@@ -6,5 +6,5 @@
 - Year: 2021
 - Source: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/
 - PDF source: https://uefi.org/sites/default/files/resources/ACPI_Spec_6_4_Jan22.pdf
-- Local PDF: not available in this directory
-- Download status: not downloaded; see source links above
+- Local PDF: `paper.pdf`
+- Download status: downloaded and verified on 2026-05-12

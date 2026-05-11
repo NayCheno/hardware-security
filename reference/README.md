@@ -18,24 +18,30 @@ Current categories:
 - `risc-v-confidential-computing/`
 - `trusted-execution-environments/`
 
-Download status: 26 of 50 reference entries have verified local PDFs.
+Download status: 43 of 57 reference entries have verified local PDFs.
 
 Newly added or completed in this pass:
 
-- `reference/trusted-execution-environments/sok/hardware-supported-trusted-execution-environments/`
-- `reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/`
-- `reference/risc-v-confidential-computing/penglai-scalable-memory-protection/`
-- `reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/`
-- `reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/`
-- `reference/architecture-and-platform-security/siopmp-scalable-efficient-io-protection-for-tees/`
-- `reference/attestation/swatt-software-based-attestation-for-embedded-devices/`
-- `reference/attestation/seda-scalable-embedded-device-attestation/`
+- `reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/`
+- `reference/risc-v-confidential-computing/risc-v-ap-tee-specification/`
+- `reference/risc-v-confidential-computing/risc-v-cove-io-specification/`
+- `reference/risc-v-confidential-computing/risc-v-iommu-specification/`
+- `reference/memory-and-io-fabrics/advanced-configuration-and-power-interface-specification/`
+- `reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/`
+- `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/`
+- `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/`
+- `reference/attestation/secure-boot-trusted-boot-remote-attestation-arm-trustzone-iot/`
+- `reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/`
+- `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/`
+- `reference/risc-v-confidential-computing/cure-customizable-resilient-enclaves/`
+- `reference/risc-v-confidential-computing/mi6-secure-enclaves-speculative-out-of-order-processor/`
+- `reference/risc-v-confidential-computing/ace-confidential-computing-embedded-risc-v-systems/`
+- `reference/arm-confidential-computing/opencca-open-framework-enable-arm-cca-research/`
+- `reference/arm-confidential-computing/caec-confidential-attestable-efficient-inter-cvm-communication-arm-cca/`
 
 Entries without a verified local PDF yet:
 
-- `reference/accelerator-tees/sok/analysis-accelerator-tee-designs/`
 - `reference/architecture-and-platform-security/amd-secure-encrypted-virtualization/`
-- `reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/`
 - `reference/architecture-and-platform-security/arm-architecture-reference-manual-a-profile/`
 - `reference/architecture-and-platform-security/arm-system-memory-management-unit-architecture-specification/`
 - `reference/architecture-and-platform-security/understanding-trace/`
@@ -46,19 +52,11 @@ Entries without a verified local PDF yet:
 - `reference/arm-confidential-computing/realm-management-monitor-specification/`
 - `reference/attestation/mra-ima-enhanced-mutual-remote-attestation-arm-trustzone/`
 - `reference/attestation/psa-certified-security-framework/`
-- `reference/attestation/secure-boot-trusted-boot-remote-attestation-arm-trustzone-iot/`
-- `reference/memory-and-io-fabrics/advanced-configuration-and-power-interface-specification/`
 - `reference/memory-and-io-fabrics/pci-express-integrity-and-data-encryption/`
 - `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/`
-- `reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/`
-- `reference/risc-v-confidential-computing/risc-v-ap-tee-specification/`
-- `reference/risc-v-confidential-computing/risc-v-cove-io-specification/`
-- `reference/risc-v-confidential-computing/risc-v-iommu-specification/`
 - `reference/trusted-execution-environments/arm-security-technology-trustzone/`
-- `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/`
-- `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/`
 
 Notes:
 
-- Missing PDFs are not all errors. Several Arm, PCI-SIG, AMD, IEEE, ACM, and GitHub-release assets were verified by source URL but blocked, timed out, or required interactive access from this environment.
-- Do not mark a PDF as local unless `paper.pdf` exists and has been verified with `file`.
+- Missing PDFs are not all errors. Remaining blocked entries are mostly Arm developer pages, PCI-SIG member-gated material, IEEE/ACM/Elsevier publisher pages, AMD pages without a stable public PDF endpoint, or HTML-only documentation.
+- Do not mark a PDF as local unless `paper.pdf` exists and has been verified as a PDF.

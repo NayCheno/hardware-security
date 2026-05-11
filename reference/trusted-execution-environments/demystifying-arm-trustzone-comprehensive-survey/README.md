@@ -5,6 +5,6 @@
 - Authors: Sandro Pinto and Nuno Santos
 - Year: 2019
 - Source: https://doi.org/10.1145/3291047
-- PDF source: https://doi.org/10.1145/3291047
-- Local PDF: not available in this directory
-- Download status: not downloaded; see source links above
+- PDF source: https://syssec.dpss.inesc-id.pt/papers/pinto_acsur19.pdf
+- Local PDF: `paper.pdf`
+- Download status: downloaded and verified on 2026-05-12

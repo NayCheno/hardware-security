@@ -1,15 +1,15 @@
 # Domain Coverage Matrix
 
-更新日期：2026-05-10
+更新日期：2026-05-12
 
 本文档维护当前 hardware-security survey 的知识域覆盖、SoK/survey 锚点、reference 证据、SOTA 状态和缺口。判断依据包括 `survey/*.tex` 正文、`survey/reference.bib`、`reference/` 本地论文库、公开论文页面、规范 release、arXiv、ACM/IEEE/USENIX/NDSS/RFC/Arm/RISC-V 官方来源。
 
 当前事实：
 
-- `survey/reference.bib`：118 个 BibTeX 条目。
+- `survey/reference.bib`：124 个 BibTeX 条目。
 - `survey/*.tex` 正文实际引用：39 个 key，全部能在 Bib 中找到。
-- `reference/`：58 个 README 条目，27 个本地 `paper.pdf`。
-- 本轮补全：`reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf` 已下载；RISC-V AP-TEE、CoVE-IO、IOMMU、AIA release 已核验但本地 PDF 下载失败，README 已标明原因。
+- `reference/`：57 个论文/规范 README 条目，43 个本地 `paper.pdf`。
+- 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、ACE、OpenCCA、CAEC 作为 SoK/SOTA 或 SoK 引用扩展材料。
 
 标记规则：
 
@@ -22,14 +22,14 @@
 
 | 知识点 / 小方向 | 状态 | 正文覆盖依据 | SoK / Survey 锚点 | 代表 reference / SOTA | 下一步 |
 |---|---|---|---|---|---|
-| 硬件辅助 TEE 总体设计空间 | 待补足 | 正文分散讨论 TrustZone/CCA/RISC-V primitives，但未以 TEE taxonomy 统领 | `schneider2022soktee`; `boubakri2025riscvtee`; `sok-tee` | `schneider2022soktee`; SOTA `boubakri2025riscvtee`; SOTA `sok-tee` | 在正文引入 launch、runtime isolation、trusted I/O、secure storage、attestation、TCB 的上位分类。 |
+| 硬件辅助 TEE 总体设计空间 | 待补足 | 正文分散讨论 TrustZone/CCA/RISC-V primitives，但未以 TEE taxonomy 统领 | `schneider2022soktee`; `li2024sokteechoices`; `boubakri2025riscvtee`; `sok-tee` | `schneider2022soktee`; SOTA `li2024sokteechoices`; SOTA `boubakri2025riscvtee`; SOTA `sok-tee` | 在正文引入 launch、runtime isolation、trusted I/O、secure storage、attestation、TCB 的上位分类。 |
 | Arm TrustZone TEE 与漏洞谱系 | 已覆盖 | `arm_trustzone_whitepaper`, `pinto2019trustzone`, `guan2017trustshadow`, `cerdeira2020trustzone` | `pinto2019trustzone`; `cerdeira2020trustzone` | `arm_trustzone_whitepaper`; SOTA `pinto2019trustzone`; SOTA `cerdeira2020trustzone` | 保持为 CCA 的历史背景；避免把 TrustZone threat model 与 CCA 混写。 |
 | Arm CCA / RME / RMM 基础架构 | 已覆盖 | `li2022cca`, `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` | 无成熟专门 SoK；以规范和 OSDI 论文为准 | `li2022cca`; SOTA `arm_cca_spec`; SOTA `arm_rmm_spec` / `wu2024rmm` | 机制表补 RMI、RSI、RIPAS、PAS、granule lifecycle、GPT/GPC。 |
-| Arm CCA 细粒度隔离与部署模型 | 待补足 | 正文提到 SHELTER/RContainer/virtCCA/NanoZone/LessTrust，但缺系统分类 | 无成熟 SoK；按系统论文追踪 | `zhang2023shelter`; SOTA `zhou2025rcontainer`; SOTA `liu2025nanozone` / `liu2025lesstrust` | 拆成 user-space、container、virtualization、intra-process、memory protection。 |
+| Arm CCA 细粒度隔离与部署模型 | 待补足 | 正文提到 SHELTER/RContainer/virtCCA/NanoZone/LessTrust，但缺系统分类 | 无成熟 SoK；按系统论文追踪 | `zhang2023shelter`; SOTA `zhou2025rcontainer`; SOTA `liu2025nanozone` / `liu2025lesstrust`; SOTA `bertschi2025opencca`; SOTA `abdollahi2025caec` | 拆成 user-space、container、virtualization、intra-process、inter-CVM sharing、memory protection。 |
 | Arm CCA I/O、DMA、accelerator、interrupt | 待补足 | 正文提到 SMMU、ACAI、Devlore、fabric，但接口细节不足 | `sok-tee` 仅作 accelerator TEE SoK | `acai2023`; SOTA `bertschi2026devlore`; SOTA `sok-tee` | 补 RME-DA/MEC、SMMU、device ownership、interrupt ownership、DMA/MMIO 可信路径。 |
 | Attestation、boot、lifecycle | 已覆盖 | `eat_rfc`, `menetrey2022attestation`, `psa_certified`, `ling2021trustzoneatt`, `chen2024mraima`, `mao2025pdrima`, `seshadri2004swatt`, `defrawy2012smart`, `asokan2015seda` | `menetrey2022attestation` | `seshadri2004swatt`; SOTA `eat_rfc`; SOTA `mao2025pdrima` | 区分 generic attestation、Arm CCA evidence chain、RISC-V CoVE layered evidence。 |
 | RISC-V 基础安全 primitives | 待补足 | 正文覆盖 privilege/PMP/ePMP/Smepmp/sIOPMP，但不够完整 | `boubakri2025riscvtee` 可辅助 | `riscv_privileged`; SOTA `riscv_iommu_2023`; SOTA `riscv_aia_2023` | 补 H-extension、IOMMU、AIA、IOPMP、Zicfilp/Zicfiss 与 confidential VM 的关系。 |
-| RISC-V TEE lineage: Keystone/Penglai/SPEAR-V | 未提到 | 正文没有引用 `lee2020keystone`, `feng2021penglai`, `schrammel2023spearv` | `boubakri2025riscvtee`; `schneider2022soktee` 中可参考 Keystone/Sanctum 谱系 | `lee2020keystone`; SOTA `feng2021penglai`; SOTA `schrammel2023spearv` | 必补，用于解释从 PMP-based enclave 到 scalable enclave 再到 CoVE confidential VM 的演进。 |
+| RISC-V TEE lineage: Sanctum/Keystone/CURE/MI6/Penglai/SPEAR-V | 未提到 | 正文没有引用 `costan2016sanctum`, `lee2020keystone`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv` | `boubakri2025riscvtee`; `schneider2022soktee`; `li2024sokteechoices` | `costan2016sanctum`; `lee2020keystone`; `bahmani2021cure`; `bourgeat2019mi6`; SOTA `feng2021penglai`; SOTA `schrammel2023spearv`; SOTA `ozga2025ace` | 必补，用于解释从 open hardware enclave 到 scalable enclave、speculative-core enclave、embedded confidential computing 再到 CoVE confidential VM 的演进。 |
 | RISC-V CoVE / AP-TEE confidential VM | 未提到 | 正文仍把 Arm CCA 主要对比到 PMP，层级不匹配 | `boubakri2025riscvtee`; CoVE 原论文和 AP-TEE spec | `sahita2023cove`; SOTA `riscv_ap_tee_2024` (v0.7 draft / not ratified); SOTA `boubakri2025riscvtee` | P0：补 TVM、TSM/TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share、CoVE attestation。 |
 | RISC-V CoVE-IO / TEE-I/O | 未提到 | 正文没有 CoVE-IO/TDI/TDM/DSM/SPDM/TDISP/trusted MSI | `sok-tee` 可辅助 accelerator 背景；原始 spec 为主 | `feng2024siopmp`; SOTA `riscv_cove_io_2026` (v0.3.0 draft / not ratified); SOTA `riscv_iommu_2023` / `riscv_aia_2023` | P0：补 device identity、secure DMA/MMIO、interrupt、PCIe IDE、TDISP、SPDM。 |
 | Memory encryption / integrity / replay protection | 待补足 | 正文提到 AMD SEV/SEV-SNP、CCA/CoVE 相关概念，但未分类 | `henson2014memory` | `henson2014memory`; SOTA `amd_sev_snp`; SOTA `riscv_ap_tee_2024` / `arm_cca_spec` | 区分 access control、encryption、integrity、replay protection；不要把 PMP/GPT 写成 memory encryption。 |
@@ -42,10 +42,11 @@
 | 锚点 | 本地 reference | 可参考内容 | 使用边界 |
 |---|---|---|---|
 | `schneider2022soktee` | `reference/trusted-execution-environments/sok/hardware-supported-trusted-execution-environments/` | 硬件 TEE design space；SoK 中涉及 SGX、SEV、TrustZone、Sanctum、Keystone 等可映射到本项目对应小方向 | 2022 时间截面，不覆盖 Arm CCA/CoVE-IO 最新规范。 |
-| `pinto2019trustzone` | `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/` | TrustZone 背景、系统软件、应用模式 | 只作为 TrustZone survey，不代表 CCA threat model。 |
-| `cerdeira2020trustzone` | `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/` | TrustZone-assisted TEE 漏洞 taxonomy、接口/TCB 风险 | 用于解释 CCA 动机和 TrustZone 局限，不直接证明 CCA 安全性。 |
+| `li2024sokteechoices` | `reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/` | Server-side TEE runtime design choices、pitfalls、TRAF/lifecycle taxonomy；可支撑 CCA/CoVE/SEV/TDX/RISC-V enclave 横向比较 | 不替代每个平台原始论文/spec；x86/IBM 平台仅作对比，当前正文不展开。 |
+| `pinto2019trustzone` | `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/` | TrustZone 背景、系统软件、应用模式；本地 PDF 可用 | 只作为 TrustZone survey，不代表 CCA threat model。 |
+| `cerdeira2020trustzone` | `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/` | TrustZone-assisted TEE 漏洞 taxonomy、接口/TCB 风险；本地 PDF 可用 | 用于解释 CCA 动机和 TrustZone 局限，不直接证明 CCA 安全性。 |
 | `menetrey2022attestation` | `reference/attestation/exploratory-study-attestation-mechanisms-for-tees/` | TEE attestation 机制、证据和 verifier 视角 | Generic attestation survey；Arm CCA/CoVE 证据链仍需回到规范。 |
-| `boubakri2025riscvtee` | `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | RISC-V secure enclaves / TEE 谱系；可连接 Keystone、Penglai、SPEAR-V、CoVE | PDF 自动下载受 403 阻挡；机制 claims 应回引原论文/spec。 |
+| `boubakri2025riscvtee` | `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | RISC-V secure enclaves / TEE 谱系；可连接 Sanctum、Keystone、CURE、MI6、Penglai、SPEAR-V、CoVE、ACE | MDPI HTML/PDF 已核验但自动 PDF 下载受 403 阻挡；机制 claims 应回引原论文/spec。 |
 | `sok-tee` | `reference/accelerator-tees/sok/analysis-accelerator-tee-designs/` | Accelerator TEE taxonomy；可支撑 ACAI、Devlore、CoVE-IO、TDISP/IDE 讨论 | 只用于 accelerator/device TEE，不作为通用 CCA/CoVE SoK。 |
 | `henson2014memory` | Bib only | Memory encryption taxonomy | 不是 TEE SoK；用于区分 encryption/integrity/replay 与 access-control。 |
 
@@ -310,10 +311,13 @@
 | 对象 | 核验结果 | 处理 |
 |---|---|---|
 | 正文 39 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
-| RISC-V AP-TEE / CoVE-IO | GitHub release 已核验；AP-TEE v0.7 是 draft/RC2 for ARC review，CoVE-IO v0.3.0 是 draft。 | 可以列为 spec/industry SOTA，但正文必须标注 draft / not ratified。 |
-| `riscv_iommu_2023` / `riscv_aia_2023` | v1.0.0 / v1.0 release 来源核验；本地 PDF 下载失败。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
+| RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；AP-TEE v0.7 是 draft/RC2 for ARC review，CoVE-IO v0.3.0 是 draft。 | 可以列为 spec/industry SOTA，但正文必须标注 draft / not ratified。 |
+| `riscv_iommu_2023` / `riscv_aia_2023` | v1.0.0 / v1.0 release 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
 | `boubakri2025riscvtee` | MDPI HTML 核验；PDF 自动下载 403。 | 作为 survey anchor；机制论断回引原始论文/spec。 |
+| `li2024sokteechoices` | ASIA CCS 2024 SoK，作者主页 PDF 已下载。 | 作为通用 server-side TEE design-choice/pitfall SoK；正文机制仍回引原始论文/spec。 |
+| `costan2016sanctum`, `bahmani2021cure`, `bourgeat2019mi6`, `ozga2025ace` | SoK/RISC-V survey 引用扩展材料，PDF 均已下载。 | 用于补 RISC-V TEE lineage；避免和 CoVE/AP-TEE confidential VM 标准混写。 |
+| `bertschi2025opencca`, `abdollahi2025caec` | Arm CCA SOTA 扩展材料，arXiv PDF 已下载。 | 用于 CCA research infrastructure 与 inter-CVM sharing；不是 Arm 官方规范。 |
 | `xu2026virtcca`, `bertschi2026devlore` | arXiv 首发早于 Bib 年份；年份可能对应目标发表或最新引用习惯。 | 在 domain/SOTA 中标注 arXiv 状态，避免误导。 |
 | Attacks / side-channel Bib 条目 | 大量条目与当前 defense/confidential-computing 主线弱相关，且正文未引用。 | 不批量删除；标记 out-of-scope，建议未来拆到 `survey/attacks.bib`。 |
 | `schluter2025heracles` | SEV-SNP 攻击论文，不是防御主线。 | 只在 threat model/limitations 中使用。 |
@@ -337,8 +341,9 @@
 |---|---|---|
 | P0 | 新增 RISC-V CoVE/AP-TEE confidential VM 小节，纠正 Arm CCA 对比到 PMP 的层级不匹配。 | `sahita2023cove`, `riscv_ap_tee_2024`, `boubakri2025riscvtee` |
 | P0 | 新增 RISC-V CoVE-IO / TEE-I/O 小节。 | `riscv_cove_io_2026`, `feng2024siopmp`, `riscv_iommu_2023`, `riscv_aia_2023`, `sok-tee` |
-| P1 | 补 RISC-V TEE lineage。 | `lee2020keystone`, `feng2021penglai`, `schrammel2023spearv` |
+| P1 | 补 RISC-V TEE lineage。 | `costan2016sanctum`, `lee2020keystone`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv`, `ozga2025ace` |
 | P1 | 补 Arm CCA 机制表。 | `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` |
+| P1 | 补 Arm CCA 研究平台和 inter-CVM sharing。 | `bertschi2025opencca`, `abdollahi2025caec` |
 | P1 | 补 memory protection taxonomy。 | `henson2014memory`, `amd_sev_snp`, `arm_cca_spec`, `riscv_ap_tee_2024` |
 | P2 | 写 side-channel scope statement，说明 attacks Bib 暂不进入 defense 主线。 | Bib attacks section; `schluter2025heracles` |
 
@@ -349,4 +354,7 @@
 - RISC-V IOMMU / AIA: https://github.com/riscv-non-isa/riscv-iommu/releases/tag/v1.0.0 and https://github.com/riscv/riscv-aia/releases/tag/1.0
 - Accelerator TEE SoK: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf
 - RISC-V TEE survey: https://www.mdpi.com/2079-9292/14/21/4171
+- TEE design-choice SoK: https://doi.org/10.1145/3634737.3644993 and https://people.csail.mit.edu/mengyuanli/files/asiaccs_sok.pdf
+- RISC-V SoK citation expansion: https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/costan, https://arxiv.org/abs/2010.15866, https://arxiv.org/abs/1812.09822, https://arxiv.org/abs/2505.12995
+- Arm CCA SOTA expansion: https://arxiv.org/abs/2506.05129 and https://arxiv.org/abs/2512.01594
 - Arm CCA / RME / RMM / SMMU / Linux CCA docs: https://developer.arm.com/documentation/den0125/latest, https://developer.arm.com/documentation/den0126/latest, https://developer.arm.com/documentation/den0137/latest, https://developer.arm.com/documentation/ihi0070/latest, https://docs.kernel.org/arch/arm64/arm-cca.html
