@@ -18,7 +18,7 @@ Current categories:
 - `risc-v-confidential-computing/`
 - `trusted-execution-environments/`
 
-Download status: 43 of 57 reference entries have verified local PDFs.
+Download status: 50 of 64 reference entries have verified local PDFs.
 
 Newly added or completed in this pass:
 
@@ -38,6 +38,13 @@ Newly added or completed in this pass:
 - `reference/risc-v-confidential-computing/ace-confidential-computing-embedded-risc-v-systems/`
 - `reference/arm-confidential-computing/opencca-open-framework-enable-arm-cca-research/`
 - `reference/arm-confidential-computing/caec-confidential-attestable-efficient-inter-cvm-communication-arm-cca/`
+- `reference/risc-v-confidential-computing/risc-v-iopmp-architecture-specification/`
+- `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/`
+- `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/`
+- `reference/architecture-and-platform-security/cva6-cfi-first-glance-risc-v-control-flow-integrity-extensions/`
+- `reference/architecture-and-platform-security/rv-cure-risc-v-capability-architecture-full-memory-safety/`
+- `reference/architecture-and-platform-security/cheriot-complete-memory-safety-embedded-devices/`
+- `reference/memory-and-io-fabrics/sok/memory-encryption-survey-existing-techniques/`
 
 Entries without a verified local PDF yet:
 

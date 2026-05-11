@@ -15,5 +15,5 @@ This category stores Arm CCA, RME/RMM, virtualization, deployment-model, and CCA
 | `liu2025nanozone` | `nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/` | arXiv 2025, local PDF available | CCA fine-grained memory-protection SOTA. |
 | `xu2026virtcca` | `virtcca-virtualized-arm-confidential-compute-architecture/` | arXiv 2026, local PDF available | Virtualized CCA-on-TrustZone research system. |
 | `bertschi2026devlore` | `devlore-device-interrupt-protection-for-confidential-vms/` | arXiv 2026, local PDF available | CCA confidential-device interrupt SOTA. |
-| `bertschi2025opencca` | `opencca-open-framework-enable-arm-cca-research/` | SysTEX/arXiv 2025, local PDF available | Research infrastructure for evaluating CCA systems on commodity Arm hardware. |
-| `abdollahi2025caec` | `caec-confidential-attestable-efficient-inter-cvm-communication-arm-cca/` | arXiv 2025, local PDF available | Inter-CVM confidential shared-memory SOTA for Arm CCA. |
+| `bertschi2025opencca` | `opencca-open-framework-enable-arm-cca-research/` | SysTEX/arXiv 2025, local PDF available, Paper Review available | Research infrastructure for evaluating CCA systems on commodity Arm hardware. |
+| `abdollahi2025caec` | `caec-confidential-attestable-efficient-inter-cvm-communication-arm-cca/` | arXiv/EuroS&P 2026, local PDF available, Paper Review available | Inter-CVM confidential shared-memory SOTA for Arm CCA. |
