@@ -11,6 +11,27 @@ Maintain this repository's hardware-security survey evidence library and produce
 
 Default output language is Chinese. Keep claims grounded in the paper. If the paper does not specify something, write `论文未说明` or `证据不足`; do not fill gaps with guesses.
 
+## Current Research Scope
+
+This repository is a research SoK/survey evidence library. The default goal is to build a defensible architecture-level survey, not to collect every adjacent security paper.
+
+Prioritize papers, specifications, and surveys that directly support:
+
+- hardware-assisted TEE and confidential-computing design space,
+- Arm TrustZone / Arm CCA / RME / RMM mechanisms,
+- RISC-V enclave lineage, CoVE / AP-TEE, CoVE-IO, TEE-I/O, IOMMU, IOPMP, and AIA,
+- attestation, boot, lifecycle, memory ownership, DMA/I/O protection, accelerator/device TEE,
+- memory protection taxonomy when it clarifies access control, encryption, integrity, replay protection, or lifecycle semantics,
+- runtime CFI / memory-safety hardening only when it helps separate architectural hardening from TEE/confidential-computing boundaries.
+
+Current out-of-scope topics:
+
+- side-channel, microarchitectural leakage, physical leakage, fault injection, Rowhammer, power/EM, cache-timing, and speculative-leakage papers as primary research targets,
+- attack-only papers that do not directly change the architecture/specification taxonomy,
+- broad vulnerability surveys unless they are needed to explain the threat-model boundary of an in-scope TEE/confidential-computing mechanism.
+
+For out-of-scope attack papers, do not download PDFs, create new reference directories, or expand citations by default. Mention them only as limitations or excluded threats when an in-scope paper relies on that boundary. If the user explicitly asks to study attacks later, create a separate scope and bibliography instead of mixing it into the current defense/specification survey.
+
 ## Repository Contract
 
 - Use the current categories in `reference/README.md`; read `domain.md` when category or SOTA role is unclear.
@@ -71,9 +92,10 @@ When the ingested or reviewed paper is a SoK, survey, taxonomy, or literature re
    - baselines or representative systems,
    - SOTA or standards-track materials,
    - missing from `reference/` but mapped to a `domain.md` gap.
-3. For each P0/P1 cited work, search for the primary paper/spec page and public PDF, deduplicate against the repo, classify into the right category, create/update the README, download a verified PDF when possible, and analyze it with this same review schema.
-4. Do not recursively expand references of those cited works unless the user explicitly asks. For large SoK bibliographies, finish the highest-priority cited works first and leave a clear backlog table in the SoK README or final report.
-5. Update `reference/<category>/sok/README.md` when adding a SoK anchor. Update `domain.md` only for material changes to coverage, SOTA status, or survey gaps.
+3. Filter out current out-of-scope attack-only works before assigning P0/P1. Side-channel, physical-leakage, fault, Rowhammer, cache-timing, and speculative-leakage citations should normally be marked `out-of-scope` or `P2 boundary only`, unless the user explicitly asks to study that attack area.
+4. For each in-scope P0/P1 cited work, search for the primary paper/spec page and public PDF, deduplicate against the repo, classify into the right category, create/update the README, download a verified PDF when possible, and analyze it with this same review schema.
+5. Do not recursively expand references of those cited works unless the user explicitly asks. For large SoK bibliographies, finish the highest-priority cited works first and leave a clear backlog table in the SoK README or final report.
+6. Update `reference/<category>/sok/README.md` when adding a SoK anchor. Update `domain.md` only for material changes to coverage, SOTA status, or survey gaps.
 
 ## Review Standard
 
@@ -149,6 +171,7 @@ For security work:
 - What attacker can and cannot do
 - Defense boundary
 - Possible bypasses or adaptive attackers
+- Whether side-channel / physical / fault / Rowhammer / speculative leakage is explicitly excluded; do not turn excluded attacks into follow-up download targets unless requested
 - Strong assumptions
 - Proof, empirical validation, exploit reproduction, or real vulnerability evidence
 - Whether security claims are sufficiently supported
@@ -209,6 +232,7 @@ Act as a reviewer:
 - Security bypass/evasion/adaptive attacker, if applicable
 - System failure modes, if applicable
 - Whether the authors discuss limitations sufficiently
+- Out-of-scope attack classes should be recorded as boundary conditions, not expanded into a separate attack survey by default
 
 ### 9. 和已有工作的关系
 

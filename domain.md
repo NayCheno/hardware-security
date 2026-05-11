@@ -18,6 +18,31 @@
 - `未提到`：正文缺少该方向的关键概念、论文或规范。
 - `SOTA`：当前应优先读/引用的最新或代表性最强材料。arXiv 和 draft spec 可以列为 SOTA，但必须标注 `arXiv`、`draft`、`not ratified`、`release` 或正式 venue。
 
+## 0. 当前科研范围规定
+
+本阶段目标是先把 SoK/survey 的研究边界、分类规则和证据标准定清楚，再补正文。当前不做侧信道/物理泄漏/故障注入等攻击方向的系统研究。
+
+纳入范围：
+
+- 硬件辅助 TEE 与 confidential computing 的架构设计空间。
+- Arm TrustZone、Arm CCA/RME/RMM、RISC-V enclave lineage、CoVE/AP-TEE、CoVE-IO/TEE-I/O。
+- IOMMU、IOPMP、AIA、SMMU、DMA/I/O protection、accelerator/device TEE、attestation、boot、lifecycle、memory ownership。
+- Memory protection taxonomy 中能澄清 access control、encryption、integrity、replay protection、lifecycle 语义的材料。
+- Runtime CFI / memory-safety hardening 只作为“架构加固”和“TEE/confidential-computing boundary”之间的边界说明材料。
+
+暂不纳入当前研究：
+
+- 侧信道、微架构泄漏、物理泄漏、故障注入、Rowhammer、power/EM、cache timing、speculative leakage 作为独立研究主题。
+- attack-only 论文，除非它直接改变某个 in-scope 架构/spec 的 threat-model 解释。
+- 大范围漏洞谱系整理，除非用于说明 TrustZone/CCA/CoVE 等机制的历史动机或明确排除边界。
+
+执行规则：
+
+- Agent 遇到论文链接时，先判断是否落入纳入范围；若只是侧信道/物理/故障/Rowhammer 攻击论文，默认不下载、不建目录、不做 citation expansion。
+- SoK/survey 引用扩展时，P0/P1 只给 in-scope 的机制、规范、系统、taxonomy 或代表性 baseline；侧信道类引用最多标为 `boundary only`，不作为当前 backlog。
+- 正文只需要一段 threat-model boundary 说明当前不研究这些攻击面；不要新增独立 side-channel 章节。
+- 现有 Bib 中的 attack 条目先保留，不批量删除；后续若用户明确转向攻击 SoK，再拆成独立 scope 和 bibliography。
+
 ## 1. 知识覆盖矩阵
 
 | 知识点 / 小方向 | 状态 | 正文覆盖依据 | SoK / Survey 锚点 | 代表 reference / SOTA | 下一步 |
@@ -35,7 +60,7 @@
 | Memory encryption / integrity / replay protection | 待补足 | 正文提到 AMD SEV/SEV-SNP、CCA/CoVE 相关概念，但未分类 | `henson2014memory` | `henson2014memory`; SOTA `amd_sev_snp`; SOTA `riscv_ap_tee_2024` / `arm_cca_spec` | 区分 access control、encryption、integrity、replay protection；不要把 PMP/GPT 写成 memory encryption。 |
 | Memory / I/O fabrics: CXL、PCIe IDE、RDMA | 已覆盖但需边界说明 | `cxl_spec`, `pcie_ide`, `acpi_spec`, `gouk2022directcxl`, `zhong2024cxltiers`, `wang2025odrp` | 无 TEE SoK；以 specs + systems papers | `gouk2022directcxl`; SOTA `zhong2024cxltiers`; SOTA `wang2025odrp` | 明确这些材料支撑 fabric boundary 和数据路径复杂性，不是 Arm CCA 或 RISC-V CoVE 本体论文。 |
 | Runtime CFI / memory-safety hardening | 已覆盖 | `armv-a`, `riscv_privileged` | 无单一 SoK；以 architecture specs 为准 | `armv-a`; SOTA `riscv_privileged`; SOTA `manoni2026cva6cfi`; SOTA `kim2023rvcure`; SOTA `amar2023cheriot` | 明确 MTE/PAC/BTI/GCS、Zicfiss/Zicfilp、CHERI/CHERIoT 与 CCA 是不同层面的防御机制。 |
-| Side-channel / physical leakage attacks | 当前 out-of-scope | Bib 中大量 attacks 条目，正文主线未引用 | 可后续另建 attack survey | Bib attacks section; `schluter2025heracles` 仅适合 threat/limitation | 不删除；建议未来迁移到 `survey/attacks.bib` 或独立章节。 |
+| Side-channel / physical leakage attacks | 当前不研究 / out-of-scope | Bib 中大量 attacks 条目，正文主线未引用 | 不作为当前 SoK 研究对象 | Bib attacks section; `schluter2025heracles` 仅适合 boundary/limitation | 不下载、不扩展、不写独立章节；只在 threat model / limitation 中说明 excluded attacks。 |
 
 ## 2. SoK / Survey 与 Reference 映射
 
@@ -323,7 +348,7 @@
 | `henson2014memory` | ACM CSUR 论文镜像 PDF 已下载，canonical DOI 已记录。 | 用于 memory encryption taxonomy；不要把 PMP/GPT/IOPMP 写成 encryption。 |
 | `bertschi2025opencca`, `abdollahi2025caec` | Arm CCA SOTA 扩展材料，arXiv PDF 已下载。 | 用于 CCA research infrastructure 与 inter-CVM sharing；不是 Arm 官方规范。 |
 | `xu2026virtcca`, `bertschi2026devlore` | arXiv 首发早于 Bib 年份；年份可能对应目标发表或最新引用习惯。 | 在 domain/SOTA 中标注 arXiv 状态，避免误导。 |
-| Attacks / side-channel Bib 条目 | 大量条目与当前 defense/confidential-computing 主线弱相关，且正文未引用。 | 不批量删除；标记 out-of-scope，建议未来拆到 `survey/attacks.bib`。 |
+| Attacks / side-channel Bib 条目 | 大量条目与当前 defense/confidential-computing 主线弱相关，且正文未引用。 | 不批量删除；当前不下载、不扩展、不写 attack survey，只作为 threat boundary / limitation。 |
 | `schluter2025heracles` | SEV-SNP 攻击论文，不是防御主线。 | 只在 threat model/limitations 中使用。 |
 
 ## 5. ACM / IEEE 两种 Survey 写法
@@ -350,7 +375,7 @@
 | P1 | 补 Arm CCA 研究平台和 inter-CVM sharing。 | `bertschi2025opencca`, `abdollahi2025caec` |
 | P1 | 补 memory protection taxonomy。 | `henson2014memory`, `amd_sev_snp`, `arm_cca_spec`, `riscv_ap_tee_2024` |
 | P1 | 补 runtime CFI / memory-safety hardening 边界说明。 | `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot`, `riscv_privileged` |
-| P2 | 写 side-channel scope statement，说明 attacks Bib 暂不进入 defense 主线。 | Bib attacks section; `schluter2025heracles` |
+| Scope-only | 写一段 side-channel / physical leakage out-of-scope statement，说明 attacks Bib 暂不进入当前 defense/specification 主线。 | Bib attacks section; `schluter2025heracles` |
 
 ## 7. 联网核验来源
 
