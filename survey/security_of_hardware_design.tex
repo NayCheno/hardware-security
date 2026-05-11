@@ -1,0 +1,101 @@
+\section{Security Design Mechanisms in Arm and RISC-V}
+
+Hardware security mechanisms are increasingly being exposed as architectural primitives rather than as optional software conventions. Across modern Arm and RISC-V systems, security-relevant invariants such as indirect-control validation, physical-memory ownership, and privileged-access constraints are moving into the hardware-software contract itself~\cite{armv-a,riscv_privileged}. For a survey of hardware security, this shift matters because it changes where defenses live: instead of relying only on compiler instrumentation or operating-system policy, the architecture now provides direct mechanisms for constraining control flow, limiting memory authority, and mediating access across privilege and device boundaries. The following sections survey these mechanisms by design objective, focusing on runtime integrity, privilege and memory isolation, and the system-integration issues that determine whether a mechanism remains effective once devices, debug paths, and accelerators are considered.
+
+\subsection{Control-Flow and Memory-Safety Mechanisms}
+
+\subsubsection{Arm Runtime-Integrity Mechanisms}
+
+Arm's recent A-profile architecture incorporates several mechanisms that aim to make common exploitation primitives harder to realize in practice~\cite{armv-a}. \textbf{Branch Target Identification (BTI)} constrains indirect branches to architecturally valid landing pads, reducing the usable gadget space for jump-oriented and related control-flow attacks. \textbf{Pointer Authentication (PAC)} protects pointers with cryptographic authentication codes, making pointer substitution and reuse attacks more difficult. \textbf{Guarded Control Stack (GCS)} adds hardware support for protecting return-address state. These mechanisms address different parts of the control-flow problem, but together they represent a clear design direction: indirect control transfer is no longer treated as something that software may validate only if it chooses to.
+
+Arm applies a similar idea to memory-safety failures. \textbf{Memory Tagging Extension (MTE)} associates tags with memory granules and checks tag consistency on pointer dereference, allowing the hardware to detect classes of spatial and temporal memory-safety violations with relatively low overhead~\cite{armv-a}. From a survey perspective, the important point is not that any one mechanism eliminates memory corruption, but that the architecture increasingly offers built-in support for narrowing the gap between a latent software bug and a reliable control-hijacking exploit.
+
+\subsubsection{RISC-V Control-Flow and Protection Primitives}
+
+The RISC-V architectural material surveyed here shows a related, though more modular, direction. The privileged and associated architectural specifications include support for control-flow integrity through extensions such as \textbf{Zicfilp}, which constrains indirect-control targets through landing-pad semantics, and \textbf{Zicfiss}, which provides hardware support for protecting return-address state~\cite{riscv_privileged}. Rather than embedding one vertically integrated protection model, the RISC-V ecosystem exposes a set of composable primitives that can be incorporated into different classes of systems.
+
+This modularity is particularly visible in the treatment of memory authority. In the cited RISC-V specifications, the most established protection story centers on privilege separation and physical-memory access control, especially through \textbf{Physical Memory Protection (PMP)} and its extensions, rather than on a single Arm-MTE-style mainstream memory-tagging mechanism~\cite{riscv_privileged}. The result is a design space in which control-flow hardening and memory isolation exist, but are often assembled as part of a larger platform composition.
+
+\subsection{Privilege, Physical Memory, and Domain Isolation}
+
+\subsubsection{Arm Privilege Hierarchy and System-Wide Isolation}
+
+Arm's protection model combines conventional privilege separation with system-wide domain isolation. The exception-level hierarchy from EL0 to EL3 separates application, kernel, hypervisor, and monitor software, while \textbf{TrustZone} extends this structure with Secure and Non-secure worlds enforced across the SoC~\cite{arm_trustzone_whitepaper,pinto2019trustzone,armv-a}. Additional mechanisms such as \textbf{PAN} and \textbf{PXN} constrain privileged software inside a single world by preventing inappropriate access to or execution from lower-privilege mappings~\cite{armv-a}. These mechanisms are important because many real attacks do not begin by crossing a world boundary; they begin by exploiting excessive authority inside an already privileged context.
+
+At the system level, Arm's more recent confidential-computing extensions push isolation further into the memory system. \textbf{Arm CCA} and \textbf{RME} use hardware checks over physical-memory ownership to protect \textbf{Realms} even in the presence of a powerful host stack~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. In other words, the architecture is moving from privilege-only isolation toward coordinated CPU, memory, and device mediation. This progression is part of a broader trend in secure hardware design: once DMA-capable devices and privileged software are part of the threat model, core-local access checks are not enough.
+
+\subsubsection{RISC-V Privilege Modes and PMP-Based Isolation}
+
+RISC-V organizes protection around privilege modes and a register-programmed physical-memory filter. \textbf{PMP} allows machine mode to define access permissions for physical-memory regions, thereby constraining S-mode and U-mode software~\cite{riscv_privileged}. Extensions such as \textbf{ePMP} and \textbf{Smepmp} strengthen this model by refining the handling of execute permissions and reducing the amount of implicitly trusted machine-mode behavior~\cite{riscv_privileged}. The design is comparatively simple and well suited to embedded systems, monitors, and smaller TEEs where a limited number of protected regions is acceptable.
+
+The main limitation of this style appears when system complexity increases. Large SoCs, confidential-computing platforms, and accelerator-rich systems must often coordinate CPU isolation with \textbf{DMA} control and device-visible memory ownership. Recent work such as \textbf{sIOPMP} therefore studies how scalable I/O protection can complement CPU-side isolation for TEEs~\cite{feng2024siopmp}. This is an important design point for survey work: in RISC-V platforms, the strength of the final security story depends heavily on how PMP-like CPU mechanisms are composed with peripheral protection.
+
+\subsection{Trusted Execution, Boot, and Trust Anchors}
+
+\subsubsection{TEE-Oriented Design Patterns}
+
+Trusted-execution support remains one of the clearest ways in which hardware security mechanisms appear as complete platform designs rather than isolated instructions. In the Arm ecosystem, \textbf{TrustZone} provides the classical two-world TEE model and has been used as the basis for a large body of systems work and security analysis~\cite{arm_trustzone_whitepaper,pinto2019trustzone,guan2017trustshadow,cerdeira2020trustzone}. Arm CCA extends this line further by introducing \textbf{Realms} for confidential workloads under stronger host-side adversary assumptions~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. More broadly, the comparison between TrustZone-style TEEs and CCA-style confidential execution shows how trusted-execution design has moved from isolating a privileged security service toward protecting workloads against stronger software adversaries.
+
+\subsubsection{Boot-Time Trust and Measured Launch}
+
+Trusted execution is closely connected to how a platform establishes trust at boot time. Work on secure boot, trusted boot, and remote attestation for Arm TrustZone-based devices demonstrates that the security of the runtime environment depends on a measured launch chain rather than on isolation alone~\cite{ling2021trustzoneatt,chen2024mraima,mao2025pdrima}. At a broader systems level, \textbf{SWATT}, \textbf{SMART}, and \textbf{SEDA} show recurring design requirements for attestation and roots of trust: measurements must be attributable, fresh, and tied to a concrete execution context~\cite{seshadri2004swatt,defrawy2012smart,asokan2015seda}. For hardware designers, this means that the relevant trust anchor is not simply a privileged mode or a secure memory region; it is the combination of launch-time measurement, protected execution, and verifiable system state.
+
+\subsection{I/O, DMA, and Accelerator Mediation}
+
+\subsubsection{Arm System Mediation Beyond the CPU}
+
+Once devices and accelerators are part of the threat model, hardware security depends on more than CPU privilege checks. Arm's system architecture therefore includes I/O mediation through the \textbf{SMMU}, which is especially important when confidential workloads or secure services interact with \textbf{DMA}-capable peripherals~\cite{arm_smmu_spec}. The same point is visible in Arm CCA-oriented systems work, where accelerator protection and device-interrupt delivery are treated as part of the core isolation problem rather than as optional external policy~\cite{acai2023,bertschi2026devlore}. This is a crucial design lesson for secure hardware surveys: a platform that protects the CPU but leaves devices outside the security model has only partial isolation.
+
+\subsubsection{RISC-V I/O Protection as a Complementary Layer}
+
+RISC-V reaches the same requirement through a more modular route. The base privileged architecture centers on CPU-side protection, while later work such as \textbf{sIOPMP} studies scalable I/O protection as a complementary mechanism for TEEs and protected domains~\cite{riscv_privileged,feng2024siopmp}. This separation reinforces the broader pattern seen throughout the chapter: RISC-V often exposes a toolkit whose final security properties depend on disciplined composition, whereas Arm more often presents these pieces as parts of a vertically integrated platform-security story.
+
+\subsection{Attestation and Security Lifecycle Mechanisms}
+
+\subsubsection{Attestation as a Hardware-Supported Design Mechanism}
+
+Attestation is not only a protocol feature; it is also a hardware-design concern because the architecture must expose stable roots of trust, measurable state, and protection domains whose claims can be verified. The \textbf{EAT} standard provides a general structure for carrying attestation claims, while broader work on attestation mechanisms for TEEs emphasizes that the usefulness of those claims depends on what the hardware and trusted runtime are able to measure and report~\cite{eat_rfc,menetrey2022attestation}. In this sense, attestation belongs in a survey of hardware security design because it links platform mechanisms to external trust decisions.
+
+\subsubsection{Lifecycle Security Frameworks}
+
+The same design logic appears in platform frameworks such as \textbf{PSA Certified}, which treats hardware-rooted security, attestation, and lifecycle management as part of one assurance story rather than as isolated controls~\cite{psa_certified}. This kind of framework is important because it extends the discussion beyond the presence of security mechanisms to their use across provisioning, update, and operational phases. For surveys of secure hardware design, lifecycle treatment matters because many platforms fail not through the absence of a mechanism, but through inconsistent handling of that mechanism across deployment stages.
+
+\subsection{Debug, Trace, and System Integration}
+
+\subsubsection{Security-Relevant Auxiliary Components}
+
+Architectural security mechanisms are not limited to branches, page tables, and privilege bits. Arm's documentation on trace makes clear that debug and observability features such as \textbf{ETM} provide detailed execution visibility that is valuable for validation and diagnostics, but that same visibility must be tightly controlled in security-sensitive deployments~\cite{arm_understanding_trace}. This illustrates a broader systems lesson: every auxiliary subsystem that can observe execution or preserve state across contexts can become part of the attack surface if it is not incorporated into the protection model.
+
+\subsubsection{Composition as the Central Design Problem}
+
+Across both Arm and RISC-V, the mechanisms surveyed above point to the same conclusion. Secure hardware design is not achieved by enabling a single extension in isolation. Control-flow hardening, memory-access constraints, privilege separation, and device mediation have to compose correctly across the whole platform~\cite{armv-a,arm_cca_spec,arm_rme_spec,riscv_privileged,feng2024siopmp}. This is also why architecture manuals and systems papers increasingly discuss memory ownership, I/O paths, and monitor logic in the same breath: the boundary that matters in practice is the one that survives contact with the full machine, not just the CPU pipeline.
+
+\subsection{Cross-Architecture Comparison}
+
+Table~\ref{tab:cross_arch_security_mapping} summarizes the main mechanism categories surveyed in this section. The goal is not to claim that the two ecosystems are identical, but to show that they increasingly address comparable security objectives through different integration styles.
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-Architecture Security Mechanism Mapping}
+\label{tab:cross_arch_security_mapping}
+\begin{tabular}{@{}p{0.28\linewidth}p{0.30\linewidth}p{0.30\linewidth}@{}}
+\toprule
+\textbf{Mechanism Category} & \textbf{Arm} & \textbf{RISC-V} \\ \midrule
+Forward-edge control-flow protection & BTI & Zicfilp \\
+Return-address protection & GCS / PAC-assisted hardening & Zicfiss \\
+Memory bug detection & MTE & Protection centered on privilege and memory-access control in the cited materials \\
+Primary privilege structure & EL0--EL3 plus Secure/Non-secure system partitioning & M/S/U privilege modes \\
+Physical-memory isolation & TrustZone system partitioning; CCA/RME ownership checks & PMP, ePMP, Smepmp \\
+System-level I/O protection & SMMU-mediated system integration in Arm platforms & Complementary mechanisms such as sIOPMP \\ \bottomrule
+\end{tabular}
+\end{table}
+
+The comparison suggests a consistent difference in emphasis. The Arm material surveyed here presents a more vertically integrated security stack in which runtime integrity, world/domain isolation, and system-wide mediation are documented as parts of one platform story~\cite{armv-a,arm_cca_spec,arm_rme_spec}. The RISC-V material, by contrast, emphasizes composable building blocks centered on privilege modes and PMP-based physical-memory control, with additional system protections layered on through complementary mechanisms and proposals~\cite{riscv_privileged,feng2024siopmp}. This is not a value judgment so much as a design distinction: one ecosystem foregrounds integration, while the other foregrounds modular composition.
+
+\subsection{Implications for Secure Hardware Design}
+
+For hardware designers, the practical lesson is that secure systems must be evaluated as whole-machine constructions. A platform with strong control-flow protections can still fail if debug visibility is unmanaged. A platform with strict CPU isolation can still fail if a device bypasses memory protections through \textbf{DMA}. A platform with clean privilege layering can still fail if the architecture leaves too much ambient authority in the most privileged software context. The mechanisms surveyed in this section therefore support the same conclusion reached elsewhere in this paper: modern hardware security depends on coordinated enforcement across the instruction set, the memory system, and the device path.
+
+\subsection{Summary}
+
+The architectures surveyed here show a broad movement toward hardware-enforced security invariants. In Arm, this is visible in the combination of BTI, PAC, GCS, MTE, privilege constraints, TrustZone, and CCA/RME-based system isolation~\cite{armv-a,arm_trustzone_whitepaper,arm_cca_spec,arm_rme_spec}. In RISC-V, the same trend appears through control-flow integrity extensions, PMP-family physical-memory protection, and complementary proposals for scalable I/O mediation~\cite{riscv_privileged,feng2024siopmp}. A cross-cutting observation is that the core design problem is no longer whether hardware offers security features at all, but whether those features compose into a coherent platform-level protection model once privileged software, accelerators, and device traffic are part of the system.

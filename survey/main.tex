@@ -1,0 +1,52 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\Urlmuskip=0mu plus 1mu
+
+\title{Hardware Security}
+
+\author{\IEEEauthorblockN{Author}
+\IEEEauthorblockA{Hardware Security Survey}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This survey reviews hardware security mechanisms for trusted execution,
+confidential computing, memory and I/O isolation, attestation, and
+cross-architecture platform design in Arm and RISC-V systems. It emphasizes
+how modern protection boundaries depend on the composition of CPU privilege,
+physical-memory ownership, device mediation, and externally verifiable trust
+evidence.
+\end{abstract}
+
+\begin{IEEEkeywords}
+hardware security, confidential computing, trusted execution environments,
+Arm CCA, RISC-V, attestation, I/O protection
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Hardware security has shifted from isolated processor features toward
+platform-level protection contracts. Modern systems must coordinate execution
+domains, memory ownership, device access, and attestation evidence across the
+whole machine. This survey organizes the current literature around that
+composition problem, using Arm and RISC-V as the main architectural lines.
+
+\input{confidential_computing_of_arm_hardware}
+
+\input{security_of_hardware_design}
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+
+\end{document}

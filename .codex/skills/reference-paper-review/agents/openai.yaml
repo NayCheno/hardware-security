@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reference Paper Review"
+  short_description: "Deep paper reviews for reference READMEs"
+  default_prompt: "Use $reference-paper-review to analyze a paper PDF under reference/ and write the result into its README."

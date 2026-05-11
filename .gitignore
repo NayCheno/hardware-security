@@ -1,0 +1,51 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python/tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.venv/
+venv/
+
+# LaTeX build artifacts for survey sources.
+# Keep reference/**/paper.pdf tracked as library assets.
+survey/*.aux
+survey/*.bbl
+survey/*.bcf
+survey/*.blg
+survey/*.fdb_latexmk
+survey/*.fls
+survey/*.log
+survey/*.out
+survey/*.run.xml
+survey/*.synctex.gz
+survey/*.toc
+survey/*.lof
+survey/*.lot
+survey/*.nav
+survey/*.snm
+survey/*.vrb
+survey/*.xdv
+survey/*.pdf
+
+# Temporary/download leftovers
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*.part
+*.download

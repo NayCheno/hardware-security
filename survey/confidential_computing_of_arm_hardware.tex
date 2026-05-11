@@ -1,0 +1,109 @@
+\section{Arm Confidential Computing}
+
+Confidential computing in the Arm ecosystem addresses a stronger threat model than classical trusted-execution environments. The central problem is not only how to isolate a secure software stack from ordinary software, but how to protect the confidentiality of a workload even when privileged software still manages scheduling, memory allocation, and devices~\cite{arm_trustzone_whitepaper,pinto2019trustzone,li2022cca,arm_cca_spec,arm_rme_spec}. In Arm platforms, this evolution is visible in the transition from TrustZone-based TEEs to the Arm Confidential Compute Architecture (CCA), which extends the protection boundary into physical-memory ownership, device mediation, and attestation. The following sections survey this transition, covering TrustZone-based systems, Realm-based isolation, hardware enforcement in the memory and I/O path, and the attestation mechanisms needed to make protected execution usable in practice.
+
+\subsection{Threat Model and Design Objectives}
+
+\subsubsection{From Trusted Services to Host-Resilient Confidentiality}
+
+The distinction between TrustZone-era TEEs and Arm CCA is fundamentally a distinction in threat model. In a classical TrustZone deployment, the secure-world firmware and runtime environment are themselves part of the trusted computing base, and the main goal is to isolate security services from the normal world~\cite{arm_trustzone_whitepaper,pinto2019trustzone}. In the confidential-computing setting addressed by Arm CCA, the protected workload must remain confidential even though a host stack continues to manage cores, memory allocation, and devices~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. The architecture therefore aims to separate resource management from data visibility more explicitly than conventional TEE models do.
+
+\subsubsection{Core Design Dimensions}
+
+The cited Arm CCA documents and systems papers show that this protection problem decomposes into several recurring design dimensions. The first is execution-domain structure: the architecture needs a protected execution context that is distinct from both ordinary software and the management software responsible for scheduling and provisioning~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. The second is memory ownership: physical memory must carry hardware-enforced ownership metadata rather than depending only on hypervisor-maintained bookkeeping~\cite{arm_cca_spec,arm_rme_spec,linux_arm_cca_doc}. The third is system integration: I/O, accelerators, interrupts, and attestation all have to reflect the same protection boundary if confidentiality is to survive contact with the whole machine~\cite{arm_smmu_spec,acai2023,bertschi2026devlore,arm_rmm_spec,eat_rfc}. These dimensions provide a useful organizing lens for the remainder of the chapter.
+
+\subsection{From TrustZone-Based TEEs to Arm CCA}
+
+\subsubsection{TrustZone as the Classical Arm Isolation Model}
+
+\textbf{TrustZone} partitions an Arm system into Secure and Non-secure worlds, with the Non-secure bit propagated through the SoC interconnect and memory system~\cite{arm_trustzone_whitepaper,pinto2019trustzone}. This model has been widely used to build TEEs for mobile, embedded, and IoT devices, where a relatively small secure-world software stack mediates access to protected resources. Representative systems such as \textbf{TrustShadow} show that TrustZone can protect unmodified applications from an untrusted normal-world operating system by relocating sensitive execution into the secure world~\cite{guan2017trustshadow}. At the same time, survey and SoK work shows that TrustZone-assisted TEEs remain exposed to recurring weaknesses in interfaces, implementation choices, and trusted computing base growth~\cite{pinto2019trustzone,cerdeira2020trustzone}.
+
+For hardware-security surveys, the importance of TrustZone is twofold. First, it demonstrates that Arm's security story has long depended on system-wide enforcement rather than on CPU privilege levels alone. Second, it shows the limits of a two-world model once the secure world accumulates more functionality: as more services migrate into the trusted side, the TCB grows and the isolation boundary becomes harder to reason about.
+
+\subsubsection{Arm CCA and the Realm Model}
+
+\textbf{Arm CCA} extends this design through the \textbf{Realm Management Extension (RME)}, introducing a model in which confidential workloads execute inside \textbf{Realms} that are intended to remain opaque to the host software stack~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. The associated \textbf{Realm Management Monitor (RMM)} manages Realm creation, execution, and teardown~\cite{arm_rmm_spec,wu2024rmm}. Compared with TrustZone, the key change is not merely the addition of another execution environment; it is the explicit separation between resource management and data ownership. The host still provisions CPUs, memory, and devices, but it is not meant to inspect Realm memory or register state as part of normal management.
+
+This change has already motivated systems work above the raw architecture. \textbf{SHELTER} uses Arm CCA to extend isolation into user space~\cite{zhang2023shelter}. \textbf{RContainer} treats CCA hardware primitives as a basis for container isolation~\cite{zhou2025rcontainer}. \textbf{virtCCA} studies how CCA-style protection can be virtualized in conjunction with existing Arm trust mechanisms~\cite{xu2026virtcca}. Taken together, these works show that Arm CCA is being treated not only as an architectural feature set, but also as a substrate for higher-level confidential-computing software stacks.
+
+\subsection{Hardware Enforcement in the Memory and I/O Path}
+
+\subsubsection{Granule Ownership and Physical-Memory Checks}
+
+The stronger isolation model of Arm CCA depends on hardware checks in the physical-memory path. The \textbf{Granule Protection Table (GPT)} records the ownership and security state of memory granules, while the \textbf{Granule Protection Check (GPC)} validates physical accesses against that metadata~\cite{arm_cca_spec,arm_rme_spec,linux_arm_cca_doc}. This is a significant departure from designs in which isolation is represented only by software-maintained page tables or a small number of coarse protected regions. In the CCA model, physical-memory ownership becomes a hardware-checked property that constrains even privileged software.
+
+This ownership model is also what makes CCA suitable for dynamic workloads. Confidential workloads may be created, destroyed, resized, or migrated, and their protected memory footprint may change over time. Recent work such as \textbf{SHELTER}, \textbf{NanoZone}, and \textit{More Granular, Less Trust} exploits this finer-grained ownership model to study user-space and intra-process isolation under an untrusted manager~\cite{zhang2023shelter,liu2025nanozone,liu2025lesstrust}. The common theme across these systems is that the architecture is no longer treating protected memory as a single static partition; instead, it supports repeated ownership transitions while preserving hardware-enforced separation.
+
+\subsubsection{Lifecycle Management and Ownership Transitions}
+
+The granule model is closely tied to lifecycle management. The \textbf{RMM} and the Arm CCA software model treat Realm creation, memory delegation, execution, and teardown as explicit state transitions rather than as ad hoc software conventions~\cite{arm_rmm_spec,linux_arm_cca_doc}. This matters because confidential-computing platforms must repeatedly move memory between protection states while preserving consistency between CPU execution, physical-memory ownership, and the host's remaining management authority. The design and verification work of Li et al.~\cite{li2022cca} and later verification-oriented work on the \textbf{RMM}~\cite{wu2024rmm} both reinforce the point that lifecycle state management is part of the security argument, not merely an implementation detail.
+
+\subsubsection{Securing Devices, Accelerators, and Memory Fabrics}
+
+CPU-side isolation is insufficient if \textbf{DMA}-capable devices can still reach protected memory directly. Arm therefore extends the confidentiality story into the I/O path through \textbf{SMMUv3}-based mediation and realm-aware device assignment~\cite{arm_smmu_spec,acai2023,bertschi2026devlore}. This matters because many confidential workloads depend on accelerators, storage engines, network adapters, or packet-processing units. If device access is not mediated under the same protection regime as CPU access, the device path becomes the obvious route around the confidentiality boundary.
+
+Recent systems research makes this point concrete. \textbf{ACAI} studies how accelerator execution can be protected using Arm CCA mechanisms~\cite{acai2023}. \textbf{Devlore} focuses on device-interrupt protection for confidential VMs, highlighting that interrupt delivery and device ownership are part of the same protection problem~\cite{bertschi2026devlore}. Related work on \textbf{CXL}, \textbf{PCIe IDE}, heterogeneous memory descriptions, and remote paging further shows that disaggregated memory and high-speed interconnects affect not only performance but also where protected data resides and which agents can observe it~\cite{cxl_spec,pcie_ide,acpi_spec,gouk2022directcxl,zhong2024cxltiers,wang2025odrp}. For confidential workloads, the integrity of the protection boundary therefore depends on the fabric and device path as much as on the CPU core.
+
+\subsection{Software Stacks and Deployment Models}
+
+\subsubsection{User-Space, Containers, and Virtualized Realms}
+
+One reason Arm CCA has attracted attention is that it can support several deployment models above the raw hardware interface. \textbf{SHELTER} explores user-space isolation with Arm CCA hardware primitives~\cite{zhang2023shelter}. \textbf{RContainer} extends the same substrate toward confidential containers~\cite{zhou2025rcontainer}. \textbf{virtCCA} studies virtualized CCA deployments that combine Realm-style protection with existing Arm trust infrastructure~\cite{xu2026virtcca}. These works are useful in a survey because they show that CCA is not restricted to one software packaging model; rather, it is being used as a common basis for protected processes, containers, and virtualized workloads.
+
+\subsubsection{Fine-Grained Isolation Above the Base Architecture}
+
+Later systems work also shows that Arm CCA is being pushed toward finer-grained protection goals than those envisioned by a simple confidential-VM model. \textbf{NanoZone} focuses on scalable and efficient memory protection for Arm CCA~\cite{liu2025nanozone}. \textit{More Granular, Less Trust} studies intra-process isolation under an untrusted management environment~\cite{liu2025lesstrust}. Together with \textbf{SHELTER}, these works indicate that once granule ownership and Realm mechanisms exist, researchers naturally try to repurpose them for user-space compartmentalization and finer-grained software isolation. This is an important trend because it suggests that Arm CCA is evolving from a narrowly server-oriented confidential-computing mechanism into a more general substrate for trusted isolation.
+
+\subsection{Attestation and Trust Establishment}
+
+\subsubsection{Attestation for Realms}
+
+Isolation alone does not let a remote party decide whether to provision secrets to a workload. Arm CCA therefore couples protected execution with attestation evidence describing the platform state, the management monitor, and the initial Realm state~\cite{arm_cca_spec,arm_rmm_spec}. The \textbf{Entity Attestation Token (EAT)} standard provides a general token format for carrying attestation claims in a machine-consumable form~\cite{eat_rfc}. More broadly, studies of attestation mechanisms for TEEs emphasize that the practical value of attestation depends on what is measured, how claims are encoded, and how a verifier evaluates them~\cite{menetrey2022attestation}. In this sense, attestation converts confidential execution from a local hardware property into a system property that can be consumed by remote tenants, orchestration systems, and key brokers.
+
+\subsubsection{Broader Attestation Context in Arm Systems}
+
+The same lesson appears in earlier TrustZone-oriented literature. Work on secure boot, trusted boot, mutual remote attestation, and runtime integrity measurement shows that deployable trust depends on evidence spanning both launch time and runtime~\cite{ling2021trustzoneatt,chen2024mraima,mao2025pdrima}. For edge and IoT platforms, \textbf{PSA Certified} provides a broader framework for hardware-rooted assurance and attestation-oriented system design~\cite{psa_certified}. Earlier attestation systems such as \textbf{SWATT}, \textbf{SMART}, and \textbf{SEDA} reinforce the same point from a wider systems perspective: evidence must be attributable to a concrete execution context and fresh enough to support a real trust decision~\cite{seshadri2004swatt,defrawy2012smart,asokan2015seda}. Within Arm CCA, attestation is therefore not an optional add-on; it is the mechanism that makes Realm isolation externally verifiable.
+
+\subsection{Comparative Perspective}
+
+\subsubsection{TrustZone versus Arm CCA}
+
+The transition from \textbf{TrustZone} to \textbf{Arm CCA} is best understood as a change in both threat model and enforcement granularity. TrustZone is effective when a secure-world software stack is itself part of the trusted boundary, but Arm CCA is designed for settings in which a powerful host stack must remain outside the confidentiality boundary~\cite{arm_trustzone_whitepaper,pinto2019trustzone,li2022cca,arm_cca_spec,arm_rme_spec,arm_rmm_spec}. As a result, protection moves from a mostly binary world partition to an ownership model backed by GPT/GPC checks and Realm lifecycle management. The comparison is not that one mechanism replaces the other in all settings; rather, they target different deployment assumptions.
+
+\begin{table}[htbp]
+\centering
+\caption{Architectural Comparison: TrustZone and Arm CCA}
+\label{tab:tz_vs_cca}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.33\linewidth}p{0.35\linewidth}@{}}
+\toprule
+\textbf{Property} & \textbf{TrustZone} & \textbf{Arm CCA} \\ \midrule
+Primary Isolation Model & Secure / Non-secure world split & Realm-based confidential execution with Root/Secure/Realm/Non-secure separation \\
+Protection Granularity & Platform-defined secure-world partitioning & Granule ownership tracked through GPT/GPC \\
+Trusted Software Context & Secure-world firmware and services & RMM-mediated Realm lifecycle with host outside the data boundary \\
+Memory Enforcement Style & World-aware interconnect and secure memory regions & Hardware-checked ownership transitions for protected granules \\
+Device Model & Typically static secure-world device handling & Realm-aware device and I/O mediation \\
+Attestation Practice & Often platform- or vendor-specific & Structured evidence for Realm launch and platform state \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Arm CCA in Comparative Context}
+
+\textbf{AMD SEV-SNP} addresses a similar high-level problem by protecting guest workloads from a host with substantial management authority~\cite{amd_sev,amd_sev_snp}. The useful comparison is therefore not whether both systems support confidential workloads, but how they represent and enforce the protection boundary. In the Arm case, the cited architecture documents and systems papers emphasize explicit security states, Realm lifecycle management, and hardware ownership checks over physical memory~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. By contrast, the comparison with \textbf{RISC-V PMP} highlights a different design axis: CCA uses table-backed ownership metadata, whereas PMP uses machine-mode configuration registers to define protected physical regions~\cite{arm_cca_spec,arm_rme_spec,riscv_privileged}. The latter remains an important primitive for smaller systems, but the former is better aligned with large, dynamic workloads that repeatedly change memory ownership and depend on coordinated device mediation.
+
+\subsection{Design Tradeoffs and Open Challenges}
+
+\subsubsection{Scalability, Complexity, and System Composition}
+
+The literature surveyed above suggests that Arm CCA's strengths also imply new engineering burdens. Table-backed ownership tracking and explicit lifecycle transitions are more expressive than coarse partitioning, but they require careful coordination among the architecture, the monitor, the host software stack, and devices~\cite{li2022cca,arm_cca_spec,arm_rme_spec,arm_rmm_spec}. The emergence of systems such as \textbf{NanoZone}, \textbf{RContainer}, and \textbf{virtCCA} indicates that researchers are already exploring how to scale these mechanisms to user space, containers, and virtualized deployments without losing the clarity of the protection boundary~\cite{liu2025nanozone,zhou2025rcontainer,xu2026virtcca}. This suggests that scalability is not only a performance question; it is also a question of whether the management model remains understandable as deployments become more complex.
+
+\subsubsection{Data-in-Use versus Data on the System Fabric}
+
+A second recurring issue is that confidential execution cannot be reduced to CPU-local isolation. In Arm CCA specifically, this concern appears through the need to align Realm isolation with device mediation, interconnect protection, and attestation rather than through one standalone mechanism~\cite{arm_cca_spec,arm_rme_spec,arm_smmu_spec,cxl_spec,pcie_ide}. The architecture therefore addresses confidential computing as a composition problem: protected execution, memory ownership, I/O mediation, and trust evidence have to remain consistent across the entire platform.
+
+\subsection{Implications for Network Devices}
+
+The mechanisms surveyed in this section are directly relevant to modern network hardware. Network appliances increasingly combine general-purpose cores, \textbf{SmartNICs}, \textbf{DPUs}, storage engines, and accelerators on the same platform, and many of these components are \textbf{DMA}-capable. In such systems, protecting a confidential workload is not just a matter of isolating CPU execution; it also requires consistent mediation of memory ownership, device assignment, interrupts, and attestation evidence. Arm CCA is therefore particularly relevant to network equipment that performs virtualization, confidential packet processing, or multi-tenant offload, because the same platform must let the operator manage resources without automatically exposing tenant memory or accelerator state.
+
+\subsection{Summary}
+
+The Arm literature surveyed here shows a clear progression from TrustZone-based TEEs to confidential-computing architectures with stronger assumptions about privileged adversaries. TrustZone established a system-wide isolation model based on Secure and Non-secure worlds, but its protection boundary is relatively coarse and often tied to a growing secure-world TCB. Arm CCA extends the design by introducing Realms, GPT/GPC-backed memory ownership, RMM-managed lifecycle control, device mediation through the I/O path, and structured attestation evidence~\cite{arm_trustzone_whitepaper,pinto2019trustzone,li2022cca,arm_cca_spec,arm_rme_spec,arm_rmm_spec}. A cross-cutting observation is that confidential computing in Arm is not defined by any single primitive. Its security properties emerge from the composition of memory ownership tracking, device mediation, and externally verifiable attestation, all of which must hold simultaneously if the workload is to remain protected from a powerful host environment.
