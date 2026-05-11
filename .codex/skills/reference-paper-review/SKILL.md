@@ -1,24 +1,79 @@
 ---
 name: reference-paper-review
-description: Deep Chinese review workflow for computer systems, security, architecture, OS, network, distributed systems, hardware, compiler, and software-engineering papers stored under a repository `reference/` library. Use when Codex needs to read a paper PDF/link/title, produce a critical reviewer-style paper analysis, or write/update that analysis into the paper directory's `README.md`.
+description: Survey-oriented Chinese workflow for hardware-security paper ingestion, classification, and critical review. Use when Codex is given a paper PDF URL, arXiv/DOI/paper page/title, or a paper already under `reference/`; download verified PDFs into the correct reference category directory, map the paper against `domain.md`, write/update the paper `README.md`, and for SoK/survey papers expand important cited works for classification and analysis.
 ---
 
 # Reference Paper Review
 
 ## Purpose
 
-Produce a critical, evidence-based paper reading note for papers under `reference/<category>/<paper>/`. Treat the output as a reusable research note, not a generic abstract.
+Maintain this repository's hardware-security survey evidence library and produce critical, evidence-based paper notes under `reference/<category>/<paper>/`. Treat the output as reusable SoK/survey material, not a generic abstract.
 
 Default output language is Chinese. Keep claims grounded in the paper. If the paper does not specify something, write `论文未说明` or `证据不足`; do not fill gaps with guesses.
 
-## Workflow
+## Repository Contract
 
-1. Locate the paper directory, usually `reference/<category>/<paper>/`.
+- Use the current categories in `reference/README.md`; read `domain.md` when category or SOTA role is unclear.
+- Store ordinary papers at `reference/<category>/<paper-slug>/`.
+- Store SoK/survey/taxonomy/literature-review anchor papers at `reference/<category>/sok/<paper-slug>/`.
+- Use a lowercase kebab-case slug derived from the canonical title.
+- Before creating anything, deduplicate with `rg` across `reference/`, `survey/reference.bib`, and `domain.md` using title words, BibTeX key, DOI, arXiv id, and author/year.
+- Treat `paper.pdf` as local evidence only after the file exists and is verified as a PDF. If download fails, keep the README and record the exact failure in `Download status`.
+
+## Link/PDF Ingestion Workflow
+
+When the user gives a network link, title, DOI, or arXiv page, do the ingestion work instead of only explaining what to do.
+
+1. Identify the input type:
+   - Direct PDF: `.pdf` URL, `arxiv.org/pdf/...`, publisher PDF endpoint, or `Content-Type: application/pdf`.
+   - Paper page: arXiv abstract, DOI, ACM/IEEE/USENIX/NDSS/OpenReview/publisher page, GitHub release, or project page.
+   - Title-only input: search for the canonical paper page and PDF source.
+2. Resolve metadata from primary sources when possible: title, authors, year, venue/status, DOI/arXiv id, source URL, PDF URL, BibTeX key candidate, and whether the paper is SoK/survey/spec/system/attack/defense.
+3. Choose the category by matching the paper's mechanism and contribution against `domain.md` and existing `reference/<category>/` entries. If it is a SoK/survey anchor, place it under that category's `sok/` directory.
+4. Create or update the paper directory and README metadata. Use this shape unless the existing README already has equivalent fields:
+
+```markdown
+# Paper Title
+
+- BibTeX key: `key`
+- Category: `category[/sok]`
+- Authors: ...
+- Year: ...
+- Venue: ...
+- Source: ...
+- PDF source: ...
+- Local PDF: `paper.pdf` or unavailable
+- Download status: downloaded and verified | unavailable: reason
+- SOTA role: ...  # only when applicable
+```
+
+5. Download the public PDF to `paper.pdf` when available. Preserve the source URL in `PDF source`. Verify the file by checking PDF magic bytes, `file`, `pdfinfo`, or a successful text extraction.
+6. Generate the review with the schema below and write it back with `scripts/update_readme.py`.
+7. If the paper is intended for the survey bibliography and reliable metadata is available, add or update its BibTeX entry in `survey/reference.bib`. Do not invent DOI, pages, venue, or publisher fields.
+
+## Existing Paper Workflow
+
+1. Locate the paper directory, usually `reference/<category>/<paper>/` or `reference/<category>/sok/<paper>/`.
 2. Read `README.md` first for BibTeX key, title, source URL, category, and download status.
 3. Prefer `paper.pdf` when present. If no PDF exists, use the source links in README or user-provided link/title. Clearly mark weaker evidence when only metadata or a web page is available.
 4. Extract enough paper text to support the review. When possible, cite section, page, figure, or table locations.
 5. Write the analysis using the schema below.
 6. Insert or replace the analysis in the paper `README.md` using `scripts/update_readme.py`.
+
+## SoK / Survey Expansion Workflow
+
+When the ingested or reviewed paper is a SoK, survey, taxonomy, or literature review, use it as an anchor for one-hop citation expansion.
+
+1. Extract the bibliography from `paper.pdf` or the publisher/arXiv page. If extraction quality is poor, say so and use only citations that can be identified reliably.
+2. Build a citation triage table before downloading many papers. Prioritize references that are:
+   - foundational systems/specifications for this survey's hardware-security scope,
+   - directly used by the SoK taxonomy,
+   - baselines or representative systems,
+   - SOTA or standards-track materials,
+   - missing from `reference/` but mapped to a `domain.md` gap.
+3. For each P0/P1 cited work, search for the primary paper/spec page and public PDF, deduplicate against the repo, classify into the right category, create/update the README, download a verified PDF when possible, and analyze it with this same review schema.
+4. Do not recursively expand references of those cited works unless the user explicitly asks. For large SoK bibliographies, finish the highest-priority cited works first and leave a clear backlog table in the SoK README or final report.
+5. Update `reference/<category>/sok/README.md` when adding a SoK anchor. Update `domain.md` only for material changes to coverage, SOTA status, or survey gaps.
 
 ## Review Standard
 
@@ -228,6 +283,25 @@ Rules for this addendum:
 - Mark status explicitly. Draft specs and arXiv papers may be SOTA, but must be labeled `draft`, `not ratified`, or `arXiv` where applicable.
 - If the evidence source is only metadata or a web page rather than `paper.pdf`, say so directly.
 
+## SoK Citation Expansion Addendum
+
+For SoK/survey/taxonomy anchor papers, append this section after the SOTA addendum when citation expansion was performed:
+
+```markdown
+### 13. SoK Citation Expansion
+
+| Priority | Cited work | Role in SoK | Repo category | Local status | Next action |
+|---|---|---|---|---|---|
+| P0 | ... | taxonomy foundation / baseline / spec / SOTA | `reference/...` | existing / added / missing PDF / backlog | ... |
+```
+
+Rules for this addendum:
+
+- Include only citations that are relevant to this repository's hardware-security survey scope.
+- Mark whether each cited work already existed, was newly added, was only metadata-verified, or still needs a PDF/review.
+- Use `P0` for must-read anchor evidence, `P1` for important supporting work, and `P2` for background or optional expansion.
+- Keep the table factual; do not claim a cited paper has been analyzed unless its README has a `Paper Review` block or the current response includes the analysis.
+
 ## Updating README
 
 Save the generated review to a temporary Markdown file, then run:
@@ -244,4 +318,7 @@ After updating, briefly report:
 
 - README path updated
 - Evidence source used (`paper.pdf`, source URL, or metadata only)
+- PDF download and verification result when ingestion was performed
+- Category and local path chosen
+- SoK citation expansion status, including any P0/P1 backlog
 - Any major fields marked `论文未说明` / `证据不足`

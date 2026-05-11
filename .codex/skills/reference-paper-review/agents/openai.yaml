@@ -1,4 +1,4 @@
 interface:
   display_name: "Reference Paper Review"
-  short_description: "Deep paper reviews for reference READMEs"
-  default_prompt: "Use $reference-paper-review to analyze a paper PDF under reference/ and write the result into its README."
+  short_description: "Ingest, classify, and review survey papers"
+  default_prompt: "Use $reference-paper-review on this paper link/PDF: ingest it into the right reference category, download and verify paper.pdf, classify it against domain.md, write/update the README review, and if it is a SoK/survey, triage its important cited works."
