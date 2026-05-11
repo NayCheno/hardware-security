@@ -15,22 +15,28 @@ Default output language is Chinese. Keep claims grounded in the paper. If the pa
 
 This repository is a research SoK/survey evidence library. The default goal is to build a defensible architecture-level survey, not to collect every adjacent security paper.
 
+The survey is fixed around three primary lanes:
+
+1. Arm / RISC-V confidential-computing defense mechanisms.
+2. Network, I/O, device, and data-path defense mechanisms in confidential-computing settings.
+3. ISA and hardware-design defenses that support platform security.
+
 Prioritize papers, specifications, and surveys that directly support:
 
-- hardware-assisted TEE and confidential-computing design space,
-- Arm TrustZone / Arm CCA / RME / RMM mechanisms,
-- RISC-V enclave lineage, CoVE / AP-TEE, CoVE-IO, TEE-I/O, IOMMU, IOPMP, and AIA,
-- attestation, boot, lifecycle, memory ownership, DMA/I/O protection, accelerator/device TEE,
-- memory protection taxonomy when it clarifies access control, encryption, integrity, replay protection, or lifecycle semantics,
-- runtime CFI / memory-safety hardening only when it helps separate architectural hardening from TEE/confidential-computing boundaries.
+- Arm TrustZone / Arm CCA / RME / RMM / Realm mechanisms and RISC-V enclave lineage / CoVE / AP-TEE / TVM / TSM mechanisms,
+- CoVE-IO, TEE-I/O, trusted I/O, SMMU, IOMMU, IOPMP/sIOPMP, AIA, trusted MSI, DMA/MMIO protection, PCIe IDE, SPDM, TDISP, CXL/RDMA data paths, device assignment, accelerator/device TEE, NIC/DPU/SmartNIC/secure offload when tied to confidential computing,
+- attestation, boot, lifecycle, memory ownership, evidence chain, verifier policy, and device/network endpoint identity for confidential workloads,
+- ISA and hardware-design defenses such as Arm MTE, PAC, BTI, GCS, PAN/PXN/UXN, PTE/page-table permissions, RISC-V PMP/ePMP/Smepmp, Zicfiss/Zicfilp, CHERI/CHERIoT-style capabilities, RV-CURE-style memory safety, memory encryption/integrity/replay protection, and debug/trace lockdown,
+- memory protection taxonomy when it clarifies access control, encryption, integrity, replay protection, or lifecycle semantics.
 
 Current out-of-scope topics:
 
 - side-channel, microarchitectural leakage, physical leakage, fault injection, Rowhammer, power/EM, cache-timing, and speculative-leakage papers as primary research targets,
 - attack-only papers that do not directly change the architecture/specification taxonomy,
+- generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary,
 - broad vulnerability surveys unless they are needed to explain the threat-model boundary of an in-scope TEE/confidential-computing mechanism.
 
-For out-of-scope attack papers, do not download PDFs, create new reference directories, or expand citations by default. Mention them only as limitations or excluded threats when an in-scope paper relies on that boundary. If the user explicitly asks to study attacks later, create a separate scope and bibliography instead of mixing it into the current defense/specification survey.
+For out-of-scope attack or generic-network papers, do not download PDFs, create new reference directories, or expand citations by default. Mention them only as limitations or excluded threats when an in-scope paper relies on that boundary. If the user explicitly asks to study attacks or generic network security later, create a separate scope and bibliography instead of mixing it into the current defense/specification survey.
 
 ## Repository Contract
 
@@ -50,8 +56,9 @@ When the user gives a network link, title, DOI, or arXiv page, do the ingestion 
    - Paper page: arXiv abstract, DOI, ACM/IEEE/USENIX/NDSS/OpenReview/publisher page, GitHub release, or project page.
    - Title-only input: search for the canonical paper page and PDF source.
 2. Resolve metadata from primary sources when possible: title, authors, year, venue/status, DOI/arXiv id, source URL, PDF URL, BibTeX key candidate, and whether the paper is SoK/survey/spec/system/attack/defense.
-3. Choose the category by matching the paper's mechanism and contribution against `domain.md` and existing `reference/<category>/` entries. If it is a SoK/survey anchor, place it under that category's `sok/` directory.
-4. Create or update the paper directory and README metadata. Use this shape unless the existing README already has equivalent fields:
+3. Choose the survey lane and category by matching the paper's mechanism and contribution against `domain.md` and existing `reference/<category>/` entries. If the paper does not map to one of the three survey lanes, do not ingest it unless the user explicitly asks.
+4. If it is a SoK/survey anchor, place it under that category's `sok/` directory.
+5. Create or update the paper directory and README metadata. Use this shape unless the existing README already has equivalent fields:
 
 ```markdown
 # Paper Title
@@ -65,12 +72,13 @@ When the user gives a network link, title, DOI, or arXiv page, do the ingestion 
 - PDF source: ...
 - Local PDF: `paper.pdf` or unavailable
 - Download status: downloaded and verified | unavailable: reason
+- Survey lane: Arm/RISC-V confidential-computing defense | confidential-computing network/I/O/data-path defense | ISA/hardware-design defense
 - SOTA role: ...  # only when applicable
 ```
 
-5. Download the public PDF to `paper.pdf` when available. Preserve the source URL in `PDF source`. Verify the file by checking PDF magic bytes, `file`, `pdfinfo`, or a successful text extraction.
-6. Generate the review with the schema below and write it back with `scripts/update_readme.py`.
-7. If the paper is intended for the survey bibliography and reliable metadata is available, add or update its BibTeX entry in `survey/reference.bib`. Do not invent DOI, pages, venue, or publisher fields.
+6. Download the public PDF to `paper.pdf` when available. Preserve the source URL in `PDF source`. Verify the file by checking PDF magic bytes, `file`, `pdfinfo`, or a successful text extraction.
+7. Generate the review with the schema below and write it back with `scripts/update_readme.py`.
+8. If the paper is intended for the survey bibliography and reliable metadata is available, add or update its BibTeX entry in `survey/reference.bib`. Do not invent DOI, pages, venue, or publisher fields.
 
 ## Existing Paper Workflow
 
@@ -87,12 +95,12 @@ When the ingested or reviewed paper is a SoK, survey, taxonomy, or literature re
 
 1. Extract the bibliography from `paper.pdf` or the publisher/arXiv page. If extraction quality is poor, say so and use only citations that can be identified reliably.
 2. Build a citation triage table before downloading many papers. Prioritize references that are:
-   - foundational systems/specifications for this survey's hardware-security scope,
+   - foundational systems/specifications for one of the three survey lanes,
    - directly used by the SoK taxonomy,
    - baselines or representative systems,
    - SOTA or standards-track materials,
    - missing from `reference/` but mapped to a `domain.md` gap.
-3. Filter out current out-of-scope attack-only works before assigning P0/P1. Side-channel, physical-leakage, fault, Rowhammer, cache-timing, and speculative-leakage citations should normally be marked `out-of-scope` or `P2 boundary only`, unless the user explicitly asks to study that attack area.
+3. Filter out current out-of-scope attack-only and generic-network works before assigning P0/P1. Side-channel, physical-leakage, fault, Rowhammer, cache-timing, speculative-leakage, and generic network-security citations should normally be marked `out-of-scope` or `P2 boundary only`, unless the user explicitly asks to study that area.
 4. For each in-scope P0/P1 cited work, search for the primary paper/spec page and public PDF, deduplicate against the repo, classify into the right category, create/update the README, download a verified PDF when possible, and analyze it with this same review schema.
 5. Do not recursively expand references of those cited works unless the user explicitly asks. For large SoK bibliographies, finish the highest-priority cited works first and leave a clear backlog table in the SoK README or final report.
 6. Update `reference/<category>/sok/README.md` when adding a SoK anchor. Update `domain.md` only for material changes to coverage, SOTA status, or survey gaps.

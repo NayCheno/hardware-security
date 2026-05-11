@@ -18,6 +18,18 @@ Current categories:
 - `risc-v-confidential-computing/`
 - `trusted-execution-environments/`
 
+Category routing for the current survey scope:
+
+- `arm-confidential-computing/`: Arm CCA/RME/RMM/Realm, Arm confidential VM, Arm CCA research platforms, inter-CVM sharing, CCA-specific memory and device mechanisms.
+- `risc-v-confidential-computing/`: RISC-V enclave lineage, CoVE/AP-TEE, TVM/TSM, CoVE-IO, TEE-I/O, RISC-V IOMMU/IOPMP/AIA when used for confidential-computing boundaries.
+- `accelerator-tees/`: GPU/NPU/DPU/SmartNIC/NIC accelerator TEE, confidential offload, device-local TEE, accelerator attestation and secure scheduling.
+- `memory-and-io-fabrics/`: confidential-computing network/I/O/data-path materials that are not tied to one CPU architecture, including CXL, RDMA, PCIe IDE, SPDM, TDISP, secure fabric paths, remote memory, trusted vNIC/vSwitch/offload, and fabric boundary papers.
+- `architecture-and-platform-security/`: ISA and hardware-design defenses such as Arm MTE/PAC/BTI/GCS/PAN/PXN/UXN/PTE permissions, RISC-V PMP/ePMP/Smepmp/Zicfiss/Zicfilp/PTE permissions, CHERI/CHERIoT, RV-CURE, memory encryption/integrity/replay protection, debug/trace lockdown, and hardware CFI/memory-safety implementations.
+- `attestation/`: evidence formats, verifier policy, boot/lifecycle attestation, device/network endpoint identity, and measurement chains used by Arm/RISC-V confidential-computing systems.
+- `trusted-execution-environments/`: cross-platform TEE SoK/survey anchors and historical TrustZone/TEE background that supports the Arm/RISC-V confidential-computing comparison.
+
+Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
+
 Download status: 50 of 64 reference entries have verified local PDFs.
 
 Newly added or completed in this pass:

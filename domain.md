@@ -20,25 +20,35 @@
 
 ## 0. 当前科研范围规定
 
-本阶段目标是先把 SoK/survey 的研究边界、分类规则和证据标准定清楚，再补正文。当前不做侧信道/物理泄漏/故障注入等攻击方向的系统研究。
+本阶段目标是先把 SoK/survey 的研究边界、分类规则和证据标准定清楚，再补正文。当前 survey 固定为三条主线：Arm/RISC-V 机密计算防御机制、机密计算场景下的网络/数据路径防御机制、以及 ISA/硬件设计防御机制。当前不做侧信道/物理泄漏/故障注入等攻击方向的系统研究。
+
+核心主线：
+
+| 主线 | 研究对象 | 典型机制 / 关键词 | 使用边界 |
+|---|---|---|---|
+| Arm / RISC-V 机密计算防御机制 | 保护 confidential workload 免受不可信 host/hypervisor/OS/firmware 或设备路径影响的体系结构机制 | Arm TrustZone、CCA、RME、RMM、Realm、GPT/GPC、RIPAS；RISC-V Sanctum/Keystone/Penglai/SPEAR-V/ACE、CoVE/AP-TEE、TSM、TVM、memory donation/reclaim/share、attestation | 主线核心；机制 claims 必须回引原始论文/spec。 |
+| 机密计算上的网络 / I/O / 数据路径防御机制 | confidential VM/Realm/TVM 使用 NIC、DPU、SmartNIC、RDMA、PCIe/CXL 设备或网络 offload 时的身份、隔离、加密、完整性、DMA 和中断防护 | CoVE-IO、TEE-I/O、SMMU、IOMMU、IOPMP/sIOPMP、AIA、trusted MSI、device assignment、SPDM、TDISP、PCIe IDE、CXL/RDMA data path、accelerator/device TEE、secure vNIC/vSwitch/offload | 只收“和机密计算边界直接相关”的网络/设备防御；普通 firewall/IDS/VPN/TLS 论文不作为主线。 |
+| ISA / 硬件设计防御机制 | 指令集、页表/权限模型、内存系统、控制流、capability/tagging、debug/trace 控制等硬件级防御 | Arm MTE、PAC、BTI、GCS、PAN/PXN/UXN、PTE/page-table permissions、SMMU；RISC-V PMP/ePMP/Smepmp、PTE/page-table permissions、Zicfiss/Zicfilp、IOMMU、IOPMP、AIA；CHERI/CHERIoT、RV-CURE、memory encryption/integrity/replay protection、debug/trace lockdown | 作为 defense-in-depth 和平台设计边界；不能把这类机制写成 TEE/CCA/CoVE 本体。 |
 
 纳入范围：
 
-- 硬件辅助 TEE 与 confidential computing 的架构设计空间。
-- Arm TrustZone、Arm CCA/RME/RMM、RISC-V enclave lineage、CoVE/AP-TEE、CoVE-IO/TEE-I/O。
-- IOMMU、IOPMP、AIA、SMMU、DMA/I/O protection、accelerator/device TEE、attestation、boot、lifecycle、memory ownership。
-- Memory protection taxonomy 中能澄清 access control、encryption、integrity、replay protection、lifecycle 语义的材料。
-- Runtime CFI / memory-safety hardening 只作为“架构加固”和“TEE/confidential-computing boundary”之间的边界说明材料。
+- 能直接支撑上述三条主线的 SoK、survey、规范、系统论文、实现论文和硬件设计论文。
+- 能解释 Arm/RISC-V 机密计算 threat model、TCB、memory ownership、attestation、device/network data path、lifecycle 或 evidence chain 的材料。
+- 能澄清 access control、PTE/page-table permissions、encryption、integrity、replay protection、capability/tagging、CFI、debug/trace、DMA/I/O protection 的材料。
+- 网络防御材料只有在和 confidential workload、TEE、device assignment、trusted I/O、secure offload、RDMA/CXL/PCIe data path 或 attested network endpoint 直接相关时纳入。
 
 暂不纳入当前研究：
 
 - 侧信道、微架构泄漏、物理泄漏、故障注入、Rowhammer、power/EM、cache timing、speculative leakage 作为独立研究主题。
 - attack-only 论文，除非它直接改变某个 in-scope 架构/spec 的 threat-model 解释。
+- 普通网络安全论文，例如通用 firewall、IDS/IPS、DDoS、routing security、TLS/VPN/web security，除非它们明确服务于机密计算网络路径或可信网络端点。
 - 大范围漏洞谱系整理，除非用于说明 TrustZone/CCA/CoVE 等机制的历史动机或明确排除边界。
 
 执行规则：
 
-- Agent 遇到论文链接时，先判断是否落入纳入范围；若只是侧信道/物理/故障/Rowhammer 攻击论文，默认不下载、不建目录、不做 citation expansion。
+- Agent 遇到论文链接时，先判断它属于哪条主线；无法映射到三条主线之一的论文默认不入库。
+- 若只是侧信道/物理/故障/Rowhammer 攻击论文，默认不下载、不建目录、不做 citation expansion。
+- 若只是普通网络防御论文，且没有 confidential computing / TEE / trusted I/O / device offload / attested endpoint 语境，默认不下载、不建目录。
 - SoK/survey 引用扩展时，P0/P1 只给 in-scope 的机制、规范、系统、taxonomy 或代表性 baseline；侧信道类引用最多标为 `boundary only`，不作为当前 backlog。
 - 正文只需要一段 threat-model boundary 说明当前不研究这些攻击面；不要新增独立 side-channel 章节。
 - 现有 Bib 中的 attack 条目先保留，不批量删除；后续若用户明确转向攻击 SoK，再拆成独立 scope 和 bibliography。
@@ -58,8 +68,8 @@
 | RISC-V CoVE / AP-TEE confidential VM | 未提到 | 正文仍把 Arm CCA 主要对比到 PMP，层级不匹配 | `boubakri2025riscvtee`; CoVE 原论文和 AP-TEE spec | `sahita2023cove`; SOTA `riscv_ap_tee_2024` (v0.7 draft / not ratified); SOTA `boubakri2025riscvtee` | P0：补 TVM、TSM/TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share、CoVE attestation。 |
 | RISC-V CoVE-IO / TEE-I/O | 未提到 | 正文没有 CoVE-IO/TDI/TDM/DSM/SPDM/TDISP/trusted MSI | `sok-tee` 可辅助 accelerator 背景；原始 spec 为主 | `feng2024siopmp`; SOTA `riscv_cove_io_2026` (v0.3.0 draft / not ratified); SOTA `riscv_iommu_2023` / `riscv_aia_2023` | P0：补 device identity、secure DMA/MMIO、interrupt、PCIe IDE、TDISP、SPDM。 |
 | Memory encryption / integrity / replay protection | 待补足 | 正文提到 AMD SEV/SEV-SNP、CCA/CoVE 相关概念，但未分类 | `henson2014memory` | `henson2014memory`; SOTA `amd_sev_snp`; SOTA `riscv_ap_tee_2024` / `arm_cca_spec` | 区分 access control、encryption、integrity、replay protection；不要把 PMP/GPT 写成 memory encryption。 |
-| Memory / I/O fabrics: CXL、PCIe IDE、RDMA | 已覆盖但需边界说明 | `cxl_spec`, `pcie_ide`, `acpi_spec`, `gouk2022directcxl`, `zhong2024cxltiers`, `wang2025odrp` | 无 TEE SoK；以 specs + systems papers | `gouk2022directcxl`; SOTA `zhong2024cxltiers`; SOTA `wang2025odrp` | 明确这些材料支撑 fabric boundary 和数据路径复杂性，不是 Arm CCA 或 RISC-V CoVE 本体论文。 |
-| Runtime CFI / memory-safety hardening | 已覆盖 | `armv-a`, `riscv_privileged` | 无单一 SoK；以 architecture specs 为准 | `armv-a`; SOTA `riscv_privileged`; SOTA `manoni2026cva6cfi`; SOTA `kim2023rvcure`; SOTA `amar2023cheriot` | 明确 MTE/PAC/BTI/GCS、Zicfiss/Zicfilp、CHERI/CHERIoT 与 CCA 是不同层面的防御机制。 |
+| 机密计算网络 / I/O / fabric 防御 | 待补足 | `cxl_spec`, `pcie_ide`, `acpi_spec`, `gouk2022directcxl`, `zhong2024cxltiers`, `wang2025odrp` 已覆盖部分 fabric；缺网络防御 taxonomy | `sok-tee` 可辅助 accelerator/device TEE；CoVE-IO 和 PCIe/CXL/RDMA specs 为主 | `riscv_cove_io_2026`; `feng2024siopmp`; `riscv_iommu_2023`; `riscv_iopmp_2026`; `riscv_aia_2023`; `pcie_ide`; `cxl_spec`; `wang2025odrp` | 补 NIC/DPU/SmartNIC、secure vNIC/vSwitch/offload、RDMA/CXL/PCIe data path、SPDM/TDISP/IDE、DMA/MMIO/MSI/IOMMU/IOPMP/AIA 的机密计算边界。 |
+| ISA / 硬件设计防御: MTE、PTE/page table、CFI、capability/tagging | 待补足 | `armv-a`, `riscv_privileged` 已覆盖部分；正文尚未系统展开 PTE/page-table permission、debug/trace、capability/tagging | 无单一 SoK；以 architecture specs 和硬件实现论文为准 | `armv-a`; `riscv_privileged`; SOTA `manoni2026cva6cfi`; SOTA `kim2023rvcure`; SOTA `amar2023cheriot`; `henson2014memory` | 明确 MTE/PAC/BTI/GCS、PAN/PXN/UXN、PTE 权限、PMP/ePMP/Smepmp、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE、memory integrity/encryption 与 CCA/CoVE 的层级关系。 |
 | Side-channel / physical leakage attacks | 当前不研究 / out-of-scope | Bib 中大量 attacks 条目，正文主线未引用 | 不作为当前 SoK 研究对象 | Bib attacks section; `schluter2025heracles` 仅适合 boundary/limitation | 不下载、不扩展、不写独立章节；只在 threat model / limitation 中说明 excluded attacks。 |
 
 ## 2. SoK / Survey 与 Reference 映射
@@ -368,13 +378,15 @@
 
 | 优先级 | 任务 | 主要引用 |
 |---|---|---|
+| P0 | 在正文开头固定三条 survey 主线：Arm/RISC-V 机密计算防御、机密计算网络/I/O/data-path 防御、ISA/硬件设计防御。 | `schneider2022soktee`, `li2024sokteechoices`, `arm_cca_spec`, `riscv_ap_tee_2024`, `riscv_cove_io_2026`, `armv-a`, `riscv_privileged` |
 | P0 | 新增 RISC-V CoVE/AP-TEE confidential VM 小节，纠正 Arm CCA 对比到 PMP 的层级不匹配。 | `sahita2023cove`, `riscv_ap_tee_2024`, `boubakri2025riscvtee` |
 | P0 | 新增 RISC-V CoVE-IO / TEE-I/O 小节。 | `riscv_cove_io_2026`, `feng2024siopmp`, `riscv_iommu_2023`, `riscv_aia_2023`, `riscv_iopmp_2026`, `sok-tee` |
+| P1 | 补机密计算网络 / I/O / fabric 防御 taxonomy。 | `riscv_cove_io_2026`, `pcie_ide`, `cxl_spec`, `wang2025odrp`, `gouk2022directcxl`, `zhong2024cxltiers`, `sok-tee` |
 | P1 | 补 RISC-V TEE lineage。 | `costan2016sanctum`, `lee2020keystone`, `weiser2019timberv`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace` |
 | P1 | 补 Arm CCA 机制表。 | `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` |
 | P1 | 补 Arm CCA 研究平台和 inter-CVM sharing。 | `bertschi2025opencca`, `abdollahi2025caec` |
 | P1 | 补 memory protection taxonomy。 | `henson2014memory`, `amd_sev_snp`, `arm_cca_spec`, `riscv_ap_tee_2024` |
-| P1 | 补 runtime CFI / memory-safety hardening 边界说明。 | `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot`, `riscv_privileged` |
+| P1 | 补 ISA / 硬件设计防御 taxonomy，覆盖 MTE、PTE/page-table permission、PAC、BTI、GCS、PMP/ePMP、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE。 | `armv-a`, `riscv_privileged`, `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot` |
 | Scope-only | 写一段 side-channel / physical leakage out-of-scope statement，说明 attacks Bib 暂不进入当前 defense/specification 主线。 | Bib attacks section; `schluter2025heracles` |
 
 ## 7. 联网核验来源
