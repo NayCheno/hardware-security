@@ -145,6 +145,17 @@ attested service-channel binding. It is distinct from device identity because
 the question is not only "which device is present" but "where does this
 application connection terminate."
 
+\textbf{aDNS} addresses the neighboring discovery and naming problem: how a
+client learns that a domain name is bound to a confidential service whose
+attestation satisfies that domain's policy. Transparent Attested DNS requires a
+TEE-backed service to present hardware attestation before registering keys and
+obtaining certificates for names in the relevant zone, and records policies,
+attestations, and certificates in a public append-only log~\cite{delignatlavaud2025adns}.
+This complements TLS+RA rather than replacing it. TLS+RA binds a channel to an
+attested endpoint; aDNS binds service names, certificate issuance, and verifier
+policy to attestation evidence. Neither mechanism constrains DMA, assigns a
+device interface, or proves the application-level semantics of the service.
+
 \subsection{Data Plane: DMA, Links, and Fabrics}
 
 \subsubsection{IOMMU, SMMU, IOPMP, and Address Authority}
@@ -313,7 +324,7 @@ application-channel termination.
 \textbf{Layer} & \textbf{Primary Question} & \textbf{Representative Mechanisms} & \textbf{Survey Role} \\ \midrule
 Device identity and measurement & Which endpoint is participating, and what state can it prove? & SPDM, SPDM secured messages, SPDM over TCP & Establish evidence and secure sessions for device trust. \\
 Device-interface lifecycle & Which interface is assigned to the confidential workload? & TDISP, trusted device interface state, CoVE-IO TDI/TDM/DSM & Bind a device function or interface to a protected domain. \\
-Attested service channel & Does the application channel terminate in the attested protected endpoint? & TLS+RA, RA-TLS-style endpoint binding, verifier policy & Bind network services, KBS endpoints, proxies, and DPU-hosted TLS termination to TEE evidence. \\
+Attested service channel & Does the application channel terminate in the attested protected endpoint? & TLS+RA, aDNS, RA-TLS-style endpoint binding, verifier policy & Bind service names, certificates, KBS endpoints, proxies, and DPU-hosted TLS termination to TEE evidence. \\
 DMA and MMIO authority & Which memory and registers may the device access? & SMMU, RISC-V IOMMU, IOPMP, sIOPMP & Enforce address translation and transaction filtering. \\
 Interrupt and event delivery & Can completion and error events be delivered without host spoofing or confusion? & AIA, trusted MSI, Devlore-style interrupt ownership & Keep device ownership coherent after asynchronous events. \\
 Link and fabric protection & What protects traffic across PCIe, CXL, RDMA, and remote-memory paths? & PCIe IDE, CXL fabric controls, protected RDMA/remote paging designs & Protect data once it leaves CPU-local memory paths. \\
@@ -337,7 +348,9 @@ becomes a whole-platform problem. SPDM and secured messages provide identity,
 measurement, and session foundations. TDISP and CoVE-IO introduce trusted
 device-interface lifecycle concepts, with TDISP cited here only through public
 metadata rather than gated normative state-machine rules, and CoVE-IO still a
-draft. TLS+RA-style protocols bind application channels to attested endpoints.
+draft. TLS+RA-style protocols bind application channels to attested endpoints,
+while aDNS adds attested naming, certificate issuance, and service-policy
+discovery.
 SMMU, IOMMU, IOPMP, and sIOPMP constrain DMA
 authority. AIA and trusted MSI address interrupt delivery. PCIe IDE, CXL, RDMA,
 NVMe-oF, and remote-memory systems define the fabric paths that protected data
