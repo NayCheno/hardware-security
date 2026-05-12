@@ -248,13 +248,13 @@
    - 解决方案：通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离。
    - 实验结果：规范，无实验。
    - 文章评价：所有 RISC-V TEE 讨论的底座；不是 confidential VM 的完整方案。
-2. `riscv_iommu_2023` / `riscv_iopmp_2026` — Spec/standard SOTA plus Draft/not ratified；IOMMU v1.0.0 ratified，IOPMP v0.8.2 draft。
+2. `riscv_iommu_2023` / `riscv_iopmp_2026` — Spec/standard SOTA plus Draft/not ratified；IOMMU v1.0.1 / 20260222 ratified-library release，IOPMP v0.8.2 draft。
    - 内容摘要：定义 RISC-V I/O translation/protection 架构。
    - 研究背景：DMA/总线 master 可绕过 CPU-side PMP/页表，TEE 需要 I/O 侧隔离。
    - 解决方案：IOMMU 约束设备地址转换和访问权限；IOPMP 通过 requester/memory-domain/entry matching 过滤 I/O transaction。
    - 实验结果：规范，无实验。
    - 文章评价：是 CoVE-IO 讨论的基础材料；IOPMP 仍是 draft，不是单独的 TEE 设计。
-3. `riscv_aia_2023` / `manoni2026cva6cfi` — Spec/standard SOTA plus Draft/not ratified；AIA v1.0，CVA6-CFI arXiv 2026。
+3. `riscv_aia_2023` / `manoni2026cva6cfi` — Spec/standard SOTA plus Draft/not ratified；AIA v1.0 ratified June 2023 with 20250312 clarifications，CVA6-CFI arXiv 2026。
    - 内容摘要：AIA 定义 interrupt/MSI/virtual interrupt 基础；CVA6-CFI 实现并评估 Zicfiss/Zicfilp。
    - 研究背景：confidential I/O 需要可信 interrupt delivery；runtime memory-safety/CFI 需要独立于 CCA/CoVE 的控制流防护。
    - 解决方案：AIA 规范化 interrupt controller 与 MSI；CVA6-CFI 用 shadow stack 和 landing pad 单元实现 backward/forward-edge CFI。
@@ -317,7 +317,7 @@
    - 解决方案：引入 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合。
    - 实验结果：规范草案，无实验。
    - 文章评价：当前最重要的 RISC-V confidential I/O 规范；必须标注 draft。
-3. `riscv_iommu_2023` / `riscv_aia_2023` — Spec/standard SOTA；v1.0.0 / v1.0 release。
+3. `riscv_iommu_2023` / `riscv_aia_2023` — Spec/standard SOTA；IOMMU v1.0.1 / 20260222 ratified-library release；AIA v1.0 ratified June 2023 with 20250312 clarifications。
    - 内容摘要：IOMMU 和 AIA 分别支撑设备 DMA translation/protection 与 interrupt delivery。
    - 研究背景：CoVE-IO 不能只靠 PMP 或 CPU page table，必须处理设备侧地址转换和中断路径。
    - 解决方案：IOMMU 控制设备可访问地址空间，AIA 提供中断架构基础。
@@ -435,7 +435,7 @@
 |---|---|---|
 | 正文 79 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
 | RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；AP-TEE v0.7 是 draft/RC2 for ARC review，CoVE-IO v0.3.0 是 draft。 | 作为 Draft/not ratified spec evidence；正文必须标注 draft / not ratified。 |
-| `riscv_iommu_2023` / `riscv_aia_2023` | v1.0.0 / v1.0 release 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
+| `riscv_iommu_2023` / `riscv_aia_2023` | IOMMU v1.0.1 / 20260222 ratified-library release 与 AIA v1.0 ratified June 2023 / 20250312 clarifications 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
 | `boubakri2025riscvtee` | MDPI HTML 核验；PDF 自动下载 403。 | 作为 survey anchor；机制论断回引原始论文/spec。 |
 | `rats_rfc` | RFC 9334 HTML/PDF 已核验并下载。 | 作为 RATS architecture / terminology 标准；不作为平台机制或 token-format 实现证据。 |
@@ -494,7 +494,7 @@
 
 - RISC-V AP-TEE / CoVE: https://github.com/riscv-non-isa/riscv-ap-tee and https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7
 - RISC-V CoVE-IO: https://github.com/riscv-non-isa/riscv-ap-tee-io and https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0
-- RISC-V IOMMU / AIA: https://github.com/riscv-non-isa/riscv-iommu/releases/tag/v1.0.0 and https://github.com/riscv/riscv-aia/releases/tag/1.0
+- RISC-V IOMMU / AIA: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf and https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf
 - RISC-V IOPMP: https://github.com/riscv-non-isa/riscv-iopmp/releases/tag/v0.8.2
 - RISC-V CFI / memory safety: https://arxiv.org/abs/2602.04991, https://arxiv.org/abs/2308.02945, and https://cheriot.org/ibex/flute/architecture/publication/2023/10/30/cheriot-at-micro.html
 - RISC-V lineage additions: https://www.ndss-symposium.org/ndss-paper/timber-v-tag-isolated-memory-bringing-fine-grained-enclaves-to-risc-v/ and https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-leecheang-ccs22.html

@@ -148,8 +148,8 @@ CoVE/AP-TEE equivalents merely because they are necessary parts of a platform.
 \textbf{Primitive} & \textbf{Role} & \textbf{Confidential-computing body?} & \textbf{Maturity} & \textbf{Survey use} \\ \midrule
 PMP/ePMP/Smepmp & CPU-side physical access control and monitor-enforced protection regions & No & Privileged architecture / extension substrate & Enclave and monitor baseline. \\
 H-extension & Virtualization substrate for guest execution and host/guest separation & No & Architectural substrate in the privileged specification family & TVM execution substrate. \\
-AIA/IMSIC & Interrupt and MSI architecture for virtualized interrupt delivery & No & AIA v1.0 release & Trusted-MSI context for CoVE-IO. \\
-IOMMU & Device-side address translation and DMA permission enforcement & No & RISC-V IOMMU v1.0.0 ratified release & DMA isolation substrate. \\
+AIA/IMSIC & Interrupt and MSI architecture for virtualized interrupt delivery & No & AIA v1.0 ratified June 2023; revised 20250312 clarifications & Trusted-MSI context for CoVE-IO. \\
+IOMMU & Device-side address translation and DMA permission enforcement & No & RISC-V IOMMU v1.0.1 / 20260222 ratified-library release & DMA isolation substrate. \\
 IOPMP & Requester-aware transaction filtering outside the CPU path & No & IOPMP v0.8.2 draft, not ratified & DMA bypass defense direction. \\
 AP-TEE/CoVE & TVM, TSM, memory lifecycle, and ABI direction for confidential VMs & Yes & AP-TEE v0.7 draft / CoVE proposal, not ratified & Core RISC-V confidential-VM direction. \\
 CoVE-IO & Trusted I/O ABI, device identity, TDI lifecycle, trusted MMIO/DMA, and trusted MSI direction & Yes & CoVE-IO v0.3.0 draft, not ratified & Trusted-I/O direction for TVMs. \\ \bottomrule

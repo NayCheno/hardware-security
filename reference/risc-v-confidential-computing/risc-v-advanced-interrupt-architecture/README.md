@@ -4,12 +4,12 @@
 - Category: `risc-v-confidential-computing`
 - Authors: RISC-V International
 - Year: 2023
-- Source: https://github.com/riscv/riscv-aia
-- Release: https://github.com/riscv/riscv-aia/releases/tag/1.0
-- PDF source: https://github.com/riscv/riscv-aia/releases/download/1.0/riscv-interrupts-1.0.pdf
+- Source: https://docs.riscv.org/reference/home/index.html
+- Release: RISC-V Ratified Specifications Library document revised 20250312
+- PDF source: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- Standardization status: v1.0 release; use as base interrupt architecture reference rather than a standalone TEE design
+- Standardization status: v1.0 ratified in June 2023; current ratified-library document includes 20250312 clarifications
 - Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 
 <!-- BEGIN PAPER REVIEW -->
@@ -18,7 +18,7 @@
 
 - 论文标题: The RISC-V Advanced Interrupt Architecture
 - 作者 / 机构: Editor John Hauser; RISC-V contributors
-- 发表会议 / 年份: Specification v1.0 / 2023
+- 发表会议 / 年份: Specification v1.0 ratified June 2023; revised 20250312
 - 领域分类: 架构 / 硬件 / 系统
 - 一句话总结: 规范定义 RISC-V AIA，包括 hart CSRs、IMSIC、APLIC、MSI、虚拟化中断和 IOMMU MSI 支持。
 - 最核心贡献一句话: 它是 RISC-V trusted MSI、virtual interrupt 和 CoVE/CoVE-IO interrupt path 的 ratified 基础。
@@ -65,7 +65,7 @@ AIA 是 AP-TEE COVI 和 CoVE-IO trusted interrupt 的 supporting spec，也与 R
 
 ### 12. Evidence README Addendum
 - Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
-- 标准化 / 发表状态: ratified v1.0 release
+- 标准化 / 发表状态: AIA v1.0 ratified June 2023 with 20250312 clarifications
 - 对应小方向: RISC-V 基础安全 primitives; RISC-V CoVE-IO / TEE-I/O
 
 #### 内容摘要

@@ -3,13 +3,13 @@
 - BibTeX key: `riscv_iommu_2023`
 - Category: `risc-v-confidential-computing`
 - Authors: RISC-V Non-ISA IOMMU contributors
-- Year: 2023
-- Source: https://github.com/riscv-non-isa/riscv-iommu
-- Release: https://github.com/riscv-non-isa/riscv-iommu/releases/tag/v1.0.0
-- PDF source: https://github.com/riscv-non-isa/riscv-iommu/releases/download/v1.0.0/riscv-iommu.pdf
+- Year: 2026
+- Source: https://docs.riscv.org/reference/home/index.html
+- Release: RISC-V Ratified Specifications Library release v1.0.1 / 20260222
+- PDF source: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- Standardization status: v1.0.0 release; use as base I/O translation/protection reference rather than a standalone TEE design
+- Standardization status: v1.0.1 / 20260222 ratified-library release; base architecture and listed standard extensions are ratified
 - Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 
 <!-- BEGIN PAPER REVIEW -->
@@ -18,7 +18,7 @@
 
 - 论文标题: RISC-V IOMMU Architecture Specification
 - 作者 / 机构: RISC-V IOMMU Task Group
-- 发表会议 / 年份: Specification v1.0.0 / 2023
+- 发表会议 / 年份: RISC-V Ratified Specifications Library v1.0.1 / 20260222
 - 领域分类: 架构 / 硬件 / 系统
 - 一句话总结: 规范定义 RISC-V I/O memory management unit 的 device context、process context、address translation、ATS/PRI 和 fault/queue 接口。
 - 最核心贡献一句话: 它是 RISC-V 设备 DMA 地址转换和隔离的 ratified 基础规范。
@@ -65,7 +65,7 @@ IOMMU 是 CoVE-IO 的 supporting spec，需与 AIA、IOPMP、SPDM/TDISP/IDE 组�
 
 ### 12. Evidence README Addendum
 - Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
-- 标准化 / 发表状态: ratified v1.0.0 release
+- 标准化 / 发表状态: ratified-library release v1.0.1 / 20260222；base architecture v1.0 和列出的 standard extensions 均为 ratified
 - 对应小方向: RISC-V 基础安全 primitives; RISC-V CoVE-IO / TEE-I/O
 
 #### 内容摘要
