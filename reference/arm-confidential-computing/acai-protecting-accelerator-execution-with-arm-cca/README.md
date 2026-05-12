@@ -9,9 +9,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-- Evidence role: Foundational; Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
+- Evidence role: Draft/not ratified. Use with explicit arXiv/preprint status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
+- Secondary use: Foundational design point for Arm CCA accelerator-execution discussions.
 ## Review
 
-Canonical BibTeX key: `acai2023`. Evidence role: Foundational; Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
+Canonical BibTeX key: `acai2023`. Evidence role: Draft/not ratified. Use with explicit arXiv/preprint status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so. Secondary use: Foundational design point for Arm CCA accelerator-execution discussions.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for ACAI: Protecting Accelerator Execution with Arm Confidential Computing Architecture. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
