@@ -138,10 +138,20 @@
   {
     "directory": "13-confidential-io-protocol-device-endpoint",
     "direction": "Confidential I/O protocol、trusted device interface、network endpoint",
-    "papers": [
-      "dmtf_spdm_2025 + dmtf_spdm_arch_2024",
-      "riscv_cove_io_2026 + pcisig_tdisp_2022 + pcisig_tdisp_xt_2025",
-      "li2024folio + amd_sev_tio_2023 + weinhold2025tlsra"
+    "primary": [
+      {"key": "dmtf_spdm_2025", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
+      {"key": "riscv_cove_io_2026", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
+      {"key": "li2024folio", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "dmtf_spdm_arch_2024", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
+      {"key": "dmtf_spdm_secured_messages_2025", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
+      {"key": "dmtf_spdm_tcp_2024", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
+      {"key": "pcisig_tdisp_2022", "evidence": "E5 / Candidate metadata-only gated", "source_status": "source_verified_pdf_unavailable"},
+      {"key": "pcisig_tdisp_xt_2025", "evidence": "E5 / Candidate metadata-only gated", "source_status": "source_verified_pdf_unavailable"},
+      {"key": "amd_sev_tio_2023", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
+      {"key": "weinhold2025tlsra", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "nvidia_bluefield_operation_2025", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"}
     ]
   },
   {

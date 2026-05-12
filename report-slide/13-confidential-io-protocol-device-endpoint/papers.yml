@@ -1,37 +1,118 @@
 direction: Confidential I/O protocol、trusted device interface、network endpoint
 focus: 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
-- key: dmtf_spdm_2025 + dmtf_spdm_arch_2024
-  role: Foundational / DMTF spec + white paper
+selection_rule: 固定三篇 primary；SPDM 辅助规范、TDISP/TDISP XT、SEV-TIO、TLS+RA 和 BlueField DPU evidence 均为 auxiliary。
+primary:
+- key: dmtf_spdm_2025
+  role: Spec/standard SOTA / DMTF DSP0274 v1.4.0
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf
   title: SPDM device identity and measurement
-  summary: 定义 SPDM 的 device identity、measurement、capability negotiation、secured session
-    和 architecture role。
-  background: confidential workload 使用真实设备时，host 对设备的普通枚举结果不足以作为可信证据。
-  solution: 通过 SPDM 让 requester 获取 responder 身份、测量和安全会话能力；secured messages 与 SPDM
-    over TCP 补充会话保护和传输绑定。
-  experiment: 规范/白皮书，无新实验；证据类型是标准化接口和协议语义。
-  comment: 适合作为机密计算 device identity/evidence 层基础；不能单独证明 DMA、interrupt 或 link path
-    已安全。
-- key: riscv_cove_io_2026 + pcisig_tdisp_2022 + pcisig_tdisp_xt_2025
-  role: Draft + gated metadata
-  title: CoVE-IO 与 TDISP/TDISP XT
-  summary: CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted
-    MSI 等组合。
-  background: TVM/Realm 使用设备时，需要证明设备接口身份、绑定 interface state、保护 DMA/MMIO，并把 interrupt
-    delivery 纳入同一边界。
-  solution: 用 device-interface lifecycle、设备安全管理、link protection 和 I/O translation
-    协同构造 confidential I/O boundary。
-  experiment: 规范草案/ECN metadata，无实验；TDISP/TDISP XT public PDFs 不可直接下载。
-  comment: 是本 survey 的 RISC-V confidential I/O 主锚点；必须明确标准状态，避免写成已完全落地规范。
-- key: li2024folio + amd_sev_tio_2023 + weinhold2025tlsra
-  role: Peer-reviewed SOTA + industry + protocol evidence
-  title: trusted network/offload tradeoff
-  summary: FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径；SEV-TIO 展示 VM trusted
-    I/O 产业设计；TLS+RA 绑定 attested TEE 与 TLS channel。
-  background: 网络和 accelerator offload 会把 plaintext、queue state、keys、model state 或
-    TLS private key 带出 CPU confidential boundary。
-  solution: 分别代表三种路线：避免信任设备、把设备纳入 trusted I/O boundary、以及用 attested TLS 把 application
-    channel 与 TEE evidence 绑定。
-  experiment: FOLIO 和 TLS+RA 为系统/协议论文，有原型评估；SEV-TIO 为 white paper，无独立学术实验。
-  comment: 适合写 trusted network/offload tradeoff；AMD 和 TLS+RA 材料只作 cross-platform evidence。
+  summary: SPDM 定义 device/component identity、measurement、capability negotiation、certificate/challenge 和 key exchange。
+  background: Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态。
+  insight_solution: 通过 requester/responder 协议、certificate chain、measurement blocks、transcript 和 secured session 建立 device trust control plane。
+  key_technologies:
+  - Device certificate and measurement retrieval
+  - Challenge-response and transcript binding
+  - Key exchange for secured control messages
+  experiment_claim: DMTF published standard，无新实验；它证明协议语义，不证明设备内部隔离、DMA、interrupt 或 data path 已安全。
+  evaluation:
+    strengths: 是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。
+    limitations: 单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。
+    commercialization: 适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update policy。
+  auxiliary:
+  - dmtf_spdm_arch_2024
+  - dmtf_spdm_secured_messages_2025
+  - dmtf_spdm_tcp_2024
+- key: riscv_cove_io_2026
+  role: Draft/not ratified / CoVE-IO v0.3.0
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf
+  title: CoVE-IO and TDISP trusted-device lifecycle
+  summary: CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 CoVE ABI。
+  background: TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery 和 PCIe/CXL link 放到同一边界。
+  insight_solution: 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle；TDISP/TDISP XT 只作为公开 metadata 辅助，不推断 gated normative rules。
+  key_technologies:
+  - TDI/TDM/DSM and TSM/RDSM lifecycle
+  - SPDM plus TDISP plus PCIe IDE composition
+  - IOMMU/IOPMP/AIA trusted DMA and interrupt substrate
+  experiment_claim: CoVE-IO 是 draft，无新实验；TDISP/TDISP XT PDF member-gated，只能写 public metadata 和 high-level lifecycle role。
+  evaluation:
+    strengths: 给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
+    limitations: v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
+    commercialization: 指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 revocation。
+  auxiliary:
+  - pcisig_tdisp_2022
+  - pcisig_tdisp_xt_2025
+- key: li2024folio
+  role: Draft/preprint data-path design point / arXiv 2024
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/memory-and-io-fabrics/bridge-the-future-high-performance-networks-confidential-vms-without-trusted-io-devices/paper.pdf
+  title: FOLIO network path without trusted I/O devices
+  summary: FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径，是 trusted I/O 不是唯一网络答案的反例。
+  background: 网络流量通常已有端到端加密；把 NIC 加入 TCB 可能带来 device ecosystem 和 verifier policy 成本。
+  insight_solution: 通过 DPDK/SNP 网络路径优化减少 shared/private transition 和 packet processing overhead，同时保持 NIC outside TCB。
+  key_technologies:
+  - SEV-SNP CVM networking path analysis
+  - DPDK data-plane optimization
+  - Trusted-I/O versus untrusted-device tradeoff
+  experiment_claim: arXiv preprint 有原型评估，报告接近理想 TIO 网络配置；结论不能泛化到 plaintext accelerator、storage 或 RDMA offload。
+  evaluation:
+    strengths: 防止把 SPDM/TDISP/IDE 写成所有网络性能问题的唯一答案。
+    limitations: 基于 SEV-SNP 网络场景，不证明 Arm CCA/CoVE、SmartNIC/DPU 或 storage offload 的同等安全/性能。
+    commercialization: 对 CVM networking 软件路径有现实意义；风险在明文 offload、TLS termination 和 secure vNIC/vSwitch production evidence 不足。
+  auxiliary:
+  - amd_sev_tio_2023
+  - weinhold2025tlsra
+  - nvidia_bluefield_operation_2025
+auxiliary:
+- key: dmtf_spdm_arch_2024
+  role: Industry explanatory white paper
+  evidence: E4 / Industry evidence
+  source_status: local_pdf_verified
+  reference: reference/memory-and-io-fabrics/spdm-architecture-white-paper/paper.pdf
+  use: 解释 SPDM 架构角色；不替代 DSP0274/DSP0277 规范。
+- key: dmtf_spdm_secured_messages_2025
+  role: Spec/standard SOTA / SPDM secured messages
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/memory-and-io-fabrics/secured-messages-using-spdm-specification/paper.pdf
+  use: 辅助说明 SPDM control-plane message protection；不保护 PCIe/CXL data path。
+- key: dmtf_spdm_tcp_2024
+  role: Spec/standard SOTA / SPDM over TCP
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/memory-and-io-fabrics/spdm-over-tcp-binding-specification/paper.pdf
+  use: 辅助说明 network-reachable attested endpoint；不是 device isolation 或 memory protection。
+- key: pcisig_tdisp_2022
+  role: Candidate/metadata-only / PCI-SIG TDISP
+  evidence: E5 / Candidate metadata-only gated
+  source_status: source_verified_pdf_unavailable
+  reference: reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/README.md
+  use: 只支撑 TDISP existence 和 high-level trusted device-interface lifecycle；不支撑 gated normative message/state-machine claim。
+- key: pcisig_tdisp_xt_2025
+  role: Candidate/metadata-only / PCI-SIG TDISP XT
+  evidence: E5 / Candidate metadata-only gated
+  source_status: source_verified_pdf_unavailable
+  reference: reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/README.md
+  use: 只支撑 PCI-SIG public metadata 中 IDE、ATS、TDISP affected areas；不推断 XT/TE rules。
+- key: amd_sev_tio_2023
+  role: Industry evidence / AMD SEV-TIO
+  evidence: E4 / Industry evidence
+  source_status: local_pdf_verified
+  reference: reference/memory-and-io-fabrics/amd-sev-tio-trusted-io/paper.pdf
+  use: x86 industry 对照：TDISP、SPDM、IDE、RMP/IOMMU 和 firmware-mediated binding 的组合。
+- key: weinhold2025tlsra
+  role: Peer-reviewed SOTA / TLS+RA
+  evidence: E1 / Peer-reviewed SOTA
+  source_status: local_pdf_verified
+  reference: reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/paper.pdf
+  use: 辅助说明 TLS channel 与 attested TEE endpoint 的绑定；不替代 SPDM/TDISP device identity。
+- key: nvidia_bluefield_operation_2025
+  role: Industry evidence / BlueField OP-TEE/fTPM
+  evidence: E4 / Industry evidence
+  source_status: local_pdf_verified
+  reference: reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/paper.pdf
+  use: 辅助说明 vendor DPU/NIC attestation building blocks；保留 testing/development-key 限制，不写成完整 production DPU TEE。
