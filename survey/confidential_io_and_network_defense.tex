@@ -105,11 +105,14 @@ level mechanisms such as TDISP, CoVE-IO, and trusted I/O designs can rely on.
 
 \textbf{TDISP} addresses a more specific lifecycle problem: how a PCIe device
 interface can be placed into a TEE-aware trust state and assigned to a
-confidential workload~\cite{pcisig_tdisp_2022}. Device identity alone is not
-enough. The platform also needs a way to bind a particular device interface,
-function, or trusted device interface to the workload that will use it. TDISP
-therefore belongs at the device-interface lifecycle layer, whereas SPDM belongs
-at the identity and secure-session layer.
+confidential workload~\cite{pcisig_tdisp_2022}. The cited PCI-SIG material is a
+public ECN/metadata page whose download target is member-gated, so this survey
+uses it only for TDISP's public existence, affected-specification metadata, and
+device-interface lifecycle role rather than for unreleased normative details.
+Device identity alone is not enough. The platform also needs a way to bind a
+particular device interface, function, or trusted device interface to the
+workload that will use it. TDISP therefore belongs at the device-interface
+lifecycle layer, whereas SPDM belongs at the identity and secure-session layer.
 
 The RISC-V CoVE-IO draft uses this kind of structure explicitly. It refers to
 trusted device interfaces, device managers, security managers, SPDM, TDISP,
@@ -158,12 +161,14 @@ equating any I/O protection with a complete trusted I/O system.
 
 Link and fabric protection answer a different question: what happens to data as
 it traverses PCIe, CXL, RDMA, or related interconnects. PCIe IDE provides
-integrity and data encryption for PCIe traffic~\cite{pcie_ide}. CXL changes the
-memory hierarchy by allowing memory expansion, pooling, and tiering beyond
-local DRAM~\cite{cxl_spec,gouk2022directcxl,zhong2024cxltiers}. RDMA and
-remote paging systems move application memory over the network or fabric with
-minimal CPU involvement~\cite{wang2025odrp}. These technologies are not all
-confidential-computing defenses by themselves, but they define the paths that a
+integrity and data encryption for PCIe traffic, which is link protection rather
+than a complete trusted-I/O stack~\cite{pcie_ide}. CXL changes the memory
+hierarchy by allowing memory expansion, pooling, and tiering beyond local
+DRAM~\cite{cxl_spec,gouk2022directcxl,zhong2024cxltiers}. RDMA and remote paging
+systems move application memory over the network or fabric with minimal CPU
+involvement~\cite{wang2025odrp}. These CXL/RDMA/fabric sources are background
+substrate and data-path evidence, not proof that a confidential-computing
+boundary remains intact by themselves; they define paths that a
 confidential-computing defense must cover.
 
 The design consequence is that confidential workloads need a data-path view, not
@@ -237,10 +242,11 @@ controller on the data path so that non-TEE devices can be assigned, measured,
 and cleaned up as part of a confidential workload lifecycle~\cite{zhu2020hetee,dhar2024cloudscale}.
 Commercial DPU documentation shows another route: DPU-local roots such as
 OP-TEE/fTPM and replay-protected storage can provide platform identity and key
-protection building blocks~\cite{nvidia_bluefield_operation_2025}. That
-commercial evidence should be used carefully, because the cited BlueField
-documentation describes fTPM support and its limitations rather than a complete
-production confidential networking TEE.
+protection building blocks~\cite{nvidia_bluefield_operation_2025}. That vendor
+evidence should be used carefully, because the cited BlueField documentation
+describes fTPM support and its limitations rather than a complete production
+confidential networking TEE, and it does not by itself bind a workload channel,
+DMA policy, or TDISP/SPDM lifecycle to the DPU state.
 
 S-NIC and TNIC fill two additional gaps. S-NIC answers how a SmartNIC can
 isolate tenant network functions from other functions and from the NIC OS, while
@@ -273,9 +279,9 @@ Attested service channel & Does the application channel terminate in the atteste
 DMA and MMIO authority & Which memory and registers may the device access? & SMMU, RISC-V IOMMU, IOPMP, sIOPMP & Enforce address translation and transaction filtering. \\
 Interrupt and event delivery & Can completion and error events be delivered without host spoofing or confusion? & AIA, trusted MSI, Devlore-style interrupt ownership & Keep device ownership coherent after asynchronous events. \\
 Link and fabric protection & What protects traffic across PCIe, CXL, RDMA, and remote-memory paths? & PCIe IDE, CXL fabric controls, protected RDMA/remote paging designs & Protect data once it leaves CPU-local memory paths. \\
-NIC-local root and function isolation & Can a SmartNIC/DPU isolate tenant functions or provide a trusted network primitive? & S-NIC, TNIC, DPU OP-TEE/fTPM & Treat NICs and DPUs as explicit trust endpoints rather than opaque offload boxes. \\
+NIC-local root and function isolation & Can a SmartNIC/DPU isolate tenant functions or provide a trusted network primitive? & S-NIC, TNIC, vendor DPU OP-TEE/fTPM building blocks & Treat NICs and DPUs as explicit but incomplete trust endpoints that still need attestation, lifecycle, DMA, and channel binding. \\
 Confidential storage data path & Can remote storage preserve confidentiality, integrity, and freshness? & Hazel, protected NVMe-oF metadata, DPU crypto offload & Extend confidential I/O beyond packets into persistent remote state. \\
-Device-local confidential execution & Does the accelerator or offload engine hold secrets or execute trusted code? & ACAI, PORTAL, CAGE, StrongBox, ITX, HETEE, CloudScale, BlueField OP-TEE/fTPM, accelerator TEE designs & Extend or avoid extending the TCB to accelerators and offload devices. \\ \bottomrule
+Device-local confidential execution & Does the accelerator or offload engine hold secrets or execute trusted code? & ACAI, PORTAL, CAGE, StrongBox, ITX, HETEE, CloudScale, vendor BlueField OP-TEE/fTPM building blocks, accelerator TEE designs & Extend or avoid extending the TCB to accelerators and offload devices; do not treat vendor building blocks as complete confidential-networking TEEs. \\ \bottomrule
 \end{tabular}
 \end{table*}
 
@@ -291,14 +297,17 @@ question is whether all relevant layers preserve the same ownership boundary.
 Confidential I/O and network defense is the point where confidential computing
 becomes a whole-platform problem. SPDM and secured messages provide identity,
 measurement, and session foundations. TDISP and CoVE-IO introduce trusted
-device-interface lifecycle concepts. TLS+RA-style protocols bind application
+device-interface lifecycle concepts, with TDISP cited here only through public
+metadata and CoVE-IO still a draft. TLS+RA-style protocols bind application
 channels to attested endpoints. SMMU, IOMMU, IOPMP, and sIOPMP constrain DMA
 authority. AIA and trusted MSI address interrupt delivery. PCIe IDE, CXL, RDMA,
 NVMe-oF, and remote-memory systems define the fabric paths that protected data
-may cross. Accelerator, SmartNIC, NIC, and DPU work such as ACAI, PORTAL, CAGE,
-StrongBox, ITX, HETEE, CloudScale, S-NIC, TNIC, Hazel, and BlueField
-OP-TEE/fTPM shows that device-local, NIC-local, storage-path, or
-controller-mediated execution can become part of the confidential boundary. A
-survey that focuses only on CPU TEE mechanisms would miss this entire class of
+may cross, but they are background substrate unless composed with device
+identity, lifecycle, and DMA controls. Accelerator, SmartNIC, NIC, and DPU work
+such as ACAI, PORTAL, CAGE, StrongBox, ITX, HETEE, CloudScale, S-NIC, TNIC,
+Hazel, and BlueField OP-TEE/fTPM shows that device-local, NIC-local,
+storage-path, or controller-mediated execution can contribute building blocks
+for a confidential boundary. A survey that focuses only on CPU TEE mechanisms
+would miss this entire class of
 defenses; for modern Arm and RISC-V confidential-computing platforms, these
 mechanisms are core rather than peripheral.

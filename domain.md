@@ -6,11 +6,11 @@
 
 当前事实：
 
-- `survey/reference.bib`：148 个 active/verified BibTeX 条目。
+- `survey/reference.bib`：149 个 active/verified BibTeX 条目。
 - `survey/candidate_reference.bib`：152 个 metadata-only 候选条目，不作为正文机制 claim 的证据。
 - `survey/p0_p1_candidate_status.md`：112 个 P0/P1 metadata-only 候选的终态记录；每个条目都已标为 active canonical coverage、backlog/no substantive citation 或 background substrate。
-- `survey/*.tex` 正文实际引用：77 个 key，全部能在 Bib 中找到。
-- `reference/`：82 个论文/规范 README 条目（不含 category index README），67 个本地 `paper.pdf`。
+- `survey/*.tex` 正文实际引用：79 个 key，全部能在 Bib 中找到。
+- `reference/`：83 个论文/规范 README 条目（不含 category index README），68 个本地 `paper.pdf`。
 - 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、PORTAL、CAGE、StrongBox、S-NIC、TNIC、Hazel 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root 和 accelerator/device TEE 的核心材料。
 - Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
 
@@ -71,7 +71,7 @@
 | Arm CCA / RME / RMM 基础架构 | 已覆盖 | `li2022cca`, `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` | 无成熟专门 SoK；以规范和 OSDI 论文为准 | Foundational `li2022cca`; Spec/standard SOTA `arm_cca_spec`, `arm_rmm_spec`; Draft/not ratified verification evidence `wu2024rmm` | 已补正文机制表；后续可继续细化 RMI/RSI ABI 和 RMM state machine。 |
 | Arm CCA 细粒度隔离与部署模型 | 待补足 | 正文提到 SHELTER/RContainer/virtCCA/NanoZone/LessTrust，但缺系统分类 | 无成熟 SoK；按系统论文追踪 | Foundational `zhang2023shelter`; Peer-reviewed SOTA `zhou2025rcontainer`, `liu2025lesstrust`; Draft/not ratified `liu2025nanozone`, `bertschi2025opencca`, `abdollahi2025caec` | 拆成 user-space、container、virtualization、intra-process、inter-CVM sharing、memory protection。 |
 | Arm CCA I/O、DMA、accelerator、interrupt | 已覆盖 | 正文提到 SMMU、ACAI、Devlore、PORTAL、CAGE、fabric，并区分 device access、accelerator workflow、interrupt ownership | `sok-tee` 仅作 accelerator TEE SoK | Foundational `acai2023`; Peer-reviewed SOTA `sang2025portal`, `wang2026cage`; Draft/not ratified `bertschi2026devlore`; Background substrate `sok-tee` | 后续继续细化 RME-DA/MEC、SMMU 与 SPDM/TDISP 组合，而不是再只补单点论文。 |
-| Attestation、boot、lifecycle | 已覆盖 | `eat_rfc`, `menetrey2022attestation`, `psa_certified`, `ling2021trustzoneatt`, `chen2024mraima`, `mao2025pdrima`, `seshadri2004swatt`, `defrawy2012smart`, `asokan2015seda` | `menetrey2022attestation` | Foundational `seshadri2004swatt`; Spec/standard SOTA `eat_rfc`; Draft/not ratified `mao2025pdrima` | 区分 generic attestation、Arm CCA evidence chain、RISC-V CoVE layered evidence。 |
+| Attestation、boot、lifecycle | 已覆盖 | `rats_rfc`, `eat_rfc`, `menetrey2022attestation`, `psa_certified`, `ling2021trustzoneatt`, `chen2024mraima`, `mao2025pdrima`, `seshadri2004swatt`, `defrawy2012smart`, `asokan2015seda` | `menetrey2022attestation` | Foundational `seshadri2004swatt`; Spec/standard SOTA `rats_rfc`, `eat_rfc`; Draft/not ratified `mao2025pdrima` | 区分 generic attestation architecture、claim-token encoding、Arm CCA evidence chain、RISC-V CoVE layered evidence。 |
 | RISC-V 基础安全 primitives | 待补足 | 正文覆盖 privilege/PMP/ePMP/Smepmp/sIOPMP，但不够完整 | `boubakri2025riscvtee` 可辅助 | Spec/standard SOTA `riscv_privileged`, `riscv_iommu_2023`, `riscv_aia_2023`; Draft/not ratified `riscv_iopmp_2026`, `manoni2026cva6cfi`; Background substrate `boubakri2025riscvtee` | 补 H-extension、IOMMU、AIA、IOPMP、Zicfilp/Zicfiss 与 confidential VM 的关系。 |
 | RISC-V TEE lineage: Sanctum/Keystone/CURE/MI6/Penglai/SPEAR-V | 已覆盖 | `survey/riscv_confidential_computing.tex` 已引用 `costan2016sanctum`, `lee2020keystone`, `weiser2019timberv`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace` | `boubakri2025riscvtee`; `schneider2022soktee`; `li2024sokteechoices` | Foundational `costan2016sanctum`, `lee2020keystone`; Peer-reviewed SOTA `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace`; Background substrate `boubakri2025riscvtee`, `schneider2022soktee`, `li2024sokteechoices` | 后续可补更细的 TCB、sharing、metadata 和硬件修改对照表。 |
 | RISC-V CoVE / AP-TEE confidential VM | 已覆盖 | `survey/riscv_confidential_computing.tex` 已补 TVM、TSM/TSM-driver、Supervisor Domains、memory donation/reclaim/share、attestation，并纠正 CCA 对比到 bare PMP 的层级问题 | `boubakri2025riscvtee`; CoVE 原论文和 AP-TEE spec | Foundational `sahita2023cove`; Draft/not ratified `riscv_ap_tee_2024`; Background substrate `boubakri2025riscvtee` | 后续细化 COVH/COVG ABI、TSM state machine 和 attestation claim 表。 |
@@ -226,12 +226,12 @@
    - 解决方案：用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。
    - 实验结果：论文在嵌入式节点场景评估；安全性强依赖时间和硬件假设。
    - 文章评价：历史价值高；现代高威胁模型下适用性有限。
-2. `eat_rfc` — Spec/standard SOTA；RFC 9711, 2025。
-   - 内容摘要：定义 Entity Attestation Token 的 claims/token 表达。
-   - 研究背景：多平台 attestation 需要可互操作的证据编码。
-   - 解决方案：用 CWT/JWT 承载实体状态和安全属性 claims。
+2. `rats_rfc` / `eat_rfc` — Spec/standard SOTA；RFC 9334 / RFC 9711。
+   - 内容摘要：RATS 定义 attester、verifier、relying party、evidence、reference values 和 attestation results 等架构角色；EAT 定义 Entity Attestation Token 的 claims/token 表达。
+   - 研究背景：多平台 attestation 同时需要可互操作的架构术语和证据编码。
+   - 解决方案：RATS 规范化 evidence 生成、传递、评估的角色与消息；EAT 用 CWT/JWT 承载实体状态和安全属性 claims。
    - 实验结果：RFC，无实验。
-   - 文章评价：标准化落地潜力强；不能说明某平台测量链是否充分。
+   - 文章评价：标准化落地潜力强；不能说明某平台测量链是否充分，也不能替代 CCA/CoVE 平台规范。
 3. `mao2025pdrima` — Draft/not ratified；arXiv 2025。
    - 内容摘要：研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。
    - 研究背景：secure boot/launch attestation 不能覆盖运行时状态变化。
@@ -432,11 +432,12 @@
 
 | 对象 | 核验结果 | 处理 |
 |---|---|---|
-| 正文 77 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
+| 正文 79 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
 | RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；AP-TEE v0.7 是 draft/RC2 for ARC review，CoVE-IO v0.3.0 是 draft。 | 作为 Draft/not ratified spec evidence；正文必须标注 draft / not ratified。 |
 | `riscv_iommu_2023` / `riscv_aia_2023` | v1.0.0 / v1.0 release 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
 | `boubakri2025riscvtee` | MDPI HTML 核验；PDF 自动下载 403。 | 作为 survey anchor；机制论断回引原始论文/spec。 |
+| `rats_rfc` | RFC 9334 HTML/PDF 已核验并下载。 | 作为 RATS architecture / terminology 标准；不作为平台机制或 token-format 实现证据。 |
 | `li2024sokteechoices` | ASIA CCS 2024 SoK，作者主页 PDF 已下载。 | 作为通用 server-side TEE design-choice/pitfall SoK；正文机制仍回引原始论文/spec。 |
 | `costan2016sanctum`, `bahmani2021cure`, `bourgeat2019mi6`, `ozga2025ace` | SoK/RISC-V survey 引用扩展材料，PDF 均已下载。 | 用于补 RISC-V TEE lineage；避免和 CoVE/AP-TEE confidential VM 标准混写。 |
 | `weiser2019timberv`, `lee2022cerberus` | RISC-V survey/SoK 引用扩展材料，PDF 均已下载。 | TIMBER-V 用于 embedded/tagged-memory enclave 谱系；Cerberus 用于 formal enclave memory-sharing 与 shared-memory 设计比较。 |
@@ -498,6 +499,7 @@
 - RISC-V lineage additions: https://www.ndss-symposium.org/ndss-paper/timber-v-tag-isolated-memory-bringing-fine-grained-enclaves-to-risc-v/ and https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-leecheang-ccs22.html
 - Memory encryption taxonomy: https://doi.org/10.1145/2566673
 - SPDM specifications: https://www.dmtf.org/dsp/DSP0274, https://www.dmtf.org/dsp/DSP0277, https://www.dmtf.org/dsp/DSP0287, and https://www.dmtf.org/standards/spdm
+- RFC 9334 RATS architecture: https://www.rfc-editor.org/rfc/rfc9334.html
 - PCI-SIG TDISP metadata: https://pcisig.com/PCI%20Express/ECN/Base/TEEDeviceInterfaceSecurityProtocol
 - AMD SEV-TIO: https://docs.amd.com/v/u/en-US/sev-tio-whitepaper
 - FOLIO confidential VM network path: https://arxiv.org/abs/2403.03360

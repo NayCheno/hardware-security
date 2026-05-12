@@ -30,9 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 67 of 82 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
+Download status: 68 of 83 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
 
-Bibliography corpus status: `survey/reference.bib` contains 148 active entries. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. See `survey/related_work_300_expansion.md` before using any candidate.
+Bibliography corpus status: `survey/reference.bib` contains 149 active entries. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. See `survey/related_work_300_expansion.md` before using any candidate.
 
 Evidence role classes follow the survey methodology: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked or HTML-only evidence. Gated or unavailable PDFs are recorded as unavailable; no private access is assumed.
 
@@ -47,6 +47,7 @@ Newly added or completed in this pass:
 - `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/`
 - `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/`
 - `reference/attestation/secure-boot-trusted-boot-remote-attestation-arm-trustzone-iot/`
+- `reference/attestation/remote-attestation-procedures-rats-architecture/`
 - `reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/`
 - `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/`
 - `reference/risc-v-confidential-computing/cure-customizable-resilient-enclaves/`

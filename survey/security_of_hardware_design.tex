@@ -12,7 +12,7 @@ Arm applies a similar idea to memory-safety failures. \textbf{Memory Tagging Ext
 
 \subsubsection{RISC-V Control-Flow and Protection Primitives}
 
-The RISC-V architectural material surveyed here shows a related, though more modular, direction. The privileged and associated architectural specifications include support for control-flow integrity through extensions such as \textbf{Zicfilp}, which constrains indirect-control targets through landing-pad semantics, and \textbf{Zicfiss}, which provides hardware support for protecting return-address state~\cite{riscv_privileged}. Rather than embedding one vertically integrated protection model, the RISC-V ecosystem exposes a set of composable primitives that can be incorporated into different classes of systems.
+The RISC-V architectural material surveyed here shows a related, though more modular, direction. The privileged and associated architectural specifications document control-flow integrity capabilities through extensions such as \textbf{Zicfilp}, which constrains indirect-control targets through landing-pad semantics, and \textbf{Zicfiss}, which provides hardware support for protecting return-address state~\cite{riscv_privileged}. CVA6-CFI provides implementation and evaluation evidence for those RISC-V CFI extensions in one processor context, but it is not evidence of a complete TEE, memory-confidentiality, DMA-isolation, or CoVE/AP-TEE boundary~\cite{manoni2026cva6cfi}. Rather than embedding one vertically integrated protection model, the RISC-V ecosystem exposes a set of composable primitives that can be incorporated into different classes of systems.
 
 This modularity is particularly visible in the treatment of memory authority. In the cited RISC-V specifications, the most established protection story centers on privilege separation and physical-memory access control, especially through \textbf{Physical Memory Protection (PMP)} and its extensions, rather than on a single Arm-MTE-style mainstream memory-tagging mechanism~\cite{riscv_privileged}. The result is a design space in which control-flow hardening and memory isolation exist, but are often assembled as part of a larger platform composition.
 
@@ -74,7 +74,7 @@ RISC-V reaches the same requirement through a more modular route. The base privi
 
 \subsubsection{Attestation as a Hardware-Supported Design Mechanism}
 
-Attestation is not only a protocol feature; it is also a hardware-design concern because the architecture must expose stable roots of trust, measurable state, and protection domains whose claims can be verified. The \textbf{EAT} standard provides a general structure for carrying attestation claims, while broader work on attestation mechanisms for TEEs emphasizes that the usefulness of those claims depends on what the hardware and trusted runtime are able to measure and report~\cite{eat_rfc,menetrey2022attestation}. In this sense, attestation belongs in a survey of hardware security design because it links platform mechanisms to external trust decisions.
+Attestation is not only a protocol feature; it is also a hardware-design concern because the architecture must expose stable roots of trust, measurable state, and protection domains whose claims can be verified. The \textbf{RATS} architecture standardizes attestation roles and conceptual messages, and the \textbf{EAT} standard provides a general structure for carrying attestation claims; neither replaces platform-specific evidence semantics~\cite{rats_rfc,eat_rfc}. Broader work on attestation mechanisms for TEEs emphasizes that the usefulness of those claims depends on what the hardware and trusted runtime are able to measure and report~\cite{menetrey2022attestation}. In this sense, attestation belongs in a survey of hardware security design because it links platform mechanisms to external trust decisions.
 
 \subsubsection{Lifecycle Security Frameworks}
 
@@ -101,8 +101,8 @@ Table~\ref{tab:cross_arch_security_mapping} summarizes the main mechanism catego
 \begin{tabular}{@{}p{0.28\linewidth}p{0.30\linewidth}p{0.30\linewidth}@{}}
 \toprule
 \textbf{Mechanism Category} & \textbf{Arm} & \textbf{RISC-V} \\ \midrule
-Forward-edge control-flow protection & BTI & Zicfilp \\
-Return-address protection & GCS / PAC-assisted hardening & Zicfiss \\
+Forward-edge control-flow protection & BTI & Zicfilp; CVA6-CFI prototype evidence \\
+Return-address protection & GCS / PAC-assisted hardening & Zicfiss; CVA6-CFI prototype evidence \\
 Memory bug detection & MTE & Protection centered on privilege and memory-access control in the cited materials \\
 Primary privilege structure & EL0--EL3 plus Secure/Non-secure system partitioning & M/S/U privilege modes \\
 Physical-memory isolation & TrustZone system partitioning; CCA/RME ownership checks & PMP, ePMP, Smepmp \\

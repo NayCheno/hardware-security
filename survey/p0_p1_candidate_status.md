@@ -35,7 +35,7 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2017lofatlowoverheadcontrol` | P0 | `attestation-boot-lifecycle` | 2017 | Backlog hardware CFA; no substantive citation until canonical paper is ingested. |
 | `rw2019vrasedverifiedhardwaresoftwareco` | P0 | `attestation-boot-lifecycle` | 2019 | Backlog verified RA design; no substantive citation until canonical paper is ingested. |
 | `rw2021deviceidentifiercompositionengine` | P0 | `attestation-boot-lifecycle` | 2021 | Backlog standard candidate for DICE; promote official DICE source before substantive citation. |
-| `rw2023remoteattestationproceduresarchitecture` | P0 | `attestation-boot-lifecycle` | 2023 | Backlog standard candidate for RFC 9334; promote official RFC before substantive citation. |
+| `rw2023remoteattestationproceduresarchitecture` | P0 | `attestation-boot-lifecycle` | 2023 | Covered by active reference `rats_rfc`; candidate remains metadata-only. |
 | `rw2008flickerexecutioninfrastructuretcbminimization` | P0 | `hardware-tee-architecture` | 2008 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2010trustvisorefficienttcbreductionattestation` | P0 | `hardware-tee-architecture` | 2010 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2008hardboundarchitecturalsupportspatialsafety` | P0 | `isa-hardware-defense` | 2008 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |

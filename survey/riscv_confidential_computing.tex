@@ -7,10 +7,13 @@ physical-memory protection mechanisms to build small trusted monitors and
 enclave runtimes. The second line is the standardization-oriented confidential
 VM effort represented by CoVE and AP-TEE, where the target is no longer only an
 application enclave but a tenant VM protected from an untrusted host
-environment~\cite{sahita2023cove,riscv_ap_tee_2024,boubakri2025riscvtee}. This
-distinction is important for classification: PMP-based enclaves, tagged-memory
-enclaves, and CoVE-style TVMs share a motivation, but they do not expose the
-same lifecycle, device, or attestation contract.
+environment~\cite{sahita2023cove,riscv_ap_tee_2024,boubakri2025riscvtee}.
+Boubakri et al. are used here as survey/background substrate; mechanism and
+status claims in this section rely on the original CoVE paper, AP-TEE draft, or
+other primary sources. This distinction is important for classification:
+PMP-based enclaves, tagged-memory enclaves, and CoVE-style TVMs share a
+motivation, but they do not expose the same lifecycle, device, or attestation
+contract.
 
 \subsection{From Enclave Research to Confidential VMs}
 
@@ -116,7 +119,8 @@ evidence before provisioning secrets to a TVM~\cite{riscv_ap_tee_2024}. The
 evidence has to bind the platform, TSM, TVM initial state, and relevant
 configuration to a verifier-visible claim. This mirrors the broader attestation
 literature: a TEE claim is useful only if the measured state is well-defined,
-fresh, and tied to the execution context that will receive secrets~\cite{eat_rfc,menetrey2022attestation}.
+fresh, tied to the execution context that will receive secrets, and appraised by
+a verifier under a clear RATS-style role model~\cite{rats_rfc,eat_rfc,menetrey2022attestation}.
 
 In RISC-V systems, this evidence chain is especially important because the
 ecosystem encourages modular composition. A TVM may depend on a TSM, a platform
@@ -137,6 +141,9 @@ of the required mechanisms. It introduces concepts such as trusted device
 interfaces and device/security managers while relying on lower-level building
 blocks including SPDM, TDISP, PCIe IDE, IOMMU support, and trusted interrupt
 delivery~\cite{riscv_cove_io_2026,dmtf_spdm_2025,pcisig_tdisp_2022,pcie_ide}.
+The TDISP citation is public PCI-SIG metadata for a member-gated ECN, so it
+supports only the device-interface lifecycle role unless a stronger public
+source is cited for a specific normative rule.
 
 The design implication is straightforward: CoVE cannot stop at CPU-side page
 ownership. A device assigned to a TVM must be identified, measured or certified,
