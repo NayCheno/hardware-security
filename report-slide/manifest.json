@@ -22,10 +22,13 @@
   {
     "directory": "03-arm-cca-rme-rmm",
     "direction": "Arm CCA / RME / RMM 基础架构",
-    "papers": [
-      "li2022cca",
-      "arm_cca_spec",
-      "arm_rmm_spec + wu2024rmm"
+    "primary": [
+      {"key": "li2022cca", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
+      {"key": "arm_cca_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"},
+      {"key": "arm_rmm_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"}
+    ],
+    "auxiliary": [
+      {"key": "wu2024rmm", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
     ]
   },
   {

@@ -1,28 +1,71 @@
 direction: Arm CCA / RME / RMM 基础架构
 focus: 围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+selection_rule: 固定三篇 primary；`wu2024rmm` 作为 RMM verification auxiliary，不计入三篇主讲。
+primary:
 - key: li2022cca
   role: Foundational / OSDI 2022
+  evidence: E1 / Foundational
+  source_status: local_pdf_verified
+  reference: reference/arm-confidential-computing/design-and-verification-of-arm-cca/paper.pdf
   title: Arm Confidential Computing Architecture
   summary: 提出并验证 Arm CCA 的核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle。
   background: 云场景下 host 仍需管理资源，但不应看到 tenant workload 数据。
-  solution: 把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm。
-  experiment: OSDI 系统论文提供设计验证和原型评估；正文引用时应以原论文数据为准。
-  comment: Arm CCA 主线第一篇；商业落地潜力强，因为机制进入 Arm 架构和 Linux 文档。
+  insight_solution: 把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm。
+  key_technologies:
+  - Realm world and host/tenant separation
+  - Granule ownership and GPT/GPC
+  - RMM-mediated lifecycle and attestation path
+  experiment_claim: OSDI 系统论文提供设计验证和原型评估；具体数字只在回到原 PDF 后写入。
+  evaluation:
+    strengths: Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清。
+    limitations: 论文原型不等同于后续完整规范或量产实现。
+    commercialization: 商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。
+  auxiliary: []
 - key: arm_cca_spec
-  role: Spec/standard SOTA / Arm spec 2025
+  role: Spec/standard SOTA / Arm spec
+  evidence: E0 / Spec-standard SOTA
+  source_status: source_verified_pdf_unavailable
+  reference: reference/arm-confidential-computing/arm-cca-specification/README.md
   title: Arm CCA 架构规范
   summary: 给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义。
   background: 研究论文需要落到稳定的硬件/固件 ABI 和平台行为。
-  solution: 规范化 CCA/RME 相关对象、状态、接口和安全语义。
-  experiment: 规范，无实验。
-  comment: 正文写机制时最权威；但不是性能或实现可用性的证据。商业价值取决于硬件平台与生态实现。
-- key: arm_rmm_spec + wu2024rmm
-  role: Spec/standard SOTA + verification evidence
-  title: RMM 规范与形式化验证补充
-  summary: RMM spec 定义 Realm 管理软件接口；ESBMC 工作验证 RMM 组件。
+  insight_solution: 规范化 CCA/RME 相关对象、状态、接口和安全语义。
+  key_technologies:
+  - Realm security state and PAS ownership
+  - Memory delegation, RIPAS and lifecycle vocabulary
+  - Attestation and platform interface semantics
+  experiment_claim: 官方规范，无实验；只写公开规范语义，不写不可见或未下载 PDF 的细节。
+  evaluation:
+    strengths: 写 CCA 机制和状态语义时最权威。
+    limitations: 不是性能、可用性或具体实现正确性的证据。
+    commercialization: 商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。
+  auxiliary:
+  - arm_rme_spec
+  - linux_arm_cca_doc
+- key: arm_rmm_spec
+  role: Spec/standard SOTA / Arm RMM spec
+  evidence: E0 / Spec-standard SOTA
+  source_status: source_verified_pdf_unavailable
+  reference: reference/arm-confidential-computing/realm-management-monitor-specification/README.md
+  title: Realm Management Monitor 规范
+  summary: RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle。
   background: RMM 位于 CCA TCB 核心，状态机或内存管理错误会破坏 Realm 安全。
-  solution: 规范提供接口契约，验证工作用 model checking 检查关键组件属性。
-  experiment: Spec 无实验；验证论文覆盖范围有限，不能泛化到完整 RMM。
-  comment: 适合讨论 CCA 正确性和 TCB 风险；商业落地依赖完整实现、验证覆盖和硬件支持。
+  insight_solution: 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态。
+  key_technologies:
+  - RMI/RSI interface boundary
+  - Realm and REC lifecycle
+  - Granule state transition and measurement hooks
+  experiment_claim: 官方规范，无实验；只写公开 RMM/RMI/RSI lifecycle 概念。
+  evaluation:
+    strengths: 能把 RMM 作为 CCA TCB 核心讲清。
+    limitations: 不证明任一 RMM 实现正确，且本地 PDF 不可用时不能写不可见细节。
+    commercialization: 落地依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 能否检查关键状态。
+  auxiliary:
+  - wu2024rmm
+auxiliary:
+- key: wu2024rmm
+  role: Draft/not ratified verification evidence
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/arm-confidential-computing/verifying-components-of-arm-cca-with-esbmc/paper.pdf
+  use: 辅助说明 RMM 组件验证风险；不作为完整 RMM 正确性或成熟 production evidence。
