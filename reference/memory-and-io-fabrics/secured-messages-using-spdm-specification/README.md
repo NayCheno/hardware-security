@@ -13,8 +13,8 @@
 - Evidence role: Spec/standard SOTA. DMTF standard for SPDM secured messages; protects the control channel, not PCIe/CXL data paths by itself.
 - Spec identifier/status: DMTF DSP0277 v2.0.0, published standard.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Secured Messages Using SPDM Specification
@@ -88,4 +88,4 @@ Trusted I/O 需要保护设备管理和接口绑定控制面。
 #### 文章评价
 
 适合作为 TDISP/CoVE-IO 控制面安全通道的引用；不能单独代表 data path protection。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: CURE: A Security Architecture with Customizable and Resilient Enclaves
@@ -86,4 +86,4 @@ CURE 支持多种 enclave 类型、外设绑定和 cache resource 隔离。
 #### 文章评价
 
 系统贡献强，尤其适合写 RISC-V enclave 到 trusted I/O 的过渡；缺点是硬件采纳和标准化不确定。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

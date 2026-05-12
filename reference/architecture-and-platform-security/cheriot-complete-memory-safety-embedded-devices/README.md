@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12; Microsoft Research PDF endpoint returned HTTP 403, CHERIoT project PDF succeeded
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: CHERIoT: Complete Memory Safety for Embedded Devices
@@ -86,4 +86,4 @@ CHERIoT 是面向嵌入式的 CHERI capability + RTOS co-design，目标是完�
 #### 文章评价
 
 这是 runtime hardening 的重要 Peer-reviewed SOTA。它不替代 TEE/CCA/CoVE，但适合作为 protected firmware 和 embedded compartmentalization 的研究方向。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

@@ -10,8 +10,9 @@
 - Download status: downloaded and verified
 
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
-## Review
-
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 Canonical BibTeX key: `zhou2025rcontainer`. Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for RContainer: A Secure Container Architecture through Extending ARM CCA Hardware Primitives. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
+<!-- END PAPER REVIEW -->

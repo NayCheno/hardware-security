@@ -13,8 +13,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense; attestation/device endpoint identity
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: TNIC: A Trusted NIC Architecture
@@ -96,4 +96,4 @@ TNIC 提供 NIC-level silicon root-of-trust，用 transferable authentication �
 #### 文章评价
 
 TNIC 是 network endpoint trust 的重要 Peer-reviewed SOTA，但不是完整 confidential I/O；应与 VM attestation、DMA/link protection 和 device lifecycle 共同使用。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

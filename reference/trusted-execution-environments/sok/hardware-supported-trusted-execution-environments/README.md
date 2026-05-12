@@ -11,8 +11,8 @@
 
 - Evidence role: Background substrate. Use for taxonomy, lineage, or adjacent data-path substrate; primary mechanism claims must be traced to original papers, specs, or platform documents.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: SoK: Hardware-supported Trusted Execution Environments
@@ -61,4 +61,4 @@
 ### 11. 对后续研究的启发
 
 1. 更新 2026 版硬件 TEE taxonomy。2. 区分 access control、encryption、integrity、replay protection。3. 单独评估 trusted I/O 商用阻碍。4. 统一 attestation evidence chain。5. 建立 confidential accelerator 跨平台比较基准。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

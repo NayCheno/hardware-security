@@ -12,8 +12,8 @@
 - Standardization status: v0.7 draft / RC2 for ARC review; treat as not ratified
 - Evidence role: Draft/not ratified. Public RISC-V AP-TEE v0.7 draft/RC2 source for CoVE/AP-TEE lifecycle and ABI concepts; always mark as draft/not ratified.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: RISC-V Application-Processor Trusted Execution Environment Specification / Confidential VM Extension (CoVE)
@@ -87,4 +87,4 @@ RISC-V confidential computing 需要标准化 VM-level TEE，而不能只依赖 
 #### 文章评价
 
 这是本 survey 最关键的 RISC-V confidential VM 材料。正文必须标注 draft/not ratified，并避免把它和 legacy RISC-V enclave 混写。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

@@ -21,8 +21,8 @@
 | P1 | Keystone / Penglai | Existing RISC-V enclave lineage | `reference/risc-v-confidential-computing/` | existing, local PDFs available | Already covered as lineage anchors. |
 | P2 | Intel TDX / IBM PEF | Out-of-scope platform comparison | not added | metadata only | Add later only if x86/IBM confidential VM comparison becomes in-scope. |
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments
@@ -108,4 +108,4 @@ SoK，无新实验；证据来自平台论文、规范和攻击案例。
 | P1 | TIMBER-V | Embedded tagged-memory enclave | `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/` | added, Review available | Use as embedded lineage branch. |
 | P1 | Cerberus | Formal enclave memory sharing | `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | added, Review available | Use for memory-sharing comparison. |
 | P2 | Intel TDX / AMD SEV / IBM PEF | Cross-platform comparison | partially in Bib/reference | backlog | Add only when x86/IBM comparison enters正文. |
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

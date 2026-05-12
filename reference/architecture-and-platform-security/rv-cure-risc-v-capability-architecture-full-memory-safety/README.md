@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: RV-CURE: A RISC-V Capability Architecture for Full Memory Safety
@@ -86,4 +86,4 @@ RV-CURE 提供 RISC-V full memory safety 的 capability/tagged-pointer 方案。
 #### 文章评价
 
 研究价值高，但仍是 arXiv 原型。它是 memory-safety hardening，不是 confidential computing 或 memory encryption。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

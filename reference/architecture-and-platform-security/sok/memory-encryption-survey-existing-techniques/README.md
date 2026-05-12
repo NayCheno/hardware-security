@@ -12,8 +12,8 @@
 - Survey lane: ISA/hardware-design defense
 - Evidence role: Background substrate. Use for taxonomy, lineage, or adjacent data-path substrate; primary mechanism claims must be traced to original papers, specs, or platform documents.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Memory Encryption: A Survey of Existing Techniques
@@ -87,4 +87,4 @@ Survey，无新实验；证据来自既有工作和攻击案例。
 #### 文章评价
 
 它是概念边界最有用的 anchor。时间较早，必须结合 SEV-SNP、CCA、CoVE 和 PCIe/CXL 资料更新。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

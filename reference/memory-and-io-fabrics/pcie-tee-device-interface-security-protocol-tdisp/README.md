@@ -15,8 +15,8 @@
 - Public metadata supports: ECN existence, affected PCIe specification metadata, and the high-level role of a TVM/device trust relationship, host-device interconnect protection, and trusted attach/detach of a TDI.
 - Public metadata does not support: normative TDISP message formats, exact state-machine rules, conformance requirements, or a claim that this survey reviewed the member-gated PDF.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: TEE Device Interface Security Protocol (TDISP)
@@ -91,4 +91,4 @@ Confidential VM 不能默认相信 host-controlled device assignment。
 #### 文章评价
 
 是 trusted I/O taxonomy 的核心标准，但因 PDF member-gated，正文只能使用 public metadata / related public documentation 支撑的结论，不能写成已精读完整公开规范。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

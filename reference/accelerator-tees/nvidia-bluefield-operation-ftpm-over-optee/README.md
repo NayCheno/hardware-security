@@ -13,8 +13,8 @@
 - Evidence class: E4 vendor documentation with verified local PDF
 - Evidence role: Industry evidence. Vendor documentation for BlueField OP-TEE/fTPM and protected-storage building blocks; do not use as proof of a complete production confidential-networking TEE.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 文档标题: NVIDIA BlueField Operation: fTPM over OP-TEE
@@ -63,4 +63,4 @@
 ### 11. 对后续研究的启发
 
 1. 研究 DPU 上 attested TLS termination。2. 把 fTPM/OP-TEE evidence 与 SPDM device identity 对接。3. 评估 DPU-hosted vSwitch/vNIC/offload 的 TCB。4. 检查 RPMB/tee-supplicant 正常世界依赖。5. 区分 product feature、testing feature 和 production confidential endpoint。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

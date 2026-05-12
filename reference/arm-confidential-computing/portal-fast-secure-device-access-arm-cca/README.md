@@ -13,8 +13,8 @@
 - Survey lane: Arm/RISC-V confidential-computing defense; confidential-computing network/I/O/data-path defense
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: PORTAL: Fast and Secure Device Access with Arm CCA for Modern Arm Mobile System-on-Chips (SoCs)
@@ -96,4 +96,4 @@ PORTAL 提出一种基于 Arm CCA memory isolation 的设备访问接口，让 R
 #### 文章评价
 
 PORTAL 是 Arm CCA device-access 的关键相关工作；但它依赖 SoC-integrated device 假设，不能替代 PCIe/TDISP/SPDM 可信设备生命周期机制。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

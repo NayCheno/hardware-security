@@ -12,8 +12,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Industry evidence. Use for vendor, product, or industry deployment evidence only; do not generalize to peer-reviewed mechanism proof or complete platform security.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: AMD SEV-TIO: Trusted I/O for Secure Encrypted Virtualization
@@ -87,4 +87,4 @@ Confidential VM 的网络、存储和 accelerator I/O 会因 bounce buffering �
 #### 文章评价
 
 很适合作为 CoVE-IO 的 x86 industry 对照；需要明确它不是 Arm/RISC-V 主线，但支撑 trusted I/O taxonomy。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

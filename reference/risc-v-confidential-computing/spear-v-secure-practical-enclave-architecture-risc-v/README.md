@@ -12,8 +12,8 @@
 
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: SPEAR-V: Secure and Practical Enclave Architecture for RISC-V
@@ -62,4 +62,4 @@ SPEAR-V 与 Keystone/Penglai 同属 RISC-V enclave lineage；相比 Keystone 更
 ### 11. 对后续研究的启发
 
 1. 与 RISC-V memory tagging draft 对照。2. 验证 DMA/IOMMU 场景。3. 和 CoVE memory tracking 比较。4. 加入 attestation evidence。5. 研究云平台采用门槛。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

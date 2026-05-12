@@ -10,8 +10,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: CAEC: Confidential, Attestable, and Efficient Inter-CVM Communication with Arm CCA
@@ -85,4 +85,4 @@ CVM disjoint memory model 让 inter-CVM communication 必须经 hypervisor-visib
 #### 文章评价
 
 这是 CCA sharing 的重要 Draft/not ratified 证据。新共享模型也引入 revocation、concurrency 和 verification 复杂性，正文需和 Cerberus/CoVE shared memory 对照。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

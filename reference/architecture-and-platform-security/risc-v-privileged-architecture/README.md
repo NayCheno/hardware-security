@@ -9,8 +9,8 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: The RISC-V Instruction Set Manual, Volume II: Privileged Architecture
@@ -84,4 +84,4 @@ RISC-V privileged architecture 是 RISC-V 安全系统的基础规范。
 #### 文章评价
 
 必须引用但不能过度解释。它是底座，不是完整 TEE、memory encryption 或 trusted I/O 方案。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

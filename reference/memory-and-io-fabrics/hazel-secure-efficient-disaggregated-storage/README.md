@@ -13,8 +13,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Draft/not ratified. arXiv/preprint evidence for secure disaggregated storage data paths; use with explicit preprint status and do not treat as standardized trusted I/O.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Hazel: Secure and Efficient Disaggregated Storage
@@ -96,4 +96,4 @@ Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 f
 #### 文章评价
 
 Hazel 是 confidential storage data path 的重要新增相关工作；但应标注 arXiv 状态，并补充底层设备身份/attestation 组合。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

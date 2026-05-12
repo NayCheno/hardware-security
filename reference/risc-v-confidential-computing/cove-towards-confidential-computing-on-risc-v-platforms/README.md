@@ -11,8 +11,8 @@
 
 - Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: CoVE: Towards Confidential Computing on RISC-V Platforms
@@ -61,4 +61,4 @@ PDF 未给出完整实现代码或系统实现细节。它更接近架构 propos
 ### 11. 对后续研究的启发
 
 1. 构建 CoVE lifecycle model。2. 评估 TSM TCB 与 RMM TCB。3. 设计 TVM attestation verifier。4. 建立 CoVE-IO DMA/interrupt 测试。5. 比较 CoVE 与 CCA 的 memory ownership transition。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

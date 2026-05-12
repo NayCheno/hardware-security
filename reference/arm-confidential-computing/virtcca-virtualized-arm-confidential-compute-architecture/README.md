@@ -10,8 +10,9 @@
 - Download status: downloaded and verified
 
 - Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
-## Review
-
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 Canonical BibTeX key: `xu2026virtcca`. Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for virtCCA: Virtualized Arm Confidential Compute Architecture with TrustZone. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
+<!-- END PAPER REVIEW -->

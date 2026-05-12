@@ -10,8 +10,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: ACE: Confidential Computing for Embedded RISC-V Systems
@@ -85,4 +85,4 @@ ACE 是 embedded RISC-V 上的 VM-based confidential computing 方案，强调 T
 #### 文章评价
 
 适合补 RISC-V lineage 的 embedded confidential VM 分支。需标注 arXiv，并与 CoVE draft 状态区分。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

@@ -12,8 +12,8 @@
 - Standardization status: v1.0 release; use as base interrupt architecture reference rather than a standalone TEE design
 - Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: The RISC-V Advanced Interrupt Architecture
@@ -87,4 +87,4 @@ confidential VM 和 trusted I/O 需要可隔离、可绑定、可撤销的中断
 #### 文章评价
 
 AIA 是 trusted MSI 讨论的必要基础，但安全语义要由 AP-TEE/CoVE-IO 赋予。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

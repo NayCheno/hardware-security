@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: TIMBER-V: Tag-Isolated Memory Bringing Fine-grained Enclaves to RISC-V
@@ -86,4 +86,4 @@ TIMBER-V 是 RISC-V embedded enclave 谱系中重要的 tagged-memory 方案，�
 #### 文章评价
 
 适合作为 RISC-V TEE lineage 的 embedded/tagged-memory 分支。它的不足是标准化和真实 SoC 证据不足，且不覆盖 full confidential I/O。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

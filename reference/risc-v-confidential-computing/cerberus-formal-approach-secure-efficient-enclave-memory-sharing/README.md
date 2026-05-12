@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Cerberus: A Formal Approach to Secure and Efficient Enclave Memory Sharing
@@ -86,4 +86,4 @@ Disjoint memory assumption 是 enclave 安全性的核心，但限制 serverless
 #### 文章评价
 
 适合作为共享内存安全性讨论的严谨基线。局限是模型保守，不覆盖 mutable sharing 和 confidential I/O。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

@@ -9,8 +9,9 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
-## Review
-
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 Canonical BibTeX key: `ling2021trustzoneatt`. Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for Secure Boot, Trusted Boot and Remote Attestation for ARM TrustZone-based IoT Nodes. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
+<!-- END PAPER REVIEW -->

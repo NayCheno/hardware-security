@@ -12,8 +12,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Confidential Computing within an AI Accelerator
@@ -87,4 +87,4 @@ CPU confidential computing 不能保护 accelerator 内部明文执行和设备 
 #### 文章评价
 
 这是 accelerator confidential computing 的强系统证据；但原型依赖特定 IPU，通用 GPU/DPU/NIC 仍需独立方案。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

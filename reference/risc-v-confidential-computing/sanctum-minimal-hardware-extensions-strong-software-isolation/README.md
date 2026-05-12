@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Sanctum: Minimal Hardware Extensions for Strong Software Isolation
@@ -86,4 +86,4 @@ Sanctum 是开放 RISC-V enclave 的 foundational work，强调 minimal hardware
 #### 文章评价
 
 适合作为 lineage 起点；现代 survey 需补 MI6、Keystone、Penglai、CoVE 和 CoVE-IO。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

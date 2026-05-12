@@ -12,8 +12,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Draft/not ratified. arXiv/preprint evidence for CVM networking without trusted I/O devices; use as a cautious data-path design point, not as a standard or universal trusted-I/O replacement.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Bridge the Future: High-Performance Networks in Confidential VMs without Trusted I/O devices
@@ -87,4 +87,4 @@ Trusted I/O 可降低 overhead，但扩大 TCB 且设备不可用；网络流量
 #### 文章评价
 
 这是网络方向必须纳入的材料，因为它防止 survey 把“trusted I/O”写成网络性能唯一答案。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

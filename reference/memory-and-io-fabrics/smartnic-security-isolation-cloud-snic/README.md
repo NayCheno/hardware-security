@@ -13,8 +13,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense; ISA/hardware-design defense
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: SmartNIC Security Isolation in the Cloud with S-NIC
@@ -96,4 +96,4 @@ Commodity SmartNIC 多租户隔离不足，NIC OS 或其他 function 可泄漏�
 #### 文章评价
 
 S-NIC 是 SmartNIC confidential offload 方向的重要隔离基线；但它不是完整 TEE/confidential VM 方案，需要和 attestation/key-release/device lifecycle 机制组合。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

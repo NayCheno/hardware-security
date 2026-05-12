@@ -12,8 +12,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Separate but Together: Integrating Remote Attestation into TLS
@@ -62,4 +62,4 @@ TLS+RA 需要应用和 TLS library 运行在 TEE 内或被 attestation 覆盖。
 ### 11. 对后续研究的启发
 
 1. 为 Realm/TVM workload 建立 attested service endpoint。2. 将 TLS+RA 与 EAT/CCA token/CoVE evidence 对接。3. 研究 DPU/SmartNIC 上 TLS termination 的 attestation。4. 对比 SPDM device session 与 TLS application session。5. 形式化验证 verifier policy。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

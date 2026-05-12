@@ -12,8 +12,8 @@
 - Standardization status: v1.0.0 release; use as base I/O translation/protection reference rather than a standalone TEE design
 - Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: RISC-V IOMMU Architecture Specification
@@ -87,4 +87,4 @@ RISC-V IOMMU 定义设备 DMA 地址转换、隔离和 queue/register 接口。
 #### 文章评价
 
 它是必要底座，但不是完整安全方案。CoVE-IO 还需要 device identity、IDE、TDISP、SPDM、trusted interrupt 和 lifecycle。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

@@ -48,6 +48,7 @@ Newly added or completed in this pass:
 - `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/`
 - `reference/attestation/secure-boot-trusted-boot-remote-attestation-arm-trustzone-iot/`
 - `reference/attestation/remote-attestation-procedures-rats-architecture/`
+- `reference/attestation/entity-attestation-token-rfc9711/`
 - `reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/`
 - `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/`
 - `reference/risc-v-confidential-computing/cure-customizable-resilient-enclaves/`

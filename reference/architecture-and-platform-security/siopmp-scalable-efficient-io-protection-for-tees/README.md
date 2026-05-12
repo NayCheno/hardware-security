@@ -11,8 +11,8 @@
 
 - Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: sIOPMP: Scalable and Efficient I/O Protection for TEEs
@@ -61,4 +61,4 @@ sIOPMP 主要解决 DMA access-control，不等同于 confidential I/O 全栈。
 ### 11. 对后续研究的启发
 
 1. 将 sIOPMP 接入 CoVE-IO lifecycle。2. 加入设备 attestation 与 TDISP。3. 评估 CXL/PCIe IDE 组合。4. 对比 Arm SMMU/RME-DA。5. 研究多租户设备共享中的 revocation 和 DoS。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

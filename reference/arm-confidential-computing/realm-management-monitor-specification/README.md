@@ -11,8 +11,9 @@
 - Survey lane: Arm/RISC-V confidential-computing defense
 - Evidence class: E0 official architecture specification source, local source page only
 - Evidence role: Spec/standard SOTA. Official Arm RMM source-page evidence with local PDF unavailable; use only public RMM/RMI/RSI lifecycle concepts and avoid unavailable non-public details.
-## Review
-
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 Canonical BibTeX key: `arm_rmm_spec`. Evidence role: Spec/standard SOTA. Official Arm RMM source-page evidence with local PDF unavailable; use only public RMM/RMI/RSI lifecycle concepts and avoid unavailable non-public details.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for Realm Management Monitor Specification. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
+<!-- END PAPER REVIEW -->

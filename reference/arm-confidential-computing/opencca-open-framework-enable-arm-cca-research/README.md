@@ -11,8 +11,8 @@
 - Download status: downloaded and verified on 2026-05-12
 - Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: OpenCCA: An Open Framework to Enable Arm CCA Research
@@ -86,4 +86,4 @@ OpenCCA 是 Arm CCA 研究平台，允许在 commodity Arm board 上跑 CCA-boun
 #### 文章评价
 
 对 survey 很有用，可评价 CCA 论文实验环境。但引用时必须声明它是 research framework，不是安全实现。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

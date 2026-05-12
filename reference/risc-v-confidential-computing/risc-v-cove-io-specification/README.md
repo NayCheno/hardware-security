@@ -12,8 +12,8 @@
 - Standardization status: v0.3.0 draft; treat as not ratified
 - Evidence role: Draft/not ratified. Public RISC-V CoVE-IO v0.3.0 draft source for trusted I/O concepts; always mark as draft/not ratified.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Confidential VM Extension I/O (CoVE-IO) for Confidential Computing on RISC-V platforms
@@ -87,4 +87,4 @@ CPU/内存隔离无法保护设备 DMA、MMIO、中断和 PCIe/CXL.io link 上�
 #### 文章评价
 
 它是 RISC-V trusted I/O 最重要资料，但成熟度低于 ratified specs，正文必须标注 draft/not ratified。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

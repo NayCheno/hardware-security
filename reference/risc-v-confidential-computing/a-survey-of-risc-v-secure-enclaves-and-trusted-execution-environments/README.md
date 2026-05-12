@@ -13,8 +13,8 @@
 - Evidence class: E2 survey, HTML-only local evidence
 - Evidence role: Background substrate. Survey/background substrate for RISC-V enclave and TEE taxonomy; mechanism claims must be traced to original papers or official RISC-V sources, and the local PDF remains blocked/HTML-only.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: A Survey of RISC-V Secure Enclaves and Trusted Execution Environments
@@ -102,4 +102,4 @@ Survey，无新实验；本地证据为 HTML 页面，PDF endpoint 自动下载 
 | P1 | TIMBER-V | Embedded tagged-memory enclave | `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/` | added, Review available | Use as embedded branch. |
 | P1 | Cerberus | Formal enclave memory sharing | `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | added, Review available | Use for sharing/formal proof discussion. |
 | P1 | ACE | Embedded RISC-V confidential computing | `reference/risc-v-confidential-computing/ace-confidential-computing-embedded-risc-v-systems/` | existing, local PDF available | Finish review when writing embedded subsection. |
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

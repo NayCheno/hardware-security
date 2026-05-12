@@ -13,8 +13,8 @@
 - Survey lane: confidential-computing network/I/O/data-path defense; ISA/hardware-design defense
 - Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: StrongBox: A GPU TEE on Arm Endpoints
@@ -96,4 +96,4 @@ Mali-T624 原型报告 4.70%--15.26% 开销，TCB 约 1,366 LoC。
 #### 文章评价
 
 适合作为 CCA accelerator 之前的 Arm GPU TEE baseline；不能写成 Arm CCA/Realm 方案。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->

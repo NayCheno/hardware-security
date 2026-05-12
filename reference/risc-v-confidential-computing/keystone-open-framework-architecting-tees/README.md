@@ -11,8 +11,8 @@
 
 - Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN REVIEW -->
-## Review
+<!-- BEGIN PAPER REVIEW -->
+## Paper Review
 ### 1. 论文基本信息
 
 - 论文标题: Keystone: An Open Framework for Architecting TEEs
@@ -61,4 +61,4 @@ Keystone 继承 Sanctum 的开放硬件隔离思想，也为 Penglai 的 scalabl
 ### 11. 对后续研究的启发
 
 1. 把 Keystone 作为 RISC-V TEE baseline。2. 对比 PMP-based enclave 与 CoVE TVM。3. 建立 I/O path benchmark。4. 研究可插拔 side-channel defense。5. 评估开源 TEE 的供应链可信根。
-<!-- END REVIEW -->
+<!-- END PAPER REVIEW -->
