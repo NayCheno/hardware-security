@@ -115,8 +115,8 @@ restrictive citation rule controls the claim.
 \begin{table*}[t]
 \centering
 \scriptsize
-\caption{Key Sources and Evidence Roles}
-\label{tab:key_source_roles}
+\caption{Key Platform and Standard Sources}
+\label{tab:key_platform_standard_sources}
 \begin{tabular}{@{}p{0.24\linewidth}p{0.09\linewidth}p{0.24\linewidth}p{0.33\linewidth}@{}}
 \toprule
 \textbf{Key} & \textbf{Class} & \textbf{Status/version} & \textbf{Allowed claim in this survey} \\ \midrule
@@ -136,7 +136,18 @@ restrictive citation rule controls the claim.
 \texttt{pcisig\_tdisp\_2022} & E5 & Public ECN metadata; member-gated PDF & TDISP existence, affected-specification metadata, and high-level device-interface role only. \\
 \texttt{pcisig\_tdisp\_xt\_2025} & E5 & Public PCIe 6.x ECN metadata; member-gated download & TDISP XT public existence and affected IDE/ATS/TDISP metadata only; no gated XT/TE normative-rule claims. \\
 \texttt{eat\_rfc} & E0 & RFC 9711, Standards Track & EAT claim/token encoding for attestation evidence. \\
-\texttt{rats\_rfc} & E0 & RFC 9334, Standards Track & RATS attester, verifier, relying-party, evidence, and appraisal roles. \\
+\texttt{rats\_rfc} & E0 & RFC 9334, Standards Track & RATS attester, verifier, relying-party, evidence, and appraisal roles. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{Key Survey, Vendor, and Boundary Sources}
+\label{tab:key_boundary_sources}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.09\linewidth}p{0.24\linewidth}p{0.33\linewidth}@{}}
+\toprule
+\textbf{Key} & \textbf{Class} & \textbf{Status/version} & \textbf{Allowed claim in this survey} \\ \midrule
 \begin{tabular}[t]{@{}l@{}}\texttt{nvidia\_bluefield}\\\texttt{operation\_2025}\end{tabular} & E4 & NVIDIA BlueField public documentation & DPU OP-TEE/fTPM building-block evidence only, not complete confidential networking proof. \\
 \texttt{boubakri2025riscvtee} & E2/E5 & Survey source; local PDF blocked / source verified & RISC-V TEE taxonomy support only; mechanism claims return to primary papers or specs. \\
 \texttt{schneider2022soktee} & E2 & Hardware-supported TEE SoK / survey & Cross-platform TEE design-space taxonomy and terminology. \\
@@ -146,11 +157,11 @@ restrictive citation rule controls the claim.
 \end{tabular}
 \end{table*}
 
-Table~\ref{tab:key_source_roles} makes the strongest sources and the main
-boundary cases visible in the paper body. In particular, draft RISC-V
-specifications, vendor documents, surveys, and gated PCI-SIG metadata are
-listed with their restricted claim roles rather than being treated as ordinary
-mechanism evidence.
+Tables~\ref{tab:key_platform_standard_sources} and~\ref{tab:key_boundary_sources}
+make the strongest sources and the main boundary cases visible in the paper
+body. In particular, draft RISC-V specifications, vendor documents, surveys,
+and gated PCI-SIG metadata are listed with their restricted claim roles rather
+than being treated as ordinary mechanism evidence.
 
 \input{tee_design_space}
 
