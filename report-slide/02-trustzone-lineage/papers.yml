@@ -59,3 +59,4 @@ primary:
     limitations: 不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。
     commercialization: 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
   auxiliary: []
+auxiliary: []

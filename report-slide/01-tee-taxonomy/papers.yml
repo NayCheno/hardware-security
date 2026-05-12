@@ -59,3 +59,4 @@ primary:
     limitations: 不能替代 CCA、CoVE-IO、SPDM/TDISP 或具体 GPU/DPU 系统的一手证据。
     commercialization: 可转化为 DPU/GPU 安全产品评估清单；落地依赖设备 RoT 与标准接口。
   auxiliary: []
+auxiliary: []

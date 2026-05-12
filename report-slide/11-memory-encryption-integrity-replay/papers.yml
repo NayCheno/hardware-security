@@ -7,7 +7,7 @@ primary:
   evidence: E2 / Background substrate
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf
-  title: Memory Encryption: A Survey of Existing Techniques
+  title: 'Memory Encryption: A Survey of Existing Techniques'
   summary: 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡。
   background: Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文；access control 与 encryption/integrity/replay 是不同问题。
   insight_solution: 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot 的边界。

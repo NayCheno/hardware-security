@@ -47,7 +47,7 @@ primary:
   evidence: E2 / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/odrp-on-demand-remote-paging-with-programmable-rdma/paper.pdf
-  title: ODRP: on-demand remote paging with programmable RDMA
+  title: 'ODRP: on-demand remote paging with programmable RDMA'
   summary: ODRP 用 programmable RDMA 支撑 on-demand remote paging，说明远程内存可进入高性能 data path。
   background: RDMA 和远程分页让数据离开 CPU/本地 DRAM 路径；confidential computing 必须处理远端 endpoint、NIC/DPU 和 buffer ownership。
   insight_solution: 把 remote paging 与 programmable RDMA 数据路径结合，减少传统远程内存访问路径中的软件开销。
