@@ -1,44 +1,119 @@
 \section{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
-\begin{frame}{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
-\small
-\textbf{方向定位：}说明 data path 不再局限于 CPU 本地内存，confidential boundary 必须跨 fabric 建模。
-\medskip
 
+\DirectionIntro
+{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
+{本方向说明 data path 不再局限于 CPU 本地内存，confidential boundary 必须跨 CXL、PCIe link、RDMA/NIC 和远端 memory endpoint 建模。}
+{三篇主讲材料是 \Key{gouk2022directcxl}、\Key{zhong2024cxltiers}、\Key{wang2025odrp}；\Key{cxl_spec} 与 \Key{pcie_ide} 只作为辅助材料。}
+{三篇主讲都是 fabric/data-path background substrate，不是 TEE、TDISP、SPDM 或 trusted-I/O proof；PCIe IDE 只覆盖 link integrity/encryption。}
+
+\begin{frame}{Memory / I/O fabrics：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & DirectCXL memory disaggregation & Foundational / USENIX ATC 2022 \\ 
-SOTA/规范 1 & CXL memory tiers in virtualized environments & Peer-reviewed SOTA / OSDI 2024 \\ 
-SOTA/规范 2 & Programmable RDMA on-demand remote paging & Peer-reviewed SOTA / NSDI 2025 \\ 
+CXL disaggregation & DirectCXL memory disaggregation & Background substrate / E2 ATC 2022 \\
+CXL tiers & CXL memory tiers in virtualized environments & Background substrate / E2 OSDI 2024 \\
+RDMA remote paging & Programmable RDMA on-demand remote paging & Background substrate / E2 NSDI 2025 \\
 \bottomrule
 \end{tabularx}
+\medskip
+\SourceState{辅助材料：\Key{cxl_spec} 支撑 CXL 语义，\Key{pcie_ide} 支撑 PCIe link protection；二者不计入三篇主讲。}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {DirectCXL memory disaggregation}
-{gouk2022directcxl | Foundational / USENIX ATC 2022}
-{研究 DirectCXL memory disaggregation。}
-{CXL 让内存位置和访问路径脱离本地 DRAM 假设。}
-{实现对 CXL-attached memory 的高性能直接访问。}
-{ATC 论文提供系统评估；具体指标以原文为准。}
-{用于说明 fabric 改变 confidential boundary 的数据路径；不是 TEE 论文。}
+{\Meta{gouk2022directcxl}{Background substrate / E2 ATC 2022}{source: local PDF verified}{claim: CXL fabric data-path context}}
+{\begin{itemize}
+  \item DirectCXL 研究 CXL-attached memory 的高性能直接访问。
+  \item 它展示内存可被远端/池化 fabric 重新组织，而不是固定在 CPU 本地 DRAM。
+\end{itemize}}
+{\begin{itemize}
+  \item CXL 让内存位置和访问路径脱离本地 DRAM 假设。
+  \item 对 confidential workload 来说，boundary 不能只画在 CPU package 内。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是让 disaggregated memory 更接近普通 load/store-like 访问模型。
+  \item 解决方案优化 DirectCXL 数据路径，降低远端/池化内存访问成本。
+\end{itemize}}
+{\begin{itemize}
+  \item CXL-attached memory access path。
+  \item Memory disaggregation data placement。
+  \item Host/fabric latency and bandwidth tradeoff。
+\end{itemize}}
+{\begin{itemize}
+  \item ATC 论文提供系统评估。
+  \item 本方向只使用其 fabric/data-path 结论，不把它写成 TEE 或 trusted-I/O proof。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}清楚说明 CXL 改变 memory locality 和 data-path 边界。
+  \item \textbf{不足：}不解决 device identity、link encryption、TDISP 或 verifier policy。
+  \item \textbf{商业落地：}对 CXL memory pooling 有启发；风险在多租户隔离、链路保护和运营配置复杂度。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {CXL memory tiers in virtualized environments}
-{zhong2024cxltiers | Peer-reviewed SOTA / OSDI 2024}
-{研究虚拟化环境中的 CXL memory tiers 管理。}
-{云平台需要在本地/远端/分层内存间调度资源。}
-{面向 virtualized environment 设计 memory tier 管理系统。}
-{OSDI 论文提供云/系统评估；具体指标以原文为准。}
-{适合支撑“host 管理资源但不应破坏 confidential boundary”的讨论。}
+{\Meta{zhong2024cxltiers}{Background substrate / E2 OSDI 2024}{source: local PDF verified}{claim: CXL tier management context}}
+{\begin{itemize}
+  \item 这篇工作研究虚拟化环境中 CXL memory tiers 的资源管理、placement 与性能权衡。
+  \item 它把 CXL 视为 cloud resource-management substrate，而不是安全边界本身。
+\end{itemize}}
+{\begin{itemize}
+  \item 云平台需要在本地 DRAM、CXL-attached memory 和远端/分层资源之间调度 workload memory。
+  \item Host 管理 placement 时，confidential VM 的 ownership 和 measurement 语义不能被隐式破坏。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 CXL memory tier 当作可调度资源，而非透明硬件细节。
+  \item 解决方案设计 virtualized memory-tier 管理系统，使 host 可以做 placement/migration policy。
+\end{itemize}}
+{\begin{itemize}
+  \item CXL memory tier management。
+  \item Virtualized placement and migration policy。
+  \item Host-managed resource scheduling。
+\end{itemize}}
+{\begin{itemize}
+  \item OSDI 论文提供系统评估。
+  \item 它支撑 resource-management context，不证明 trusted-I/O 或 confidential boundary 完整性。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}支撑“host 管资源但不能破坏 confidential boundary”的动机。
+  \item \textbf{不足：}安全边界、attestation、IDE keying 和 device ownership 不是论文主目标。
+  \item \textbf{商业落地：}对云 CXL 内存分层直接相关；风险在 VM ownership 与 host placement policy 的冲突。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Programmable RDMA on-demand remote paging}
-{wang2025odrp | Peer-reviewed SOTA / NSDI 2025}
-{用 programmable RDMA 支持 on-demand remote paging。}
-{远程内存和 RDMA 让数据离开 CPU/本地内存路径。}
-{把 remote paging 与 programmable RDMA 数据路径结合。}
-{NSDI 论文提供系统评估；具体指标以原文为准。}
-{可说明 confidential computing 不能只看 CPU 内部隔离；不是直接防御论文。}
+{\Meta{wang2025odrp}{Background substrate / E2 NSDI 2025}{source: local PDF verified}{claim: RDMA remote-memory data-path context}}
+{\begin{itemize}
+  \item ODRP 用 programmable RDMA 支撑 on-demand remote paging。
+  \item 它说明远程内存可以进入高性能 data path，而不是只作为慢速后台存储。
+\end{itemize}}
+{\begin{itemize}
+  \item RDMA 和远程分页让数据离开 CPU/本地 DRAM 路径。
+  \item Confidential computing 必须处理远端 endpoint、NIC/DPU、buffer ownership 和 revocation。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 remote paging 与 programmable RDMA 数据路径结合。
+  \item 解决方案减少传统远程内存访问路径中的软件开销。
+\end{itemize}}
+{\begin{itemize}
+  \item Programmable RDMA data path。
+  \item On-demand remote paging。
+  \item Remote-memory buffer management。
+\end{itemize}}
+{\begin{itemize}
+  \item NSDI 论文提供系统评估。
+  \item 本方向只引用 data-path context，不写成完整 confidential-computing boundary proof。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}说明 RDMA/remote paging 会把敏感数据路径扩展到 NIC/fabric/remote memory。
+  \item \textbf{不足：}不提供 attested endpoint、encrypted link、trusted vNIC/vSwitch/offload 或 device lifecycle 证明。
+  \item \textbf{商业落地：}对 remote memory 和 SmartNIC/DPU offload 有价值；风险在 endpoint trust、buffer revocation 和 QoS/side-channel。
+\end{itemize}}
 
+\DirectionSummary
+{Memory / I/O fabrics}
+{DirectCXL 表明 memory locality 不再等于本地 DRAM，fabric 会进入 workload memory path。}
+{CXL tiers 把远端/分层 memory 变成 host-managed cloud resource，需要与 confidential ownership/lifecycle 对齐。}
+{ODRP 说明 RDMA/NIC/remote paging 会把 data path 推到 NIC、DPU 和远端 endpoint。}
+{PCIe IDE、CXL security、SPDM/TDISP 和 SmartNIC local root 必须组合建模；单篇 CXL/RDMA 系统论文不能证明完整机密边界。}

@@ -125,10 +125,14 @@
   {
     "directory": "12-memory-io-fabrics",
     "direction": "Memory / I/O fabrics: CXL、PCIe IDE、RDMA",
-    "papers": [
-      "gouk2022directcxl",
-      "zhong2024cxltiers",
-      "wang2025odrp"
+    "primary": [
+      {"key": "gouk2022directcxl", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
+      {"key": "zhong2024cxltiers", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
+      {"key": "wang2025odrp", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "cxl_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
+      {"key": "pcie_ide", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"}
     ]
   },
   {
