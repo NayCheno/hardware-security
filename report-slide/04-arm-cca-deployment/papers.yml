@@ -1,28 +1,69 @@
 direction: Arm CCA 细粒度隔离与部署模型
 focus: 从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+selection_rule: 固定三篇 primary；`liu2025lesstrust` 作为 intra-process 辅助材料，不计入三篇主讲。
+primary:
 - key: zhang2023shelter
   role: Foundational / USENIX Security 2023
+  evidence: E1 / Foundational
+  source_status: local_pdf_verified
+  reference: reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf
   title: 'Shelter: CCA 用户态隔离'
-  summary: 用 Arm CCA 支持用户态隔离。
-  background: Realm 机制不必只服务 VM，进程内/用户态敏感代码也需要低 TCB 隔离。
-  solution: 把 CCA primitives 封装成可供 user-space compartment 使用的隔离模型。
-  experiment: USENIX Security 论文提供原型与开销评估；具体数值回引原文。
-  comment: 开辟 CCA 细粒度使用方式；落地取决于 CCA 硬件普及和 OS/runtime 集成。
+  summary: 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment。
+  background: Realm 机制不必只服务 VM；进程内敏感代码同样需要小 TCB、host-untrusted 的隔离边界。
+  insight_solution: 把 CCA primitives 封装成用户态隔离模型，让应用 compartment 在不完全信任 OS/host 的前提下运行敏感逻辑。
+  key_technologies:
+  - User-space compartment over Arm CCA
+  - Realm-backed isolation boundary
+  - Runtime and OS integration path for fine-grained protection
+  experiment_claim: USENIX Security 论文提供原型与开销评估；具体数值需回引本地 PDF。
+  evaluation:
+    strengths: 开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。
+    limitations: 系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。
+    commercialization: 对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。
+  auxiliary: []
 - key: zhou2025rcontainer
   role: Peer-reviewed SOTA / NDSS 2025
+  evidence: E1 / Peer-reviewed SOTA
+  source_status: local_pdf_verified
+  reference: reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf
   title: 'RContainer: CCA 安全容器'
-  summary: 把 Arm CCA 扩展到安全容器架构。
-  background: 容器比 VM 更轻，但内核共享导致隔离边界弱。
-  solution: 用 CCA 硬件 primitives 为容器建立更强的机密性边界。
-  experiment: NDSS 系统论文提供原型评估；具体结果需以论文数据为准。
-  comment: 贴近云原生落地；挑战是容器生态、编排系统和 CCA lifecycle 的耦合。
-- key: liu2025nanozone + liu2025lesstrust
-  role: Draft + Peer-reviewed SOTA evidence
-  title: 更细粒度 CCA 隔离
-  summary: 研究 Arm CCA 上更可扩展、更细粒度的内存和进程内隔离。
-  background: 只用 Realm/VM 粒度会造成管理成本和隔离粒度之间的矛盾。
-  solution: 探索 CCA granule/lifecycle 能否支撑更小保护域和更少管理者信任。
-  experiment: NanoZone 为 arXiv；LessTrust 为 TIFS 论文，具体评估需回到原文。
-  comment: 方向前沿；商业潜力取决于硬件成本、kernel/runtime 改造和开发者可用性。
+  summary: 把 Arm CCA 扩展到安全容器架构，面向云原生场景重构容器隔离边界。
+  background: 容器共享内核带来部署效率，但传统容器边界难以抵御高权限 host/内核路径的泄露风险。
+  insight_solution: 利用 CCA 硬件 primitives 为容器 workload 建立更强机密性边界，同时保留容器化部署模型。
+  key_technologies:
+  - CCA-backed secure container boundary
+  - Container lifecycle and Realm lifecycle mapping
+  - Runtime/orchestration integration considerations
+  experiment_claim: NDSS 系统论文提供原型评估；本 deck 不复制未核对的具体性能数字。
+  evaluation:
+    strengths: 贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload。
+    limitations: 容器生态、编排系统和 CCA lifecycle 的耦合复杂，生产部署需要额外工程证据。
+    commercialization: 商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
+  auxiliary: []
+- key: liu2025nanozone
+  role: Draft/not ratified / arXiv 2025
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf
+  title: 'NanoZone: CCA 细粒度内存保护'
+  summary: 探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题。
+  background: 只用 Realm/VM 粒度会在管理成本、保护域数量和应用内敏感数据隔离之间形成矛盾。
+  insight_solution: 研究 CCA granule/lifecycle 能否支撑更小保护域，并用辅助材料 `liu2025lesstrust` 对照进程内信任收缩问题。
+  key_technologies:
+  - Fine-grained memory protection over CCA
+  - Granule/lifecycle scaling pressure
+  - Intra-process isolation comparison with less-trust management
+  experiment_claim: arXiv 预印本提供设计和评估线索；draft/not ratified 状态下只作为前沿方向证据。
+  evaluation:
+    strengths: 直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿。
+    limitations: 预印本尚不能代表同行评议共识或硬件/OS 生态成熟度。
+    commercialization: 若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
+  auxiliary:
+  - liu2025lesstrust
+auxiliary:
+- key: liu2025lesstrust
+  role: Peer-reviewed SOTA / TIFS 2025
+  evidence: E1 / Peer-reviewed SOTA
+  source_status: source_verified_pdf_unavailable
+  reference: reference/arm-confidential-computing/more-granular-less-trust-arm-cca-intra-process-isolation/README.md
+  use: 辅助对比 intra-process isolation 和 untrusted management threat model；本地 PDF 不可用时不写具体实验数字。

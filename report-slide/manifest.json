@@ -34,10 +34,13 @@
   {
     "directory": "04-arm-cca-deployment",
     "direction": "Arm CCA 细粒度隔离与部署模型",
-    "papers": [
-      "zhang2023shelter",
-      "zhou2025rcontainer",
-      "liu2025nanozone + liu2025lesstrust"
+    "primary": [
+      {"key": "zhang2023shelter", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
+      {"key": "zhou2025rcontainer", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "liu2025nanozone", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "liu2025lesstrust", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "source_verified_pdf_unavailable"}
     ]
   },
   {
