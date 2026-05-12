@@ -1,30 +1,69 @@
 direction: Attestation、boot、lifecycle
-focus: 区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier
-  policy。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+focus: 区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier policy。
+selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary。
+primary:
 - key: seshadri2004swatt
   role: Foundational / IEEE S&P 2004
+  evidence: E1 / Foundational
+  source_status: local_pdf_verified
+  reference: reference/attestation/swatt-software-based-attestation-for-embedded-devices/paper.pdf
   title: 'SWATT: 软件 attestation 早期代表'
-  summary: 提出软件 attestation 的早期代表方法。
-  background: 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性。
-  solution: 用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。
-  experiment: 论文在嵌入式节点场景评估；安全性强依赖时间和硬件假设。
-  comment: 历史价值高；现代高威胁模型下适用性有限。商业应用应转向硬件 RoT 与标准化 evidence。
-- key: rats_rfc + eat_rfc
-  role: Spec/standard SOTA / RFC 9334 + RFC 9711
-  title: RATS 架构与 Entity Attestation Token
-  summary: RATS 定义 attester、verifier、relying party、evidence、reference values 和 attestation
-    results；EAT 定义 token claims。
-  background: 多平台 attestation 同时需要可互操作的架构术语和证据编码。
-  solution: RATS 规范化 evidence 生成、传递、评估角色与消息；EAT 用 CWT/JWT 承载实体状态和安全属性 claims。
-  experiment: RFC，无实验。
-  comment: 标准化落地潜力强；不能说明某平台测量链是否充分，也不能替代 CCA/CoVE 平台规范。
+  summary: 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。
+  background: 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态。
+  insight_solution: 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum。
+  key_technologies:
+  - Software-only remote attestation
+  - Timing-sensitive memory checksum
+  - Verifier/prover challenge-response model
+  experiment_claim: 论文在嵌入式节点场景评估；安全性强依赖 timing、硬件和网络假设。
+  evaluation:
+    strengths: 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
+    limitations: 面对现代强对手和复杂 SoC/TEE 时适用性有限。
+    commercialization: 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
+  auxiliary: []
+- key: rats_rfc
+  role: Spec/standard SOTA / RFC 9334
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/attestation/remote-attestation-procedures-rats-architecture/paper.pdf
+  title: RATS 架构
+  summary: 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy。
+  background: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐。
+  insight_solution: RATS 规范化 evidence 生成、传递、评估角色与拓扑；`eat_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码。
+  key_technologies:
+  - Attester/verifier/relying-party roles
+  - Evidence, endorsements, reference values and appraisal policy
+  - Attestation results and freshness vocabulary
+  experiment_claim: RFC 架构规范，无实验；不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义。
+  evaluation:
+    strengths: 是跨平台 attestation 术语和 verifier policy 的权威基线。
+    limitations: 不证明任一平台测量链充分，也不定义完整 token claim encoding。
+    commercialization: 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
+  auxiliary:
+  - eat_rfc
 - key: mao2025pdrima
   role: Draft/not ratified / arXiv 2025
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/attestation/pdrima-policy-driven-runtime-integrity-measurement-attestation/paper.pdf
   title: Policy-driven runtime integrity measurement
   summary: 研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。
-  background: secure boot/launch attestation 不能覆盖运行时状态变化。
-  solution: 把策略驱动的 runtime measurement 融入 attestation。
-  experiment: arXiv 论文，本地 PDF 可用；具体结果需回引原文。
-  comment: 适合补 runtime attestation；不要把它泛化为 CCA/CoVE 的完整 evidence chain。
+  background: Secure boot 和 launch attestation 只能覆盖启动或装载时刻，不能自动证明运行时状态持续可信。
+  insight_solution: 把策略驱动的 runtime measurement 融入 attestation，让 verifier 能按 policy 关注运行期状态变化。
+  key_technologies:
+  - Policy-driven runtime measurement
+  - TrustZone-based TEE measurement path
+  - Runtime attestation evidence generation
+  experiment_claim: arXiv 论文，本地 PDF 可用；draft/not-ratified 状态下只写保守机制方向。
+  evaluation:
+    strengths: 补上 secure boot/launch attestation 之后的 runtime freshness 问题。
+    limitations: TrustZone-based draft 不能泛化成 CCA/CoVE 的完整 evidence chain。
+    commercialization: 适合安全运维和 runtime compliance；风险在策略管理、性能成本和证据解释一致性。
+  auxiliary: []
+auxiliary:
+- key: eat_rfc
+  role: Spec/standard SOTA / RFC 9711
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/attestation/entity-attestation-token-rfc9711/paper.pdf
+  use: 辅助说明 Entity Attestation Token 的 CWT/JWT claim/token encoding；不计入三篇主讲，也不替代 RATS 架构或平台证据语义。

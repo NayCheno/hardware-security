@@ -56,10 +56,13 @@
   {
     "directory": "06-attestation-boot-lifecycle",
     "direction": "Attestation、boot、lifecycle",
-    "papers": [
-      "seshadri2004swatt",
-      "rats_rfc + eat_rfc",
-      "mao2025pdrima"
+    "primary": [
+      {"key": "seshadri2004swatt", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
+      {"key": "rats_rfc", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
+      {"key": "mao2025pdrima", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "eat_rfc", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
     ]
   },
   {

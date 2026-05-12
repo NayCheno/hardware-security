@@ -1,44 +1,119 @@
 \section{Attestation、boot、lifecycle}
-\begin{frame}{Attestation、boot、lifecycle}
-\small
-\textbf{方向定位：}区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier policy。
-\medskip
 
+\DirectionIntro
+{Attestation、boot、lifecycle}
+{本方向区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier policy，避免把一次性启动测量写成持续可信。}
+{三篇主讲材料是 \Key{seshadri2004swatt}、\Key{rats_rfc}、\Key{mao2025pdrima}；\Key{eat_rfc} 只作为 token-format auxiliary。}
+{RFC 页只写规范语义和证据类型；draft runtime measurement 只写前沿方向，不泛化成 CCA/CoVE 完整证据链。}
+
+\begin{frame}{Attestation、boot、lifecycle：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & SWATT: 软件 attestation 早期代表 & Foundational / IEEE S\&P 2004 \\ 
-SOTA/规范 1 & RATS 架构与 Entity Attestation Token & Spec/standard SOTA / RFC 9334 + RFC 9711 \\ 
-SOTA/规范 2 & Policy-driven runtime integrity measurement & Draft/not ratified / arXiv 2025 \\ 
+历史入口 & SWATT: 软件 attestation 早期代表 & Foundational / E1 IEEE S\&P 2004 \\
+标准架构 & RATS 架构 & Spec-standard SOTA / E0 RFC 9334 \\
+运行时测量 & Policy-driven runtime integrity measurement & Draft/not ratified / E3 arXiv 2025 \\
 \bottomrule
 \end{tabularx}
+\medskip
+\SourceState{辅助材料：\Key{eat_rfc} 是 RFC 9711 EAT token/claim encoding，不计入三篇，也不替代 RATS 架构。}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt | Foundational / IEEE S\&P 2004}
-{提出软件 attestation 的早期代表方法。}
-{低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性。}
-{用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。}
-{论文在嵌入式节点场景评估；安全性强依赖时间和硬件假设。}
-{历史价值高；现代高威胁模型下适用性有限。商业应用应转向硬件 RoT 与标准化 evidence。}
+{\Meta{seshadri2004swatt}{Foundational / E1 IEEE S\&P 2004}{source: local PDF verified}{claim: embedded software attestation baseline}}
+{\begin{itemize}
+  \item SWATT 提出软件 attestation 的早期代表方法。
+  \item 它用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。
+\end{itemize}}
+{\begin{itemize}
+  \item 低端嵌入式设备缺少硬件 root of trust。
+  \item 远程管理者仍需要确认设备代码完整性和启动状态。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把软件 checksum 与严格时间假设绑定。
+  \item 解决方案通过 verifier/prover challenge-response 约束篡改设备伪造完整内存 checksum 的空间。
+\end{itemize}}
+{\begin{itemize}
+  \item Software-only remote attestation。
+  \item Timing-sensitive memory checksum。
+  \item Verifier/prover challenge-response model。
+\end{itemize}}
+{\begin{itemize}
+  \item 论文在嵌入式节点场景评估。
+  \item 安全性强依赖 timing、硬件和网络假设，不能直接迁移到现代复杂 TEE/SoC threat model。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
+  \item \textbf{不足：}面对现代强对手和复杂 SoC/TEE 时适用性有限。
+  \item \textbf{商业落地：}现代方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
+\end{itemize}}
 
-\PaperFrame
-{RATS 架构与 Entity Attestation Token}
-{rats\_rfc + eat\_rfc | Spec/standard SOTA / RFC 9334 + RFC 9711}
-{RATS 定义 attester、verifier、relying party、evidence、reference values 和 attestation results；EAT 定义 token claims。}
-{多平台 attestation 同时需要可互操作的架构术语和证据编码。}
-{RATS 规范化 evidence 生成、传递、评估角色与消息；EAT 用 CWT/JWT 承载实体状态和安全属性 claims。}
-{RFC，无实验。}
-{标准化落地潜力强；不能说明某平台测量链是否充分，也不能替代 CCA/CoVE 平台规范。}
+\PaperStory
+{RATS 架构}
+{\Meta{rats\_rfc}{Spec-standard SOTA / E0 RFC 9334}{source: local PDF verified}{claim: architecture vocabulary only}}
+{\begin{itemize}
+  \item RATS 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy。
+  \item 本 deck 用它统一后续 CCA、CoVE、DPU/NIC attestation 词汇。
+\end{itemize}}
+{\begin{itemize}
+  \item 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇。
+  \item 没有架构词汇时，platform evidence、token encoding 和 verifier result 容易混在一起。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 evidence 生成、传递、评估角色与拓扑标准化。
+  \item \Key{eat_rfc} 只作为辅助材料，说明实体状态和安全属性 claims 的 token 编码。
+\end{itemize}}
+{\begin{itemize}
+  \item Attester/verifier/relying-party roles。
+  \item Evidence, endorsements, reference values and appraisal policy。
+  \item Attestation results and freshness vocabulary。
+\end{itemize}}
+{\begin{itemize}
+  \item RFC 架构规范，无实验。
+  \item 不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}跨平台 attestation 术语和 verifier policy 的权威基线。
+  \item \textbf{不足：}不证明任一平台测量链充分，也不定义完整 token claim encoding。
+  \item \textbf{商业落地：}标准化潜力强；风险在 evidence profile、endorsement 分发和 verifier policy 运维复杂。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Policy-driven runtime integrity measurement}
-{mao2025pdrima | Draft/not ratified / arXiv 2025}
-{研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。}
-{secure boot/launch attestation 不能覆盖运行时状态变化。}
-{把策略驱动的 runtime measurement 融入 attestation。}
-{arXiv 论文，本地 PDF 可用；具体结果需回引原文。}
-{适合补 runtime attestation；不要把它泛化为 CCA/CoVE 的完整 evidence chain。}
+{\Meta{mao2025pdrima}{Draft/not ratified / E3 arXiv 2025}{source: local PDF verified}{claim: draft runtime measurement design}}
+{\begin{itemize}
+  \item PDRIMA 研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。
+  \item 它补充 secure boot/launch attestation 之后的运行期状态问题。
+\end{itemize}}
+{\begin{itemize}
+  \item Secure boot 和 launch attestation 只能覆盖启动或装载时刻。
+  \item Workload 运行后，代码、配置、policy 和状态变化仍需 freshness 与可解释 evidence。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 policy-driven runtime measurement 融入 attestation。
+  \item Verifier 可以按 policy 关注运行期状态变化，而不是只看启动测量。
+\end{itemize}}
+{\begin{itemize}
+  \item Policy-driven runtime measurement。
+  \item TrustZone-based TEE measurement path。
+  \item Runtime attestation evidence generation。
+\end{itemize}}
+{\begin{itemize}
+  \item arXiv 论文，本地 PDF 可用。
+  \item Draft/not-ratified 状态下只写保守机制方向，不写成同行评议共识。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}补上 secure boot/launch attestation 之后的 runtime freshness 问题。
+  \item \textbf{不足：}TrustZone-based draft 不能泛化成 CCA/CoVE 的完整 evidence chain。
+  \item \textbf{商业落地：}适合安全运维和 runtime compliance；风险在策略管理、性能成本和证据解释一致性。
+\end{itemize}}
 
+\DirectionSummary
+{Attestation、boot、lifecycle}
+{SWATT 说明早期 remote attestation 依赖软件测量和 timing 假设，现代方案需要硬件 RoT 与标准化 evidence。}
+{RATS 把 attester/verifier/relying party、evidence、endorsement、reference value、appraisal policy 和 result 统一成架构词汇。}
+{Runtime measurement 把关注点从 launch-time 扩展到运行期 freshness，但 draft evidence 不能被写成成熟平台能力。}
+{后续 CCA、CoVE、SPDM/TDISP、DPU/NIC attestation 都需要映射到 RATS/EAT 与平台特定 evidence profile。}
