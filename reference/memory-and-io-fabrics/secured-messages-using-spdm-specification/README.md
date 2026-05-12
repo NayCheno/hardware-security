@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: secured-message layer for SPDM sessions used by trusted device control paths.
+- Evidence role: Spec/standard SOTA. DMTF standard for SPDM secured messages; protects the control channel, not PCIe/CXL data paths by itself.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Secured Messages Using SPDM Specification
@@ -64,9 +63,8 @@ SPDM 完成认证和密钥协商后，上层还需要一个标准化方式保护
 
 1. CoVE-IO control-plane transcript verification。2. SPDM secure session 与 IDE key lifecycle 绑定。3. secure message state fuzzing。4. 设备热插拔下 session revocation。5. 多租户 TDI 的 control-plane isolation。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Spec/industry SOTA
+### 12. Evidence README Addendum
+- Evidence role: Spec/standard SOTA. DMTF standard for SPDM secured messages; protects the control channel, not PCIe/CXL data paths by itself.
 - 标准化 / 发表状态: DMTF published standard, DSP0277 v2.0.0
 - 对应小方向: 机密计算网络 / I/O / fabric 防御
 
@@ -89,4 +87,4 @@ Trusted I/O 需要保护设备管理和接口绑定控制面。
 #### 文章评价
 
 适合作为 TDISP/CoVE-IO 控制面安全通道的引用；不能单独代表 data path protection。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

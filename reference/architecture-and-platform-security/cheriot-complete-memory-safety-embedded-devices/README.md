@@ -9,11 +9,10 @@
 - PDF source: https://cheriot.org/papers/2023-micro-cheriot-uarch.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12; Microsoft Research PDF endpoint returned HTTP 403, CHERIoT project PDF succeeded
-- SOTA role: Academic SOTA for CHERI-derived embedded compartmentalization and deterministic memory safety; useful follow-up for the runtime CFI / memory-safety hardening gap.
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: CHERIoT: Complete Memory Safety for Embedded Devices
@@ -63,9 +62,8 @@ CHERIoT 继承 CHERI/Morello 思路，但针对低成本 embedded。与 RV-CURE 
 
 1. 将 CHERIoT compartment model 与 embedded attestation 结合。2. 比较 CHERIoT 与 TIMBER-V 的 TCB/性能/安全边界。3. 研究 DMA/IOPMP 与 capability memory safety 的组合。4. 把 CHERIoT 用作 secure device firmware root。5. 建立 embedded memory-safety benchmark。潜在 venue: MICRO、ASPLOS、USENIX Security、IEEE S&P、RTSS。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 - 标准化 / 发表状态: peer-reviewed MICRO 2023
 - 对应小方向: Runtime CFI / memory-safety hardening
 
@@ -87,5 +85,5 @@ CHERIoT 是面向嵌入式的 CHERI capability + RTOS co-design，目标是完�
 
 #### 文章评价
 
-这是 runtime hardening 的重要 SOTA。它不替代 TEE/CCA/CoVE，但适合作为 protected firmware 和 embedded compartmentalization 的研究方向。
-<!-- END PAPER REVIEW -->
+这是 runtime hardening 的重要 Peer-reviewed SOTA。它不替代 TEE/CCA/CoVE，但适合作为 protected firmware 和 embedded compartmentalization 的研究方向。
+<!-- END REVIEW -->

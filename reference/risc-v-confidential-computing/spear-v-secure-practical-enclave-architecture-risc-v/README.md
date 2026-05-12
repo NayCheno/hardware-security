@@ -10,9 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: SPEAR-V: Secure and Practical Enclave Architecture for RISC-V
@@ -20,7 +21,7 @@
 - 发表会议 / 年份: ASIA CCS 2023
 - 领域分类: 架构 / 安全 / 系统
 - 一句话总结: SPEAR-V 用单一硬件 primitive 支持 RISC-V enclave 的双向 sandbox、共享内存和嵌套。
-- 最核心贡献一句话: 它代表 pre-CoVE RISC-V enclave 方向的 SOTA 之一，重点是低开销、灵活和 controlled-channel mitigation。
+- 最核心贡献一句话: 它代表 pre-CoVE RISC-V enclave 方向的 Peer-reviewed SOTA 之一，重点是低开销、灵活和 controlled-channel mitigation。
 
 ### 2. 研究问题与背景
 
@@ -61,4 +62,4 @@ SPEAR-V 与 Keystone/Penglai 同属 RISC-V enclave lineage；相比 Keystone 更
 ### 11. 对后续研究的启发
 
 1. 与 RISC-V memory tagging draft 对照。2. 验证 DMA/IOMMU 场景。3. 和 CoVE memory tracking 比较。4. 加入 attestation evidence。5. 研究云平台采用门槛。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

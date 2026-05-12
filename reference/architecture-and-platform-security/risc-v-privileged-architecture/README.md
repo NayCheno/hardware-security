@@ -9,9 +9,8 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: The RISC-V Instruction Set Manual, Volume II: Privileged Architecture
@@ -61,9 +60,8 @@ Sanctum/Keystone/Penglai/SPEAR-V/TIMBER-V/CURE/ACE 都在不同程度上依赖 R
 
 1. 构建 RISC-V TEE primitive matrix。2. 对 Smepmp+PMP monitor 做形式化验证。3. 将 privilege spec 与 IOPMP/IOMMU/AIA 统一建模。4. 研究 CFI state 与 TEE monitor hardening。5. 自动生成 TSM/monitor 的 CSR misuse checker。潜在 venue: ASPLOS、PLDI、USENIX Security、HOST、ISCA。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Spec/industry SOTA
+### 12. Evidence README Addendum
+- Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 - 标准化 / 发表状态: Official Release 20260120
 - 对应小方向: RISC-V 基础安全 primitives; Runtime CFI / memory-safety hardening
 
@@ -86,4 +84,4 @@ RISC-V privileged architecture 是 RISC-V 安全系统的基础规范。
 #### 文章评价
 
 必须引用但不能过度解释。它是底座，不是完整 TEE、memory encryption 或 trusted I/O 方案。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

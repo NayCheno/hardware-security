@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: Academic SOTA for binding remote attestation to TLS channel establishment in confidential-computing endpoints.
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Separate but Together: Integrating Remote Attestation into TLS
@@ -54,7 +53,7 @@ TLS+RA 需要应用和 TLS library 运行在 TEE 内或被 attestation 覆盖。
 
 ### 9. 和已有工作的关系
 
-它补齐 EAT、SPDM、TDISP 之外的网络应用层问题：SPDM 证明设备，TDISP 管 interface lifecycle，TLS+RA 证明业务通道终止在 attested TEE 软件内。它也可作为 RA-TLS、RATS-TLS、Open Enclave Attested TLS 的 SOTA 对照。
+它补齐 EAT、SPDM、TDISP 之外的网络应用层问题：SPDM 证明设备，TDISP 管 interface lifecycle，TLS+RA 证明业务通道终止在 attested TEE 软件内。它也可作为 RA-TLS、RATS-TLS、Open Enclave Attested TLS 的 Peer-reviewed SOTA 对照。
 
 ### 10. 复现与再实现计划
 
@@ -63,4 +62,4 @@ TLS+RA 需要应用和 TLS library 运行在 TEE 内或被 attestation 覆盖。
 ### 11. 对后续研究的启发
 
 1. 为 Realm/TVM workload 建立 attested service endpoint。2. 将 TLS+RA 与 EAT/CCA token/CoVE evidence 对接。3. 研究 DPU/SmartNIC 上 TLS termination 的 attestation。4. 对比 SPDM device session 与 TLS application session。5. 形式化验证 verifier policy。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

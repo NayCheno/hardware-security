@@ -9,9 +9,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
+- Evidence role: Background substrate. Use for taxonomy, lineage, or adjacent data-path substrate; primary mechanism claims must be traced to original papers, specs, or platform documents.
 
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: SoK: Hardware-supported Trusted Execution Environments
@@ -51,7 +52,7 @@
 
 ### 9. 和已有工作的关系
 
-它可作为 Pinto TrustZone survey、Cerdeira TrustZone SoK、Intel SGX/AMD SEV/Arm CCA/RISC-V TEE lineage 的上位框架。本项目应先引用它建立 design-space，再用领域 SoK 和 SOTA 论文补细节。
+它可作为 Pinto TrustZone survey、Cerdeira TrustZone SoK、Intel SGX/AMD SEV/Arm CCA/RISC-V TEE lineage 的上位框架。本项目应先引用它建立 design-space，再用领域 SoK 和明确 evidence role 的论文补细节。
 
 ### 10. 复现与再实现计划
 
@@ -60,4 +61,4 @@
 ### 11. 对后续研究的启发
 
 1. 更新 2026 版硬件 TEE taxonomy。2. 区分 access control、encryption、integrity、replay protection。3. 单独评估 trusted I/O 商用阻碍。4. 统一 attestation evidence chain。5. 建立 confidential accelerator 跨平台比较基准。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

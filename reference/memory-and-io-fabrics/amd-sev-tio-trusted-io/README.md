@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: industry reference for TDISP-based trusted I/O in SEV-SNP systems; use as cross-platform comparison for Arm CCA and RISC-V CoVE-IO.
+- Evidence role: Industry evidence. Use for vendor, product, or industry deployment evidence only; do not generalize to peer-reviewed mechanism proof or complete platform security.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: AMD SEV-TIO: Trusted I/O for Secure Encrypted Virtualization
@@ -64,9 +63,8 @@ SEV-SNP 保护 guest private memory，但传统 device assignment 只能让设�
 
 1. SEV-TIO、CoVE-IO、Arm RME-DA 的统一 trusted I/O 表。2. TDISP state machine verification。3. Device certificate lifecycle and revocation。4. Secure vNIC/SmartNIC confidential offload benchmark。5. Bounce buffering 与 trusted I/O 的性能/TCB tradeoff。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Industry SOTA / supporting cross-platform trusted I/O reference
+### 12. Evidence README Addendum
+- Evidence role: Industry evidence. Use for vendor, product, or industry deployment evidence only; do not generalize to peer-reviewed mechanism proof or complete platform security.
 - 标准化 / 发表状态: AMD white paper, 2023
 - 对应小方向: 机密计算网络 / I/O / fabric 防御
 
@@ -89,4 +87,4 @@ Confidential VM 的网络、存储和 accelerator I/O 会因 bounce buffering �
 #### 文章评价
 
 很适合作为 CoVE-IO 的 x86 industry 对照；需要明确它不是 Arm/RISC-V 主线，但支撑 trusted I/O taxonomy。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

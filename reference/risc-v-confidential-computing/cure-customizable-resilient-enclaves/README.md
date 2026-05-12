@@ -9,11 +9,10 @@
 - PDF source: https://arxiv.org/pdf/2010.15866
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- SOTA role: RISC-V enclave design baseline for customizable enclave types, cache isolation, and enclave-to-peripheral binding; useful citation from `li2024sokteechoices` and `boubakri2025riscvtee`.
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: CURE: A Security Architecture with Customizable and Resilient Enclaves
@@ -63,9 +62,8 @@ CURE 扩展 Sanctum/Keystone/Sanctuary/Komodo 等路线，也连接 sIOPMP/CoVE-
 
 1. 用 CURE 对照 CoVE-IO 的 device binding。2. 将 customizable enclave type 纳入 RISC-V lineage 表。3. 对 bus filtering 做形式化验证。4. 研究 accelerator enclave 和 TDISP/IDE 组合。5. 评估 CURE-style cache allocation 对 modern side-channel 的覆盖。潜在 venue: USENIX Security、ASPLOS、CCS、HOST、DAC。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 - 标准化 / 发表状态: peer-reviewed USENIX Security 2021
 - 对应小方向: RISC-V TEE lineage; RISC-V CoVE-IO / TEE-I/O 背景
 
@@ -88,4 +86,4 @@ CURE 支持多种 enclave 类型、外设绑定和 cache resource 隔离。
 #### 文章评价
 
 系统贡献强，尤其适合写 RISC-V enclave 到 trusted I/O 的过渡；缺点是硬件采纳和标准化不确定。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

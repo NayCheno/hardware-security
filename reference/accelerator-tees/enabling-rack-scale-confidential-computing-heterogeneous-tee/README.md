@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: Foundational accelerator/device TEE system; useful baseline for rack-scale accelerator isolation before TDISP/CoVE-IO-era designs.
+- Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Enabling Rack-scale Confidential Computing using Heterogeneous Trusted Execution Environment
@@ -63,4 +62,4 @@ HETEE 可与 ITX、CloudScale heterogeneous devices、ACAI、CoVE-IO 和 acceler
 ### 11. 对后续研究的启发
 
 1. 把 HETEE security controller 映射到 TDISP/CoVE-IO device lifecycle。2. 比较 rack-level SC 与 device-local RoT 的 TCB 大小。3. 研究 SmartNIC/DPU 作为 security controller 的可行性。4. 加入 PCIe IDE/SPDM 证据链。5. 建立 confidential offload benchmark。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

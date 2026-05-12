@@ -11,11 +11,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 - Survey lane: confidential-computing network/I/O/data-path defense; ISA/hardware-design defense
-- SOTA role: foundational Arm endpoint GPU TEE baseline
+- Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: StrongBox: A GPU TEE on Arm Endpoints
@@ -73,9 +72,8 @@ StrongBox 是 CAGE/Arm CCA accelerator 工作的重要前置基线。相比 Grav
 4. Side-channel boundary statement: 明确 unified-memory GPU TEE 的 cache/bus leakage 排除边界。
 5. Device attestation extension: 给 StrongBox-like GPU runtime 增加可远程验证的 evidence chain。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: 基础/历史入口
+### 12. Evidence README Addendum
+- Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 - 标准化 / 发表状态: ACM CCS 2022 peer-reviewed paper
 - 对应小方向: Arm endpoint accelerator TEE baseline
 
@@ -98,4 +96,4 @@ Mali-T624 原型报告 4.70%--15.26% 开销，TCB 约 1,366 LoC。
 #### 文章评价
 
 适合作为 CCA accelerator 之前的 Arm GPU TEE baseline；不能写成 Arm CCA/Realm 方案。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

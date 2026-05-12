@@ -9,11 +9,10 @@
 - PDF source: https://arxiv.org/pdf/2506.05129
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- SOTA role: Academic SOTA for Arm CCA research infrastructure on commodity Arm hardware; use to interpret evaluation quality of recent Arm CCA systems.
+- Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: OpenCCA: An Open Framework to Enable Arm CCA Research
@@ -63,9 +62,8 @@ OpenCCA 类似 OpenSGX 的研究平台角色。它支撑 Shelter、ACAI、RConta
 
 1. 建立 Arm CCA evaluation baseline。2. 将 OpenCCA 与真实 CCA hardware 对比校准。3. 为 CCA papers 提供 artifact standard。4. 结合 virtCCA 提升安全模拟。5. 评估 CCA research 的性能可比性。潜在 venue: SysTEX、ASPLOS artifacts、USENIX ATC、EuroSys、SEC artifacts。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 - 标准化 / 发表状态: SysTEX 2025 / arXiv preprint
 - 对应小方向: Arm CCA 细粒度隔离与部署模型; Arm CCA 研究平台
 
@@ -88,4 +86,4 @@ OpenCCA 是 Arm CCA 研究平台，允许在 commodity Arm board 上跑 CCA-boun
 #### 文章评价
 
 对 survey 很有用，可评价 CCA 论文实验环境。但引用时必须声明它是 research framework，不是安全实现。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

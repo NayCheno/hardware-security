@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Standardization status: v1.0 release; use as base interrupt architecture reference rather than a standalone TEE design
-- SOTA role: supporting spec for trusted MSI and confidential I/O interrupt-path discussion
+- Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: The RISC-V Advanced Interrupt Architecture
@@ -64,9 +63,8 @@ AIA 是 AP-TEE COVI 和 CoVE-IO trusted interrupt 的 supporting spec，也与 R
 
 1. CoVE COVI ABI 与 AIA IMSIC 的形式化对齐。2. Trusted MSI rebind/unbind race 检查。3. Interrupt DoS 与安全边界区分。4. IOMMU MSI table 和 AIA 的一致性测试。5. Device assignment 下 interrupt ownership transfer。潜在 venue: ASPLOS、USENIX Security、HOST、OSDI、NDSS。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Spec/industry SOTA
+### 12. Evidence README Addendum
+- Evidence role: Spec/standard SOTA. Use for the public standard, architecture, or specification semantics it defines; do not infer implementation security, performance, or platform completeness beyond the document.
 - 标准化 / 发表状态: ratified v1.0 release
 - 对应小方向: RISC-V 基础安全 primitives; RISC-V CoVE-IO / TEE-I/O
 
@@ -89,4 +87,4 @@ confidential VM 和 trusted I/O 需要可隔离、可绑定、可撤销的中断
 #### 文章评价
 
 AIA 是 trusted MSI 讨论的必要基础，但安全语义要由 AP-TEE/CoVE-IO 赋予。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

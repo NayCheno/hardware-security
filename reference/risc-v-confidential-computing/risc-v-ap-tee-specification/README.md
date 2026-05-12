@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Standardization status: v0.7 draft / RC2 for ARC review; treat as not ratified
-- SOTA role: spec/industry SOTA for RISC-V CoVE/AP-TEE TVM, TSM, COVH/COVG, memory lifecycle, and attestation semantics
+- Evidence role: Draft/not ratified. Public RISC-V AP-TEE v0.7 draft/RC2 source for CoVE/AP-TEE lifecycle and ABI concepts; always mark as draft/not ratified.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: RISC-V Application-Processor Trusted Execution Environment Specification / Confidential VM Extension (CoVE)
@@ -22,7 +21,7 @@
 - 发表会议 / 年份: Specification draft v0.7 / 2024
 - 领域分类: 架构 / 系统 / 安全
 - 一句话总结: 规范定义 RISC-V CoVE/AP-TEE 的 TVM、TSM、COVH/COVG/COVI ABI、memory lifecycle 和 attestation 语义。
-- 最核心贡献一句话: 它是当前 RISC-V confidential VM 与 Arm CCA 同层对照的核心 spec/industry SOTA。
+- 最核心贡献一句话: 它是当前 RISC-V confidential VM 与 Arm CCA 同层对照的核心 Draft/not ratified 规范证据。
 
 ### 2. 研究问题与背景
 
@@ -64,9 +63,8 @@ RISC-V 需要从 PMP-based enclave 上升到 confidential VM 层级，使 guest/
 
 1. AP-TEE 与 Arm CCA 的 granule/page lifecycle 对照。2. TSM ABI fuzzing 和 formal model。3. TVM memory sharing 的 race-free proof。4. CoVE attestation evidence 与 EAT/CCA token 的统一 verifier。5. CoVE-IO 与 AP-TEE 生命周期合并验证。潜在 venue: ASPLOS、USENIX Security、IEEE S&P、CCS、HOST。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Spec/industry SOTA
+### 12. Evidence README Addendum
+- Evidence role: Draft/not ratified. Public RISC-V AP-TEE v0.7 draft/RC2 source for CoVE/AP-TEE lifecycle and ABI concepts; always mark as draft/not ratified.
 - 标准化 / 发表状态: v0.7 draft, development state, not ratified
 - 对应小方向: RISC-V CoVE / AP-TEE confidential VM
 
@@ -89,4 +87,4 @@ RISC-V confidential computing 需要标准化 VM-level TEE，而不能只依赖 
 #### 文章评价
 
 这是本 survey 最关键的 RISC-V confidential VM 材料。正文必须标注 draft/not ratified，并避免把它和 legacy RISC-V enclave 混写。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

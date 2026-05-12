@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: explanatory architecture source for SPDM deployment and relationships among device authentication, measurement, and secure sessions.
+- Evidence role: Industry evidence. DMTF industry white paper explaining SPDM deployment; use as explanatory industry evidence, not normative mechanism proof.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Security Protocol and Data Model (SPDM) Architecture White Paper
@@ -64,9 +63,8 @@ SPDM 的原始规范较长且偏消息格式。Survey 写作需要解释为什�
 
 1. 整理 SPDM 标准族到 CoVE-IO 的映射。2. 构建 device-attestation glossary。3. 比较 MCTP/TCP/DOE transport binding。4. 建立 verifier policy 模板。5. 形成 trusted I/O 教程章节。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Supporting architecture white paper
+### 12. Evidence README Addendum
+- Evidence role: Industry evidence. DMTF industry white paper explaining SPDM deployment; use as explanatory industry evidence, not normative mechanism proof.
 - 标准化 / 发表状态: DMTF informational white paper
 - 对应小方向: 机密计算网络 / I/O / fabric 防御
 
@@ -89,4 +87,4 @@ SPDM 的原始规范较长且偏消息格式。Survey 写作需要解释为什�
 #### 文章评价
 
 适合讲清概念，不应用作规范细节或安全证明的唯一依据。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

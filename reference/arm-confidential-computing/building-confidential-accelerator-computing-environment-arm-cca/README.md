@@ -11,11 +11,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 - Survey lane: Arm/RISC-V confidential-computing defense; confidential-computing network/I/O/data-path defense
-- SOTA role: Arm CCA confidential accelerator SOTA; expanded CAGE line of work
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Building Confidential Accelerator Computing Environment for Arm CCA
@@ -73,9 +72,8 @@ CAGE 与 ACAI、PORTAL、Devlore 共同构成 Arm CCA device/accelerator 子线:
 4. Formal Monitor minimization: 证明 GPT/GPC 更新和 shadow-task 状态机无 TOCTTOU。
 5. Scheduler-aware confidential accelerator sharing: 在不泄漏任务状态的前提下支持多 Realm accelerator multiplexing。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 - 标准化 / 发表状态: IEEE TDSC 2026 peer-reviewed journal article; expands CAGE/Arm CCA accelerator line
 - 对应小方向: Arm CCA accelerator/device confidential computing
 
@@ -97,5 +95,5 @@ GPU benchmark 开销 0.58%--5.31%，FPGA benchmark 开销 9.61%--16.30%，TCB �
 
 #### 文章评价
 
-这是 Arm CCA accelerator 方向必须引用的 SOTA；限制是 device identity、production CCA hardware 和复杂多租户 accelerator scheduling 仍需进一步研究。
-<!-- END PAPER REVIEW -->
+这是 Arm CCA accelerator 方向必须引用的 Peer-reviewed SOTA；限制是 device identity、production CCA hardware 和复杂多租户 accelerator scheduling 仍需进一步研究。
+<!-- END REVIEW -->

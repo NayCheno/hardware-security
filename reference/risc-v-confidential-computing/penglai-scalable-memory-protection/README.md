@@ -10,9 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Scalable Memory Protection in the Penglai Enclave
@@ -61,4 +62,4 @@ Penglai 与 Keystone 同属 pre-CoVE RISC-V TEE lineage，但更强调 scalable 
 ### 11. 对后续研究的启发
 
 1. 将 GPT/MMT 映射到 CoVE memory tracking。2. 研究标准化 memory integrity primitive。3. 将 serverless lifecycle 与 attestation 绑定。4. 评估 side-channel hardening。5. 探索商业硬件成本和兼容性。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

@@ -11,11 +11,10 @@
 - Local PDF: not available in this directory
 - Download status: attempted again on 2026-05-10; PDF endpoint returned HTTP 403 to automated download, HTML source verified
 - Evidence class: E2 survey, HTML-only local evidence
-- SOTA role: secondary survey anchor for RISC-V secure enclaves and TEEs; use as taxonomy support only, then cite original Sanctum/Keystone/Penglai/SPEAR-V/CoVE/AP-TEE/CoVE-IO sources for mechanism claims
+- Evidence role: Background substrate. Survey/background substrate for RISC-V enclave and TEE taxonomy; mechanism claims must be traced to original papers or official RISC-V sources, and the local PDF remains blocked/HTML-only.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: A Survey of RISC-V Secure Enclaves and Trusted Execution Environments
@@ -65,9 +64,8 @@ Survey 无新实验。它可能汇总已有系统结果，但不能替代原论�
 
 1. 写 RISC-V TEE 年代表。2. 对 PMP/ePMP/Smepmp/IOPMP/IOMMU/AIA 做 primitive 矩阵。3. 对 CoVE 与 Arm CCA 做同层对照。4. 将 embedded enclave 与 cloud confidential VM 分开评价。5. 搜索 WorldGuard、TIMBER-V、Cerberus 等未在 domain 主表中的重要分支。潜在 venue: CSUR、IEEE Access survey、ACM Computing Surveys、HOST、JSA。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: SoK/survey anchor
+### 12. Evidence README Addendum
+- Evidence role: Background substrate. Survey/background substrate for RISC-V enclave and TEE taxonomy; mechanism claims must be traced to original papers or official RISC-V sources, and the local PDF remains blocked/HTML-only.
 - 标准化 / 发表状态: peer-reviewed Electronics 2025; evidence source HTML only because PDF download returned 403
 - 对应小方向: RISC-V TEE lineage; RISC-V CoVE / AP-TEE confidential VM
 
@@ -95,13 +93,13 @@ Survey，无新实验；本地证据为 HTML 页面，PDF endpoint 自动下载 
 
 | Priority | Cited work | Role in SoK | Repo category | Local status | Next action |
 |---|---|---|---|---|---|
-| P0 | Sanctum | Foundational open-hardware enclave | `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/` | existing, local PDF available | Finish Paper Review and cite for lineage. |
-| P0 | Keystone | Open RISC-V enclave framework | `reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/` | existing, Paper Review available | Use as baseline. |
-| P0 | Penglai | Scalable enclave memory protection | `reference/risc-v-confidential-computing/penglai-scalable-memory-protection/` | existing, Paper Review available | Use as academic SOTA. |
-| P0 | SPEAR-V | Practical RISC-V enclave primitive | `reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/` | existing, Paper Review available | Use as academic SOTA. |
+| P0 | Sanctum | Foundational open-hardware enclave | `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/` | existing, local PDF available | Finish review and cite for lineage. |
+| P0 | Keystone | Open RISC-V enclave framework | `reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/` | existing, Review available | Use as baseline. |
+| P0 | Penglai | Scalable enclave memory protection | `reference/risc-v-confidential-computing/penglai-scalable-memory-protection/` | existing, Review available | Use as Peer-reviewed SOTA. |
+| P0 | SPEAR-V | Practical RISC-V enclave primitive | `reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/` | existing, Review available | Use as Peer-reviewed SOTA. |
 | P0 | CoVE/AP-TEE | Confidential VM architecture/spec | `reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/`; `risc-v-ap-tee-specification/` | existing, local PDFs available | Use for confidential VM section. |
 | P0 | CoVE-IO | Confidential I/O spec | `reference/risc-v-confidential-computing/risc-v-cove-io-specification/` | existing, local PDF available | Use for trusted I/O section. |
-| P1 | TIMBER-V | Embedded tagged-memory enclave | `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/` | added, Paper Review available | Use as embedded branch. |
-| P1 | Cerberus | Formal enclave memory sharing | `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | added, Paper Review available | Use for sharing/formal proof discussion. |
-| P1 | ACE | Embedded RISC-V confidential computing | `reference/risc-v-confidential-computing/ace-confidential-computing-embedded-risc-v-systems/` | existing, local PDF available | Finish Paper Review when writing embedded subsection. |
-<!-- END PAPER REVIEW -->
+| P1 | TIMBER-V | Embedded tagged-memory enclave | `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/` | added, Review available | Use as embedded branch. |
+| P1 | Cerberus | Formal enclave memory sharing | `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | added, Review available | Use for sharing/formal proof discussion. |
+| P1 | ACE | Embedded RISC-V confidential computing | `reference/risc-v-confidential-computing/ace-confidential-computing-embedded-risc-v-systems/` | existing, local PDF available | Finish review when writing embedded subsection. |
+<!-- END REVIEW -->

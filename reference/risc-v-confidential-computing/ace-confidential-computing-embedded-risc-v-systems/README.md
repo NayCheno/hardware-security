@@ -8,11 +8,10 @@
 - PDF source: https://arxiv.org/pdf/2505.12995
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- SOTA role: Academic/industrial SOTA for embedded RISC-V confidential computing with auditable/formally oriented firmware; use as a post-CoVE/AP-TEE adjacent system, not as a ratified RISC-V specification.
+- Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: ACE: Confidential Computing for Embedded RISC-V Systems
@@ -20,7 +19,7 @@
 - 发表会议 / 年份: arXiv 2025
 - 领域分类: 系统 / 安全 / 架构
 - 一句话总结: ACE 把 VM-based confidential computing 带到嵌入式 RISC-V，并强调可验证 firmware 和低成本硬件。
-- 最核心贡献一句话: 它是 RISC-V embedded confidential computing 的近期 SOTA，并声称影响了 CoVE specification 的 embedded scope。
+- 最核心贡献一句话: 它是 RISC-V embedded confidential computing 的近期 Draft/not ratified 证据，并声称影响了 CoVE specification 的 embedded scope。
 
 ### 2. 研究问题与背景
 
@@ -62,9 +61,8 @@ ACE 与 CoVE/AP-TEE 共享 TVM/TSM 术语，偏 embedded deployment；与 CHERIo
 
 1. ACE 与 AP-TEE v0.7 的 ABI/semantic diff。2. TSM Rust verification 模板。3. embedded CoVE-IO 设备模型。4. 静态 partition 与 dynamic memory donation 的 tradeoff。5. 面向 certification 的 confidential computing design rules。潜在 venue: USENIX Security、IEEE S&P、ASPLOS、RTSS、HOST。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 - 标准化 / 发表状态: arXiv preprint 2025
 - 对应小方向: RISC-V TEE lineage; RISC-V CoVE / AP-TEE confidential VM
 
@@ -87,4 +85,4 @@ ACE 是 embedded RISC-V 上的 VM-based confidential computing 方案，强调 T
 #### 文章评价
 
 适合补 RISC-V lineage 的 embedded confidential VM 分支。需标注 arXiv，并与 CoVE draft 状态区分。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

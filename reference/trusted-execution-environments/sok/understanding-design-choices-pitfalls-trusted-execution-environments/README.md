@@ -9,7 +9,7 @@
 - PDF source: https://people.csail.mit.edu/mengyuanli/files/asiaccs_sok.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- SOTA role: SoK/survey anchor for server-side TEE runtime design choices and pitfalls; use with `schneider2022soktee` for general TEE taxonomy and with original platform papers for mechanism claims.
+- Evidence role: Background substrate. Use for taxonomy, lineage, or adjacent data-path substrate; primary mechanism claims must be traced to original papers, specs, or platform documents.
 
 ## Citation Triage
 
@@ -21,9 +21,8 @@
 | P1 | Keystone / Penglai | Existing RISC-V enclave lineage | `reference/risc-v-confidential-computing/` | existing, local PDFs available | Already covered as lineage anchors. |
 | P2 | Intel TDX / IBM PEF | Out-of-scope platform comparison | not added | metadata only | Add later only if x86/IBM confidential VM comparison becomes in-scope. |
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments
@@ -73,9 +72,8 @@
 
 1. 将 TRAF 扩展到 CoVE-IO/TDISP/IDE trusted I/O。2. 把 Arm CCA RME/RMM 与 RISC-V TSM 做 mode-by-mode 对照。3. 构建 TEE pitfall checklist 用于审计新论文。4. 研究 inter-CVM sharing 的 management-mode 转换。5. 将 accelerator TEE 加入 resource-management taxonomy。潜在 venue: CSUR、IEEE S&P SoK、USENIX Security、CCS、NDSS。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: SoK/survey anchor
+### 12. Evidence README Addendum
+- Evidence role: Background substrate. Use for taxonomy, lineage, or adjacent data-path substrate; primary mechanism claims must be traced to original papers, specs, or platform documents.
 - 标准化 / 发表状态: peer-reviewed ASIA CCS 2024
 - 对应小方向: 硬件辅助 TEE 总体设计空间; Arm CCA / RISC-V CoVE 对照
 
@@ -104,10 +102,10 @@ SoK，无新实验；证据来自平台论文、规范和攻击案例。
 | Priority | Cited work | Role in SoK | Repo category | Local status | Next action |
 |---|---|---|---|---|---|
 | P0 | Sanctum | RISC-V/open-hardware enclave baseline | `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/` | existing, local PDF available | Add/finish lineage review before writing survey section. |
-| P0 | Keystone | RISC-V open enclave framework | `reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/` | existing, Paper Review available | Use as baseline. |
+| P0 | Keystone | RISC-V open enclave framework | `reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/` | existing, Review available | Use as baseline. |
 | P0 | CURE | Customizable RISC-V enclave | `reference/risc-v-confidential-computing/cure-customizable-resilient-enclaves/` | existing, local PDF available | Add/finish lineage review. |
 | P1 | MI6 | Speculative OoO enclave | `reference/risc-v-confidential-computing/mi6-secure-enclaves-speculative-out-of-order-processor/` | existing, local PDF available | Use for speculation/side-channel boundary. |
-| P1 | TIMBER-V | Embedded tagged-memory enclave | `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/` | added, Paper Review available | Use as embedded lineage branch. |
-| P1 | Cerberus | Formal enclave memory sharing | `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | added, Paper Review available | Use for memory-sharing comparison. |
+| P1 | TIMBER-V | Embedded tagged-memory enclave | `reference/risc-v-confidential-computing/timber-v-tag-isolated-memory-fine-grained-enclaves-risc-v/` | added, Review available | Use as embedded lineage branch. |
+| P1 | Cerberus | Formal enclave memory sharing | `reference/risc-v-confidential-computing/cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | added, Review available | Use for memory-sharing comparison. |
 | P2 | Intel TDX / AMD SEV / IBM PEF | Cross-platform comparison | partially in Bib/reference | backlog | Add only when x86/IBM comparison enters正文. |
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

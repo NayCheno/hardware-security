@@ -8,11 +8,10 @@
 - PDF source: https://arxiv.org/pdf/2512.01594
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- SOTA role: Academic SOTA for Arm CCA inter-CVM confidential shared memory; use when expanding CCA deployment models beyond single isolated CVMs.
+- Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: CAEC: Confidential, Attestable, and Efficient Inter-CVM Communication with Arm CCA
@@ -20,7 +19,7 @@
 - 发表会议 / 年份: IEEE EuroS&P 2026 / arXiv 2026
 - 领域分类: 系统 / 安全 / 架构
 - 一句话总结: CAEC 在 Arm CCA 中扩展 firmware 支持 Confidential Shared Memory，让互相 attested 的 CVM 共享 plaintext memory 且 hypervisor 不可访问。
-- 最核心贡献一句话: 它是 Arm CCA inter-CVM confidential sharing 的近期 SOTA。
+- 最核心贡献一句话: 它是 Arm CCA inter-CVM confidential sharing 的近期 Draft/not ratified 证据。
 
 ### 2. 研究问题与背景
 
@@ -62,9 +61,8 @@
 
 1. CAEC-style CSM 在 RISC-V CoVE 的可行性。2. Mutable CSM 的形式化安全模型。3. Revocation 和 crash consistency。4. CSM 与 confidential accelerator buffer sharing。5. 多租户 ML model sharing policy。潜在 venue: IEEE S&P、USENIX Security、CCS、EuroSys、OSDI。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.
 - 标准化 / 发表状态: accepted EuroS&P 2026 / arXiv 2026
 - 对应小方向: Arm CCA 细粒度隔离与部署模型; inter-CVM sharing
 
@@ -86,5 +84,5 @@ CVM disjoint memory model 让 inter-CVM communication 必须经 hypervisor-visib
 
 #### 文章评价
 
-这是 CCA sharing 的重要 SOTA。新共享模型也引入 revocation、concurrency 和 verification 复杂性，正文需和 Cerberus/CoVE shared memory 对照。
-<!-- END PAPER REVIEW -->
+这是 CCA sharing 的重要 Draft/not ratified 证据。新共享模型也引入 revocation、concurrency 和 verification 复杂性，正文需和 Cerberus/CoVE shared memory 对照。
+<!-- END REVIEW -->

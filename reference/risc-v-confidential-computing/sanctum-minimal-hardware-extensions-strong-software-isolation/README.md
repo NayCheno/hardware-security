@@ -9,11 +9,10 @@
 - PDF source: https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_costan.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
-- SOTA role: foundational RISC-V/open-hardware enclave baseline cited by SoK/survey anchors; use to explain pre-Keystone isolation, cache partitioning, and software-only side-channel threat models.
+- Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Sanctum: Minimal Hardware Extensions for Strong Software Isolation
@@ -63,9 +62,8 @@ Sanctum 继承 Aegis/XOM/SGX 思路，影响 Keystone、MI6、Cerberus 和 RISC-
 
 1. Sanctum 到 CoVE 的演进表。2. Monitor proof 与 implementation refinement。3. cache partition 与 AIA/IOMMU/IOPMP 组合。4. 对 modern OoO core side-channel 扩展。5. 将 Sanctum threat model 更新到 2026。潜在 venue: USENIX Security、CCS、ASPLOS、HOST、IEEE S&P。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: 基础/历史入口
+### 12. Evidence README Addendum
+- Evidence role: Foundational. Use as a foundational entry point for this survey lane; later SOTA, specification, or implementation details should be cited separately when making narrow claims.
 - 标准化 / 发表状态: peer-reviewed USENIX Security 2016
 - 对应小方向: RISC-V TEE lineage
 
@@ -88,4 +86,4 @@ Sanctum 是开放 RISC-V enclave 的 foundational work，强调 minimal hardware
 #### 文章评价
 
 适合作为 lineage 起点；现代 survey 需补 MI6、Keystone、Penglai、CoVE 和 CoVE-IO。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

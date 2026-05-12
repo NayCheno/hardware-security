@@ -11,11 +11,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 - Survey lane: Arm/RISC-V confidential-computing defense; confidential-computing network/I/O/data-path defense
-- SOTA role: Arm CCA device-access SOTA for mobile SoC / integrated-device paths
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: PORTAL: Fast and Secure Device Access with Arm CCA for Modern Arm Mobile System-on-Chips (SoCs)
@@ -73,9 +72,8 @@ PORTAL 与 ACAI/CAGE 都处理 CCA 与设备/accelerator 的组合问题，但 P
 4. Migration-aware device lifecycle: 分析 Realm migration 时 PORTAL region、SMMU state 和设备队列如何安全迁移或销毁。
 5. Formal state-machine validation: 对 attach/detach/RIPAS/PAS/SMMU 更新做模型检查，降低 System Realm 逻辑错误风险。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 - 标准化 / 发表状态: IEEE S&P 2025 peer-reviewed paper
 - 对应小方向: Arm CCA I/O/device access, mobile SoC confidential I/O
 
@@ -98,4 +96,4 @@ PORTAL 提出一种基于 Arm CCA memory isolation 的设备访问接口，让 R
 #### 文章评价
 
 PORTAL 是 Arm CCA device-access 的关键相关工作；但它依赖 SoC-integrated device 假设，不能替代 PCIe/TDISP/SPDM 可信设备生命周期机制。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

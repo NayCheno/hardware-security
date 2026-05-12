@@ -11,11 +11,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 - Survey lane: confidential-computing network/I/O/data-path defense; ISA/hardware-design defense
-- SOTA role: SmartNIC isolation SOTA for multi-tenant network offload
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: SmartNIC Security Isolation in the Cloud with S-NIC
@@ -73,9 +72,8 @@ S-NIC 与 FairNIC 等工作都讨论 SmartNIC isolation，但 S-NIC 更强调 se
 4. TDISP/SPDM integration: 把 virtual NIC function lifecycle 纳入 trusted device interface state。
 5. Resource-efficient isolation: 研究在保持 side-channel boundary 的同时支持 function chaining 和共享 accelerator。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA
+### 12. Evidence README Addendum
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 - 标准化 / 发表状态: EuroSys 2024 peer-reviewed paper
 - 对应小方向: SmartNIC/DPU secure offload and network data-path isolation
 
@@ -98,4 +96,4 @@ Commodity SmartNIC 多租户隔离不足，NIC OS 或其他 function 可泄漏�
 #### 文章评价
 
 S-NIC 是 SmartNIC confidential offload 方向的重要隔离基线；但它不是完整 TEE/confidential VM 方案，需要和 attestation/key-release/device lifecycle 机制组合。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

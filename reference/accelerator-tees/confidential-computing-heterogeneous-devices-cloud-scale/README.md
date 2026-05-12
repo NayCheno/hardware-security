@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: Academic SOTA for cloud-scale heterogeneous DSA protection with TEE and non-TEE nodes.
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Confidential Computing with Heterogeneous Devices at Cloud-Scale
@@ -63,4 +62,4 @@ SC 的正确性和供应链可信是硬假设。论文没有替代 SPDM/TDISP/PC
 ### 11. 对后续研究的启发
 
 1. 把 SC 作为 SmartNIC/DPU root-of-trust 的候选形态。2. 对比 SC 与 SPDM/TDISP/IDE 标准栈。3. 研究 non-TEE DSA 的 revocation 和 cleanup。4. 做 confidential network offload 的端到端 benchmark。5. 补充 multi-tenant failure isolation。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

@@ -10,11 +10,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: foundational accelerator TEE system showing native confidential-computing support inside an AI accelerator.
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Confidential Computing within an AI Accelerator
@@ -64,9 +63,8 @@ AI workload 的敏感数据和模型常在 accelerator 上处理。CPU TEE 保�
 
 1. 为 SmartNIC/DPU 构建 ITX-style device TEE。2. 把 SPDM/TDISP/IDE 与 accelerator-native attestation 对齐。3. 研究 multi-accelerator link encryption。4. 比较 static compiler scheduling 与 dynamic GPU runtime 的 TCB。5. 建立 confidential accelerator benchmark suite。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Foundational accelerator TEE system
+### 12. Evidence README Addendum
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 - 标准化 / 发表状态: peer-reviewed USENIX ATC 2023 paper
 - 对应小方向: accelerator/device TEE; 机密计算网络 / I/O / fabric 防御
 
@@ -89,4 +87,4 @@ CPU confidential computing 不能保护 accelerator 内部明文执行和设备 
 #### 文章评价
 
 这是 accelerator confidential computing 的强系统证据；但原型依赖特定 IPU，通用 GPU/DPU/NIC 仍需独立方案。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

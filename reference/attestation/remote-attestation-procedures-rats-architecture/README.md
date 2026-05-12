@@ -8,7 +8,7 @@
 - PDF source: https://www.rfc-editor.org/rfc/rfc9334.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
-- Evidence role: E0 official RFC, Informational status
+- Evidence role: Spec/standard SOTA. Official RFC 9334 architecture and terminology source for RATS roles and messages; not a platform mechanism or token-format implementation.
 
 ## Review
 

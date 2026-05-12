@@ -9,9 +9,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
+- Evidence role: Peer-reviewed SOTA. Use for the specific mechanism, evaluation, and threat-model scope established by the source; avoid broader claims outside its evidence class.
 
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: sIOPMP: Scalable and Efficient I/O Protection for TEEs
@@ -19,7 +20,7 @@
 - 发表会议 / 年份: ASPLOS 2024
 - 领域分类: 架构 / 系统 / 安全
 - 一句话总结: sIOPMP 面向 TEE 的 DMA/I/O 隔离，解决传统 IOMMU 或软件 I/O 在 TEE 场景下的性能和可扩展性问题。
-- 最核心贡献一句话: 它是 RISC-V/TEE I/O 隔离方向的关键 SOTA 论文，应作为 CoVE-IO 之前的论文锚点。
+- 最核心贡献一句话: 它是 RISC-V/TEE I/O 隔离方向的关键 Peer-reviewed SOTA 论文，应作为 CoVE-IO 之前的论文锚点。
 
 ### 2. 研究问题与背景
 
@@ -60,4 +61,4 @@ sIOPMP 主要解决 DMA access-control，不等同于 confidential I/O 全栈。
 ### 11. 对后续研究的启发
 
 1. 将 sIOPMP 接入 CoVE-IO lifecycle。2. 加入设备 attestation 与 TDISP。3. 评估 CXL/PCIe IDE 组合。4. 对比 Arm SMMU/RME-DA。5. 研究多租户设备共享中的 revocation 和 DoS。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->

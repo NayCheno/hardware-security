@@ -11,11 +11,10 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: secure disaggregated storage / NVMe-oF confidential data-path SOTA candidate
+- Evidence role: Draft/not ratified. arXiv/preprint evidence for secure disaggregated storage data paths; use with explicit preprint status and do not treat as standardized trusted I/O.
 
-<!-- BEGIN PAPER REVIEW -->
-## Paper Review
-
+<!-- BEGIN REVIEW -->
+## Review
 ### 1. 论文基本信息
 
 - 论文标题: Hazel: Secure and Efficient Disaggregated Storage
@@ -73,9 +72,8 @@ Hazel 与 FOLIO 都服务 confidential VM 的高性能 I/O，但 Hazel 聚焦 di
 4. Crash-consistent confidential storage: 形式化验证 Hazel eventual consistency 和 HMT root 更新顺序。
 5. Realm/TVM integration: 把 Hazel control path 与 Arm CCA/RISC-V CoVE key broker policy 对接。
 
-### 12. SOTA README Addendum
-
-- SOTA 定位: Academic SOTA candidate
+### 12. Evidence README Addendum
+- Evidence role: Draft/not ratified. arXiv/preprint evidence for secure disaggregated storage data paths; use with explicit preprint status and do not treat as standardized trusted I/O.
 - 标准化 / 发表状态: arXiv preprint v2, 2026
 - 对应小方向: confidential-computing storage/network data path; NVMe-oF with SmartNIC/DPU offload
 
@@ -98,4 +96,4 @@ Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 f
 #### 文章评价
 
 Hazel 是 confidential storage data path 的重要新增相关工作；但应标注 arXiv 状态，并补充底层设备身份/attestation 组合。
-<!-- END PAPER REVIEW -->
+<!-- END REVIEW -->
