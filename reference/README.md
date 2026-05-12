@@ -102,5 +102,5 @@ Entries without a verified local PDF yet:
 
 Notes:
 
-- Missing PDFs are not all errors. Remaining blocked entries are mostly Arm developer pages, PCI-SIG member-gated material, IEEE/ACM/Elsevier publisher pages, AMD pages without a stable public PDF endpoint, or HTML-only documentation. TDISP currently has public metadata but no public PCI-SIG PDF.
+- Missing PDFs are not all errors. Remaining blocked entries are mostly Arm developer pages, PCI-SIG member-gated material, IEEE/ACM/Elsevier publisher pages, AMD pages without a stable public PDF endpoint, or HTML-only documentation. TDISP and TDISP XT currently have public metadata but no public PCI-SIG PDF.
 - Do not mark a PDF as local unless `paper.pdf` exists and has been verified as a PDF.
