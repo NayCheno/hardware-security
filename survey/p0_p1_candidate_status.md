@@ -127,6 +127,21 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2017graphenesgxpracticallibraryos` | P1 | `tee-runtime` | 2017 | Backlog/background substrate for SGX runtime comparison; no substantive citation in current Arm/RISC-V/TEE-I/O正文. |
 | `rw2017panoplylowtcblinuxapplications` | P1 | `tee-runtime` | 2017 | Backlog/background substrate for SGX runtime comparison; no substantive citation in current Arm/RISC-V/TEE-I/O正文. |
 
+## Post-Plan Top-Conference Additions
+
+These entries were promoted as canonical keys during the `next-plan.md` implementation pass. They were not converted from the `rw...` P0/P1 metadata subset, so the P0/P1 candidate counts remain P0 = 42, P1 = 70, total = 112.
+
+| Canonical key | Priority / role | Category or corpus | Terminal state |
+|---|---|---|---|
+| `chen2024hardwareisolation` | P0 active | `architecture-and-platform-security` | Added as active reference with verified PDF and README; cited only for hardware-isolation primitive comparison. |
+| `chen2024cpc` | P0 active | `arm-confidential-computing` | Added as active reference with verified PDF and README; cited for CVM maintenance/lifecycle, not official Arm interface. |
+| `delignatlavaud2025adns` | P1 active | `attestation` | Added as active reference with verified PDF and README; cited for attested naming/policy, not device identity or DMA control. |
+| `lamster2024voodoo` | P1 active | `architecture-and-platform-security` | Added as active reference with verified PDF and README; cited for memory tagging/authenticated-encryption/ECC composition. |
+| `shi2025cofunc` | P1 background substrate | `trusted-execution-environments` | Added as active background substrate with verified PDF and README; cited for confidential serverless/container packaging only. |
+| `kuhne2026aster` | P2/emerging active | `arm-confidential-computing` | Added as active emerging reference with verified PDF and README; cited for Android AVF-on-CCA deployment only. |
+| `khalilov2024osmosis` | P2/background substrate | `memory-and-io-fabrics` | Added as active background substrate with verified PDF and README; cited for SmartNIC resource management only. |
+| `schluter2024heckler` | Boundary-only | `survey/excluded_attack_reference.bib` | Added only to excluded attack bibliography and boundary prose; no active正文 citation. |
+
 ## Promotion Gate
 
 To promote any backlog row, replace the metadata-only candidate with a canonical BibTeX entry in `survey/reference.bib`, add or update a `reference/<category>/<slug>/README.md`, record PDF availability or blockage, and update this table from backlog to the canonical key. Until then, the terminal state is no substantive正文 citation.

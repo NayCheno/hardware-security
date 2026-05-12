@@ -30,9 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 73 of 90 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
+Download status: 80 of 97 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
 
-Bibliography corpus status: `survey/reference.bib` contains 92 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 63 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. See `survey/related_work_300_expansion.md` before using any candidate.
+Bibliography corpus status: `survey/reference.bib` contains 99 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 64 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. `survey/top_conference_coverage_audit.md` records the recent top-conference additions and boundary decisions. See `survey/related_work_300_expansion.md` before using any candidate.
 
 Evidence role classes follow the survey methodology: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked or HTML-only evidence. Gated or unavailable PDFs are recorded as unavailable; no private access is assumed.
 
@@ -75,6 +75,11 @@ Newly added or completed in this pass:
 - `reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/`
 - `reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/`
 - `reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/`
+- `reference/attestation/transparent-attested-dns-confidential-computing-services/`
+- `reference/architecture-and-platform-security/limitations-and-opportunities-modern-hardware-isolation-mechanisms/`
+- `reference/architecture-and-platform-security/voodoo-memory-tagging-authenticated-encryption-error-correction-magic/`
+- `reference/arm-confidential-computing/cpc-flexible-secure-efficient-cvm-maintenance-confidential-procedure-calls/`
+- `reference/arm-confidential-computing/aster-bringing-confidential-computing-to-android/`
 - `reference/arm-confidential-computing/portal-fast-secure-device-access-arm-cca/`
 - `reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/`
 - `reference/accelerator-tees/strongbox-gpu-tee-arm-endpoints/`
@@ -88,6 +93,8 @@ Newly added or completed in this pass:
 - `reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/`
 - `reference/memory-and-io-fabrics/tnic-trusted-nic-architecture/`
 - `reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/`
+- `reference/memory-and-io-fabrics/osmosis-enabling-multi-tenancy-datacenter-smartnics/`
+- `reference/trusted-execution-environments/serverless-functions-confidential-efficient-split-containers/`
 
 Entries without a verified local PDF yet:
 
