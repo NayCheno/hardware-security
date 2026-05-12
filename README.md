@@ -9,6 +9,7 @@ This repository organizes a hardware-security survey and its cited paper library
 ├── survey/
 │   ├── main.tex
 │   ├── reference.bib
+│   ├── background_runtime_reference.bib
 │   ├── excluded_attack_reference.bib
 │   ├── candidate_reference.bib
 │   ├── p0_p1_candidate_status.md
@@ -41,7 +42,7 @@ pdflatex -interaction=nonstopmode main.tex
 pdflatex -interaction=nonstopmode main.tex
 ```
 
-The active bibliography used by the survey lives in `survey/reference.bib`. Metadata-only related-work candidates are kept separately in `survey/candidate_reference.bib`; they must not be cited in正文 until their metadata, source, and evidence status are verified and promoted into `survey/reference.bib`. Out-of-scope attack-only bibliography entries are preserved separately in `survey/excluded_attack_reference.bib` for future attack-scope work and are not active survey evidence. The P0/P1 subset is controlled by `survey/p0_p1_candidate_status.md`, which assigns all 112 P0/P1 candidates to terminal states: active canonical coverage, explicit backlog/no substantive citation, or background substrate.
+The active bibliography used by the survey lives in `survey/reference.bib`. SGX runtime/container background substrate entries that are not cited by the current正文 live in `survey/background_runtime_reference.bib`; they are retained for historical comparison only and are not active evidence. Metadata-only related-work candidates are kept separately in `survey/candidate_reference.bib`; they must not be cited in正文 until their metadata, source, and evidence status are verified and promoted into `survey/reference.bib`. Out-of-scope attack-only bibliography entries are preserved separately in `survey/excluded_attack_reference.bib` for future attack-scope work and are not active survey evidence. The P0/P1 subset is controlled by `survey/p0_p1_candidate_status.md`, which assigns all 112 P0/P1 candidates to terminal states: active canonical coverage, explicit backlog/no substantive citation, or background substrate.
 
 Evidence classes are defined in `survey/main.tex`: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked sources.
 

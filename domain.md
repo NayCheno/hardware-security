@@ -6,14 +6,15 @@
 
 当前事实：
 
-- `survey/reference.bib`：86 个 active in-scope BibTeX 条目。
+- `survey/reference.bib`：85 个 active in-scope BibTeX 条目。
+- `survey/background_runtime_reference.bib`：2 个 SGX runtime/container background substrate BibTeX 条目；不作为当前正文 active evidence。
 - `survey/excluded_attack_reference.bib`：63 个 out-of-scope attack-only BibTeX 条目；仅为未来攻击范围研究保留，不作为当前正文 active evidence。
 - `survey/candidate_reference.bib`：152 个 metadata-only 候选条目，不作为正文机制 claim 的证据。
 - `survey/p0_p1_candidate_status.md`：112 个 P0/P1 metadata-only 候选的终态记录；每个条目都已标为 active canonical coverage、backlog/no substantive citation 或 background substrate。
 - `survey/*.tex` 正文实际引用：79 个 key，全部能在 Bib 中找到。
 - `reference/`：83 个论文/规范 README 条目（不含 category index README），68 个本地 `paper.pdf`。
 - 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP/TDISP XT metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、PORTAL、CAGE、StrongBox、S-NIC、TNIC、Hazel 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root 和 accelerator/device TEE 的核心材料。
-- Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；63 条 out-of-scope attack-only BibTeX 已拆到 `survey/excluded_attack_reference.bib`，避免与当前三条 defense/spec survey 主线混作 active evidence。新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
+- Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；2 条 SGX runtime/container 背景 BibTeX 已拆到 `survey/background_runtime_reference.bib`；63 条 out-of-scope attack-only BibTeX 已拆到 `survey/excluded_attack_reference.bib`，避免与当前三条 defense/spec survey 主线混作 active evidence。新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
 
 标记规则：
 
@@ -25,7 +26,7 @@
 - `Spec/standard SOTA`：官方规范、标准或 RFC；无实验时只支撑规范性机制/状态 claim。
 - `Draft/not ratified`：公开 draft、release candidate 或未 ratified 规范；正文必须显式标注状态。
 - `Industry evidence`：vendor/product/whitepaper 证据；只支撑产品行为、部署实践或 engineering building block。
-- `Background substrate`：CXL/RDMA/SmartNIC/runtime/ISA lineage 等相邻背景；不直接支撑 CCA/CoVE/TDISP/accelerator-TEE 安全 claim。
+- `Background substrate`：CXL/RDMA/SmartNIC/runtime/ISA lineage 等相邻背景；SGX runtime/container entries live in `survey/background_runtime_reference.bib` unless promoted；不直接支撑 CCA/CoVE/TDISP/accelerator-TEE 安全 claim。
 - `Candidate/metadata-only`：仍在 `survey/candidate_reference.bib` 或 `survey/p0_p1_candidate_status.md` 中的候选；不得作为正文实质 claim 的证据。
 
 ## 0. 当前科研范围规定
@@ -433,7 +434,7 @@
 
 | 对象 | 核验结果 | 处理 |
 |---|---|---|
-| 正文 79 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
+| 正文 82 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key；SGX runtime background entries are outside active bibliography. |
 | RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；Draft/not ratified: AP-TEE v0.7 / RC2 for ARC review；Draft/not ratified: CoVE-IO v0.3.0。 | 作为 draft/not-ratified spec evidence；正文必须标注 draft/not ratified。 |
 | `riscv_iommu_2023` / `riscv_aia_2023` | IOMMU v1.0.1 / 20260222 ratified-library release 与 AIA v1.0 ratified June 2023 / 20250312 clarifications 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |

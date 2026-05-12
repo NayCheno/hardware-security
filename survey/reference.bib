@@ -9,31 +9,6 @@
   note = {NDSS 2026 paper; use when discussing accelerator TEEs rather than general CCA only}
 }
 
-@article{costan2016sgx,
-    title={Intel SGX Explained},
-    author={Victor Costan and Srinivas Devadas},
-    journal={IACR Cryptol. ePrint Arch.},
-    year={2016},
-    volume={2016},
-    pages={86},
-    url={https://api.semanticscholar.org/CorpusID:28642809}
-}
-
-@inproceedings{arnautov2016scone,
-    author = {Arnautov, Sergei and Trach, Bohdan and Gregor, Franz and Knauth, Thomas and Martin, Andre and Priebe, Christian and Lind, Joshua and Muthukumaran, Divya and O'Keeffe, Dan and Stillwell, Mark L. and Goltzsche, David and Eyers, David and Kapitza, R\"{u}diger and Pietzuch, Peter and Fetzer, Christof},
-    title = {SCONE: secure Linux containers with Intel SGX},
-    year = {2016},
-    isbn = {9781931971331},
-    publisher = {USENIX Association},
-    address = {USA},
-    abstract = {In multi-tenant environments, Linux containers managed by Docker or Kubernetes have a lower resource footprint, faster startup times, and higher I/O performance compared to virtual machines (VMs) on hypervisors. Yet their weaker isolation guarantees, enforced through software kernel mechanisms, make it easier for attackers to compromise the confidentiality and integrity of application data within containers.We describe SCONE, a secure container mechanism for Docker that uses the SGX trusted execution support of Intel CPUs to protect container processes from outside attacks. The design of SCONE leads to (i) a small trusted computing base (TCB) and (ii) a low performance overhead: SCONE offers a secure C standard library interface that transparently encrypts/decrypts I/O data; to reduce the performance impact of thread synchronization and system calls within SGX enclaves, SCONE supports user-level threading and asynchronous system calls. Our evaluation shows that it protects unmodified applications with SGX, achieving 0.6\texttimes{}-1.2\texttimes{} of native throughput.},
-    booktitle = {Proceedings of the 12th USENIX Conference on Operating Systems Design and Implementation},
-    pages = {689–703},
-    numpages = {15},
-    location = {Savannah, GA, USA},
-    series = {OSDI'16} 
-}
-
 @techreport{arm_trustzone_whitepaper,
   title = {ARM Security Technology: Building a Secure System Using TrustZone Technology},
   author = {{ARM Limited}},
