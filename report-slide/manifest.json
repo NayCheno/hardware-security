@@ -157,10 +157,15 @@
   {
     "directory": "14-accelerator-dpu-smartnic-offload",
     "direction": "Accelerator / DPU / SmartNIC confidential offload",
-    "papers": [
-      "zhu2020hetee",
-      "dhar2024cloudscale",
-      "wang2026cage + sang2025portal + deng2022strongbox"
+    "primary": [
+      {"key": "zhu2020hetee", "evidence": "E1 / Foundational peer-reviewed", "source_status": "local_pdf_verified"},
+      {"key": "dhar2024cloudscale", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "wang2026cage", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "sang2025portal", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "deng2022strongbox", "evidence": "E1 / Foundational peer-reviewed", "source_status": "local_pdf_verified"},
+      {"key": "nvidia_bluefield_operation_2025", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"}
     ]
   },
   {
