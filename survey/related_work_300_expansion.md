@@ -2,7 +2,7 @@
 
 Status date: 2026-05-12
 
-This file records the 152 metadata-only candidates stored in `survey/candidate_reference.bib`. They were originally appended to `survey/reference.bib` during corpus expansion, but they are now kept separate from the 85 active in-scope bibliography entries used by the survey. Two SGX runtime/container background entries are preserved in `survey/background_runtime_reference.bib`, not the active bibliography. The 63 out-of-scope attack-only entries that previously shared the active BibTeX file are preserved separately in `survey/excluded_attack_reference.bib`.
+This file records the 152 metadata-only candidates stored in `survey/candidate_reference.bib`. They were originally appended to `survey/reference.bib` during corpus expansion, but they are now kept separate from the 92 active in-scope bibliography entries used by the survey. Two SGX runtime/container background entries are preserved in `survey/background_runtime_reference.bib`, not the active bibliography. The 63 out-of-scope attack-only entries that previously shared the active BibTeX file are preserved separately in `survey/excluded_attack_reference.bib`.
 
 Important rule: these entries are triage candidates, not downloaded/reviewed reference records. Before any candidate is cited substantively in the survey, verify its authors, venue, DOI/source URL, download a public PDF when available, create the matching `reference/<category>/<paper>/README.md`, and promote a canonical BibTeX entry into `survey/reference.bib`.
 

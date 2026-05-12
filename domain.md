@@ -441,7 +441,7 @@
 
 | 对象 | 核验结果 | 处理 |
 |---|---|---|
-| 正文 89 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key；SGX runtime background entries are outside active bibliography. |
+| 正文 90 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key；SGX runtime background entries are outside active bibliography. |
 | RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；Draft/not ratified: AP-TEE v0.7 / RC2 for ARC review；Draft/not ratified: CoVE-IO v0.3.0。 | 作为 draft/not-ratified spec evidence；正文必须标注 draft/not ratified。 |
 | `riscv_iommu_2023` / `riscv_aia_2023` | IOMMU v1.0.1 / 20260222 ratified-library release 与 AIA v1.0 ratified June 2023 / 20250312 clarifications 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
