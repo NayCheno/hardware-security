@@ -11,6 +11,18 @@
 - Download status: downloaded and verified on 2026-05-10
 - Evidence role: Background substrate. Use for taxonomy, lineage, or adjacent data-path substrate; primary mechanism claims must be traced to original papers, specs, or platform documents.
 
+## One-hop accelerator TEE triage
+
+| Candidate / baseline | Canonical key | Reference record | Status | Survey use |
+|---|---|---|---|---|
+| Graviton | `volos2018graviton` | `reference/accelerator-tees/graviton-trusted-execution-environments-gpus/` | promoted; local PDF verified | Foundational GPU secure-context baseline. |
+| Telekine | `hunt2020telekine` | `reference/accelerator-tees/telekine-secure-computing-cloud-gpus/` | promoted; local PDF verified | GPU TEE runtime/API side-channel baseline. |
+| Honeycomb | `mai2023honeycomb` | `reference/accelerator-tees/honeycomb-secure-efficient-gpu-executions-static-validation/` | promoted; local PDF verified | Static-validation GPU TEE baseline. |
+| ShEF | `zhao2022shef` | `reference/accelerator-tees/shef-shielded-enclaves-cloud-fpgas/` | promoted; local PDF verified | Cloud FPGA TEE baseline. |
+| XpuTEE | `fan2025xputee` | `reference/accelerator-tees/xputee-high-performance-practical-heterogeneous-tee-gpus/` | promoted as source-limited; local PDF unavailable | Recent CPU/GPU heterogeneous TEE metadata; abstract-level claim only. |
+| SGX-FPGA | `xia2021sgxfpga` | `reference/accelerator-tees/sgx-fpga-trusted-execution-cpu-fpga-heterogeneous-architecture/` | promoted as source-limited; local PDF unavailable | CPU-FPGA lineage marker only; no strong mechanism claim. |
+| SoK: Trusted Execution in SoC-FPGAs | `perkins2024socsok` | `reference/accelerator-tees/sok/trusted-execution-soc-fpgas/` | promoted; local PDF verified | SoC-FPGA TEE gap/taxonomy support. |
+
 <!-- BEGIN PAPER REVIEW -->
 ## Paper Review
 ### 1. 论文基本信息

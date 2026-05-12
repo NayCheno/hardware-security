@@ -233,6 +233,18 @@ baseline that uses TrustZone and Stage-2 translation to protect unified-memory
 GPU computation~\cite{deng2022strongbox}.
 ITX demonstrates confidential computing within an AI accelerator, giving a
 concrete example of device-local confidential execution~\cite{vaswani2023itx}.
+The broader accelerator TEE lineage shows several different protection routes:
+Graviton adds GPU secure contexts and command-processor ownership checks,
+Telekine makes cloud-GPU streams independent of secret-dependent behavior,
+Honeycomb uses static validation to shrink GPU TEE hardware requirements, and
+ShEF moves the same question to cloud FPGAs with secure boot, attestation, and
+a configurable Shield~\cite{volos2018graviton,hunt2020telekine,mai2023honeycomb,zhao2022shef}.
+XpuTEE is tracked as a recent CPU/GPU heterogeneous TEE baseline, but only with
+source-limited metadata and abstract-level evidence in this survey; SGX-FPGA is
+also kept as source-limited metadata and is not used for strong mechanism
+claims~\cite{fan2025xputee,xia2021sgxfpga}. The SoC-FPGA SoK is useful for
+classifying edge and SoC-FPGA TEE gaps, but its claims still need primary
+system papers for mechanism detail~\cite{perkins2024socsok}.
 The accelerator TEE SoK organizes this space around device identity, memory and
 bus protection, runtime TCB, scheduling, and attestation~\cite{sok-tee}. These
 works are important for network defense as well because modern NICs, DPUs, and
@@ -289,7 +301,7 @@ Interrupt and event delivery & Can completion and error events be delivered with
 Link and fabric protection & What protects traffic across PCIe, CXL, RDMA, and remote-memory paths? & PCIe IDE, CXL fabric controls, protected RDMA/remote paging designs & Protect data once it leaves CPU-local memory paths. \\
 NIC-local root and function isolation & Can a SmartNIC/DPU isolate tenant functions or provide a trusted network primitive? & S-NIC, TNIC, vendor DPU OP-TEE/fTPM building blocks & Treat NICs and DPUs as explicit but incomplete trust endpoints that still need attestation, lifecycle, DMA, and channel binding. \\
 Confidential storage data path & Can remote storage preserve confidentiality, integrity, and freshness? & Hazel, protected NVMe-oF metadata, DPU crypto offload & Extend confidential I/O beyond packets into persistent remote state. \\
-Device-local confidential execution & Does the accelerator or offload engine hold secrets or execute trusted code? & ACAI, PORTAL, CAGE, StrongBox, ITX, HETEE, CloudScale, vendor BlueField OP-TEE/fTPM building blocks, accelerator TEE designs & Extend or avoid extending the TCB to accelerators and offload devices; do not treat vendor building blocks as complete confidential-networking TEEs. \\ \bottomrule
+Device-local confidential execution & Does the accelerator or offload engine hold secrets or execute trusted code? & ACAI, PORTAL, CAGE, StrongBox, Graviton, Telekine, Honeycomb, ShEF, ITX, XpuTEE source-limited metadata, SGX-FPGA source-limited metadata, HETEE, CloudScale, vendor BlueField OP-TEE/fTPM building blocks, accelerator TEE designs & Extend or avoid extending the TCB to accelerators and offload devices; do not treat vendor building blocks or source-limited metadata as complete confidential-networking TEEs. \\ \bottomrule
 \end{tabular}
 \end{table*}
 

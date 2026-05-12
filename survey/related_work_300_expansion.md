@@ -70,14 +70,14 @@ Prioritize these newly added candidates because they are closest to the fixed su
 
 ### accelerator-tee
 
-- `rw2018gravitontrustedexecutionenvironmentsgpus` (2018) Graviton: Trusted Execution Environments on GPUs
-- `rw2020telekinesecurecomputingcloudgpus` (2020) Telekine: Secure Computing with Cloud GPUs
-- `rw2022honeycombsecureefficientgpuexecutions` (2022) Honeycomb: Secure and Efficient GPU Executions via Static Validation
-- `rw2024xputeeenablingtrustedexecutionheterogeneous` (2024) XpuTEE: Enabling Trusted Execution on Heterogeneous Accelerators
-- `rw2020sgxfpgatrustedexecutionenvironment` (2020) SGX-FPGA: Trusted Execution Environment for CPU-FPGA Systems
-- `rw2021shefshieldedenclavescloudfpgas` (2021) ShEF: Shielded Enclaves for Cloud FPGAs
+- `rw2018gravitontrustedexecutionenvironmentsgpus` (2018) Graviton: Trusted Execution Environments on GPUs — promoted as `volos2018graviton`
+- `rw2020telekinesecurecomputingcloudgpus` (2020) Telekine: Secure Computing with Cloud GPUs — promoted as `hunt2020telekine`
+- `rw2022honeycombsecureefficientgpuexecutions` (2022) Honeycomb: Secure and Efficient GPU Executions via Static Validation — promoted as `mai2023honeycomb`
+- `rw2024xputeeenablingtrustedexecutionheterogeneous` (2024) XpuTEE: Enabling Trusted Execution on Heterogeneous Accelerators — promoted as source-limited `fan2025xputee`
+- `rw2020sgxfpgatrustedexecutionenvironment` (2020) SGX-FPGA: Trusted Execution Environment for CPU-FPGA Systems — promoted as source-limited `xia2021sgxfpga`
+- `rw2021shefshieldedenclavescloudfpgas` (2021) ShEF: Shielded Enclaves for Cloud FPGAs — promoted as `zhao2022shef`
 - `rw2024confidentialcomputingheterogeneouscpugpu` (2024) Confidential Computing on Heterogeneous CPU-GPU Systems: Survey and Future Directions
-- `rw2025soktrustedexecutionsocfpgas` (2025) SoK: Trusted Execution in SoC-FPGAs
+- `rw2025soktrustedexecutionsocfpgas` (2025) SoK: Trusted Execution in SoC-FPGAs — promoted as `perkins2024socsok`
 
 ### isa-hardware-defense
 
@@ -235,15 +235,15 @@ Recent web/arXiv searches during this expansion surfaced several current candida
 | `rw2020fastswapfastscalableefficientremote` | `confidential-io-fabric` | P2 | 2020 | Fastswap: A Fast, Scalable, and Efficient Remote Memory System |
 | `rw2023transparentpageplacementcxlenabled` | `confidential-io-fabric` | P1 | 2023 | Transparent Page Placement for CXL-Enabled Tiered Memory |
 | `rw2023pondcxlbasedmemorypooling` | `confidential-io-fabric` | P1 | 2023 | Pond: CXL-Based Memory Pooling Systems for Cloud Platforms |
-| `rw2018gravitontrustedexecutionenvironmentsgpus` | `accelerator-tee` | P0 | 2018 | Graviton: Trusted Execution Environments on GPUs |
-| `rw2020telekinesecurecomputingcloudgpus` | `accelerator-tee` | P0 | 2020 | Telekine: Secure Computing with Cloud GPUs |
+| `rw2018gravitontrustedexecutionenvironmentsgpus` | `accelerator-tee` | P0 | 2018 | Graviton: Trusted Execution Environments on GPUs; promoted as `volos2018graviton` |
+| `rw2020telekinesecurecomputingcloudgpus` | `accelerator-tee` | P0 | 2020 | Telekine: Secure Computing with Cloud GPUs; promoted as `hunt2020telekine` |
 | `rw2020hixprotectinggpuacceleratedapplications` | `accelerator-tee` | P1 | 2020 | HIX: Protecting GPU-Accelerated Applications in the Cloud |
-| `rw2022honeycombsecureefficientgpuexecutions` | `accelerator-tee` | P0 | 2022 | Honeycomb: Secure and Efficient GPU Executions via Static Validation |
+| `rw2022honeycombsecureefficientgpuexecutions` | `accelerator-tee` | P0 | 2022 | Honeycomb: Secure and Efficient GPU Executions via Static Validation; promoted as `mai2023honeycomb` |
 | `rw2019securetimelygpuexecutioncyber` | `accelerator-tee` | P1 | 2019 | Secure and Timely GPU Execution in Cyber-Physical Systems |
 | `rw2022litelowcostpracticalinter` | `accelerator-tee` | P1 | 2022 | LITE: A Low-Cost Practical Inter-Operable TEE for Heterogeneous Systems |
-| `rw2024xputeeenablingtrustedexecutionheterogeneous` | `accelerator-tee` | P0 | 2024 | XpuTEE: Enabling Trusted Execution on Heterogeneous Accelerators |
-| `rw2020sgxfpgatrustedexecutionenvironment` | `accelerator-tee` | P0 | 2020 | SGX-FPGA: Trusted Execution Environment for CPU-FPGA Systems |
-| `rw2021shefshieldedenclavescloudfpgas` | `accelerator-tee` | P0 | 2021 | ShEF: Shielded Enclaves for Cloud FPGAs |
+| `rw2024xputeeenablingtrustedexecutionheterogeneous` | `accelerator-tee` | P0 | 2024 | XpuTEE: Enabling Trusted Execution on Heterogeneous Accelerators; promoted as source-limited `fan2025xputee` |
+| `rw2020sgxfpgatrustedexecutionenvironment` | `accelerator-tee` | P0 | 2020 | SGX-FPGA: Trusted Execution Environment for CPU-FPGA Systems; promoted as source-limited `xia2021sgxfpga` |
+| `rw2021shefshieldedenclavescloudfpgas` | `accelerator-tee` | P0 | 2021 | ShEF: Shielded Enclaves for Cloud FPGAs; promoted as `zhao2022shef` |
 | `rw2022guardnnsecurednnacceleratortrusted` | `accelerator-tee` | P1 | 2022 | GuardNN: Secure DNN Accelerator for Trusted Execution |
 | `rw2018slalomfastverifiableprivateexecution` | `accelerator-tee` | P1 | 2018 | Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware |
 | `rw2021cryptgpufastprivacypreservingmachine` | `accelerator-tee` | P2 | 2021 | CRYPTGPU: Fast Privacy-Preserving Machine Learning on the GPU |
@@ -252,7 +252,7 @@ Recent web/arXiv searches during this expansion surfaced several current candida
 | `rw2020privadopracticalsecurednninference` | `accelerator-tee` | P2 | 2020 | Privado: Practical and Secure DNN Inference for Enclaves |
 | `rw2024confidentialcomputingheterogeneouscpugpu` | `accelerator-tee` | P0 | 2024 | Confidential Computing on Heterogeneous CPU-GPU Systems: Survey and Future Directions |
 | `rw2025confidentialllminferenceperformancecost` | `accelerator-tee` | P1 | 2025 | Confidential LLM Inference: Performance and Cost Across CPU and GPU TEEs |
-| `rw2025soktrustedexecutionsocfpgas` | `accelerator-tee` | P0 | 2025 | SoK: Trusted Execution in SoC-FPGAs |
+| `rw2025soktrustedexecutionsocfpgas` | `accelerator-tee` | P0 | 2025 | SoK: Trusted Execution in SoC-FPGAs; promoted as `perkins2024socsok` |
 | `rw2005controlflowintegrityprinciplesimplementations` | `isa-hardware-defense` | P1 | 2005 | Control-Flow Integrity Principles, Implementations, and Applications |
 | `rw2015hafixhardwareassistedflowintegrity` | `isa-hardware-defense` | P0 | 2015 | HAFIX: Hardware-Assisted Flow Integrity Extension |
 | `rw2016hcfihardwareenforcedcontrolflow` | `isa-hardware-defense` | P0 | 2016 | HCFI: Hardware-Enforced Control-Flow Integrity |

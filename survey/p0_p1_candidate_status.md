@@ -14,14 +14,14 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 
 | Candidate key | Priority | Category | Year | Terminal state |
 |---|---|---|---:|---|
-| `rw2018gravitontrustedexecutionenvironmentsgpus` | P0 | `accelerator-tee` | 2018 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
-| `rw2020sgxfpgatrustedexecutionenvironment` | P0 | `accelerator-tee` | 2020 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
-| `rw2020telekinesecurecomputingcloudgpus` | P0 | `accelerator-tee` | 2020 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
-| `rw2021shefshieldedenclavescloudfpgas` | P0 | `accelerator-tee` | 2021 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
-| `rw2022honeycombsecureefficientgpuexecutions` | P0 | `accelerator-tee` | 2022 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
+| `rw2018gravitontrustedexecutionenvironmentsgpus` | P0 | `accelerator-tee` | 2018 | Covered by active reference `volos2018graviton`; candidate remains metadata-only. |
+| `rw2020sgxfpgatrustedexecutionenvironment` | P0 | `accelerator-tee` | 2020 | Covered by active source-limited reference `xia2021sgxfpga`; no strong mechanism claim until public PDF is available. |
+| `rw2020telekinesecurecomputingcloudgpus` | P0 | `accelerator-tee` | 2020 | Covered by active reference `hunt2020telekine`; candidate remains metadata-only. |
+| `rw2021shefshieldedenclavescloudfpgas` | P0 | `accelerator-tee` | 2021 | Covered by active reference `zhao2022shef`; candidate remains metadata-only. |
+| `rw2022honeycombsecureefficientgpuexecutions` | P0 | `accelerator-tee` | 2022 | Covered by active reference `mai2023honeycomb`; candidate remains metadata-only. |
 | `rw2024confidentialcomputingheterogeneouscpugpu` | P0 | `accelerator-tee` | 2024 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
-| `rw2024xputeeenablingtrustedexecutionheterogeneous` | P0 | `accelerator-tee` | 2024 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
-| `rw2025soktrustedexecutionsocfpgas` | P0 | `accelerator-tee` | 2025 | Backlog accelerator TEE baseline; no substantive citation until source/PDF/README are verified. |
+| `rw2024xputeeenablingtrustedexecutionheterogeneous` | P0 | `accelerator-tee` | 2024 | Covered by active source-limited reference `fan2025xputee`; abstract-level metadata only until public PDF is available. |
+| `rw2025soktrustedexecutionsocfpgas` | P0 | `accelerator-tee` | 2025 | Covered by active reference `perkins2024socsok`; candidate remains metadata-only. |
 | `rw2023shelterextendingarmccauser` | P0 | `arm-trustzone-cca` | 2023 | Covered by active reference `zhang2023shelter`; candidate remains metadata-only. |
 | `rw2024hitchhikersguidearmcca` | P0 | `arm-trustzone-cca` | 2024 | Backlog P0 Arm CCA explainer; no substantive citation until source/PDF/README are verified. |
 | `rw2024virtccavirtualizingarmconfidentialcomputing` | P0 | `arm-trustzone-cca` | 2024 | Covered by active reference `xu2026virtcca`; candidate remains metadata-only. |

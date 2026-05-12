@@ -30,9 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 68 of 83 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
+Download status: 73 of 90 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
 
-Bibliography corpus status: `survey/reference.bib` contains 85 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 63 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. See `survey/related_work_300_expansion.md` before using any candidate.
+Bibliography corpus status: `survey/reference.bib` contains 92 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 63 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. See `survey/related_work_300_expansion.md` before using any candidate.
 
 Evidence role classes follow the survey methodology: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked or HTML-only evidence. Gated or unavailable PDFs are recorded as unavailable; no private access is assumed.
 
@@ -78,6 +78,13 @@ Newly added or completed in this pass:
 - `reference/arm-confidential-computing/portal-fast-secure-device-access-arm-cca/`
 - `reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/`
 - `reference/accelerator-tees/strongbox-gpu-tee-arm-endpoints/`
+- `reference/accelerator-tees/graviton-trusted-execution-environments-gpus/`
+- `reference/accelerator-tees/telekine-secure-computing-cloud-gpus/`
+- `reference/accelerator-tees/honeycomb-secure-efficient-gpu-executions-static-validation/`
+- `reference/accelerator-tees/shef-shielded-enclaves-cloud-fpgas/`
+- `reference/accelerator-tees/xputee-high-performance-practical-heterogeneous-tee-gpus/`
+- `reference/accelerator-tees/sgx-fpga-trusted-execution-cpu-fpga-heterogeneous-architecture/`
+- `reference/accelerator-tees/sok/trusted-execution-soc-fpgas/`
 - `reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/`
 - `reference/memory-and-io-fabrics/tnic-trusted-nic-architecture/`
 - `reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/`
@@ -95,6 +102,8 @@ Entries without a verified local PDF yet:
 - `reference/arm-confidential-computing/realm-management-monitor-specification/`
 - `reference/attestation/mra-ima-enhanced-mutual-remote-attestation-arm-trustzone/`
 - `reference/attestation/psa-certified-security-framework/`
+- `reference/accelerator-tees/xputee-high-performance-practical-heterogeneous-tee-gpus/`
+- `reference/accelerator-tees/sgx-fpga-trusted-execution-cpu-fpga-heterogeneous-architecture/`
 - `reference/memory-and-io-fabrics/pci-express-integrity-and-data-encryption/`
 - `reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/`
 - `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/`

@@ -7,3 +7,4 @@ This directory stores systematization papers for accelerator trusted execution e
 | Key | Reference | Status | Use in `domain.md` |
 |---|---|---|---|
 | `sok-tee` | `analysis-accelerator-tee-designs/` | NDSS 2026, local PDF available | Accelerator TEE taxonomy; cite only for accelerator/device TEE design space, not as a generic Arm CCA or RISC-V CoVE source. |
+| `perkins2024socsok` | `trusted-execution-soc-fpgas/` | TPS-ISA 2024 / arXiv 2025, local PDF available | SoC-FPGA TEE feature/gap taxonomy; primary mechanism claims still need original system papers. |
