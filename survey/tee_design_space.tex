@@ -30,3 +30,13 @@ questions beyond CPU execution into DMA, interrupts, links, devices, and
 persistent or remote state. Keeping these dimensions separate prevents three
 common overclaims: treating attestation as isolation, treating memory ownership
 as storage freshness, and treating device identity as complete trusted I/O.
+
+Deployment substrates introduce another boundary that is easy to overstate.
+\textbf{CoFunc} studies confidential serverless functions through split
+containers, placing a function-oriented microkernel and library OS inside a CVM
+while leaving Linux container management in an untrusted shadow container
+outside the CVM~\cite{shi2025cofunc}. This is useful evidence for confidential
+container and serverless packaging because it exposes the tension between CVM
+cold start, resource sharing, TCB size, and function isolation. It is not an
+Arm CCA mechanism paper and should not be used to justify Realm lifecycle,
+RMM/RMI semantics, device assignment, or trusted-I/O claims.
