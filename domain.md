@@ -6,13 +6,14 @@
 
 当前事实：
 
-- `survey/reference.bib`：149 个 active/verified BibTeX 条目。
+- `survey/reference.bib`：86 个 active in-scope BibTeX 条目。
+- `survey/excluded_attack_reference.bib`：63 个 out-of-scope attack-only BibTeX 条目；仅为未来攻击范围研究保留，不作为当前正文 active evidence。
 - `survey/candidate_reference.bib`：152 个 metadata-only 候选条目，不作为正文机制 claim 的证据。
 - `survey/p0_p1_candidate_status.md`：112 个 P0/P1 metadata-only 候选的终态记录；每个条目都已标为 active canonical coverage、backlog/no substantive citation 或 background substrate。
 - `survey/*.tex` 正文实际引用：79 个 key，全部能在 Bib 中找到。
 - `reference/`：83 个论文/规范 README 条目（不含 category index README），68 个本地 `paper.pdf`。
 - 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、PORTAL、CAGE、StrongBox、S-NIC、TNIC、Hazel 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root 和 accelerator/device TEE 的核心材料。
-- Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
+- Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；63 条 out-of-scope attack-only BibTeX 已拆到 `survey/excluded_attack_reference.bib`，避免与当前三条 defense/spec survey 主线混作 active evidence。新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
 
 标记规则：
 
@@ -60,7 +61,7 @@
 - 若只是普通网络防御论文，且没有 confidential computing / TEE / trusted I/O / device offload / attested endpoint 语境，默认不下载、不建目录。
 - SoK/survey 引用扩展时，P0/P1 只给 in-scope 的机制、规范、系统、taxonomy 或代表性 baseline；侧信道类引用最多标为 `boundary only`，不作为当前 backlog。
 - 正文只需要一段 threat-model boundary 说明当前不研究这些攻击面；不要新增独立 side-channel 章节。
-- 现有 Bib 中的 attack 条目先保留，不批量删除；后续若用户明确转向攻击 SoK，再拆成独立 scope 和 bibliography。
+- 63 条 out-of-scope attack-only BibTeX 已从 active bibliography 拆出并保存在 `survey/excluded_attack_reference.bib`；后续若用户明确转向攻击 SoK，再以该文件作为独立 scope 的起点。
 
 ## 1. 知识覆盖矩阵
 
@@ -79,7 +80,7 @@
 | Memory encryption / integrity / replay protection | 已覆盖 | `survey/security_of_hardware_design.tex` 已区分 access control、encryption、integrity、replay protection，并说明 CCA/CoVE 主要是 ownership/lifecycle/access-control 语义 | `henson2014memory` | Background substrate `henson2014memory`; Industry evidence `amd_sev_snp`; Spec/standard SOTA `arm_cca_spec`; Draft/not ratified `riscv_ap_tee_2024` | 后续可补 SEV-SNP、MKTME、CCA/CoVE 的加密/完整性实现差异表。 |
 | 机密计算网络 / I/O / fabric 防御 | 已覆盖 | `survey/confidential_io_and_network_defense.tex` 已建立 protocol、device lifecycle、DMA/MMIO、interrupt、link/fabric、accelerator TEE、endpoint attestation、SmartNIC/NIC root 和 secure storage data path taxonomy | `sok-tee` 可辅助 accelerator/device TEE；CoVE-IO 和 PCIe/CXL/RDMA specs 为主 | Draft/not ratified `riscv_cove_io_2026`, `chrapek2026hazel`; Spec/standard SOTA `dmtf_spdm_2025`, `dmtf_spdm_secured_messages_2025`, `dmtf_spdm_tcp_2024`, `pcie_ide`, `cxl_spec`; Candidate/metadata-only gated record `pcisig_tdisp_2022`; Industry evidence `amd_sev_tio_2023`, `nvidia_bluefield_operation_2025`; Peer-reviewed SOTA `li2024folio`, `vaswani2023itx`, `zhu2020hetee`, `dhar2024cloudscale`, `weinhold2025tlsra`, `zhou2024snic`, `giantsidi2025tnic`, `wang2025odrp`; Background substrate `sok-tee` | 后续可补更多 vendor NIC/DPU attestation、secure vSwitch/offload production evidence，以及正式标准更新。 |
 | ISA / 硬件设计防御: MTE、PTE/page table、CFI、capability/tagging | 已覆盖 | `survey/security_of_hardware_design.tex` 已补 PTE/page-table permission、PAN/PXN/UXN、PMP/ePMP/Smepmp、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE、memory encryption/integrity 层级关系 | 无单一 SoK；以 architecture specs 和硬件实现论文为准 | Spec/standard SOTA `armv-a`, `riscv_privileged`; Draft/not ratified `manoni2026cva6cfi`; Peer-reviewed SOTA `kim2023rvcure`, `amar2023cheriot`; Background substrate `henson2014memory` | 后续可补 Arm MTE 与 CHERI/RV-CURE 的机制差异和开发者可用性比较。 |
-| Side-channel / physical leakage attacks | 当前不研究 / out-of-scope | Bib 中大量 attacks 条目，正文主线未引用 | 不作为当前 SoK 研究对象 | Bib attacks section; `schluter2025heracles` 仅适合 boundary/limitation | 不下载、不扩展、不写独立章节；只在 threat model / limitation 中说明 excluded attacks。 |
+| Side-channel / physical leakage attacks | 当前不研究 / out-of-scope | 攻击-only 条目已移到 `survey/excluded_attack_reference.bib`，正文主线未引用 | 不作为当前 SoK 研究对象 | `survey/excluded_attack_reference.bib`; `schluter2025heracles` 仅适合 boundary/limitation | 不下载、不扩展、不写独立章节；只在 threat model / limitation 中说明 excluded attacks。 |
 
 ## 2. SoK / Survey 与 Reference 映射
 
@@ -458,7 +459,7 @@
 | `chrapek2026hazel` | arXiv v2 PDF 已下载并验证。 | 用于 confidential storage/NVMe-oF data path；必须标注 arXiv preprint。 |
 | `bertschi2025opencca`, `abdollahi2025caec` | Arm CCA Draft/not ratified 扩展材料，arXiv PDF 已下载。 | 用于 CCA research infrastructure 与 inter-CVM sharing；不是 Arm 官方规范。 |
 | `xu2026virtcca`, `bertschi2026devlore` | arXiv 首发早于 Bib 年份；年份可能对应目标发表或最新引用习惯。 | 在 domain evidence role 中标注 arXiv 状态，避免误导。 |
-| Attacks / side-channel Bib 条目 | 大量条目与当前 defense/confidential-computing 主线弱相关，且正文未引用。 | 不批量删除；当前不下载、不扩展、不写 attack survey，只作为 threat boundary / limitation。 |
+| Attacks / side-channel Bib 条目 | 63 条 out-of-scope attack-only 条目已保存在 `survey/excluded_attack_reference.bib`，且正文未引用。 | 不作为 active evidence；当前不下载、不扩展、不写 attack survey，只作为 threat boundary / limitation。 |
 | `schluter2025heracles` | SEV-SNP 攻击论文，不是防御主线。 | 只在 threat model/limitations 中使用。 |
 
 ## 5. ACM / IEEE 两种 Survey 写法
@@ -484,7 +485,7 @@
 | 已完成初稿 | 补 memory protection 与 ISA / 硬件设计防御 taxonomy，覆盖 PTE/page-table permission、MTE/PAC/BTI/GCS、PMP/ePMP/Smepmp、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE、memory encryption/integrity/replay protection。 | `armv-a`, `riscv_privileged`, `henson2014memory`, `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot` |
 | 已完成初稿 | 补 DPU/SmartNIC/accelerator confidential offload 和 attested network endpoint 材料。 | `zhu2020hetee`, `dhar2024cloudscale`, `nvidia_bluefield_operation_2025`, `weinhold2025tlsra`, `vaswani2023itx` |
 | 已完成初稿 | 继续补 Arm CCA device access、GPU/FPGA accelerator、SmartNIC/NIC root-of-trust 与 secure storage data path 相关工作。 | `sang2025portal`, `wang2026cage`, `deng2022strongbox`, `zhou2024snic`, `giantsidi2025tnic`, `chrapek2026hazel` |
-| 已完成初稿 | 写入 side-channel / physical leakage out-of-scope statement，说明 attacks Bib 暂不进入当前 defense/specification 主线。 | Bib attacks section; `schluter2025heracles` |
+| 已完成初稿 | 写入 side-channel / physical leakage out-of-scope statement，说明 excluded attack bibliography 不进入当前 defense/specification 主线。 | `survey/excluded_attack_reference.bib`; `schluter2025heracles` |
 | 已完成初稿 | 补 Arm CCA 机制表，细化 RMI、RSI、RIPAS、PAS、granule lifecycle、GPT/GPC、RMM state machine。 | `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` |
 | 待深化 | 补 Arm CCA 研究平台、inter-CVM sharing、OpenCCA/CAEC 与现有 Realm lifecycle 的关系。 | `bertschi2025opencca`, `abdollahi2025caec` |
 | 待深化 | 补 vendor NIC/DPU attestation、secure vNIC/vSwitch/offload production evidence，以及 SPDM/TDISP 与 SmartNIC local root 的组合关系。 | `sok-tee`, `zhou2024snic`, `giantsidi2025tnic`, `nvidia_bluefield_operation_2025`, `chrapek2026hazel` |
