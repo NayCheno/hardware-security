@@ -163,6 +163,23 @@ pre-ratification status. As a result, the survey can discuss how these pieces
 compose without implying that every primitive has the same maturity or claim
 strength.
 
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{RISC-V CoVE/AP-TEE Lifecycle and State-Machine Summary}
+\label{tab:riscv_lifecycle_summary}
+\begin{tabular}{@{}p{0.17\linewidth}p{0.27\linewidth}p{0.23\linewidth}p{0.23\linewidth}@{}}
+\toprule
+\textbf{Lifecycle phase} & \textbf{State object or transition} & \textbf{Evidence status} & \textbf{Survey claim boundary} \\ \midrule
+TVM creation and admission & TSM admits a TVM, establishes launch state, and separates host resource management from TVM data visibility & E3: AP-TEE v0.7 draft / CoVE proposal direction~\cite{riscv_ap_tee_2024,sahita2023cove} & Use as RISC-V confidential-VM direction, not as ratified ABI behavior. \\
+Memory donation and acceptance & Host-managed pages become TVM-owned pages through TSM-mediated lifecycle transitions & E3: AP-TEE draft lifecycle vocabulary~\cite{riscv_ap_tee_2024} & Supports draft state-machine comparison with Arm CCA; detailed ABI and corner cases remain draft. \\
+Sharing, reclaim, and teardown & Pages move between private, shared, reclaimed, or destroyed states under TSM policy & E3 draft plus RISC-V lineage papers for background sharing models~\cite{riscv_ap_tee_2024,lee2022cerberus} & Useful for identifying lifecycle requirements; not yet a ratified cross-platform contract. \\
+Attestation and evidence appraisal & TVM launch/runtime evidence is encoded and appraised by verifier/relying-party roles & E0: RATS/EAT generic roles and token format; E3: AP-TEE platform-specific evidence direction~\cite{rats_rfc,eat_rfc,riscv_ap_tee_2024} & Can claim standard attestation vocabulary and draft RISC-V direction, not complete production verifier policy. \\
+Device-interface admission & TDI/TDM/DSM-style actors bind a device interface to a TVM and compose SPDM, TDISP, IDE, and IOMMU controls & E3: CoVE-IO v0.3.0; E0 SPDM/IOMMU/AIA substrate; E5 TDISP public metadata~\cite{riscv_cove_io_2026,dmtf_spdm_2025,riscv_iommu_2023,riscv_aia_2023,pcisig_tdisp_2022} & Strongest claim is required-layer mapping; the CoVE-IO interface state machine is still draft. \\
+Trusted MSI and interrupt routing & Interrupt ownership follows device assignment and TVM ownership rather than host-only routing & E0 AIA substrate with E3 CoVE-IO trusted-I/O direction~\cite{riscv_aia_2023,riscv_cove_io_2026} & Use as trusted-interrupt design direction; do not claim ratified trusted-MSI semantics. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
 \subsection{RISC-V Confidential I/O}
 
 \subsubsection{Why CoVE Needs I/O Standardization}
@@ -230,6 +247,22 @@ untrusted host manage resources without giving it data visibility. The
 difference is that Arm presents a more vertically integrated Realm architecture,
 whereas RISC-V standardization exposes a set of modular pieces that platform
 builders must assemble into a coherent protection boundary.
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{Arm CCA versus RISC-V CoVE/AP-TEE Claim-Strength Comparison}
+\label{tab:cca_cove_claim_strength}
+\begin{tabular}{@{}p{0.17\linewidth}p{0.25\linewidth}p{0.25\linewidth}p{0.23\linewidth}@{}}
+\toprule
+\textbf{Claim axis} & \textbf{Arm CCA evidence} & \textbf{RISC-V CoVE/AP-TEE evidence} & \textbf{Allowed survey claim} \\ \midrule
+Confidential-VM abstraction & E1 OSDI design/verification plus E0 Arm architecture and RMM specifications~\cite{li2022cca,arm_cca_spec,arm_rmm_spec} & E3 CoVE/AP-TEE proposal and draft material~\cite{sahita2023cove,riscv_ap_tee_2024} & Compare architectural goals and roles; do not imply equal standard maturity. \\
+Memory ownership lifecycle & E0/E1 support for Realm granule ownership, GPT/GPC checks, and RMM-mediated transitions~\cite{li2022cca,arm_cca_spec,arm_rme_spec} & E3 draft support for TVM memory donation, sharing, reclaim, and TSM mediation~\cite{riscv_ap_tee_2024} & Arm supports stronger mechanism/state claims; RISC-V supports draft direction and gap analysis. \\
+Attestation evidence & E0 Arm CCA/RMM plus E0 RATS/EAT vocabulary for role and token semantics~\cite{arm_cca_spec,arm_rmm_spec,rats_rfc,eat_rfc} & E0 RATS/EAT vocabulary plus E3 AP-TEE platform evidence direction~\cite{rats_rfc,eat_rfc,riscv_ap_tee_2024} & Compare evidence-chain requirements; platform-specific RISC-V claims remain draft. \\
+Device and trusted-I/O path & E0 SMMU substrate and E1/E3 Arm CCA device/accelerator research such as ACAI, PORTAL, CAGE, and Devlore~\cite{arm_smmu_spec,acai2023,sang2025portal,wang2026cage,bertschi2026devlore} & E0 IOMMU/AIA/SPDM substrate, E3 CoVE-IO, and E5 TDISP metadata~\cite{riscv_iommu_2023,riscv_aia_2023,dmtf_spdm_2025,riscv_cove_io_2026,pcisig_tdisp_2022} & Claim both need device identity, DMA control, interrupts, and lifecycle; RISC-V trusted I/O remains a draft composition. \\
+Implementation and deployment evidence & E1 systems and public Arm/Linux documentation show research prototypes and architecture-facing implementation paths~\cite{li2022cca,linux_arm_cca_doc,bertschi2025opencca} & E1 lineage systems plus E3 AP-TEE/CoVE-IO drafts show design direction rather than ratified deployment contracts~\cite{costan2016sanctum,lee2020keystone,riscv_ap_tee_2024,riscv_cove_io_2026} & Use RISC-V lineage as background and draft standardization evidence, not as proof of completed production parity. \\ \bottomrule
+\end{tabular}
+\end{table*}
 
 \subsection{Summary}
 

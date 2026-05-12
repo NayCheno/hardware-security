@@ -215,6 +215,24 @@ link security, interrupt delivery, and evidence that a verifier can evaluate.
 Different platforms divide those responsibilities differently, but the required
 security properties are similar.
 
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{Confidential I/O Lifecycle and State-Machine Summary}
+\label{tab:confidential_io_lifecycle}
+\begin{tabular}{@{}p{0.15\linewidth}p{0.25\linewidth}p{0.24\linewidth}p{0.26\linewidth}@{}}
+\toprule
+\textbf{Phase} & \textbf{Representative state transition} & \textbf{Primary evidence status} & \textbf{Survey claim boundary} \\ \midrule
+Endpoint identity and session & Requester/responder capabilities, certificates, measurements, and secured-session setup & E0: DMTF DSP0274 v1.4.0 selected SPDM snapshot; secured-message and TCP bindings are protocol substrate~\cite{dmtf_spdm_2025,dmtf_spdm_secured_messages_2025,dmtf_spdm_tcp_2024} & Supports device identity, measurement, negotiation, and secure sessions; does not by itself assign the device or constrain DMA. \\
+Interface admission & Device interface is requested, configured, and bound to a protected workload or device manager & E3: CoVE-IO v0.3.0 draft; E5: TDISP/TDISP XT public metadata only~\cite{riscv_cove_io_2026,pcisig_tdisp_2022,pcisig_tdisp_xt_2025} & Trusted-device-interface lifecycle is a draft/metadata-backed direction here; no gated TDISP normative state rule is claimed. \\
+DMA and MMIO authority & I/O page tables, SMMU/IOMMU mappings, or IOPMP-style filters are installed for the assigned endpoint & E0: Arm SMMU and RISC-V IOMMU substrate; E3: IOPMP draft; E1: sIOPMP system paper~\cite{arm_smmu_spec,riscv_iommu_2023,riscv_iopmp_2026,feng2024siopmp} & Strong access-control/translation claim for the cited primitive, not a complete endpoint-trust claim. \\
+Link and fabric protection & PCIe/CXL/RDMA/NVMe-oF path is encrypted, integrity protected, or routed through a protected data-path design & Spec and background substrate for PCIe IDE/CXL plus E1/E3 systems such as FOLIO, ODRP, and Hazel~\cite{pcie_ide,cxl_spec,li2024folio,wang2025odrp,chrapek2026hazel} & Supports data-path/fabric risk analysis; must be composed with endpoint identity and memory authority before becoming trusted I/O. \\
+Interrupt and event delivery & Completion/error/MSI events are delivered to the intended protected domain without host confusion & E0: AIA/IMSIC interrupt substrate; E3/E1 research direction for trusted MSI and device-interrupt protection~\cite{riscv_aia_2023,riscv_cove_io_2026,bertschi2026devlore} & Claim is currently strongest as a required lifecycle layer; complete production semantics remain platform-specific. \\
+Operation and re-attestation & Endpoint state, workload channel, or service channel is rechecked while secrets are in use & E0 RATS/EAT roles and token format; E1 TLS+RA/channel-binding evidence; E4 vendor DPU roots~\cite{rats_rfc,eat_rfc,weinhold2025tlsra,nvidia_bluefield_operation_2025} & Evidence must be bound to the workload channel; vendor building blocks are not complete confidential-networking TEEs. \\
+Teardown and cleanup & Interface is stopped, DMA authority revoked, device state reset or zeroized, and evidence invalidated & E1 accelerator/offload systems and E3 CoVE-IO direction~\cite{zhu2020hetee,dhar2024cloudscale,riscv_cove_io_2026} & Cleanup is necessary for lifecycle safety but remains an open cross-device validation gap. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
 \subsubsection{Accelerator TEEs and Confidential Offload}
 
 Accelerator TEEs push the same problem into device-local computation. The
