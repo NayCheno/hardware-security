@@ -101,10 +101,13 @@
   {
     "directory": "10-riscv-cove-io-tee-io",
     "direction": "RISC-V CoVE-IO / TEE-I/O",
-    "papers": [
-      "feng2024siopmp",
-      "riscv_cove_io_2026",
-      "riscv_iommu_2023 + riscv_aia_2023"
+    "primary": [
+      {"key": "feng2024siopmp", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "riscv_cove_io_2026", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
+      {"key": "riscv_iommu_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "riscv_aia_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
     ]
   },
   {
