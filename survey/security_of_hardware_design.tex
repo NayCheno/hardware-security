@@ -50,6 +50,16 @@ The correct classification is therefore defense-in-depth. Capability and tagging
 
 Memory encryption should also be separated from access-control mechanisms. A memory-encryption design addresses what an observer of raw memory or a memory bus can learn, while integrity and replay-protection designs address whether modified or stale data can be detected~\cite{henson2014memory}. AMD SEV-SNP is an important modern example because it combines encrypted-VM deployment with stronger protection against host-controlled memory-management attacks~\cite{amd_sev_snp}. Arm CCA and RISC-V CoVE/AP-TEE, by contrast, primarily specify ownership, lifecycle, and access-control semantics in the cited architectural materials~\cite{arm_cca_spec,riscv_ap_tee_2024}. A complete product may combine these layers, but a survey should not treat them as interchangeable.
 
+Recent architecture work also shows that these layers can be deliberately
+co-designed rather than simply stacked. \textbf{Voodoo} combines memory tagging,
+authenticated encryption, and DRAM error correction through a MAGIC-style
+construction, using tag-dependent authentication to protect encrypted memory
+while also preserving correction capabilities~\cite{lamster2024voodoo}. Its
+role in this survey is narrow but important: it is evidence that memory-safety
+metadata, confidentiality, integrity, and reliability can share a hardware
+primitive. It is not evidence for Realm or TVM lifecycle state, attestation, DMA
+authorization, or trusted device assignment.
+
 This taxonomy is especially important for Arm and RISC-V confidential-computing comparison. GPT/GPC, PMP, IOPMP, and IOMMU checks decide whether an access is allowed. Link protection such as PCIe IDE protects traffic on a fabric. Memory encryption protects data representation outside the processor or protected boundary. Integrity and anti-replay mechanisms protect freshness and tamper detection. These mechanisms compose, but none of them alone proves that a workload is confidential against the full host, device, and fabric threat model.
 
 \subsection{Trusted Execution, Boot, and Trust Anchors}
