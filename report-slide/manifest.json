@@ -91,11 +91,12 @@
   {
     "directory": "09-riscv-cove-ap-tee",
     "direction": "RISC-V CoVE / AP-TEE confidential VM",
-    "papers": [
-      "sahita2023cove",
-      "riscv_ap_tee_2024",
-      "boubakri2025riscvtee"
-    ]
+    "primary": [
+      {"key": "sahita2023cove", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
+      {"key": "riscv_ap_tee_2024", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
+      {"key": "boubakri2025riscvtee", "evidence": "E2/E5 / Background substrate", "source_status": "source_verified_pdf_limited"}
+    ],
+    "auxiliary": []
   },
   {
     "directory": "10-riscv-cove-io-tee-io",

@@ -1,29 +1,62 @@
 direction: RISC-V CoVE / AP-TEE confidential VM
 focus: 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+selection_rule: 固定三篇 primary；survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。
+primary:
 - key: sahita2023cove
   role: Foundational / arXiv 2023
+  evidence: E1 / Foundational
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf
   title: RISC-V CoVE reference architecture
-  summary: 提出 RISC-V CoVE confidential computing 参考架构方向。
-  background: 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任。
-  solution: 描述 confidential VM 所需的 ISA、non-ISA、SoC 和 platform requirements。
-  experiment: 架构论文/position-style，无完整系统实验。
-  comment: 是 CoVE 入口；不能替代 AP-TEE draft spec 的 ABI/state details。
+  summary: 提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、non-ISA、SoC 与 platform requirements。
+  background: 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lineage。
+  insight_solution: 用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform support。
+  key_technologies:
+  - RISC-V confidential VM reference architecture
+  - ISA/non-ISA/SoC/platform requirement split
+  - Host/hypervisor trust reduction for TVM
+  experiment_claim: 架构论文/position-style，无完整系统实验；具体 ABI/state details 需要 AP-TEE draft。
+  evaluation:
+    strengths: CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。
+    limitations: 不提供完整 ABI、状态机或 ratified standard 语义。
+    commercialization: 对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
+  auxiliary: []
 - key: riscv_ap_tee_2024
   role: Draft/not ratified / AP-TEE v0.7 RC2
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf
   title: RISC-V AP-TEE / CoVE TVM 规范草案
-  summary: 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI。
-  background: CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面。
-  solution: 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share
-    等规范语义。
-  experiment: 规范草案，无实验。
-  comment: 当前最重要的 RISC-V CCA 对照材料；必须标注 draft / not ratified。
+  summary: 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memory lifecycle。
+  background: CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm CCA/RMM 同层比较。
+  insight_solution: 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share 等 draft 规范语义。
+  key_technologies:
+  - TVM/TSM lifecycle and SBI ABI
+  - COVH/COVG host/guest interface split
+  - Memory donation, reclaim and sharing semantics
+  experiment_claim: 规范草案，无实验；draft/not-ratified，不能写成 ratified standard 或 production ABI。
+  evaluation:
+    strengths: 当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。
+    limitations: v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。
+    commercialization: 商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
+  auxiliary: []
 - key: boubakri2025riscvtee
   role: Background substrate / Electronics 2025 survey
+  evidence: E2/E5 / Background substrate
+  source_status: source_verified_pdf_limited
+  reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
   title: RISC-V TEE 谱系辅助材料
-  summary: 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系。
-  background: RISC-V TEE 论文和规范发展快，survey 可减少分类断裂。
-  solution: 按 secure enclave / TEE mechanism 分类和对比。
-  experiment: Survey，无新实验。
-  comment: 适合辅助写作；mechanism claims 应回引 CoVE paper 和 AP-TEE spec。
+  summary: 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtime 和 confidential VM。
+  background: RISC-V TEE 论文和规范发展快，survey 可减少分类断裂，但 HTML-only/PDF-blocked 证据弱于本地 PDF。
+  insight_solution: 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类；机制 claim 必须回引 CoVE paper 和 AP-TEE spec。
+  key_technologies:
+  - RISC-V enclave and TEE taxonomy
+  - Pre-CoVE versus CoVE/AP-TEE classification
+  - Survey bridge for representative systems
+  experiment_claim: Survey，无新实验；本地 PDF 不可用，只使用 taxonomy/background claim。
+  evaluation:
+    strengths: 有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
+    limitations: PDF blocked/HTML-only evidence，不能替代原始机制论文或官方规范。
+    commercialization: 适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。
+  auxiliary: []
+auxiliary: []
