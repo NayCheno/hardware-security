@@ -7,10 +7,10 @@ primary:
   selection_reason: First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for this direction.
   evidence_type: E4 industry/vendor evidence
   maturity: industry/vendor evidence
-  pdf_status: source_verified_pdf_unavailable
-  source_url: https://developer.arm.com/documentation/PRD29-GENC-009492/c?lang=en
+  pdf_status: local_pdf_verified
+  source_url: https://documentation-service.arm.com/static/5f212796500e883ab8e74531
   evidence: E4 / Foundational industry evidence
-  source_status: source_verified_pdf_unavailable
+  source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/arm-security-technology-trustzone/README.md
   title: Arm TrustZone 白皮书
   summary: 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型。

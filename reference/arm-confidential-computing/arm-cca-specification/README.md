@@ -7,7 +7,7 @@
 - Source: https://developer.arm.com/documentation/den0125/latest
 - PDF source: https://developer.arm.com/documentation/den0125/latest
 - Local PDF: not available in this directory
-- Download status: official Arm documentation page verified; local PDF unavailable in this repository
+- Download status: official Arm documentation page verified; local PDF unavailable in this repository. Rechecked on 2026-05-12; `den0125/latest` and `den0125/0400` returned access-denied HTML to automated download, and no stable public PDF endpoint was found.
 - Survey lane: Arm/RISC-V confidential-computing defense
 - Evidence class: E0 official architecture specification source, local source page only
 - Evidence role: Spec/standard SOTA. Official Arm CCA source-page evidence with local PDF unavailable; use only public architecture concepts and avoid unavailable non-public details.

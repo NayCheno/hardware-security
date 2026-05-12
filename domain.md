@@ -12,7 +12,7 @@
 - `survey/candidate_reference.bib`：152 个 metadata-only 候选条目，不作为正文机制 claim 的证据。
 - `survey/p0_p1_candidate_status.md`：112 个 P0/P1 metadata-only 候选的终态记录；每个条目都已标为 active canonical coverage、backlog/no substantive citation 或 background substrate。
 - `survey/*.tex` 正文实际引用：98 个 key，全部能在 Bib 中找到。
-- `reference/`：98 个论文/规范记录 README（不含 9 个目录索引或空 SoK 占位 README），81 个本地 `paper.pdf`。
+- `reference/`：99 个论文/规范记录 README（不含目录索引或空 SoK 占位 README），84 个本地 `paper.pdf`。
 - 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP/TDISP XT metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、DICE、PORTAL、CAGE、StrongBox、Graviton、Telekine、Honeycomb、ShEF、XpuTEE source-limited metadata、SGX-FPGA source-limited metadata、SoC-FPGA SoK、S-NIC、TNIC、Hazel、Hardware Isolation、CPC、aDNS、Voodoo、CoFunc、Aster、OSMOSIS 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root、Arm CCA deployment、ISA/hardware-design defense 和 accelerator/device TEE 的核心或背景材料。
 - Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；2 条 SGX runtime/container 背景 BibTeX 已拆到 `survey/background_runtime_reference.bib`；64 条 out-of-scope attack-only BibTeX 已拆到 `survey/excluded_attack_reference.bib`，避免与当前三条 defense/spec survey 主线混作 active evidence。新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
 
@@ -92,7 +92,7 @@
 | `pinto2019trustzone` | `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/` | TrustZone 背景、系统软件、应用模式；本地 PDF 可用 | 只作为 TrustZone survey，不代表 CCA threat model。 |
 | `cerdeira2020trustzone` | `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/` | TrustZone-assisted TEE 漏洞 taxonomy、接口/TCB 风险；本地 PDF 可用 | 用于解释 CCA 动机和 TrustZone 局限，不直接证明 CCA 安全性。 |
 | `menetrey2022attestation` | `reference/attestation/exploratory-study-attestation-mechanisms-for-tees/` | TEE attestation 机制、证据和 verifier 视角 | Generic attestation survey；Arm CCA/CoVE 证据链仍需回到规范。 |
-| `boubakri2025riscvtee` | `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | RISC-V secure enclaves / TEE 谱系；可连接 Sanctum、Keystone、CURE、MI6、Penglai、SPEAR-V、CoVE、ACE | E2 peer-reviewed survey；MDPI HTML 已核验但自动 PDF 下载受 403 阻挡；机制 claims 应回引原论文/spec。 |
+| `boubakri2025riscvtee` | `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | RISC-V secure enclaves / TEE 谱系；可连接 Sanctum、Keystone、CURE、MI6、Penglai、SPEAR-V、CoVE、ACE | E2 peer-reviewed survey；MDPI HTML 与本地 PDF 已核验；机制 claims 应回引原论文/spec。 |
 | `sok-tee` | `reference/accelerator-tees/sok/analysis-accelerator-tee-designs/` | Accelerator TEE taxonomy；可支撑 ACAI、Devlore、CoVE-IO、TDISP/IDE 讨论 | 只用于 accelerator/device TEE，不作为通用 CCA/CoVE SoK。 |
 | `henson2014memory` | `reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/` | Memory encryption taxonomy；本地 PDF 已下载并解析 | 不是 TEE SoK；用于区分 encryption/integrity/replay 与 access-control。 |
 | `dmtf_spdm_2025`, `dmtf_spdm_secured_messages_2025`, `dmtf_spdm_tcp_2024`, `dmtf_spdm_arch_2024` | `reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/` 等 SPDM 目录 | Device identity、measurement、secured session、transport binding；本地 PDF 已下载并解析 | 不是完整 trusted I/O 系统；用于 device identity / evidence / secure session 层。 |
@@ -130,7 +130,7 @@
    - 解决方案：用机制级 taxonomy 替代产品级罗列，把不同 TEE 统一映射到可比较的安全属性。
    - 实验结果：Survey/SoK，无新实验；证据来自公开论文和规范比较。
    - 文章评价：适合做本项目顶层分类；不足是 2022 之后 CCA、CoVE/AP-TEE、CoVE-IO、accelerator TEE 需额外补。
-2. `boubakri2025riscvtee` — Background substrate；E2 Electronics 2025 survey；MDPI HTML 核验，自动 PDF 下载 403。
+2. `boubakri2025riscvtee` — Background substrate；E2 Electronics 2025 survey；MDPI HTML 与本地 PDF 已核验。
    - 内容摘要：梳理 RISC-V secure enclave 与 TEE 研究谱系。
    - 研究背景：RISC-V TEE 从 PMP monitor 到 confidential VM 的发展分散在论文、草案和原型中。
    - 解决方案：按 RISC-V TEE 设计点组织 Keystone、Penglai、SPEAR-V、CoVE 等工作。
@@ -445,7 +445,7 @@
 | RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；Draft/not ratified: AP-TEE v0.7 / RC2 for ARC review；Draft/not ratified: CoVE-IO v0.3.0。 | 作为 draft/not-ratified spec evidence；正文必须标注 draft/not ratified。 |
 | `riscv_iommu_2023` / `riscv_aia_2023` | IOMMU v1.0.1 / 20260222 ratified-library release 与 AIA v1.0 ratified June 2023 / 20250312 clarifications 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
-| `boubakri2025riscvtee` | E2 peer-reviewed survey；MDPI HTML 核验；PDF 自动下载 403。 | 作为 survey anchor；机制论断回引原始论文/spec。 |
+| `boubakri2025riscvtee` | E2 peer-reviewed survey；MDPI HTML 与本地 PDF 已核验。 | 作为 survey anchor；机制论断回引原始论文/spec。 |
 | `rats_rfc` | RFC 9334 HTML/PDF 已核验并下载。 | 作为 RATS architecture / terminology 标准；不作为平台机制或 token-format 实现证据。 |
 | `tcg_dice_2018` | TCG Published DICE PDF 已下载并验证。 | 用于 UDS/CDI、first mutable code measurement 和 boot identity vocabulary；不作为完整 remote-attestation protocol、Android AVF profile 或 CCA/CoVE implementation proof。 |
 | `li2024sokteechoices` | ASIA CCS 2024 SoK，作者主页 PDF 已下载。 | 作为通用 server-side TEE design-choice/pitfall SoK；正文机制仍回引原始论文/spec。 |

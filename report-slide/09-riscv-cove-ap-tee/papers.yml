@@ -55,23 +55,23 @@ primary:
   selection_reason: Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave systems.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
-  pdf_status: mdpi_html_verified_pdf_403
+  pdf_status: local_pdf_verified
   source_url: https://www.mdpi.com/2079-9292/14/21/4171
   evidence: E2 survey / Background substrate
-  source_status: mdpi_html_verified_pdf_403
+  source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
   title: RISC-V TEE 谱系辅助材料
   summary: 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtime 和 confidential VM。
-  background: RISC-V TEE 论文和规范发展快，survey 可减少分类断裂，但 HTML-only/PDF-blocked 证据弱于本地 PDF。
+  background: RISC-V TEE 论文和规范发展快，survey 可减少分类断裂；即使本地 PDF 已核验，机制细节仍要回到原始论文/spec。
   insight_solution: 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类；机制 claim 必须回引 CoVE paper 和 AP-TEE spec。
   key_technologies:
   - RISC-V enclave and TEE taxonomy
   - Pre-CoVE versus CoVE/AP-TEE classification
   - Survey bridge for representative systems
-  experiment_claim: Survey，无新实验；本地 PDF 不可用，只使用 taxonomy/background claim。
+  experiment_claim: Survey，无新实验；本地 PDF 已核验，但仍只使用 taxonomy/background claim。
   evaluation:
     strengths: 有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
-    limitations: PDF blocked/HTML-only evidence，不能替代原始机制论文或官方规范。
+    limitations: Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。
     commercialization: 适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。
   auxiliary: []
 auxiliary: []

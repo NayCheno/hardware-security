@@ -5,9 +5,9 @@
 - Authors: Arm Limited
 - Year: 2025
 - Source: https://developer.arm.com/documentation/den0137/latest/
-- PDF source: https://developer.arm.com/documentation/den0137/latest/
+- PDF source: https://developer.arm.com/-/cdn-downloads/permalink/PDF/Architectures/DEN0137_1.0-rel0-rc1_rmm-arch_external.pdf
 - Local PDF: not available in this directory
-- Download status: official Arm documentation page verified; local PDF unavailable in this repository
+- Download status: official Arm documentation page and public DEN0137 CDN URL verified; local PDF unavailable in this repository. Rechecked on 2026-05-12; direct CDN download returned access-denied HTML to automated download.
 - Survey lane: Arm/RISC-V confidential-computing defense
 - Evidence class: E0 official architecture specification source, local source page only
 - Evidence role: Spec/standard SOTA. Official Arm RMM source-page evidence with local PDF unavailable; use only public RMM/RMI/RSI lifecycle concepts and avoid unavailable non-public details.

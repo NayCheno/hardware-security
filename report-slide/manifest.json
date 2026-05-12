@@ -17,12 +17,12 @@
       {
         "key": "boubakri2025riscvtee",
         "evidence": "E2 survey / Background substrate",
-        "source_status": "mdpi_html_verified_pdf_403",
+        "source_status": "local_pdf_verified",
         "role": "sota_1",
         "selection_reason": "Recent RISC-V TEE survey used to connect Keystone, Penglai, SPEAR-V, CoVE, and AP-TEE lineages.",
         "evidence_type": "E2 peer-reviewed survey/SoK",
         "maturity": "peer-reviewed survey/SoK",
-        "pdf_status": "mdpi_html_verified_pdf_403",
+        "pdf_status": "local_pdf_verified",
         "source_url": "https://www.mdpi.com/2079-9292/14/21/4171"
       },
       {
@@ -46,13 +46,13 @@
       {
         "key": "arm_trustzone_whitepaper",
         "evidence": "E4 / Foundational industry evidence",
-        "source_status": "source_verified_pdf_unavailable",
+        "source_status": "local_pdf_verified",
         "role": "foundational",
         "selection_reason": "First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for this direction.",
         "evidence_type": "E4 industry/vendor evidence",
         "maturity": "industry/vendor evidence",
-        "pdf_status": "source_verified_pdf_unavailable",
-        "source_url": "https://developer.arm.com/documentation/PRD29-GENC-009492/c?lang=en"
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://documentation-service.arm.com/static/5f212796500e883ab8e74531"
       },
       {
         "key": "pinto2019trustzone",
@@ -377,12 +377,12 @@
       {
         "key": "boubakri2025riscvtee",
         "evidence": "E2 survey / Background substrate",
-        "source_status": "mdpi_html_verified_pdf_403",
+        "source_status": "local_pdf_verified",
         "role": "sota_2",
         "selection_reason": "Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave systems.",
         "evidence_type": "E2 peer-reviewed survey/SoK",
         "maturity": "peer-reviewed survey/SoK",
-        "pdf_status": "mdpi_html_verified_pdf_403",
+        "pdf_status": "local_pdf_verified",
         "source_url": "https://www.mdpi.com/2079-9292/14/21/4171"
       }
     ],

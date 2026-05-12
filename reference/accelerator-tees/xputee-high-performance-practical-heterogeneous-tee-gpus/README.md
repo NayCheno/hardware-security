@@ -8,7 +8,7 @@
 - Source: https://dl.acm.org/doi/10.1145/3719653
 - PDF source: https://dl.acm.org/doi/pdf/10.1145/3719653
 - Local PDF: unavailable
-- Download status: unavailable: ACM DOI PDF endpoint returned HTTP 403 on 2026-05-12; metadata and abstract verified through DOI/ACM-indexed sources
+- Download status: unavailable: ACM DOI PDF endpoint returned HTTP 403 on 2026-05-12; metadata and abstract verified through DOI/ACM-indexed sources, CiteDrive/Mendeley metadata, and Zhichao Hua's homepage, which lists XpuTEE without a public PDF link
 - Survey lane: confidential-computing network/I/O/data-path defense
 - SOTA role: source-limited current GPU heterogeneous TEE baseline
 
@@ -89,4 +89,6 @@ AI workload 需要 heterogeneous accelerator，但 CPU-only TEE 与 GPU-only TEE
 #### 文章评价
 
 XpuTEE 值得进入 active bibliography，因为它是 2025 GPU heterogeneous TEE baseline；但本项目必须保留 source-limited 状态，直到 PDF 可审查。
+
+PDF recovery notes: ACM and metadata mirrors confirm DOI `10.1145/3719653`, ACM TOCS 43(1-2), authors Shulin Fan, Zhichao Hua, Yubin Xia, and Haibo Chen. ResearchGate is request-only and no author-hosted PDF was found.
 <!-- END PAPER REVIEW -->

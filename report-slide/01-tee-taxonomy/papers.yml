@@ -31,10 +31,10 @@ primary:
   selection_reason: Recent RISC-V TEE survey used to connect Keystone, Penglai, SPEAR-V, CoVE, and AP-TEE lineages.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
-  pdf_status: mdpi_html_verified_pdf_403
+  pdf_status: local_pdf_verified
   source_url: https://www.mdpi.com/2079-9292/14/21/4171
   evidence: E2 survey / Background substrate
-  source_status: mdpi_html_verified_pdf_403
+  source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
   title: RISC-V secure enclave 与 TEE 谱系 survey
   summary: 梳理 RISC-V secure enclave 与 TEE 研究谱系。

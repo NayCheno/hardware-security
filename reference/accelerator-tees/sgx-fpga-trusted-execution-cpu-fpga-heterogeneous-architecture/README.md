@@ -8,7 +8,7 @@
 - Source: https://www.researchwithrutgers.com/en/publications/sgx-fpga-trusted-execution-environment-for-cpu-fpga-heterogeneous
 - PDF source: https://ieeexplore.ieee.org/document/9586207
 - Local PDF: unavailable
-- Download status: unavailable: IEEE Xplore public stamp endpoint returned HTTP 418 on 2026-05-12; Rutgers metadata page and DOI verified
+- Download status: unavailable: IEEE Xplore public stamp endpoint returned HTTP 418 on 2026-05-12; Rutgers/ResearchWithNJ metadata page, DOI, and ResearchGate request-only page verified
 - Survey lane: confidential-computing network/I/O/data-path defense
 - SOTA role: source-limited CPU-FPGA TEE metadata baseline
 
@@ -89,4 +89,6 @@ CPU TEE 默认不覆盖 FPGA offload，CPU-FPGA cloud service 需要额外可信
 #### 文章评价
 
 保留该记录有助于说明 CPU-FPGA TEE lineage，但必须显式标注 source-limited，不能作为强机制或性能证据。
+
+PDF recovery notes: ResearchWithNJ verifies DAC 2021 metadata and DOI `10.1109/DAC18074.2021.9586207`. ResearchGate is request-only and explicitly does not expose a public full-text PDF.
 <!-- END PAPER REVIEW -->
