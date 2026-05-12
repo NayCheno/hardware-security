@@ -1,44 +1,119 @@
 \section{Arm CCA I/O、DMA、accelerator、interrupt}
-\begin{frame}{Arm CCA I/O、DMA、accelerator、interrupt}
-\small
-\textbf{方向定位：}把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
-\medskip
 
+\DirectionIntro
+{Arm CCA I/O、DMA、accelerator、interrupt}
+{本方向把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界，避免把 Realm 安全误写成只覆盖 CPU 内存。}
+{三篇主讲材料是 \Key{acai2023}、\Key{bertschi2026devlore}、\Key{sok-tee}；前两篇是 draft/not-ratified，本页只保守使用其设计证据。}
+{本方向连接后续 confidential I/O、DPU/SmartNIC 和 secure offload；所有 production claim 留给后续 vendor/spec evidence。}
+
+\begin{frame}{Arm CCA I/O、DMA、accelerator、interrupt：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & ACAI: CCA accelerator execution & Foundational / arXiv 2023 \\ 
-SOTA/规范 1 & Devlore: device interrupt protection & Draft/not ratified / arXiv \\ 
-SOTA/规范 2 & Accelerator TEE SoK for CCA I/O & Background substrate / NDSS 2026 SoK \\ 
+方向入口 & ACAI: CCA accelerator execution & Draft/not ratified / E3 arXiv 2023 \\
+中断边界 & Devlore: device interrupt protection & Draft/not ratified / E3 arXiv \\
+设计空间 & Accelerator TEE SoK for CCA I/O & Background substrate / E2 NDSS 2026 SoK \\
 \bottomrule
 \end{tabularx}
+\medskip
+\SourceState{ACAI/Devlore 都是本地 PDF verified 的 draft evidence；\Key{sok-tee} 只作为 accelerator/device TEE taxonomy。}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {ACAI: CCA accelerator execution}
-{acai2023 | Foundational / arXiv 2023}
-{研究如何用 Arm CCA 保护 accelerator execution。}
-{Confidential workloads 需要使用加速器，CPU Realm 不能默认保护 offload 路径。}
-{围绕 CCA-aware accelerator execution path 设计保护机制。}
-{arXiv 系统论文提供原型结果；具体数值需回引原文。}
-{是 Arm CCA accelerator 方向的重要入口；成熟度受制于设备支持和驱动 TCB。}
+{\Meta{acai2023}{Draft/not ratified / E3 arXiv 2023}{source: local PDF verified}{claim: draft accelerator-execution design}}
+{\begin{itemize}
+  \item ACAI 研究如何用 Arm CCA 保护 accelerator execution。
+  \item 它说明 CPU Realm 之外的 offload path 不能默认继承机密性。
+\end{itemize}}
+{\begin{itemize}
+  \item Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器。
+  \item 如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 Realm 安全边界延伸到 accelerator execution path。
+  \item 解决方案围绕 CCA-aware offload，连接设备内存访问、队列管理和 attestation。
+\end{itemize}}
+{\begin{itemize}
+  \item CCA-aware accelerator execution path。
+  \item Protected DMA and command/data movement。
+  \item Driver/runtime TCB boundary for offload。
+\end{itemize}}
+{\begin{itemize}
+  \item arXiv 系统论文提供原型结果。
+  \item Draft/not-ratified 状态下具体性能和安全结论需回引本地 PDF，不能写成标准或生产事实。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow。
+  \item \textbf{不足：}预印本不能代表标准化接口或量产设备能力，驱动/runtime TCB 仍是主要风险。
+  \item \textbf{商业落地：}适合 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Devlore: device interrupt protection}
-{bertschi2026devlore | Draft/not ratified / arXiv}
-{关注 confidential VM 的 device interrupt protection。}
-{即便 DMA 受控，设备 interrupt 也可能暴露或破坏 confidential VM 的状态与所有权。}
-{把 interrupt delivery、device ownership 与 confidential boundary 绑定。}
-{arXiv 论文，本地 PDF 可用；具体数据需回引原文。}
-{很好地说明 interrupt 不是外围问题；落地需硬件、firmware、OS 和 hypervisor 协同。}
+{\Meta{bertschi2026devlore}{Draft/not ratified / E3 arXiv}{source: local PDF verified}{claim: draft interrupt-protection design}}
+{\begin{itemize}
+  \item Devlore 关注 confidential VM 的 device interrupt protection。
+  \item 它把 interrupt delivery 纳入机密计算边界，而不是只讨论 DMA。
+\end{itemize}}
+{\begin{itemize}
+  \item 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息。
+  \item Host 也可能通过 interrupt path 干扰 confidential VM 的状态机和设备所有权。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是 interrupt 是 device ownership 的一部分。
+  \item 解决方案将 interrupt delivery、device ownership 与 confidential boundary 绑定。
+\end{itemize}}
+{\begin{itemize}
+  \item Confidential-device interrupt ownership。
+  \item Interrupt delivery mediation。
+  \item VM/device lifecycle coupling。
+\end{itemize}}
+{\begin{itemize}
+  \item arXiv 论文且本地 PDF 可用。
+  \item 本 deck 只写机制方向和证据状态，不写未复核数字或成熟部署结论。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}明确指出 interrupt 是 CCA device path 的核心安全面。
+  \item \textbf{不足：}Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
+  \item \textbf{商业落地：}对云端直通设备和加速器租户隔离关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Accelerator TEE SoK for CCA I/O}
-{sok-tee | Background substrate / NDSS 2026 SoK}
-{为 accelerator TEE 提供设计空间。}
-{GPU/NPU/DPU/SmartNIC 的 TEE 机制比 CPU TEE 更分散。}
-{分类设备身份、内存路径、队列、runtime、driver TCB、attestation。}
-{Survey/SoK，无新实验。}
-{可作为本方向的 SoK；必须与 ACAI/Devlore/Arm SMMU/RME-DA 等一手材料配合。}
+{\Meta{sok-tee}{Background substrate / E2 NDSS 2026 SoK}{source: local PDF verified}{claim: taxonomy only}}
+{\begin{itemize}
+  \item Accelerator TEE SoK 为 accelerator/device TEE 提供 taxonomy。
+  \item 本方向用它组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题。
+\end{itemize}}
+{\begin{itemize}
+  \item 设备 TEE 机制比 CPU TEE 更分散。
+  \item 不同 accelerator 的队列、固件、驱动和本地 root 差异很大，不能用一个 CPU TEE 模型覆盖。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是用 taxonomy 分层，而不是把所有 offload 都写成同一种 TEE。
+  \item 解决方案区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation。
+\end{itemize}}
+{\begin{itemize}
+  \item Accelerator/device TEE design taxonomy。
+  \item Device identity and attestation vocabulary。
+  \item Memory, queue, runtime and driver TCB dimensions。
+\end{itemize}}
+{\begin{itemize}
+  \item Survey/SoK，无新实验。
+  \item Primary mechanism claim 必须回引原始论文、规范或平台文档。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
+  \item \textbf{不足：}不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。
+  \item \textbf{商业落地：}有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
+\end{itemize}}
 
+\DirectionSummary
+{Arm CCA I/O、DMA、accelerator、interrupt}
+{第一条推进线：ACAI 把 CCA 保护面延伸到 accelerator execution，但证据仍是 draft design point。}
+{第二条推进线：Devlore 强调 interrupt delivery 也是 confidential device ownership 的一部分。}
+{第三条推进线：Accelerator TEE SoK 提供设备 TEE taxonomy，用于拆分 identity、memory、queue、runtime、driver 和 attestation。}
+{该方向自然过渡到后续 confidential I/O protocol、DPU/SmartNIC offload 和 secure vNIC/vSwitch 的生产证据审查。}

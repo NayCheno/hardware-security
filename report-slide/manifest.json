@@ -46,11 +46,12 @@
   {
     "directory": "05-arm-cca-io-accelerator-interrupt",
     "direction": "Arm CCA I/O、DMA、accelerator、interrupt",
-    "papers": [
-      "acai2023",
-      "bertschi2026devlore",
-      "sok-tee"
-    ]
+    "primary": [
+      {"key": "acai2023", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
+      {"key": "bertschi2026devlore", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
+      {"key": "sok-tee", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": []
   },
   {
     "directory": "06-attestation-boot-lifecycle",
