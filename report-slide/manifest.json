@@ -68,10 +68,14 @@
   {
     "directory": "07-riscv-primitives",
     "direction": "RISC-V 基础安全 primitives",
-    "papers": [
-      "riscv_privileged",
-      "riscv_iommu_2023 + riscv_iopmp_2026",
-      "riscv_aia_2023 + manoni2026cva6cfi"
+    "primary": [
+      {"key": "riscv_privileged", "evidence": "E0 / Foundational standard substrate", "source_status": "local_pdf_verified"},
+      {"key": "riscv_iommu_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
+      {"key": "riscv_aia_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "riscv_iopmp_2026", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
+      {"key": "manoni2026cva6cfi", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
     ]
   },
   {

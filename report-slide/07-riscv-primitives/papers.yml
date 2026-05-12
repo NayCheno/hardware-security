@@ -1,33 +1,76 @@
 direction: RISC-V 基础安全 primitives
 focus: 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+selection_rule: 固定三篇 primary；`riscv_iopmp_2026` 与 `manoni2026cva6cfi` 作为辅助材料，不计入三篇主讲。
+primary:
 - key: riscv_privileged
-  role: Foundational / RISC-V privileged spec
+  role: Foundational standard substrate / RISC-V privileged spec
+  evidence: E0 / Foundational standard substrate
+  source_status: local_pdf_verified
+  reference: reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf
   title: RISC-V privileged architecture
-  summary: 定义 RISC-V privilege modes、PMP、virtualization 和相关保护基础。
-  background: RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发。
-  solution: 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离。
-  experiment: 规范，无实验。
-  comment: 所有 RISC-V TEE 讨论的底座；不是 confidential VM 的完整方案。商业价值在于可形成开放生态的共识基础。
-- key: riscv_iommu_2023 + riscv_iopmp_2026
-  role: Spec/standard SOTA + draft
-  title: RISC-V IOMMU 与 IOPMP
-  summary: 定义 RISC-V I/O translation/protection 架构。
-  background: DMA/总线 master 可绕过 CPU-side PMP/页表，TEE 需要 I/O 侧隔离。
-  solution: IOMMU 约束设备地址转换和访问权限；IOPMP 通过 requester/memory-domain/entry matching 过滤
-    I/O transaction。
-  experiment: 规范，无实验。
-  comment: 是 CoVE-IO 讨论的基础材料；IOPMP 仍是 draft，不是单独的 TEE 设计。
-- key: riscv_aia_2023 + manoni2026cva6cfi
-  role: Spec/standard SOTA + CFI draft evidence
-  title: AIA 与 RISC-V CFI
-  summary: AIA 定义 interrupt/MSI/virtual interrupt 基础；CVA6-CFI 实现并评估 Zicfiss/Zicfilp。
-  background: confidential I/O 需要可信 interrupt delivery；runtime memory-safety/CFI 需要独立于
-    CCA/CoVE 的控制流防护。
-  solution: AIA 规范化 interrupt controller 与 MSI；CVA6-CFI 用 shadow stack 和 landing pad
-    单元实现 backward/forward-edge CFI。
-  experiment: AIA 为规范无实验；CVA6-CFI 报告约 1.0% area overhead、MiBench automotive 子集最高 15.6%
-    performance overhead。
-  comment: AIA 支撑 trusted MSI/interrupt ownership；CVA6-CFI 说明 RISC-V CFI 的硬件成本，但不等同于
-    TEE 隔离。
+  summary: 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础。
+  background: RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离语义。
+  insight_solution: 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate。
+  key_technologies:
+  - M/S/U and virtualization privilege modes
+  - PMP/ePMP/Smepmp memory protection substrate
+  - Trap, translation and supervisor/guest isolation vocabulary
+  experiment_claim: 规范，无实验；只提供架构语义，不证明任一 TEE 或 confidential VM 实现。
+  evaluation:
+    strengths: 所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
+    limitations: 不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
+    commercialization: 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
+  auxiliary: []
+- key: riscv_iommu_2023
+  role: Spec/standard SOTA / RISC-V IOMMU
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf
+  title: RISC-V IOMMU
+  summary: 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限。
+  background: DMA 和总线 master 可绕过 CPU-side PMP/页表；TEE 或 CoVE-IO 需要 I/O 侧地址转换和权限控制。
+  insight_solution: IOMMU 把设备发起的访问纳入可配置 translation/protection 边界；`riscv_iopmp_2026` 作为 requester/memory-domain filtering 的 draft 辅助材料。
+  key_technologies:
+  - Device address translation and protection
+  - I/O page-table and permission semantics
+  - CoVE-IO substrate for DMA isolation discussions
+  experiment_claim: 规范，无实验；ratified-library spec 只能支撑公开架构语义，不证明具体平台安全或性能。
+  evaluation:
+    strengths: 是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
+    limitations: IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
+    commercialization: 对服务器和加速器直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
+  auxiliary:
+  - riscv_iopmp_2026
+- key: riscv_aia_2023
+  role: Spec/standard SOTA / RISC-V AIA
+  evidence: E0 / Spec-standard SOTA
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf
+  title: RISC-V Advanced Interrupt Architecture
+  summary: 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义。
+  background: Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery；runtime CFI 则是独立的控制流防护 substrate。
+  insight_solution: AIA 规范化 interrupt controller 与 MSI/virtual interrupt；`manoni2026cva6cfi` 作为 RISC-V CFI draft implementation auxiliary。
+  key_technologies:
+  - Advanced interrupt controller architecture
+  - MSI and virtual interrupt semantics
+  - Trusted interrupt-delivery substrate for confidential I/O
+  experiment_claim: AIA 为规范无实验；辅助 CFI preprint 的实现数字不作为 AIA 或 TEE 隔离证据。
+  evaluation:
+    strengths: 为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。
+    limitations: 不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。
+    commercialization: 对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。
+  auxiliary:
+  - manoni2026cva6cfi
+auxiliary:
+- key: riscv_iopmp_2026
+  role: Draft/not ratified / RISC-V IOPMP v0.8.2
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/risc-v-iopmp-architecture-specification/paper.pdf
+  use: 辅助说明 I/O requester、memory-domain 和 entry matching；draft/not-ratified，不作为独立 TEE 或 ratified standard。
+- key: manoni2026cva6cfi
+  role: Draft/not ratified / arXiv CFI implementation
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/architecture-and-platform-security/cva6-cfi-first-glance-risc-v-control-flow-integrity-extensions/paper.pdf
+  use: 辅助说明 Zicfiss/Zicfilp 在 CVA6 的 CFI implementation evidence；不作为 TEE、DMA isolation 或 CoVE/AP-TEE 边界证据。

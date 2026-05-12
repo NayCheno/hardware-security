@@ -1,44 +1,119 @@
 \section{RISC-V 基础安全 primitives}
-\begin{frame}{RISC-V 基础安全 primitives}
-\small
-\textbf{方向定位：}把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
-\medskip
 
+\DirectionIntro
+{RISC-V 基础安全 primitives}
+{本方向把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开，防止把基础机制误写成完整 confidential computing。}
+{三篇主讲材料是 \Key{riscv_privileged}、\Key{riscv_iommu_2023}、\Key{riscv_aia_2023}；\Key{riscv_iopmp_2026} 和 \Key{manoni2026cva6cfi} 是辅助材料。}
+{规范页统一写为无新实验；draft auxiliary 明确不作为 ratified standard、TEE 边界或生产证据。}
+
+\begin{frame}{RISC-V 基础安全 primitives：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & RISC-V privileged architecture & Foundational / RISC-V privileged spec \\ 
-SOTA/规范 1 & RISC-V IOMMU 与 IOPMP & Spec/standard SOTA + draft \\ 
-SOTA/规范 2 & AIA 与 RISC-V CFI & Spec/standard SOTA + CFI draft evidence \\ 
+CPU/内存底座 & RISC-V privileged architecture & Foundational standard substrate / E0 \\
+DMA/I/O 底座 & RISC-V IOMMU & Spec-standard SOTA / E0 \\
+中断底座 & RISC-V Advanced Interrupt Architecture & Spec-standard SOTA / E0 \\
 \bottomrule
 \end{tabularx}
+\medskip
+\SourceState{辅助材料：\Key{riscv_iopmp_2026} 是 IOPMP draft；\Key{manoni2026cva6cfi} 是 CFI implementation preprint，二者不计入三篇主讲。}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {RISC-V privileged architecture}
-{riscv\_privileged | Foundational / RISC-V privileged spec}
-{定义 RISC-V privilege modes、PMP、virtualization 和相关保护基础。}
-{RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发。}
-{通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离。}
-{规范，无实验。}
-{所有 RISC-V TEE 讨论的底座；不是 confidential VM 的完整方案。商业价值在于可形成开放生态的共识基础。}
+{\Meta{riscv\_privileged}{Foundational standard substrate / E0}{source: local PDF verified}{claim: privileged architecture semantics}}
+{\begin{itemize}
+  \item RISC-V privileged architecture 定义 privilege modes、PMP、virtualization、trap/translation 和相关保护基础。
+  \item 本 deck 用它作为 RISC-V TEE/CoVE/AP-TEE 的基础术语层。
+\end{itemize}}
+{\begin{itemize}
+  \item RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发。
+  \item TEE 论文如果跳过底层隔离语义，容易把机制 substrate 与安全目标混在一起。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是用标准 privilege 和 memory-control primitives 组合隔离 substrate。
+  \item 解决方案不是单个 TEE，而是 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 的语义集合。
+\end{itemize}}
+{\begin{itemize}
+  \item M/S/U and virtualization privilege modes。
+  \item PMP/ePMP/Smepmp memory protection substrate。
+  \item Trap, translation and supervisor/guest isolation vocabulary。
+\end{itemize}}
+{\begin{itemize}
+  \item 规范，无实验。
+  \item 只提供架构语义，不证明任一 TEE 或 confidential VM 实现。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
+  \item \textbf{不足：}不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
+  \item \textbf{商业落地：}开放生态共识价值高；风险在厂商实现差异和扩展组合复杂度。
+\end{itemize}}
 
-\PaperFrame
-{RISC-V IOMMU 与 IOPMP}
-{riscv\_iommu\_2023 + riscv\_iopmp\_2026 | Spec/standard SOTA + draft}
-{定义 RISC-V I/O translation/protection 架构。}
-{DMA/总线 master 可绕过 CPU-side PMP/页表，TEE 需要 I/O 侧隔离。}
-{IOMMU 约束设备地址转换和访问权限；IOPMP 通过 requester/memory-domain/entry matching 过滤 I/O transaction。}
-{规范，无实验。}
-{是 CoVE-IO 讨论的基础材料；IOPMP 仍是 draft，不是单独的 TEE 设计。}
+\PaperStory
+{RISC-V IOMMU}
+{\Meta{riscv\_iommu\_2023}{Spec-standard SOTA / E0}{source: local PDF verified}{claim: I/O translation/protection semantics}}
+{\begin{itemize}
+  \item RISC-V IOMMU 定义 I/O translation/protection 架构。
+  \item 它用于约束设备地址转换和访问权限，是 CoVE-IO 讨论的 DMA substrate。
+\end{itemize}}
+{\begin{itemize}
+  \item DMA 和总线 master 可绕过 CPU-side PMP/页表。
+  \item TEE 或 CoVE-IO 需要 I/O 侧地址转换和权限控制，才能讨论设备访问隔离。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把设备发起的访问纳入可配置 translation/protection 边界。
+  \item \Key{riscv_iopmp_2026} 只作为 requester/memory-domain filtering 的 draft 辅助材料。
+\end{itemize}}
+{\begin{itemize}
+  \item Device address translation and protection。
+  \item I/O page-table and permission semantics。
+  \item CoVE-IO substrate for DMA isolation discussions。
+\end{itemize}}
+{\begin{itemize}
+  \item 规范，无实验。
+  \item Ratified-library spec 只能支撑公开架构语义，不证明具体平台安全或性能。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
+  \item \textbf{不足：}IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
+  \item \textbf{商业落地：}对服务器和加速器直通关键；风险在设备生态、固件配置和 verifier 可见性。
+\end{itemize}}
 
-\PaperFrame
-{AIA 与 RISC-V CFI}
-{riscv\_aia\_2023 + manoni2026cva6cfi | Spec/standard SOTA + CFI draft evidence}
-{AIA 定义 interrupt/MSI/virtual interrupt 基础；CVA6-CFI 实现并评估 Zicfiss/Zicfilp。}
-{confidential I/O 需要可信 interrupt delivery；runtime memory-safety/CFI 需要独立于 CCA/CoVE 的控制流防护。}
-{AIA 规范化 interrupt controller 与 MSI；CVA6-CFI 用 shadow stack 和 landing pad 单元实现 backward/forward-edge CFI。}
-{AIA 为规范无实验；CVA6-CFI 报告约 1.0\% area overhead、MiBench automotive 子集最高 15.6\% performance overhead。}
-{AIA 支撑 trusted MSI/interrupt ownership；CVA6-CFI 说明 RISC-V CFI 的硬件成本，但不等同于 TEE 隔离。}
+\PaperStory
+{RISC-V Advanced Interrupt Architecture}
+{\Meta{riscv\_aia\_2023}{Spec-standard SOTA / E0}{source: local PDF verified}{claim: interrupt/MSI semantics}}
+{\begin{itemize}
+  \item AIA 定义 interrupt、MSI、virtual interrupt 等基础。
+  \item 本 deck 用它支撑 trusted interrupt delivery 与 confidential I/O 讨论。
+\end{itemize}}
+{\begin{itemize}
+  \item Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery。
+  \item Runtime CFI 是独立控制流防护 substrate，不能替代 AIA 或 TEE 边界。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 interrupt controller、MSI 和 virtualization interrupt 语义标准化。
+  \item \Key{manoni2026cva6cfi} 只作为 RISC-V CFI draft implementation auxiliary。
+\end{itemize}}
+{\begin{itemize}
+  \item Advanced interrupt controller architecture。
+  \item MSI and virtual interrupt semantics。
+  \item Trusted interrupt-delivery substrate for confidential I/O。
+\end{itemize}}
+{\begin{itemize}
+  \item AIA 为规范，无实验。
+  \item 辅助 CFI preprint 的实现数字不作为 AIA 或 TEE 隔离证据。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。
+  \item \textbf{不足：}不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。
+  \item \textbf{商业落地：}对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在实现、组合和审计可见性。
+\end{itemize}}
 
+\DirectionSummary
+{RISC-V 基础安全 primitives}
+{第一条推进线：privileged architecture 给出 CPU privilege、PMP/ePMP/Smepmp、translation 和 trap 的基础语义。}
+{第二条推进线：IOMMU 把 DMA/I/O translation 纳入 RISC-V 标准 substrate；IOPMP 仍是 draft auxiliary。}
+{第三条推进线：AIA 支撑 interrupt/MSI/virtual interrupt 语义；CFI preprint 只说明控制流防护实现，不是 TEE。}
+{这些 primitives 是后续 Keystone/Penglai/SPEAR-V、CoVE/AP-TEE 和 CoVE-IO 的基础材料，而不是完整安全产品。}
