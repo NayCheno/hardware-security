@@ -21,8 +21,9 @@ papers and generic network substrates do not leak into active survey claims.
 
 - Active in-scope additions from this plan: 7 canonical entries.
 - Boundary-only additions from this plan: 1 excluded attack entry.
-- Active BibTeX count after one-hop DICE promotion: 100.
+- Active BibTeX count after PDF recovery and attestation-lineage promotion: 104.
 - Excluded attack BibTeX count after audit: 64.
--正文 cited keys after one-hop DICE promotion: 98, all present in `survey/reference.bib`.
-- Reference library status after one-hop DICE promotion: 98 paper/spec entry READMEs, 81 verified local PDFs.
-- `next-plan.md` remains an untracked control file and is not part of the evidence corpus.
+- 正文 cited keys after PDF recovery and attestation-lineage promotion: 102, all present in `survey/reference.bib`.
+- Reference library status after PDF recovery and attestation-lineage promotion: 102 paper/spec entry READMEs, 88 verified local PDFs.
+- Current corpus counts are reconciled in `survey/evidence_ledger.md`.
+- `next-plan.md` remains a control file and is not part of the evidence corpus.

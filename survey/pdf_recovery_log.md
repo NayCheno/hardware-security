@@ -2,6 +2,10 @@
 
 Last updated: 2026-05-12
 
+Current corpus counts, PDF totals, and evidence-class boundaries are reconciled
+in `survey/evidence_ledger.md`; this file is the historical recovery log for
+missing or blocked PDFs.
+
 ## Workflow
 
 For missing PDFs, use this source order before changing `pdf_status`:

@@ -29,7 +29,8 @@ boundary or backlog material.
 
 ## Count Update
 
-- Active BibTeX entries after DICE promotion: 100.
+- Active BibTeX entries after PDF recovery and attestation-lineage promotion: 104.
 - Excluded attack BibTeX entries: 64.
--正文 cited keys after DICE promotion: 98, all present in `survey/reference.bib`.
-- Reference library status after DICE promotion: 98 paper/spec entry READMEs, 81 verified local PDFs.
+- 正文 cited keys after PDF recovery and attestation-lineage promotion: 102, all present in `survey/reference.bib`.
+- Reference library status after PDF recovery and attestation-lineage promotion: 102 paper/spec entry READMEs, 88 verified local PDFs.
+- Current corpus counts are reconciled in `survey/evidence_ledger.md`.

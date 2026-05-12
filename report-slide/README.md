@@ -37,3 +37,5 @@ For each selected primary paper, keep a seven-slide mini-story:
 Evidence labels must be preserved: Foundational, Peer-reviewed SOTA, Spec/standard SOTA, Draft/not ratified, Industry evidence, Background substrate, Candidate/metadata-only.
 
 Each direction keeps exactly three `primary` entries in `papers.yml`. Combined evidence packages are split into one primary paper/spec plus `auxiliary` comparison materials that do not count toward the three-paper rule. Missing-PDF, gated, metadata-only, and source-limited entries may describe source status only; they must not carry strong experimental claims.
+
+The current three-primary ledger, evidence classes, and source-limited boundaries are reconciled in `../survey/evidence_ledger.md`.
