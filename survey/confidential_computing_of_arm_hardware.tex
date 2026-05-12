@@ -70,6 +70,31 @@ Recent systems research makes this point concrete. \textbf{ACAI} studies how acc
 
 One reason Arm CCA has attracted attention is that it can support several deployment models above the raw hardware interface. \textbf{SHELTER} explores user-space isolation with Arm CCA hardware primitives~\cite{zhang2023shelter}. \textbf{RContainer} extends the same substrate toward confidential containers~\cite{zhou2025rcontainer}. \textbf{virtCCA} studies virtualized CCA deployments that combine Realm-style protection with existing Arm trust infrastructure~\cite{xu2026virtcca}. These works are useful in a survey because they show that CCA is not restricted to one software packaging model; rather, it is being used as a common basis for protected processes, containers, and virtualized workloads.
 
+\begin{table*}[t]
+\centering
+\caption{Arm CCA Deployment Taxonomy}
+\label{tab:arm_cca_deployment_taxonomy}
+\scriptsize
+\begin{tabular}{@{}p{0.14\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.18\linewidth}p{0.12\linewidth}p{0.12\linewidth}@{}}
+\toprule
+\textbf{Category} & \textbf{Representative work} & \textbf{Protected object} & \textbf{CCA mechanism used} & \textbf{Evidence role} & \textbf{Main limitation} \\ \midrule
+User-space isolation & SHELTER & Process or application compartment & Realm/GPT/GPC-backed user-space isolation & E1 primary paper & Not a general VM or container deployment. \\
+Container isolation & RContainer & Container workload & CCA primitives beneath container packaging & E1 primary paper & Deployment maturity and orchestration integration remain open. \\
+Virtualized CCA & virtCCA & Virtualized Realm/CCA stack & CCA combined with existing Arm trust infrastructure & E3 arXiv/preprint evidence & Nested trust and virtualization complexity. \\
+Intra-process isolation & NanoZone; More Granular, Less Trust & Fine-grained compartment inside a process & Granule ownership and Realm-style memory protection & E3 plus E1 & Granularity and draft/preprint status vary by work. \\
+Inter-CVM sharing & CAEC & Communication between confidential VMs & Attestation plus controlled sharing over CCA substrate & E3 arXiv evidence & Not an Arm official interface; sharing policy remains research. \\
+Device and accelerator access & PORTAL; CAGE; Devlore & SoC device, accelerator workflow, or interrupt path & SMMU, GPT/GPC, GPC-backed checks, and Realm-aware mediation & E1 plus E3 & Device identity and complete trusted-I/O lifecycle are still incomplete. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:arm_cca_deployment_taxonomy} separates these systems by the
+software object they protect rather than by paper name. This matters because a
+process compartment, container, nested CCA stack, inter-CVM channel, and device
+path stress different parts of the architecture. The table also keeps evidence
+roles visible: peer-reviewed systems can support their own mechanisms and
+measurements, while arXiv or pre-standardization work is treated as emerging
+research evidence rather than as proof of mature deployment.
+
 \subsubsection{Fine-Grained Isolation Above the Base Architecture}
 
 Later systems work also shows that Arm CCA is being pushed toward finer-grained protection goals than those envisioned by a simple confidential-VM model. \textbf{NanoZone} focuses on scalable and efficient memory protection for Arm CCA~\cite{liu2025nanozone}. \textit{More Granular, Less Trust} studies intra-process isolation under an untrusted management environment~\cite{liu2025lesstrust}. Together with \textbf{SHELTER}, these works indicate that once granule ownership and Realm mechanisms exist, researchers naturally try to repurpose them for user-space compartmentalization and finer-grained software isolation. This is an important trend because it suggests that Arm CCA is evolving from a narrowly server-oriented confidential-computing mechanism into a more general substrate for trusted isolation.
