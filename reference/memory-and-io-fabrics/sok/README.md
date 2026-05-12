@@ -1,9 +1,9 @@
 # SoK papers for memory-and-io-fabrics
 
-This directory stores survey and taxonomy anchors for memory encryption, integrity, replay protection, and secure memory/I/O fabrics.
+This directory stores survey and taxonomy anchors for secure memory/I/O fabrics.
 
 ## Indexed SoK
 
 | Key | Reference | Status | Use in `domain.md` |
 |---|---|---|---|
-| `henson2014memory` | `memory-encryption-survey-existing-techniques/` | ACM CSUR 2014, local PDF available, Paper Review available | Memory encryption taxonomy anchor; distinguish confidentiality encryption from integrity, authentication, replay protection, and access-control mechanisms such as PMP/GPT. |
+| _none currently_ | _n/a_ | Memory encryption survey moved to `reference/architecture-and-platform-security/sok/` | Fabric SoK anchors should focus on CXL/RDMA/PCIe/TDISP/SPDM/data-path taxonomy rather than generic memory encryption. |

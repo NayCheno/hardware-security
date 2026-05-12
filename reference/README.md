@@ -30,7 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 50 of 64 reference entries have verified local PDFs.
+Download status: 67 of 82 reference entries have verified local PDFs.
+
+Bibliography corpus status: `survey/reference.bib` now contains 300 entries. The 152 newly added related-work entries are metadata-only candidates, not downloaded/reviewed reference records; see `survey/related_work_300_expansion.md` before turning any of them into正文 evidence.
 
 Newly added or completed in this pass:
 
@@ -56,7 +58,25 @@ Newly added or completed in this pass:
 - `reference/architecture-and-platform-security/cva6-cfi-first-glance-risc-v-control-flow-integrity-extensions/`
 - `reference/architecture-and-platform-security/rv-cure-risc-v-capability-architecture-full-memory-safety/`
 - `reference/architecture-and-platform-security/cheriot-complete-memory-safety-embedded-devices/`
-- `reference/memory-and-io-fabrics/sok/memory-encryption-survey-existing-techniques/`
+- `reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/`
+- `reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/`
+- `reference/memory-and-io-fabrics/secured-messages-using-spdm-specification/`
+- `reference/memory-and-io-fabrics/spdm-over-tcp-binding-specification/`
+- `reference/memory-and-io-fabrics/spdm-architecture-white-paper/`
+- `reference/memory-and-io-fabrics/amd-sev-tio-trusted-io/`
+- `reference/memory-and-io-fabrics/bridge-the-future-high-performance-networks-confidential-vms-without-trusted-io-devices/`
+- `reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/`
+- `reference/accelerator-tees/confidential-computing-within-ai-accelerator/`
+- `reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/`
+- `reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/`
+- `reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/`
+- `reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/`
+- `reference/arm-confidential-computing/portal-fast-secure-device-access-arm-cca/`
+- `reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/`
+- `reference/accelerator-tees/strongbox-gpu-tee-arm-endpoints/`
+- `reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/`
+- `reference/memory-and-io-fabrics/tnic-trusted-nic-architecture/`
+- `reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/`
 
 Entries without a verified local PDF yet:
 
@@ -72,10 +92,11 @@ Entries without a verified local PDF yet:
 - `reference/attestation/mra-ima-enhanced-mutual-remote-attestation-arm-trustzone/`
 - `reference/attestation/psa-certified-security-framework/`
 - `reference/memory-and-io-fabrics/pci-express-integrity-and-data-encryption/`
+- `reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/`
 - `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/`
 - `reference/trusted-execution-environments/arm-security-technology-trustzone/`
 
 Notes:
 
-- Missing PDFs are not all errors. Remaining blocked entries are mostly Arm developer pages, PCI-SIG member-gated material, IEEE/ACM/Elsevier publisher pages, AMD pages without a stable public PDF endpoint, or HTML-only documentation.
+- Missing PDFs are not all errors. Remaining blocked entries are mostly Arm developer pages, PCI-SIG member-gated material, IEEE/ACM/Elsevier publisher pages, AMD pages without a stable public PDF endpoint, or HTML-only documentation. TDISP currently has public metadata but no public PCI-SIG PDF.
 - Do not mark a PDF as local unless `paper.pdf` exists and has been verified as a PDF.

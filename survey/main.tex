@@ -21,12 +21,16 @@
 \maketitle
 
 \begin{abstract}
-This survey reviews hardware security mechanisms for trusted execution,
-confidential computing, memory and I/O isolation, attestation, and
-cross-architecture platform design in Arm and RISC-V systems. It emphasizes
-how modern protection boundaries depend on the composition of CPU privilege,
-physical-memory ownership, device mediation, and externally verifiable trust
-evidence.
+This survey reviews defense mechanisms for Arm and RISC-V confidential
+computing, confidential-computing network and I/O data paths, and ISA-level
+hardware design defenses. The central observation is that modern hardware
+security cannot be evaluated by CPU isolation alone. A confidential workload is
+protected only when execution domains, physical-memory ownership, device
+assignment, DMA translation, interrupt routing, link protection, and attestation
+evidence compose into a coherent platform boundary. The survey therefore
+connects Arm CCA, RISC-V CoVE/AP-TEE, trusted I/O protocols, accelerator TEEs,
+and hardware mechanisms such as MTE, PMP, capability machines, and CFI
+extensions under a common systems-oriented taxonomy.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -38,11 +42,46 @@ Arm CCA, RISC-V, attestation, I/O protection
 
 Hardware security has shifted from isolated processor features toward
 platform-level protection contracts. Modern systems must coordinate execution
-domains, memory ownership, device access, and attestation evidence across the
-whole machine. This survey organizes the current literature around that
-composition problem, using Arm and RISC-V as the main architectural lines.
+domains, memory ownership, device access, interrupt delivery, and attestation
+evidence across the whole machine. This survey organizes the current literature
+around that composition problem, using Arm and RISC-V as the main architectural
+lines.
+
+The scope is deliberately narrower than a general hardware-security SoK. We
+focus on three defense-oriented lanes. The first lane covers confidential
+computing mechanisms in Arm and RISC-V systems, including Arm TrustZone and CCA
+as well as RISC-V enclave lineage, CoVE, AP-TEE, and TVM lifecycle management.
+The second lane covers network, I/O, and data-path defense in
+confidential-computing deployments, including SPDM, TDISP, PCIe IDE,
+IOMMU/IOPMP/SMMU mediation, trusted MSI, SmartNIC/DPU-style offload, and
+accelerator TEEs. The third lane covers ISA and hardware design defenses that
+provide defense-in-depth for those platforms: memory tagging, page-table
+permissions, PMP/ePMP, capability/tagging architectures, hardware CFI,
+memory-encryption taxonomy, and debug or trace controls.
+
+This scope also defines what the survey does not attempt to cover in the
+current version. Side channels, physical leakage, fault injection, Rowhammer,
+and attack-only vulnerability catalogs are important hardware-security topics,
+but they are not treated as independent research lanes here. They are mentioned
+only when they affect the threat-model boundary of a confidential-computing
+mechanism. Similarly, ordinary network-security mechanisms such as firewalls,
+generic IDS/IPS systems, routing security, TLS, or VPNs are excluded unless they
+directly protect a confidential workload's trusted network endpoint, device
+assignment path, or secure offload boundary.
+
+The paper is organized as follows. The Arm section explains the transition from
+TrustZone-style TEEs to CCA and Realm-based protection. The RISC-V section
+connects earlier enclave systems to CoVE/AP-TEE confidential VMs. The
+confidential I/O section then treats devices, fabrics, and network data paths
+as first-class parts of the confidential-computing boundary. Finally, the
+hardware-design section surveys cross-architecture ISA and microarchitectural
+defenses that complement those confidential-computing mechanisms.
 
 \input{confidential_computing_of_arm_hardware}
+
+\input{riscv_confidential_computing}
+
+\input{confidential_io_and_network_defense}
 
 \input{security_of_hardware_design}
 

@@ -1,0 +1,304 @@
+\section{Confidential I/O and Network Data-Path Defense}
+
+Confidential computing protects data in use, but real workloads rarely remain
+inside CPU registers and local DRAM. They use NICs, DPUs, SmartNICs, storage
+controllers, GPUs, NPUs, CXL-attached memory, RDMA paths, and virtual switches.
+These components move data through DMA engines, device queues, interrupts,
+MMIO windows, link layers, and sometimes device-local runtimes. A CPU TEE or
+confidential VM therefore provides only a partial boundary unless the I/O path
+is integrated into the same trust model~\cite{riscv_cove_io_2026,arm_smmu_spec,sok-tee,zhu2020hetee,dhar2024cloudscale,zhou2024snic,giantsidi2025tnic}.
+
+This section treats confidential I/O and network defense as a separate survey
+lane. It does not cover generic network security. Instead, it focuses on
+mechanisms that let a confidential workload safely use a device, network path,
+remote memory tier, or accelerator without handing plaintext or control
+authority back to an untrusted host.
+
+\subsection{Threat Model and Data-Path Surfaces}
+
+\subsubsection{Why Device Paths Break CPU-Only Isolation}
+
+The basic device threat is simple: DMA-capable devices can access memory
+without executing CPU load and store instructions. If the platform protects a
+confidential VM only through CPU page tables, PMP, GPT/GPC, or monitor-managed
+state, a device with insufficiently constrained DMA authority can still reach
+protected pages~\cite{arm_smmu_spec,riscv_iommu_2023,riscv_iopmp_2026}. The
+same concern applies to MMIO registers and queue metadata. A host that cannot
+read a TVM's memory directly may still observe descriptors, packet buffers,
+completion queues, or device status if those structures are not assigned and
+protected as part of the confidential boundary.
+
+Interrupts create a second surface. Device completion and error events must be
+delivered to the protected workload without letting the host spoof, suppress, or
+misroute security-critical signals. Work such as Devlore makes this explicit
+for confidential VMs: interrupt ownership and delivery are part of device
+ownership, not a secondary OS scheduling detail~\cite{bertschi2026devlore}.
+For RISC-V, AIA and CoVE-IO provide the architectural vocabulary for trusted MSI
+and interrupt handling, while Arm platforms rely on SMMU and interrupt
+controller integration in the broader CCA system model~\cite{riscv_aia_2023,riscv_cove_io_2026,arm_smmu_spec}.
+
+\subsubsection{Network and Offload-Specific Risks}
+
+Network devices add their own complications. A confidential workload may use a
+virtual NIC, SR-IOV virtual function, SmartNIC, DPU, programmable switch path,
+or RDMA queue pair. In each case, the sensitive state is not only application
+payload. It includes descriptors, keys, queue ownership, completion events,
+flow steering rules, packet headers, and device firmware state. A secure
+offload design must therefore answer four questions: which device or function
+is the endpoint, what code and configuration is running there, which memory can
+it access, and how packets or DMA buffers are protected while crossing the
+fabric.
+
+FOLIO illustrates one possible tradeoff for confidential VM networking by
+aiming for high-performance networks without requiring trusted I/O
+devices~\cite{li2024folio}. This is useful because it separates two design
+paths. One path tries to make the device part of the trusted computing base
+through assignment, measurement, and secure transport. The other path tries to
+avoid trusting the device by keeping plaintext and sensitive control inside the
+confidential VM while still obtaining high throughput. Both directions belong
+in this survey because they address the same confidential-computing bottleneck:
+network performance should not require silently expanding the trusted boundary
+to an opaque device stack.
+
+Network endpoint identity is a separate question from device identity. Even if
+a NIC or DPU can be identified through SPDM-like mechanisms, a tenant still
+needs to know whether the application channel carrying secrets terminates
+inside the intended TEE software. TLS+RA addresses this endpoint problem by
+binding remote attestation evidence to TLS channel establishment, so that a
+secure channel is not merely adjacent to a TEE quote but cryptographically tied
+to the attested endpoint~\cite{weinhold2025tlsra}. This matters for
+confidential vNIC, proxy, gateway, and DPU-hosted services because TLS
+termination can otherwise become a place where plaintext exits the confidential
+boundary.
+
+SmartNIC and NIC-local trust work pushes the same question lower in the stack.
+\textbf{S-NIC} shows that a multi-tenant SmartNIC needs hardware isolation for
+on-NIC RAM, cache, accelerators, DMA, and bus bandwidth before offloaded network
+functions can be treated as tenant-confidential components~\cite{zhou2024snic}.
+\textbf{TNIC} takes a different route by placing a minimal root of trust at the
+NIC, providing transferable authentication and non-equivocation for trustworthy
+distributed systems~\cite{giantsidi2025tnic}. These works are not substitutes
+for VM memory protection, SPDM, or TDISP. They clarify what a NIC or DPU must
+provide if it becomes a real endpoint of a confidential data path.
+
+\subsection{Protocol Layer: Identity, Session Security, and Device State}
+
+\subsubsection{SPDM as Device Identity and Measurement Substrate}
+
+The \textbf{Security Protocol and Data Model (SPDM)} provides a protocol for
+device authentication, measurement retrieval, version and capability
+negotiation, and session establishment~\cite{dmtf_spdm_2025,dmtf_spdm_arch_2024}.
+In confidential-computing systems, SPDM is valuable because the host's view of a
+device is not enough. A tenant or trusted manager needs evidence about the
+device identity and state before allowing that device to participate in a
+protected data path.
+
+SPDM secured messages add confidentiality and integrity for protocol exchanges
+after session establishment~\cite{dmtf_spdm_secured_messages_2025}. SPDM over
+TCP extends the transport setting so that SPDM can be used beyond only local
+bus-oriented interactions~\cite{dmtf_spdm_tcp_2024}. These specifications do
+not themselves define a complete confidential I/O architecture. Their role is
+to supply the identity, measurement, and secure-channel substrate that higher
+level mechanisms such as TDISP, CoVE-IO, and trusted I/O designs can rely on.
+
+\subsubsection{TDISP and Trusted Device Interfaces}
+
+\textbf{TDISP} addresses a more specific lifecycle problem: how a PCIe device
+interface can be placed into a TEE-aware trust state and assigned to a
+confidential workload~\cite{pcisig_tdisp_2022}. Device identity alone is not
+enough. The platform also needs a way to bind a particular device interface,
+function, or trusted device interface to the workload that will use it. TDISP
+therefore belongs at the device-interface lifecycle layer, whereas SPDM belongs
+at the identity and secure-session layer.
+
+The RISC-V CoVE-IO draft uses this kind of structure explicitly. It refers to
+trusted device interfaces, device managers, security managers, SPDM, TDISP,
+PCIe IDE, IOMMU controls, and trusted MSI as cooperating parts of a
+confidential I/O design~\cite{riscv_cove_io_2026}. The important survey point
+is that no single layer is sufficient. A measured device without constrained
+DMA can still leak memory. A constrained DMA path without device identity can
+still attach the wrong endpoint. A protected link without lifecycle control can
+still carry traffic for an interface that was not securely assigned.
+
+\subsubsection{Attested Service Channels}
+
+SPDM and TDISP focus on the device and device-interface layers, but confidential
+workloads also expose application-level endpoints. A key broker, model-serving
+endpoint, storage proxy, packet-processing service, or DPU-hosted TLS
+termination service may all need to prove that the network channel reaches the
+expected protected code. \textbf{TLS+RA} integrates remote attestation into the
+TLS handshake while keeping certificate-based endpoint identity and
+attestation-based platform evidence independently deployable and independently
+failing~\cite{weinhold2025tlsra}. This gives the survey a seventh layer:
+attested service-channel binding. It is distinct from device identity because
+the question is not only "which device is present" but "where does this
+application connection terminate."
+
+\subsection{Data Plane: DMA, Links, and Fabrics}
+
+\subsubsection{IOMMU, SMMU, IOPMP, and Address Authority}
+
+DMA mediation is the first enforcement layer for confidential I/O. Arm systems
+use SMMU-based translation and protection to constrain device accesses in the
+system memory path~\cite{arm_smmu_spec}. RISC-V systems use the IOMMU
+specification for device address translation and IOPMP-style mechanisms for
+requester-aware transaction filtering~\cite{riscv_iommu_2023,riscv_iopmp_2026}.
+Academic work such as sIOPMP emphasizes the scalability pressure: protected
+systems may have many devices, many domains, and frequent mapping changes, so
+the I/O protection mechanism must be both precise and efficient~\cite{feng2024siopmp}.
+
+These mechanisms should be classified as access-control and translation
+mechanisms. They do not automatically encrypt data on a link, validate the
+device's internal firmware, or prove the endpoint state to a remote verifier.
+Their job is to ensure that a bus master can access only the memory and MMIO
+resources assigned to it. This classification prevents a common survey error:
+equating any I/O protection with a complete trusted I/O system.
+
+\subsubsection{PCIe IDE, CXL, RDMA, and Remote Memory Paths}
+
+Link and fabric protection answer a different question: what happens to data as
+it traverses PCIe, CXL, RDMA, or related interconnects. PCIe IDE provides
+integrity and data encryption for PCIe traffic~\cite{pcie_ide}. CXL changes the
+memory hierarchy by allowing memory expansion, pooling, and tiering beyond
+local DRAM~\cite{cxl_spec,gouk2022directcxl,zhong2024cxltiers}. RDMA and
+remote paging systems move application memory over the network or fabric with
+minimal CPU involvement~\cite{wang2025odrp}. These technologies are not all
+confidential-computing defenses by themselves, but they define the paths that a
+confidential-computing defense must cover.
+
+The design consequence is that confidential workloads need a data-path view, not
+only a CPU view. A page that is protected while resident in local memory may
+later move through a CXL fabric, be staged through an RDMA-capable NIC, or be
+referenced by a device queue. Each transition introduces a new enforcement
+point. The platform must decide whether protection comes from link encryption,
+DMA access control, endpoint TEE support, software copying through trusted
+buffers, or a combination of these mechanisms.
+
+Secure storage over network fabrics adds freshness and crash-consistency
+questions to this path. \textbf{Hazel} studies NVMe-over-Fabrics storage under a
+confidential-computing threat model and combines counter leasing, NVMe metadata,
+a disaggregated Merkle-tree design, and BlueField-3 offload to provide
+confidentiality, integrity, and freshness without changing the NVMe-oF
+protocol~\cite{chrapek2026hazel}. This kind of work is useful for the survey
+because it shows that a protected I/O path must sometimes defend not only
+in-flight packets, but also remote persistent state and replay freshness.
+
+\subsection{Trusted I/O Systems and Device TEEs}
+
+\subsubsection{SEV-TIO and VM-Oriented Trusted I/O}
+
+AMD SEV-TIO provides a concrete industry design point for trusted I/O in
+encrypted-VM systems~\cite{amd_sev_tio_2023}. It is useful in this survey even
+though the main architectural focus is Arm and RISC-V, because it clarifies the
+general pattern: a confidential VM needs device assignment, device trust
+establishment, protected DMA, interrupt handling, and attestation-compatible
+state. These requirements reappear in CoVE-IO and in Arm CCA-oriented device
+work.
+
+The SEV-TIO comparison also helps avoid an overly narrow interpretation of
+trusted I/O. Trusted I/O is not merely "attach a device to a VM." It is the
+combination of device identity, interface lifecycle, memory access restriction,
+link security, interrupt delivery, and evidence that a verifier can evaluate.
+Different platforms divide those responsibilities differently, but the required
+security properties are similar.
+
+\subsubsection{Accelerator TEEs and Confidential Offload}
+
+Accelerator TEEs push the same problem into device-local computation. The
+accelerator may execute kernels, hold model weights, stage tensors, manage
+queues, or perform packet-processing offload. A CPU confidential VM cannot
+automatically protect that state once it leaves the CPU package. The accelerator
+itself must either become part of the trusted boundary or be treated as
+untrusted with protocols that keep secrets inside the confidential workload.
+
+ACAI studies accelerator protection in the Arm CCA context~\cite{acai2023}.
+PORTAL studies protected Arm CCA device access for mobile SoCs, using CCA
+memory isolation to avoid repeated shared-buffer encryption~\cite{sang2025portal}.
+CAGE adapts GPU and FPGA accelerator workflows to Arm CCA with shadow tasks and
+GPC/GPT-backed checks~\cite{wang2026cage}. StrongBox is an earlier Arm GPU TEE
+baseline that uses TrustZone and Stage-2 translation to protect unified-memory
+GPU computation~\cite{deng2022strongbox}.
+ITX demonstrates confidential computing within an AI accelerator, giving a
+concrete example of device-local confidential execution~\cite{vaswani2023itx}.
+The accelerator TEE SoK organizes this space around device identity, memory and
+bus protection, runtime TCB, scheduling, and attestation~\cite{sok-tee}. These
+works are important for network defense as well because modern NICs, DPUs, and
+SmartNICs increasingly resemble accelerators: they execute firmware and
+programmable code, maintain queues, and transform data before the CPU sees it.
+
+\subsubsection{SmartNIC, DPU, and Rack-Scale Offload}
+
+SmartNICs and DPUs sit between the device-interface layer and the application
+service layer. They can expose SR-IOV functions and virtual switches to the
+host, run embedded Arm-side control software, terminate tunnels, process
+packets, or mediate storage traffic. HETEE and later cloud-scale work show one
+route for protecting accelerator and DPU-like offload: place a security
+controller on the data path so that non-TEE devices can be assigned, measured,
+and cleaned up as part of a confidential workload lifecycle~\cite{zhu2020hetee,dhar2024cloudscale}.
+Commercial DPU documentation shows another route: DPU-local roots such as
+OP-TEE/fTPM and replay-protected storage can provide platform identity and key
+protection building blocks~\cite{nvidia_bluefield_operation_2025}. That
+commercial evidence should be used carefully, because the cited BlueField
+documentation describes fTPM support and its limitations rather than a complete
+production confidential networking TEE.
+
+S-NIC and TNIC fill two additional gaps. S-NIC answers how a SmartNIC can
+isolate tenant network functions from other functions and from the NIC OS, while
+TNIC answers how a NIC can provide a small, verifiable trust root for networked
+protocols~\cite{zhou2024snic,giantsidi2025tnic}. Hazel then shows how DPU/SmartNIC
+offload can be used in a secure storage data path while preserving freshness
+properties~\cite{chrapek2026hazel}. Together these papers make the DPU/NIC
+category more precise: one must distinguish local resource isolation, endpoint
+attestation, protocol-level non-equivocation, and storage freshness.
+
+For survey classification, these systems are neither ordinary firewall/IDS
+papers nor complete replacements for CoVE-IO or TDISP. They are evidence that
+network offload devices are becoming programmable trust endpoints. A secure
+confidential networking stack must therefore compose DPU-local roots,
+device-interface lifecycle, DMA restrictions, link protection, and attested
+application-channel termination.
+
+\subsection{Taxonomy}
+
+\begin{table*}[t]
+\centering
+\caption{Confidential I/O and Network Defense Taxonomy}
+\label{tab:confidential_io_taxonomy}
+\begin{tabular}{@{}p{0.18\linewidth}p{0.26\linewidth}p{0.25\linewidth}p{0.22\linewidth}@{}}
+\toprule
+\textbf{Layer} & \textbf{Primary Question} & \textbf{Representative Mechanisms} & \textbf{Survey Role} \\ \midrule
+Device identity and measurement & Which endpoint is participating, and what state can it prove? & SPDM, SPDM secured messages, SPDM over TCP & Establish evidence and secure sessions for device trust. \\
+Device-interface lifecycle & Which interface is assigned to the confidential workload? & TDISP, trusted device interface state, CoVE-IO TDI/TDM/DSM & Bind a device function or interface to a protected domain. \\
+Attested service channel & Does the application channel terminate in the attested protected endpoint? & TLS+RA, RA-TLS-style endpoint binding, verifier policy & Bind network services, KBS endpoints, proxies, and DPU-hosted TLS termination to TEE evidence. \\
+DMA and MMIO authority & Which memory and registers may the device access? & SMMU, RISC-V IOMMU, IOPMP, sIOPMP & Enforce address translation and transaction filtering. \\
+Interrupt and event delivery & Can completion and error events be delivered without host spoofing or confusion? & AIA, trusted MSI, Devlore-style interrupt ownership & Keep device ownership coherent after asynchronous events. \\
+Link and fabric protection & What protects traffic across PCIe, CXL, RDMA, and remote-memory paths? & PCIe IDE, CXL fabric controls, protected RDMA/remote paging designs & Protect data once it leaves CPU-local memory paths. \\
+NIC-local root and function isolation & Can a SmartNIC/DPU isolate tenant functions or provide a trusted network primitive? & S-NIC, TNIC, DPU OP-TEE/fTPM & Treat NICs and DPUs as explicit trust endpoints rather than opaque offload boxes. \\
+Confidential storage data path & Can remote storage preserve confidentiality, integrity, and freshness? & Hazel, protected NVMe-oF metadata, DPU crypto offload & Extend confidential I/O beyond packets into persistent remote state. \\
+Device-local confidential execution & Does the accelerator or offload engine hold secrets or execute trusted code? & ACAI, PORTAL, CAGE, StrongBox, ITX, HETEE, CloudScale, BlueField OP-TEE/fTPM, accelerator TEE designs & Extend or avoid extending the TCB to accelerators and offload devices. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:confidential_io_taxonomy} captures the classification used in
+the rest of this survey. The table is intentionally layered because
+confidential I/O failures are often composition failures. A system can have
+SPDM but weak DMA protection, PCIe IDE but no trusted device-interface
+lifecycle, or a device TEE but an ambiguous interrupt path. The practical
+question is whether all relevant layers preserve the same ownership boundary.
+
+\subsection{Summary}
+
+Confidential I/O and network defense is the point where confidential computing
+becomes a whole-platform problem. SPDM and secured messages provide identity,
+measurement, and session foundations. TDISP and CoVE-IO introduce trusted
+device-interface lifecycle concepts. TLS+RA-style protocols bind application
+channels to attested endpoints. SMMU, IOMMU, IOPMP, and sIOPMP constrain DMA
+authority. AIA and trusted MSI address interrupt delivery. PCIe IDE, CXL, RDMA,
+NVMe-oF, and remote-memory systems define the fabric paths that protected data
+may cross. Accelerator, SmartNIC, NIC, and DPU work such as ACAI, PORTAL, CAGE,
+StrongBox, ITX, HETEE, CloudScale, S-NIC, TNIC, Hazel, and BlueField
+OP-TEE/fTPM shows that device-local, NIC-local, storage-path, or
+controller-mediated execution can become part of the confidential boundary. A
+survey that focuses only on CPU TEE mechanisms would miss this entire class of
+defenses; for modern Arm and RISC-V confidential-computing platforms, these
+mechanisms are core rather than peripheral.

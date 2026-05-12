@@ -17,3 +17,5 @@ This category stores Arm CCA, RME/RMM, virtualization, deployment-model, and CCA
 | `bertschi2026devlore` | `devlore-device-interrupt-protection-for-confidential-vms/` | arXiv 2026, local PDF available | CCA confidential-device interrupt SOTA. |
 | `bertschi2025opencca` | `opencca-open-framework-enable-arm-cca-research/` | SysTEX/arXiv 2025, local PDF available, Paper Review available | Research infrastructure for evaluating CCA systems on commodity Arm hardware. |
 | `abdollahi2025caec` | `caec-confidential-attestable-efficient-inter-cvm-communication-arm-cca/` | arXiv/EuroS&P 2026, local PDF available, Paper Review available | Inter-CVM confidential shared-memory SOTA for Arm CCA. |
+| `sang2025portal` | `portal-fast-secure-device-access-arm-cca/` | IEEE S&P 2025, local PDF available, Paper Review available | CCA device-access and mobile SoC integrated-device SOTA. |
+| `wang2026cage` | `building-confidential-accelerator-computing-environment-arm-cca/` | IEEE TDSC 2026, local PDF available, Paper Review available | CCA confidential accelerator support for GPU/FPGA. |

@@ -1,0 +1,206 @@
+\section{RISC-V Confidential Computing}
+
+RISC-V confidential computing is best understood as the convergence of two
+historically separate lines of work. The first line is the open enclave
+literature, where researchers use RISC-V's extensible ISA, privilege model, and
+physical-memory protection mechanisms to build small trusted monitors and
+enclave runtimes. The second line is the standardization-oriented confidential
+VM effort represented by CoVE and AP-TEE, where the target is no longer only an
+application enclave but a tenant VM protected from an untrusted host
+environment~\cite{sahita2023cove,riscv_ap_tee_2024,boubakri2025riscvtee}. This
+distinction is important for classification: PMP-based enclaves, tagged-memory
+enclaves, and CoVE-style TVMs share a motivation, but they do not expose the
+same lifecycle, device, or attestation contract.
+
+\subsection{From Enclave Research to Confidential VMs}
+
+\subsubsection{Early RISC-V Enclave Design}
+
+\textbf{Sanctum} is one of the earliest and most influential examples of using
+RISC-V to explore strong software isolation through minimal hardware
+extensions~\cite{costan2016sanctum}. Its importance is not just that it provides
+an enclave system, but that it frames open hardware as a way to make TEE
+assumptions explicit. Instead of treating a proprietary platform as a fixed
+black box, Sanctum exposes the processor, cache, memory, and monitor assumptions
+that must hold for enclave isolation.
+
+\textbf{Keystone} then provides a more reusable open-source RISC-V TEE
+framework built around a security monitor, PMP-based memory isolation, and
+runtime abstractions for enclaves~\cite{lee2020keystone}. Keystone is central to
+the survey because it shows the strengths and limitations of using standard
+RISC-V mechanisms for protected execution. PMP gives a simple and efficient
+physical-memory filter, but a small number of PMP regions and monitor-managed
+state are not the same as a cloud-scale confidential-VM memory ownership model.
+This is the point at which RISC-V enclave research begins to diverge from
+later CoVE/AP-TEE work.
+
+\subsubsection{Scaling and Specializing the Enclave Boundary}
+
+Subsequent RISC-V enclave systems explore different ways to scale, specialize,
+or strengthen the basic monitor-plus-memory-protection model. \textbf{TIMBER-V}
+uses tag-isolated memory to support fine-grained enclaves, which is especially
+relevant for embedded and compartmentalized systems where the protected unit may
+be smaller than a full VM~\cite{weiser2019timberv}. \textbf{CURE} introduces
+customizable resilient enclaves, emphasizing configurable isolation and
+resilience tradeoffs~\cite{bahmani2021cure}. \textbf{MI6} studies secure
+enclaves in the context of a speculative out-of-order processor, making clear
+that the microarchitecture matters even when the ISA-level enclave abstraction
+appears simple~\cite{bourgeat2019mi6}.
+
+\textbf{Penglai} addresses a different bottleneck: scalable memory protection
+for large numbers of enclaves, motivated by cloud and serverless deployment
+patterns~\cite{feng2021penglai}. \textbf{SPEAR-V} proposes low-overhead
+enclave primitives for RISC-V and is useful as a later point in the lineage
+because it studies practical primitive design rather than only monitor
+structure~\cite{schrammel2023spearv}. \textbf{Cerberus} focuses on formal and
+efficient enclave memory sharing, an issue that becomes increasingly important
+once protected domains need deliberate shared-memory communication rather than
+complete isolation~\cite{lee2022cerberus}. \textbf{ACE} extends the discussion
+toward confidential computing for embedded RISC-V systems~\cite{ozga2025ace}.
+
+Across these works, the recurring lesson is that a TEE is not only an execution
+mode. It is a contract over memory ownership, entry and exit, metadata
+integrity, sharing, interrupt behavior, and attestation. Earlier enclave
+systems often solve a subset of that contract for a specific threat model.
+CoVE/AP-TEE attempts to standardize a larger contract for confidential VMs.
+
+\subsection{CoVE and AP-TEE}
+
+\subsubsection{Threat Model and Architectural Role}
+
+RISC-V CoVE targets a host-resilient confidential-VM model. The tenant workload
+executes in a trusted virtual machine while a host stack remains responsible for
+resource management, scheduling, and device orchestration~\cite{sahita2023cove}.
+This is conceptually close to Arm CCA in that both designs separate management
+authority from data visibility, but the RISC-V path is expressed through a
+different standardization structure and a more modular ecosystem. The AP-TEE
+specification defines the relevant ABI and lifecycle concepts, but it remains a
+draft and should be treated as a standardization work in progress rather than a
+ratified architecture~\cite{riscv_ap_tee_2024}.
+
+The core AP-TEE objects are the \textbf{Trusted Security Monitor (TSM)}, the
+\textbf{TSM driver}, \textbf{Supervisor Domains}, and the \textbf{Trusted
+Virtual Machine (TVM)}~\cite{riscv_ap_tee_2024}. The host retains the ability
+to allocate resources, but the TSM mediates TVM creation, memory assignment,
+entry, exit, and security-sensitive transitions. This moves RISC-V beyond the
+simple observation that PMP can isolate memory. A confidential VM needs a
+defined lifecycle, a way to donate and reclaim pages, an attestation path, and
+an interface that lets untrusted management software perform useful work without
+reading protected state.
+
+\subsubsection{Memory Lifecycle and TVM State}
+
+Memory lifecycle is the central mechanism that differentiates CoVE/AP-TEE from
+earlier PMP-only enclave explanations. The draft AP-TEE model includes memory
+\textbf{donation}, \textbf{reclaim}, and \textbf{sharing} semantics, which are
+needed because a TVM is dynamic: pages are created, mapped, unmapped, shared for
+communication, and eventually returned to the host~\cite{riscv_ap_tee_2024}.
+These transitions are security-critical. If a page can move between host and TVM
+ownership without explicit state checks, stale mappings, unclean metadata, or
+ambiguous sharing state can break the confidentiality boundary.
+
+This is also where RISC-V confidential computing should not be reduced to
+memory encryption. The AP-TEE draft primarily specifies ownership, lifecycle,
+and access-control semantics; it does not by itself replace a memory-encryption
+and replay-protection taxonomy~\cite{henson2014memory}. A complete platform may
+combine access control, encryption, integrity protection, and attestation, but
+those mechanisms answer different questions. Access control asks which agent
+may reach a physical page. Encryption asks what an observer of raw memory can
+learn. Integrity and replay protection ask whether stale or modified data can be
+detected. A precise survey has to keep those layers separate.
+
+\subsubsection{Attestation and Evidence}
+
+AP-TEE also requires an attestation story because tenants need external
+evidence before provisioning secrets to a TVM~\cite{riscv_ap_tee_2024}. The
+evidence has to bind the platform, TSM, TVM initial state, and relevant
+configuration to a verifier-visible claim. This mirrors the broader attestation
+literature: a TEE claim is useful only if the measured state is well-defined,
+fresh, and tied to the execution context that will receive secrets~\cite{eat_rfc,menetrey2022attestation}.
+
+In RISC-V systems, this evidence chain is especially important because the
+ecosystem encourages modular composition. A TVM may depend on a TSM, a platform
+root of trust, an IOMMU, interrupt controllers, device-security protocols, and
+firmware components from different vendors or projects. Attestation is the
+mechanism that turns that composition into something a remote tenant can
+evaluate.
+
+\subsection{RISC-V Confidential I/O}
+
+\subsubsection{Why CoVE Needs I/O Standardization}
+
+A confidential VM that cannot use real devices is not sufficient for cloud or
+edge deployment. CoVE-IO and TEE-I/O therefore extend the TVM discussion into
+device identity, DMA, MMIO, interrupts, and link protection~\cite{riscv_cove_io_2026}. The
+draft CoVE-IO specification is not ratified, but it is already useful as a map
+of the required mechanisms. It introduces concepts such as trusted device
+interfaces and device/security managers while relying on lower-level building
+blocks including SPDM, TDISP, PCIe IDE, IOMMU support, and trusted interrupt
+delivery~\cite{riscv_cove_io_2026,dmtf_spdm_2025,pcisig_tdisp_2022,pcie_ide}.
+
+The design implication is straightforward: CoVE cannot stop at CPU-side page
+ownership. A device assigned to a TVM must be identified, measured or certified,
+placed into an appropriate trust state, constrained in the memory it can access,
+and connected to the TVM through an interrupt path that does not silently return
+control to the untrusted host. If any of those steps is missing, the I/O path
+becomes a privileged channel around the confidential-computing boundary.
+
+\subsubsection{RISC-V IOMMU, IOPMP, AIA, and sIOPMP}
+
+The RISC-V IOMMU and AIA specifications provide two of the required supporting
+layers. The IOMMU constrains device-side address translation and access
+permissions, while AIA provides the interrupt and MSI architecture that CoVE-IO
+can build on for trusted delivery~\cite{riscv_iommu_2023,riscv_aia_2023}. These
+specifications are not confidential-computing systems by themselves. Their role
+is to provide the architectural substrate on which a confidential I/O protocol
+can express and enforce device ownership.
+
+IOPMP and sIOPMP address a related but distinct problem: scalable filtering of
+I/O transactions so that requester identity and memory-domain policy can be
+checked outside the CPU's ordinary memory-access path~\cite{riscv_iopmp_2026,feng2024siopmp}.
+For RISC-V confidential computing, this matters because DMA is the obvious way
+to bypass a CPU-centered protection story. A TVM memory page protected from host
+loads and stores is still exposed if a bus master can reach it without going
+through a domain-aware check.
+
+\subsection{Comparison with Arm CCA}
+
+\begin{table}[htbp]
+\centering
+\caption{Arm CCA and RISC-V CoVE/AP-TEE Design Mapping}
+\label{tab:arm_cca_riscv_cove}
+\begin{tabular}{@{}p{0.27\linewidth}p{0.31\linewidth}p{0.31\linewidth}@{}}
+\toprule
+\textbf{Design Point} & \textbf{Arm CCA} & \textbf{RISC-V CoVE/AP-TEE} \\ \midrule
+Protected workload & Realm & Trusted Virtual Machine \\
+Management component & RMM & TSM and TSM driver \\
+Host role & Resource management outside the Realm data boundary & Resource management outside the TVM data boundary \\
+Memory ownership & GPT/GPC and Realm lifecycle & TVM memory donation, reclaim, sharing, and TSM-mediated state \\
+Device path & SMMU and realm-aware device mediation & CoVE-IO, IOMMU, IOPMP, AIA, SPDM, TDISP, PCIe IDE \\
+Standard status & Arm architecture/specification path & AP-TEE and CoVE-IO drafts, not ratified \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:arm_cca_riscv_cove} shows why the comparison should be made at
+the confidential-VM layer rather than between CCA and bare PMP. PMP remains a
+useful primitive, especially for monitors and embedded TEEs, but CoVE/AP-TEE is
+the closer architectural analogue to Arm CCA. Both systems try to let an
+untrusted host manage resources without giving it data visibility. The
+difference is that Arm presents a more vertically integrated Realm architecture,
+whereas RISC-V standardization exposes a set of modular pieces that platform
+builders must assemble into a coherent protection boundary.
+
+\subsection{Summary}
+
+RISC-V confidential computing has a rich pre-standardization lineage in
+open-source enclave systems and a rapidly developing standardization path in
+CoVE/AP-TEE. Earlier systems such as Sanctum, Keystone, TIMBER-V, CURE, MI6,
+Penglai, SPEAR-V, Cerberus, and ACE establish the design vocabulary for
+isolation, monitor structure, metadata, and memory sharing. CoVE/AP-TEE raises
+the abstraction to confidential VMs, with TVM lifecycle, TSM mediation, memory
+ownership transitions, and attestation as first-class concerns. CoVE-IO then
+extends the same reasoning to devices and networks. The resulting lesson is
+that RISC-V confidential computing is not one mechanism but a platform
+composition problem: CPU privilege, memory ownership, I/O translation,
+interrupt routing, device identity, and attestation all have to agree on the
+same security boundary.

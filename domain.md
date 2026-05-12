@@ -6,10 +6,11 @@
 
 当前事实：
 
-- `survey/reference.bib`：130 个 BibTeX 条目。
-- `survey/*.tex` 正文实际引用：39 个 key，全部能在 Bib 中找到。
-- `reference/`：64 个论文/规范 README 条目，50 个本地 `paper.pdf`。
-- 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey 作为 SoK/SOTA 或 SoK 引用扩展材料。
+- `survey/reference.bib`：300 个 BibTeX 条目。
+- `survey/*.tex` 正文实际引用：77 个 key，全部能在 Bib 中找到。
+- `reference/`：82 个论文/规范 README 条目，67 个本地 `paper.pdf`。
+- 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、PORTAL、CAGE、StrongBox、S-NIC、TNIC、Hazel 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root 和 accelerator/device TEE 的核心材料。
+- Related-work corpus 扩展：`survey/reference.bib` 已追加 152 条 metadata-only 候选，使总条目达到 300；新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。它们尚未算作已下载/已精读 reference，后续引用前必须先核验作者、venue、DOI/source、PDF，并补 `reference/` 目录。
 
 标记规则：
 
@@ -59,17 +60,17 @@
 |---|---|---|---|---|---|
 | 硬件辅助 TEE 总体设计空间 | 待补足 | 正文分散讨论 TrustZone/CCA/RISC-V primitives，但未以 TEE taxonomy 统领 | `schneider2022soktee`; `li2024sokteechoices`; `boubakri2025riscvtee`; `sok-tee` | `schneider2022soktee`; SOTA `li2024sokteechoices`; SOTA `boubakri2025riscvtee`; SOTA `sok-tee` | 在正文引入 launch、runtime isolation、trusted I/O、secure storage、attestation、TCB 的上位分类。 |
 | Arm TrustZone TEE 与漏洞谱系 | 已覆盖 | `arm_trustzone_whitepaper`, `pinto2019trustzone`, `guan2017trustshadow`, `cerdeira2020trustzone` | `pinto2019trustzone`; `cerdeira2020trustzone` | `arm_trustzone_whitepaper`; SOTA `pinto2019trustzone`; SOTA `cerdeira2020trustzone` | 保持为 CCA 的历史背景；避免把 TrustZone threat model 与 CCA 混写。 |
-| Arm CCA / RME / RMM 基础架构 | 已覆盖 | `li2022cca`, `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` | 无成熟专门 SoK；以规范和 OSDI 论文为准 | `li2022cca`; SOTA `arm_cca_spec`; SOTA `arm_rmm_spec` / `wu2024rmm` | 机制表补 RMI、RSI、RIPAS、PAS、granule lifecycle、GPT/GPC。 |
+| Arm CCA / RME / RMM 基础架构 | 已覆盖 | `li2022cca`, `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` | 无成熟专门 SoK；以规范和 OSDI 论文为准 | `li2022cca`; SOTA `arm_cca_spec`; SOTA `arm_rmm_spec` / `wu2024rmm` | 已补正文机制表；后续可继续细化 RMI/RSI ABI 和 RMM state machine。 |
 | Arm CCA 细粒度隔离与部署模型 | 待补足 | 正文提到 SHELTER/RContainer/virtCCA/NanoZone/LessTrust，但缺系统分类 | 无成熟 SoK；按系统论文追踪 | `zhang2023shelter`; SOTA `zhou2025rcontainer`; SOTA `liu2025nanozone` / `liu2025lesstrust`; SOTA `bertschi2025opencca`; SOTA `abdollahi2025caec` | 拆成 user-space、container、virtualization、intra-process、inter-CVM sharing、memory protection。 |
-| Arm CCA I/O、DMA、accelerator、interrupt | 待补足 | 正文提到 SMMU、ACAI、Devlore、fabric，但接口细节不足 | `sok-tee` 仅作 accelerator TEE SoK | `acai2023`; SOTA `bertschi2026devlore`; SOTA `sok-tee` | 补 RME-DA/MEC、SMMU、device ownership、interrupt ownership、DMA/MMIO 可信路径。 |
+| Arm CCA I/O、DMA、accelerator、interrupt | 已覆盖 | 正文提到 SMMU、ACAI、Devlore、PORTAL、CAGE、fabric，并区分 device access、accelerator workflow、interrupt ownership | `sok-tee` 仅作 accelerator TEE SoK | `acai2023`; SOTA `sang2025portal`; SOTA `wang2026cage`; SOTA `bertschi2026devlore`; SOTA `sok-tee` | 后续继续细化 RME-DA/MEC、SMMU 与 SPDM/TDISP 组合，而不是再只补单点论文。 |
 | Attestation、boot、lifecycle | 已覆盖 | `eat_rfc`, `menetrey2022attestation`, `psa_certified`, `ling2021trustzoneatt`, `chen2024mraima`, `mao2025pdrima`, `seshadri2004swatt`, `defrawy2012smart`, `asokan2015seda` | `menetrey2022attestation` | `seshadri2004swatt`; SOTA `eat_rfc`; SOTA `mao2025pdrima` | 区分 generic attestation、Arm CCA evidence chain、RISC-V CoVE layered evidence。 |
 | RISC-V 基础安全 primitives | 待补足 | 正文覆盖 privilege/PMP/ePMP/Smepmp/sIOPMP，但不够完整 | `boubakri2025riscvtee` 可辅助 | `riscv_privileged`; SOTA `riscv_iommu_2023`; SOTA `riscv_aia_2023`; SOTA `riscv_iopmp_2026`; SOTA `manoni2026cva6cfi` | 补 H-extension、IOMMU、AIA、IOPMP、Zicfilp/Zicfiss 与 confidential VM 的关系。 |
-| RISC-V TEE lineage: Sanctum/Keystone/CURE/MI6/Penglai/SPEAR-V | 未提到 | 正文没有引用 `costan2016sanctum`, `lee2020keystone`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv` | `boubakri2025riscvtee`; `schneider2022soktee`; `li2024sokteechoices` | `costan2016sanctum`; `lee2020keystone`; `weiser2019timberv`; `bahmani2021cure`; `bourgeat2019mi6`; SOTA `feng2021penglai`; SOTA `schrammel2023spearv`; SOTA `lee2022cerberus`; SOTA `ozga2025ace` | 必补，用于解释从 open hardware enclave、tagged-memory embedded enclave、scalable enclave、speculative-core enclave、formal memory sharing、embedded confidential computing 再到 CoVE confidential VM 的演进。 |
-| RISC-V CoVE / AP-TEE confidential VM | 未提到 | 正文仍把 Arm CCA 主要对比到 PMP，层级不匹配 | `boubakri2025riscvtee`; CoVE 原论文和 AP-TEE spec | `sahita2023cove`; SOTA `riscv_ap_tee_2024` (v0.7 draft / not ratified); SOTA `boubakri2025riscvtee` | P0：补 TVM、TSM/TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share、CoVE attestation。 |
-| RISC-V CoVE-IO / TEE-I/O | 未提到 | 正文没有 CoVE-IO/TDI/TDM/DSM/SPDM/TDISP/trusted MSI | `sok-tee` 可辅助 accelerator 背景；原始 spec 为主 | `feng2024siopmp`; SOTA `riscv_cove_io_2026` (v0.3.0 draft / not ratified); SOTA `riscv_iommu_2023` / `riscv_aia_2023` | P0：补 device identity、secure DMA/MMIO、interrupt、PCIe IDE、TDISP、SPDM。 |
-| Memory encryption / integrity / replay protection | 待补足 | 正文提到 AMD SEV/SEV-SNP、CCA/CoVE 相关概念，但未分类 | `henson2014memory` | `henson2014memory`; SOTA `amd_sev_snp`; SOTA `riscv_ap_tee_2024` / `arm_cca_spec` | 区分 access control、encryption、integrity、replay protection；不要把 PMP/GPT 写成 memory encryption。 |
-| 机密计算网络 / I/O / fabric 防御 | 待补足 | `cxl_spec`, `pcie_ide`, `acpi_spec`, `gouk2022directcxl`, `zhong2024cxltiers`, `wang2025odrp` 已覆盖部分 fabric；缺网络防御 taxonomy | `sok-tee` 可辅助 accelerator/device TEE；CoVE-IO 和 PCIe/CXL/RDMA specs 为主 | `riscv_cove_io_2026`; `feng2024siopmp`; `riscv_iommu_2023`; `riscv_iopmp_2026`; `riscv_aia_2023`; `pcie_ide`; `cxl_spec`; `wang2025odrp` | 补 NIC/DPU/SmartNIC、secure vNIC/vSwitch/offload、RDMA/CXL/PCIe data path、SPDM/TDISP/IDE、DMA/MMIO/MSI/IOMMU/IOPMP/AIA 的机密计算边界。 |
-| ISA / 硬件设计防御: MTE、PTE/page table、CFI、capability/tagging | 待补足 | `armv-a`, `riscv_privileged` 已覆盖部分；正文尚未系统展开 PTE/page-table permission、debug/trace、capability/tagging | 无单一 SoK；以 architecture specs 和硬件实现论文为准 | `armv-a`; `riscv_privileged`; SOTA `manoni2026cva6cfi`; SOTA `kim2023rvcure`; SOTA `amar2023cheriot`; `henson2014memory` | 明确 MTE/PAC/BTI/GCS、PAN/PXN/UXN、PTE 权限、PMP/ePMP/Smepmp、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE、memory integrity/encryption 与 CCA/CoVE 的层级关系。 |
+| RISC-V TEE lineage: Sanctum/Keystone/CURE/MI6/Penglai/SPEAR-V | 已覆盖 | `survey/riscv_confidential_computing.tex` 已引用 `costan2016sanctum`, `lee2020keystone`, `weiser2019timberv`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace` | `boubakri2025riscvtee`; `schneider2022soktee`; `li2024sokteechoices` | `costan2016sanctum`; `lee2020keystone`; `weiser2019timberv`; `bahmani2021cure`; `bourgeat2019mi6`; SOTA `feng2021penglai`; SOTA `schrammel2023spearv`; SOTA `lee2022cerberus`; SOTA `ozga2025ace` | 后续可补更细的 TCB、sharing、metadata 和硬件修改对照表。 |
+| RISC-V CoVE / AP-TEE confidential VM | 已覆盖 | `survey/riscv_confidential_computing.tex` 已补 TVM、TSM/TSM-driver、Supervisor Domains、memory donation/reclaim/share、attestation，并纠正 CCA 对比到 bare PMP 的层级问题 | `boubakri2025riscvtee`; CoVE 原论文和 AP-TEE spec | `sahita2023cove`; SOTA `riscv_ap_tee_2024` (v0.7 draft / not ratified); SOTA `boubakri2025riscvtee` | 后续细化 COVH/COVG ABI、TSM state machine 和 attestation claim 表。 |
+| RISC-V CoVE-IO / TEE-I/O | 已覆盖 | `survey/riscv_confidential_computing.tex` 与 `survey/confidential_io_and_network_defense.tex` 已补 CoVE-IO、TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、IOPMP、AIA/trusted MSI | `sok-tee` 可辅助 accelerator 背景；原始 spec 为主 | `feng2024siopmp`; SOTA `riscv_cove_io_2026` (v0.3.0 draft / not ratified); SOTA `riscv_iommu_2023` / `riscv_aia_2023`; `dmtf_spdm_2025`; `pcisig_tdisp_2022` | 后续补 device-interface lifecycle 时序图和 CoVE-IO draft 状态更新。 |
+| Memory encryption / integrity / replay protection | 已覆盖 | `survey/security_of_hardware_design.tex` 已区分 access control、encryption、integrity、replay protection，并说明 CCA/CoVE 主要是 ownership/lifecycle/access-control 语义 | `henson2014memory` | `henson2014memory`; SOTA `amd_sev_snp`; SOTA `riscv_ap_tee_2024` / `arm_cca_spec` | 后续可补 SEV-SNP、MKTME、CCA/CoVE 的加密/完整性实现差异表。 |
+| 机密计算网络 / I/O / fabric 防御 | 已覆盖 | `survey/confidential_io_and_network_defense.tex` 已建立 protocol、device lifecycle、DMA/MMIO、interrupt、link/fabric、accelerator TEE、endpoint attestation、SmartNIC/NIC root 和 secure storage data path taxonomy | `sok-tee` 可辅助 accelerator/device TEE；CoVE-IO 和 PCIe/CXL/RDMA specs 为主 | `riscv_cove_io_2026`; `dmtf_spdm_2025`; `dmtf_spdm_secured_messages_2025`; `dmtf_spdm_tcp_2024`; `pcisig_tdisp_2022`; `amd_sev_tio_2023`; `li2024folio`; `vaswani2023itx`; `zhu2020hetee`; `dhar2024cloudscale`; `nvidia_bluefield_operation_2025`; `weinhold2025tlsra`; `zhou2024snic`; `giantsidi2025tnic`; `chrapek2026hazel`; `pcie_ide`; `cxl_spec`; `wang2025odrp` | 后续可补更多 vendor NIC/DPU attestation、secure vSwitch/offload production evidence，以及正式标准更新。 |
+| ISA / 硬件设计防御: MTE、PTE/page table、CFI、capability/tagging | 已覆盖 | `survey/security_of_hardware_design.tex` 已补 PTE/page-table permission、PAN/PXN/UXN、PMP/ePMP/Smepmp、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE、memory encryption/integrity 层级关系 | 无单一 SoK；以 architecture specs 和硬件实现论文为准 | `armv-a`; `riscv_privileged`; SOTA `manoni2026cva6cfi`; SOTA `kim2023rvcure`; SOTA `amar2023cheriot`; `henson2014memory` | 后续可补 Arm MTE 与 CHERI/RV-CURE 的机制差异和开发者可用性比较。 |
 | Side-channel / physical leakage attacks | 当前不研究 / out-of-scope | Bib 中大量 attacks 条目，正文主线未引用 | 不作为当前 SoK 研究对象 | Bib attacks section; `schluter2025heracles` 仅适合 boundary/limitation | 不下载、不扩展、不写独立章节；只在 threat model / limitation 中说明 excluded attacks。 |
 
 ## 2. SoK / Survey 与 Reference 映射
@@ -83,7 +84,22 @@
 | `menetrey2022attestation` | `reference/attestation/exploratory-study-attestation-mechanisms-for-tees/` | TEE attestation 机制、证据和 verifier 视角 | Generic attestation survey；Arm CCA/CoVE 证据链仍需回到规范。 |
 | `boubakri2025riscvtee` | `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | RISC-V secure enclaves / TEE 谱系；可连接 Sanctum、Keystone、CURE、MI6、Penglai、SPEAR-V、CoVE、ACE | MDPI HTML/PDF 已核验但自动 PDF 下载受 403 阻挡；机制 claims 应回引原论文/spec。 |
 | `sok-tee` | `reference/accelerator-tees/sok/analysis-accelerator-tee-designs/` | Accelerator TEE taxonomy；可支撑 ACAI、Devlore、CoVE-IO、TDISP/IDE 讨论 | 只用于 accelerator/device TEE，不作为通用 CCA/CoVE SoK。 |
-| `henson2014memory` | `reference/memory-and-io-fabrics/sok/memory-encryption-survey-existing-techniques/` | Memory encryption taxonomy；本地 PDF 已下载并解析 | 不是 TEE SoK；用于区分 encryption/integrity/replay 与 access-control。 |
+| `henson2014memory` | `reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/` | Memory encryption taxonomy；本地 PDF 已下载并解析 | 不是 TEE SoK；用于区分 encryption/integrity/replay 与 access-control。 |
+| `dmtf_spdm_2025`, `dmtf_spdm_secured_messages_2025`, `dmtf_spdm_tcp_2024`, `dmtf_spdm_arch_2024` | `reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/` 等 SPDM 目录 | Device identity、measurement、secured session、transport binding；本地 PDF 已下载并解析 | 不是完整 trusted I/O 系统；用于 device identity / evidence / secure session 层。 |
+| `pcisig_tdisp_2022` | `reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/` | PCIe trusted device interface lifecycle；公开 PDF 受限，metadata 已记录 | 只作 TDISP public metadata 和 CoVE-IO/TEE-I/O 机制说明；不要伪称本地 PDF 可用。 |
+| `amd_sev_tio_2023` | `reference/memory-and-io-fabrics/amd-sev-tio-trusted-io/` | VM trusted I/O 产业设计点；本地 PDF 已下载并解析 | x86/AMD 材料仅作 trusted I/O cross-platform reference，不扩展为本 survey 主线。 |
+| `li2024folio` | `reference/memory-and-io-fabrics/bridge-the-future-high-performance-networks-confidential-vms-without-trusted-io-devices/` | 不信任 I/O 设备时的 confidential VM 高性能网络路径；本地 PDF 已下载并解析 | 用于网络/data-path 防御 tradeoff；不是 Arm/RISC-V 标准。 |
+| `vaswani2023itx` | `reference/accelerator-tees/confidential-computing-within-ai-accelerator/` | AI accelerator 内部 confidential computing 设计；本地 PDF 已下载并解析 | 用于 accelerator/device TEE 代表系统，不替代 accelerator TEE SoK。 |
+| `zhu2020hetee` | `reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/` | Rack-scale heterogeneous TEE baseline；本地 PDF 已下载并解析 | 用于 accelerator/offload trusted boundary；早于 SPDM/TDISP/CoVE-IO 标准化，不能当作完整 modern trusted I/O spec。 |
+| `dhar2024cloudscale` | `reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/` | Cloud-scale TEE/non-TEE DSA pool 和 security controller；本地 PDF 已下载并解析 | 用于 heterogeneous DSA/DPU/SmartNIC-like offload taxonomy；不是 Arm/RISC-V 官方规范。 |
+| `nvidia_bluefield_operation_2025` | `reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/` | BlueField DPU OP-TEE/fTPM、platform identity、RPMB 证据；本地 PDF 已下载并解析 | Industry evidence；文档明确 fTPM TA/testing 限制，不能写成完整 production DPU TEE。 |
+| `weinhold2025tlsra` | `reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/` | TLS+RA, attested network endpoint and channel binding；本地 PDF 已下载并解析 | 用于 network endpoint attestation；不替代 SPDM/TDISP/device identity 或底层 TEE attestation 语义。 |
+| `sang2025portal` | `reference/arm-confidential-computing/portal-fast-secure-device-access-arm-cca/` | Arm CCA mobile SoC device-access interface；本地 PDF 已下载并解析 | 用于 CCA device I/O / plaintext protected region；不替代 PCIe trusted device lifecycle。 |
+| `wang2026cage` | `reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/` | CAGE / Arm CCA confidential accelerator workflow；本地 PDF 已下载并解析 | 用于 GPU/FPGA accelerator under CCA；需标注 device identity/side-channel/physical attack 边界。 |
+| `deng2022strongbox` | `reference/accelerator-tees/strongbox-gpu-tee-arm-endpoints/` | Arm endpoint GPU TEE baseline；本地 PDF 已下载并解析 | 作为 TrustZone-era Arm GPU TEE baseline；不能写成 CCA/Realm 方案。 |
+| `zhou2024snic` | `reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/` | SmartNIC multi-tenant function isolation；本地 PDF 已下载并解析 | 用于 SmartNIC secure offload substrate；不是完整 confidential I/O/attestation stack。 |
+| `giantsidi2025tnic` | `reference/memory-and-io-fabrics/tnic-trusted-nic-architecture/` | NIC-level root-of-trust、non-equivocation、transferable authentication；本地 PDF 已下载并解析 | 用于 network endpoint root-of-trust；不替代 VM/Realm memory confidentiality。 |
+| `chrapek2026hazel` | `reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/` | NVMe-oF secure disaggregated storage with BlueField offload；本地 PDF 已下载并解析 | arXiv preprint；用于 storage/network data path，不当作已标准化方案。 |
 
 ## 3. 小方向三篇精选与五维介绍
 
@@ -341,11 +357,74 @@
    - 实验结果：NSDI 论文提供系统评估；具体指标以原文为准。
    - 文章评价：可说明 confidential computing 不能只看 CPU 内部隔离；不是直接防御论文。
 
+### 3.13 Confidential I/O protocol、trusted device interface、network endpoint
+
+1. `dmtf_spdm_2025` / `dmtf_spdm_arch_2024` — 基础入口；DMTF specification / white paper。
+   - 内容摘要：定义 SPDM 的 device identity、measurement、capability negotiation、secured session 和 architecture role。
+   - 研究背景：confidential workload 使用真实设备时，host 对设备的普通枚举结果不足以作为可信证据。
+   - 解决方案：通过 SPDM 让 requester 获取 responder 身份、测量和安全会话能力；secured messages 与 SPDM over TCP 分别补充会话保护和传输绑定。
+   - 实验结果：规范/白皮书，无新实验；证据类型是标准化接口和协议语义。
+   - 文章评价：适合作为机密计算 device identity/evidence 层基础；不能单独证明 DMA、interrupt 或 link path 已安全。
+2. `SOTA: riscv_cove_io_2026` / `pcisig_tdisp_2022` — Draft spec + PCI-SIG ECN metadata。
+   - 内容摘要：CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 等组合；TDISP 关注 PCIe trusted device interface lifecycle。
+   - 研究背景：TVM/Realm 使用设备时，需要证明设备接口身份、绑定 interface state、保护 DMA/MMIO，并把 interrupt delivery 纳入同一边界。
+   - 解决方案：用 device-interface lifecycle、设备安全管理、link protection 和 I/O translation 协同构造 confidential I/O boundary。
+   - 实验结果：规范草案/ECN metadata，无实验；CoVE-IO v0.3.0 为 draft / not ratified，TDISP public PDF 不可直接下载。
+   - 文章评价：是本 survey 的 RISC-V confidential I/O 主锚点；必须明确标准状态，避免写成已完全落地规范。
+3. `SOTA: li2024folio` / `amd_sev_tio_2023` / `weinhold2025tlsra` — Academic + industry + endpoint protocol。
+   - 内容摘要：FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径；SEV-TIO 展示 VM trusted I/O 的产业设计；TLS+RA 解决 secure channel 是否终止在 attested TEE 内的问题。
+   - 研究背景：网络和 accelerator offload 会把 plaintext、queue state、keys、model state 或服务端 TLS private key 带出 CPU confidential boundary。
+   - 解决方案：分别代表三种路线：避免信任设备、把设备纳入 trusted I/O boundary、以及用 attested TLS 把 application channel 与 TEE evidence 绑定。
+   - 实验结果：FOLIO 和 TLS+RA 为系统/协议论文，有原型评估；SEV-TIO 为 white paper，无独立学术实验。
+   - 文章评价：适合写 trusted network/offload tradeoff；AMD 和 TLS+RA 材料只作 cross-platform evidence，不把 survey 主线扩展成 x86 或通用网络协议综述。
+
+### 3.14 Accelerator / DPU / SmartNIC confidential offload
+
+1. `zhu2020hetee` — 基础入口；IEEE S&P 2020。
+   - 内容摘要：提出 HETEE，用 rack-level security controller 与 PCIe ExpressFabric 动态隔离 GPU/FPGA/TPU 等 accelerator。
+   - 研究背景：CPU TEE 不能天然保护 accelerator offload path，敏感数据一旦进入 GPU/driver/PCIe fabric 仍可能暴露。
+   - 解决方案：用 SC 作为 thin TCB，管理 accelerator assignment、加密认证、remote attestation、secure cleanup 和资源回收。
+   - 实验结果：真实硬件原型；ResNet152 inference 最大 throughput overhead 2.17%，training 最大 overhead 0.95%。
+   - 文章评价：是 accelerator confidential offload 的 foundational work；早于 TDISP/SPDM/CoVE-IO，需与现代 trusted I/O 标准对照。
+2. `SOTA: dhar2024cloudscale` — Academic SOTA；ACSAC 2024。
+   - 内容摘要：提出 cloud-scale Security Controller，使 TEE-enabled nodes 与 legacy non-TEE DSA nodes 能共同支持 confidential workloads。
+   - 研究背景：数据中心内大多数 DSA 节点没有 TEE 能力，用户在性能和安全之间被迫取舍。
+   - 解决方案：SC 作为 TEE proxy，执行 access control、attestation、key exchange 和 protected data path。
+   - 实验结果：AI、Redis、file-system workloads 平均 1.5-5% overhead，可扩展到 2236 concurrent NPUs running CNNs。
+   - 文章评价：更接近 cloud-scale DPU/SmartNIC/NPU resource-pool 问题；仍需和 vendor DPU RoT、SPDM/TDISP/IDE 标准结合。
+3. `SOTA: wang2026cage` / `sang2025portal` / `deng2022strongbox` — Arm accelerator/device path evidence。
+   - 内容摘要：CAGE 适配 Arm CCA Realm 的 GPU/FPGA accelerator workflow；PORTAL 为 Arm CCA mobile SoC 设备访问提供 protected plaintext region；StrongBox 是 TrustZone-era Arm endpoint GPU TEE baseline。
+   - 研究背景：CCA/TrustZone 保护 CPU-side execution 后，GPU/NPU/FPGA/SoC peripheral 会成为 plaintext 和 device-control 的新边界。
+   - 解决方案：CAGE 用 shadow task、GPC/GPT 和 Monitor 检查保护 accelerator task；PORTAL 用 System Realm/SMMU/GPT 保护 device-access region；StrongBox 用 TrustZone/TZASC/Stage-2 translation 保护 GPU task RAM 与 MMIO。
+   - 实验结果：CAGE GPU benchmark 开销 0.58%-5.31%、FPGA 开销 9.61%-16.30%；PORTAL 报告 9.8% one-time overhead 和 1.07x-9.07x 性能收益；StrongBox 报告 4.70%-15.26% 开销。
+   - 文章评价：CAGE/PORTAL 是 Arm CCA device/accelerator SOTA；StrongBox 是历史 baseline，不能写成 CCA Realm 机制。
+
+### 3.15 SmartNIC / trusted NIC / secure storage data path
+
+1. `zhou2024snic` — Academic SOTA；EuroSys 2024。
+   - 内容摘要：S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions。
+   - 研究背景：SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户函数可能泄漏或篡改 state。
+   - 解决方案：用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics。
+   - 实验结果：硬件面积约 +8.89%，功耗约 +11.45%，function throughput worst-case 下降小于 1.7%。
+   - 文章评价：非常适合 secure vNIC/vSwitch/offload taxonomy；不是完整 VM/Realm trusted I/O 方案，需要和 SPDM/TDISP/TEE evidence 组合。
+2. `giantsidi2025tnic` — Academic SOTA；ASPLOS 2025。
+   - 内容摘要：TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation。
+   - 研究背景：CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate。
+   - 解决方案：在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议；用 Tamarin 验证核心性质。
+   - 实验结果：相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC。
+   - 文章评价：适合 network endpoint root-of-trust 讨论；不替代 confidential VM memory protection 或 device lifecycle 标准。
+3. `chrapek2026hazel` — Academic SOTA candidate；arXiv 2026。
+   - 内容摘要：Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销。
+   - 研究背景：confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness。
+   - 解决方案：counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload。
+   - 实验结果：常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latency 平均约 2.2%；小随机 freshness I/O 是弱点。
+   - 文章评价：适合补 confidential storage/network data path；必须标注 arXiv/preprint，且仍需底层设备 attestation 与 trusted I/O 组合。
+
 ## 4. 引用核验与清理规则
 
 | 对象 | 核验结果 | 处理 |
 |---|---|---|
-| 正文 39 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
+| 正文 77 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
 | RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；AP-TEE v0.7 是 draft/RC2 for ARC review，CoVE-IO v0.3.0 是 draft。 | 可以列为 spec/industry SOTA，但正文必须标注 draft / not ratified。 |
 | `riscv_iommu_2023` / `riscv_aia_2023` | v1.0.0 / v1.0 release 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
@@ -356,6 +435,18 @@
 | `riscv_iopmp_2026` | GitHub release v0.8.2 PDF 已下载；状态为 draft / in development。 | 支撑 IOPMP 和 CoVE-IO/sIOPMP 讨论；正文必须标注 not ratified。 |
 | `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot` | arXiv / MICRO 论文 PDF 已下载。 | 用于 runtime CFI / memory-safety hardening；不要和 CCA/CoVE 的 confidential-computing boundary 混写。 |
 | `henson2014memory` | ACM CSUR 论文镜像 PDF 已下载，canonical DOI 已记录。 | 用于 memory encryption taxonomy；不要把 PMP/GPT/IOPMP 写成 encryption。 |
+| `dmtf_spdm_2025`, `dmtf_spdm_secured_messages_2025`, `dmtf_spdm_tcp_2024`, `dmtf_spdm_arch_2024` | DMTF public PDFs 已下载并验证。 | 用于 device identity、measurement、secured session、transport binding；不要写成完整 DMA/link/interrupt 防御。 |
+| `pcisig_tdisp_2022` | PCI-SIG public metadata 已记录；public PDF/member-gated，未下载本地 PDF。 | 用于 trusted device interface lifecycle；正文需避免声称本地 PDF 或完整规范内容已公开可核验。 |
+| `amd_sev_tio_2023` | AMD public PDF 已下载并验证。 | 作为 trusted I/O cross-platform design point；不扩展为 x86 confidential computing 主线。 |
+| `li2024folio` | arXiv PDF 已下载并验证。 | 用于不信任 I/O 设备时的 confidential VM network path；不是 Arm/RISC-V 官方规范。 |
+| `vaswani2023itx` | USENIX ATC 2023 PDF 已下载并验证。 | 用于 accelerator 内部 confidential computing 代表系统；需与 `sok-tee` 配合使用。 |
+| `zhu2020hetee`, `dhar2024cloudscale` | IEEE S&P / ACSAC PDF 已下载并验证。 | 用于 rack/cloud-scale accelerator confidential offload；不要写成 SPDM/TDISP/CoVE-IO 标准。 |
+| `nvidia_bluefield_operation_2025` | NVIDIA BlueField public PDF 已下载并验证。 | 用于 DPU OP-TEE/fTPM building blocks；必须保留 testing/development-key 限制。 |
+| `weinhold2025tlsra` | USENIX ATC 2025 PDF 已下载并验证。 | 用于 attested TLS/channel binding；不替代底层 TEE evidence 或 device attestation。 |
+| `sang2025portal`, `wang2026cage` | IEEE S&P / IEEE TDSC PDF 已下载并验证。 | 用于 Arm CCA device access、GPU/FPGA confidential accelerator；不要写成通用 PCIe trusted I/O 标准。 |
+| `deng2022strongbox` | ACM CCS 2022 PDF 已下载并验证。 | 用于 Arm endpoint GPU TEE baseline；不是 CCA/Realm 机制。 |
+| `zhou2024snic`, `giantsidi2025tnic` | EuroSys / ASPLOS PDF 已下载并验证。 | 用于 SmartNIC/NIC root-of-trust 和 secure offload；需要和 VM/Realm attestation、SPDM/TDISP、DMA protection 组合。 |
+| `chrapek2026hazel` | arXiv v2 PDF 已下载并验证。 | 用于 confidential storage/NVMe-oF data path；必须标注 arXiv preprint。 |
 | `bertschi2025opencca`, `abdollahi2025caec` | Arm CCA SOTA 扩展材料，arXiv PDF 已下载。 | 用于 CCA research infrastructure 与 inter-CVM sharing；不是 Arm 官方规范。 |
 | `xu2026virtcca`, `bertschi2026devlore` | arXiv 首发早于 Bib 年份；年份可能对应目标发表或最新引用习惯。 | 在 domain/SOTA 中标注 arXiv 状态，避免误导。 |
 | Attacks / side-channel Bib 条目 | 大量条目与当前 defense/confidential-computing 主线弱相关，且正文未引用。 | 不批量删除；当前不下载、不扩展、不写 attack survey，只作为 threat boundary / limitation。 |
@@ -376,18 +467,18 @@
 
 ## 6. 后续正文补足优先级
 
-| 优先级 | 任务 | 主要引用 |
+| 状态 | 任务 | 主要引用 |
 |---|---|---|
-| P0 | 在正文开头固定三条 survey 主线：Arm/RISC-V 机密计算防御、机密计算网络/I/O/data-path 防御、ISA/硬件设计防御。 | `schneider2022soktee`, `li2024sokteechoices`, `arm_cca_spec`, `riscv_ap_tee_2024`, `riscv_cove_io_2026`, `armv-a`, `riscv_privileged` |
-| P0 | 新增 RISC-V CoVE/AP-TEE confidential VM 小节，纠正 Arm CCA 对比到 PMP 的层级不匹配。 | `sahita2023cove`, `riscv_ap_tee_2024`, `boubakri2025riscvtee` |
-| P0 | 新增 RISC-V CoVE-IO / TEE-I/O 小节。 | `riscv_cove_io_2026`, `feng2024siopmp`, `riscv_iommu_2023`, `riscv_aia_2023`, `riscv_iopmp_2026`, `sok-tee` |
-| P1 | 补机密计算网络 / I/O / fabric 防御 taxonomy。 | `riscv_cove_io_2026`, `pcie_ide`, `cxl_spec`, `wang2025odrp`, `gouk2022directcxl`, `zhong2024cxltiers`, `sok-tee` |
-| P1 | 补 RISC-V TEE lineage。 | `costan2016sanctum`, `lee2020keystone`, `weiser2019timberv`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace` |
-| P1 | 补 Arm CCA 机制表。 | `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` |
-| P1 | 补 Arm CCA 研究平台和 inter-CVM sharing。 | `bertschi2025opencca`, `abdollahi2025caec` |
-| P1 | 补 memory protection taxonomy。 | `henson2014memory`, `amd_sev_snp`, `arm_cca_spec`, `riscv_ap_tee_2024` |
-| P1 | 补 ISA / 硬件设计防御 taxonomy，覆盖 MTE、PTE/page-table permission、PAC、BTI、GCS、PMP/ePMP、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE。 | `armv-a`, `riscv_privileged`, `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot` |
-| Scope-only | 写一段 side-channel / physical leakage out-of-scope statement，说明 attacks Bib 暂不进入当前 defense/specification 主线。 | Bib attacks section; `schluter2025heracles` |
+| 已完成初稿 | 在正文开头固定三条 survey 主线：Arm/RISC-V 机密计算防御、机密计算网络/I/O/data-path 防御、ISA/硬件设计防御。 | `arm_cca_spec`, `riscv_ap_tee_2024`, `riscv_cove_io_2026`, `armv-a`, `riscv_privileged` |
+| 已完成初稿 | 新增 RISC-V TEE lineage 与 CoVE/AP-TEE confidential VM 小节，纠正 Arm CCA 对比到 bare PMP 的层级不匹配。 | `costan2016sanctum`, `lee2020keystone`, `sahita2023cove`, `riscv_ap_tee_2024`, `boubakri2025riscvtee` |
+| 已完成初稿 | 新增 RISC-V CoVE-IO / TEE-I/O 与机密计算网络/I/O/fabric 防御 taxonomy。 | `riscv_cove_io_2026`, `dmtf_spdm_2025`, `pcisig_tdisp_2022`, `feng2024siopmp`, `riscv_iommu_2023`, `riscv_aia_2023`, `riscv_iopmp_2026`, `sok-tee` |
+| 已完成初稿 | 补 memory protection 与 ISA / 硬件设计防御 taxonomy，覆盖 PTE/page-table permission、MTE/PAC/BTI/GCS、PMP/ePMP/Smepmp、Zicfiss/Zicfilp、CHERI/CHERIoT、RV-CURE、memory encryption/integrity/replay protection。 | `armv-a`, `riscv_privileged`, `henson2014memory`, `manoni2026cva6cfi`, `kim2023rvcure`, `amar2023cheriot` |
+| 已完成初稿 | 补 DPU/SmartNIC/accelerator confidential offload 和 attested network endpoint 材料。 | `zhu2020hetee`, `dhar2024cloudscale`, `nvidia_bluefield_operation_2025`, `weinhold2025tlsra`, `vaswani2023itx` |
+| 已完成初稿 | 继续补 Arm CCA device access、GPU/FPGA accelerator、SmartNIC/NIC root-of-trust 与 secure storage data path 相关工作。 | `sang2025portal`, `wang2026cage`, `deng2022strongbox`, `zhou2024snic`, `giantsidi2025tnic`, `chrapek2026hazel` |
+| 已完成初稿 | 写入 side-channel / physical leakage out-of-scope statement，说明 attacks Bib 暂不进入当前 defense/specification 主线。 | Bib attacks section; `schluter2025heracles` |
+| 已完成初稿 | 补 Arm CCA 机制表，细化 RMI、RSI、RIPAS、PAS、granule lifecycle、GPT/GPC、RMM state machine。 | `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` |
+| 待深化 | 补 Arm CCA 研究平台、inter-CVM sharing、OpenCCA/CAEC 与现有 Realm lifecycle 的关系。 | `bertschi2025opencca`, `abdollahi2025caec` |
+| 待深化 | 补 vendor NIC/DPU attestation、secure vNIC/vSwitch/offload production evidence，以及 SPDM/TDISP 与 SmartNIC local root 的组合关系。 | `sok-tee`, `zhou2024snic`, `giantsidi2025tnic`, `nvidia_bluefield_operation_2025`, `chrapek2026hazel` |
 
 ## 7. 联网核验来源
 
@@ -398,9 +489,22 @@
 - RISC-V CFI / memory safety: https://arxiv.org/abs/2602.04991, https://arxiv.org/abs/2308.02945, and https://cheriot.org/ibex/flute/architecture/publication/2023/10/30/cheriot-at-micro.html
 - RISC-V lineage additions: https://www.ndss-symposium.org/ndss-paper/timber-v-tag-isolated-memory-bringing-fine-grained-enclaves-to-risc-v/ and https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-leecheang-ccs22.html
 - Memory encryption taxonomy: https://doi.org/10.1145/2566673
+- SPDM specifications: https://www.dmtf.org/dsp/DSP0274, https://www.dmtf.org/dsp/DSP0277, https://www.dmtf.org/dsp/DSP0287, and https://www.dmtf.org/standards/spdm
+- PCI-SIG TDISP metadata: https://pcisig.com/PCI%20Express/ECN/Base/TEEDeviceInterfaceSecurityProtocol
+- AMD SEV-TIO: https://docs.amd.com/v/u/en-US/sev-tio-whitepaper
+- FOLIO confidential VM network path: https://arxiv.org/abs/2403.03360
+- ITX confidential computing within an AI accelerator: https://www.usenix.org/conference/atc23/presentation/vaswani
+- HETEE rack-scale heterogeneous TEE: https://ieeexplore.ieee.org/document/9152787 and https://heartever.github.io/files/hetee.pdf
+- CloudScale heterogeneous devices: https://www.acsac.org/2024/program/final/s297.html and https://www.shwetashinde.org/publications/cloudscale_acsac24.pdf
+- NVIDIA BlueField OP-TEE/fTPM: https://docs.nvidia.com/networking/display/bluefieldbsp480/ftpm%2Bover%2Bop-tee
+- TLS+RA endpoint attestation: https://www.usenix.org/conference/atc25/presentation/weinhold
 - Accelerator TEE SoK: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf
 - RISC-V TEE survey: https://www.mdpi.com/2079-9292/14/21/4171
 - TEE design-choice SoK: https://doi.org/10.1145/3634737.3644993 and https://people.csail.mit.edu/mengyuanli/files/asiaccs_sok.pdf
 - RISC-V SoK citation expansion: https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/costan, https://arxiv.org/abs/2010.15866, https://arxiv.org/abs/1812.09822, https://arxiv.org/abs/2505.12995
 - Arm CCA SOTA expansion: https://arxiv.org/abs/2506.05129 and https://arxiv.org/abs/2512.01594
 - Arm CCA / RME / RMM / SMMU / Linux CCA docs: https://developer.arm.com/documentation/den0125/latest, https://developer.arm.com/documentation/den0126/latest, https://developer.arm.com/documentation/den0137/latest, https://developer.arm.com/documentation/ihi0070/latest, https://docs.kernel.org/arch/arm64/arm-cca.html
+- Arm CCA device and accelerator expansion: https://sang.fan/assets/papers/portal_sp25.pdf and https://ira.lib.polyu.edu.hk/handle/10397/117541
+- Arm endpoint GPU TEE baseline: https://fengweiz.github.io/paper/strongbox-ccs22.pdf
+- SmartNIC/NIC trust expansion: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf and https://dse.in.tum.de/wp-content/uploads/2025/02/TNIC-ASPLOS-2025.pdf
+- Confidential NVMe-oF storage data path: https://arxiv.org/abs/2510.18756
