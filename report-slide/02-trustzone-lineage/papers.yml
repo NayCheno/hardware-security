@@ -3,7 +3,12 @@ focus: 把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat 
 selection_rule: 固定三篇 primary；TrustZone 白皮书、survey 和漏洞 SoK 只支撑历史背景、生态和迁移动机。
 primary:
 - key: arm_trustzone_whitepaper
-  role: Foundational / Arm whitepaper
+  role: foundational
+  selection_reason: First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for this direction.
+  evidence_type: E4 industry/vendor evidence
+  maturity: industry/vendor evidence
+  pdf_status: source_verified_pdf_unavailable
+  source_url: https://developer.arm.com/documentation/PRD29-GENC-009492/c?lang=en
   evidence: E4 / Foundational industry evidence
   source_status: source_verified_pdf_unavailable
   reference: reference/trusted-execution-environments/arm-security-technology-trustzone/README.md
@@ -22,7 +27,12 @@ primary:
     commercialization: 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
   auxiliary: []
 - key: pinto2019trustzone
-  role: Background substrate / ACM CSUR survey
+  role: sota_1
+  selection_reason: Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE lineage.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1145/3291047
   evidence: E2 / Background substrate
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/paper.pdf
@@ -41,7 +51,12 @@ primary:
     commercialization: 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
   auxiliary: []
 - key: cerdeira2020trustzone
-  role: Background substrate / IEEE S&P SoK
+  role: sota_2
+  selection_reason: S&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narrative.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1109/SP40000.2020.00061
   evidence: E2 / Peer-reviewed SoK
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/paper.pdf

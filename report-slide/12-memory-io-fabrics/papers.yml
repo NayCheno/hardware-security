@@ -3,7 +3,12 @@ focus: 说明 data path 不再局限于 CPU 本地内存，confidential boundary
 selection_rule: 固定三篇 primary；`cxl_spec` 与 `pcie_ide` 作为 fabric/link-security auxiliary，不计入三篇主讲。
 primary:
 - key: gouk2022directcxl
-  role: Foundational systems paper / USENIX ATC 2022
+  role: foundational
+  selection_reason: DirectCXL is the primary systems-paper entry point for CXL memory fabric research.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.usenix.org/conference/atc22/presentation/gouk
   evidence: E1 primary systems / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/directcxl-direct-access-high-performance-memory-disaggregation/paper.pdf
@@ -23,7 +28,12 @@ primary:
   auxiliary:
   - cxl_spec
 - key: zhong2024cxltiers
-  role: Peer-reviewed systems SOTA / OSDI 2024
+  role: sota_1
+  selection_reason: CXL-Tiers is a peer-reviewed OSDI 2024 SOTA system for CXL memory tiering.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.usenix.org/conference/osdi24/presentation/zhong-yuhong
   evidence: E1 primary systems / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/managing-memory-tiers-with-cxl-in-virtualized-environments/paper.pdf
@@ -43,7 +53,12 @@ primary:
   auxiliary:
   - cxl_spec
 - key: wang2025odrp
-  role: Peer-reviewed systems SOTA / NSDI 2025
+  role: sota_2
+  selection_reason: ODRP is a peer-reviewed NSDI 2025 SOTA system for CXL and RDMA data paths.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.usenix.org/conference/nsdi25/presentation/wang-zixuan
   evidence: E1 primary systems / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/odrp-on-demand-remote-paging-with-programmable-rdma/paper.pdf

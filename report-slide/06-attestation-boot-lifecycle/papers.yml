@@ -3,7 +3,12 @@ focus: 区分 secure boot、launch attestation、runtime freshness、evidence pr
 selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary。
 primary:
 - key: seshadri2004swatt
-  role: Foundational / IEEE S&P 2004
+  role: foundational
+  selection_reason: SWATT is the classic starting point for remote software attestation problem framing.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1109/SECPRI.2004.1301329
   evidence: E1 / Foundational
   source_status: local_pdf_verified
   reference: reference/attestation/swatt-software-based-attestation-for-embedded-devices/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
   auxiliary: []
 - key: rats_rfc
-  role: Spec/standard SOTA / RFC 9334
+  role: sota_1
+  selection_reason: RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: local_pdf_verified
+  source_url: https://www.rfc-editor.org/info/rfc9334
   evidence: E0 / Spec-standard SOTA
   source_status: local_pdf_verified
   reference: reference/attestation/remote-attestation-procedures-rats-architecture/paper.pdf
@@ -42,7 +52,12 @@ primary:
   auxiliary:
   - eat_rfc
 - key: mao2025pdrima
-  role: Draft/not ratified / arXiv 2025
+  role: sota_2
+  selection_reason: PDRIMA is treated as a draft SOTA item for RISC-V and IoT attestation, with evidence limits recorded.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://arxiv.org/abs/2512.06500
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/attestation/pdrima-policy-driven-runtime-integrity-measurement-attestation/paper.pdf

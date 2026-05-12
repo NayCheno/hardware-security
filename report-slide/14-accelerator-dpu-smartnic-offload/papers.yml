@@ -3,7 +3,12 @@ focus: 从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Ar
 selection_rule: 固定三篇 primary；`sang2025portal`、`deng2022strongbox`、`nvidia_bluefield_operation_2025` 作为辅助对比，不计入三篇主讲。
 primary:
 - key: zhu2020hetee
-  role: Foundational / IEEE S&P 2020
+  role: foundational
+  selection_reason: HETEE is a foundational peer-reviewed work for heterogeneous CPU-accelerator TEEs.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://ieeexplore.ieee.org/document/9152787
   evidence: E1 / Foundational peer-reviewed
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 适合启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle 复杂度。
   auxiliary: []
 - key: dhar2024cloudscale
-  role: Peer-reviewed SOTA / ACSAC 2024
+  role: sota_1
+  selection_reason: Cloud-scale acceleration work is a peer-reviewed 2024 SOTA item for confidential accelerator deployment.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.acsac.org/2024/program/final/s297.html
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/paper.pdf
@@ -42,7 +52,12 @@ primary:
   auxiliary:
   - nvidia_bluefield_operation_2025
 - key: wang2026cage
-  role: Peer-reviewed SOTA / IEEE TDSC 2026
+  role: sota_2
+  selection_reason: CAGE is a recent peer-reviewed SOTA item for GPU accelerator enclaves.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://ira.lib.polyu.edu.hk/handle/10397/117541
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/paper.pdf

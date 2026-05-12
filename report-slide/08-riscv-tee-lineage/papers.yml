@@ -3,7 +3,12 @@ focus: 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadat
 selection_rule: 固定三篇 primary；不引入辅助材料，直接呈现 RISC-V enclave lineage。
 primary:
 - key: lee2020keystone
-  role: Foundational / EuroSys 2020
+  role: foundational
+  selection_reason: EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE framework paper.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: author_hosted_eurosys_pdf_verified
+  source_url: https://www.shwetashinde.org/publications/keystone_eurosys20.pdf
   evidence: E1 / Foundational
   source_status: author_hosted_eurosys_pdf_verified
   reference: reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
   auxiliary: []
 - key: feng2021penglai
-  role: Peer-reviewed SOTA / OSDI 2021
+  role: sota_1
+  selection_reason: OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS after Keystone.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.usenix.org/conference/osdi21/presentation/feng
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf
@@ -41,7 +51,12 @@ primary:
     commercialization: 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
   auxiliary: []
 - key: schrammel2023spearv
-  role: Peer-reviewed SOTA / ACM AsiaCCS 2023
+  role: sota_2
+  selection_reason: SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-attestation focus.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1145/3579856.3590264
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf

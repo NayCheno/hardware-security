@@ -5,7 +5,12 @@ selection_rule: 固定三篇 primary；`nvidia_bluefield_operation_2025` 与 `kh
   作为辅助材料，不计入三篇主讲。
 primary:
 - key: zhou2024snic
-  role: Peer-reviewed SOTA / EuroSys 2024
+  role: foundational
+  selection_reason: sNIC is the foundational peer-reviewed systems paper for cloud SmartNIC isolation.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf
@@ -28,7 +33,12 @@ primary:
   - khalilov2024osmosis
   - nvidia_bluefield_operation_2025
 - key: giantsidi2025tnic
-  role: Peer-reviewed SOTA / ASPLOS 2025
+  role: sota_1
+  selection_reason: TNIC is a peer-reviewed ASPLOS 2025 SOTA trusted NIC system.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://dse.in.tum.de/wp-content/uploads/2025/02/TNIC-ASPLOS-2025.pdf
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/tnic-trusted-nic-architecture/paper.pdf
@@ -50,7 +60,12 @@ primary:
   auxiliary:
   - nvidia_bluefield_operation_2025
 - key: chrapek2026hazel
-  role: Draft/not ratified / arXiv 2026
+  role: sota_2
+  selection_reason: Hazel is retained as a draft SOTA item for trusted NIC and secure storage data paths.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://arxiv.org/abs/2510.18756
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/paper.pdf

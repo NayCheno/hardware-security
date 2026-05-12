@@ -3,7 +3,12 @@ focus: 把设备身份、DMA/MMIO、interrupt、link security 与 I/O translatio
 selection_rule: 固定三篇 primary；`riscv_aia_2023` 作为 trusted interrupt auxiliary，不计入三篇主讲。
 primary:
 - key: feng2024siopmp
-  role: Peer-reviewed SOTA / ASPLOS 2024
+  role: foundational
+  selection_reason: sIOPMP is a peer-reviewed mechanism starting point for RISC-V trusted I/O and DMA protection.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1145/3620665.3640378
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/siopmp-scalable-efficient-io-protection-for-tees/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 对高性能设备直通有价值；风险在硬件改造、IOMMU/IOPMP 组合和平台可观测性。
   auxiliary: []
 - key: riscv_cove_io_2026
-  role: Draft/not ratified / CoVE-IO v0.3.0
+  role: sota_1
+  selection_reason: CoVE-IO and TEE-I/O draft is the current standards-track SOTA for RISC-V confidential I/O.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf
@@ -41,7 +51,12 @@ primary:
     commercialization: 对 RISC-V confidential accelerator/NIC 生态关键；风险在 SPDM/TDISP/IDE 与平台 ABI 收敛。
   auxiliary: []
 - key: riscv_iommu_2023
-  role: Spec/standard SOTA / RISC-V IOMMU
+  role: sota_2
+  selection_reason: RISC-V IOMMU specification provides the current DMA isolation substrate for CoVE-IO.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: local_pdf_verified
+  source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf
   evidence: E0 / Spec-standard SOTA
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf

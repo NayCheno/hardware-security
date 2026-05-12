@@ -3,7 +3,12 @@ focus: 避免把 access control、ownership、encryption、integrity、freshness
 selection_rule: 固定三篇 primary；`riscv_ap_tee_2024` 作为 AP-TEE/CoVE lifecycle auxiliary，不计入三篇主讲。
 primary:
 - key: henson2014memory
-  role: Foundational survey / ACM CSUR 2014
+  role: foundational
+  selection_reason: Henson 2014 is the background starting point for secure memory encryption, integrity, and replay defense.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1145/2566673
   evidence: E2 / Background substrate
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
   auxiliary: []
 - key: amd_sev_snp
-  role: Industry evidence / AMD SEV-SNP whitepaper
+  role: sota_1
+  selection_reason: AMD SEV-SNP whitepaper captures a mature commercial VM memory integrity and replay-protection design.
+  evidence_type: E4 industry/vendor evidence
+  maturity: industry/vendor evidence
+  pdf_status: local_pdf_verified
+  source_url: https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more
   evidence: E4 / Industry evidence
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf
@@ -41,7 +51,12 @@ primary:
     commercialization: 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
   auxiliary: []
 - key: arm_cca_spec
-  role: Spec/standard SOTA / Arm CCA
+  role: sota_2
+  selection_reason: Arm CCA specification defines current Realm memory ownership and granule lifecycle evidence.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: source_verified_pdf_unavailable
+  source_url: https://developer.arm.com/documentation/den0125/latest
   evidence: E0 / Spec-standard SOTA
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/arm-cca-specification/README.md

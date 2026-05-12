@@ -3,7 +3,12 @@ focus: 从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android
 selection_rule: 固定三篇 primary；`liu2025lesstrust` 作为 intra-process 辅助材料，不计入三篇主讲。
 primary:
 - key: zhang2023shelter
-  role: Foundational / USENIX Security 2023
+  role: foundational
+  selection_reason: Shelter is the entry peer-reviewed system for moving CCA from VM Realms to user-space isolation.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming
   evidence: E1 / Foundational
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。
   auxiliary: []
 - key: zhou2025rcontainer
-  role: Peer-reviewed SOTA / NDSS 2025
+  role: sota_1
+  selection_reason: RContainer is a peer-reviewed SOTA system for CCA-backed cloud-native container deployment.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf
@@ -41,7 +51,12 @@ primary:
     commercialization: 商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
   auxiliary: []
 - key: liu2025nanozone
-  role: Draft/not ratified / arXiv 2025
+  role: sota_2
+  selection_reason: NanoZone is retained as a draft SOTA item for fine-grained CCA memory protection, with evidence limits recorded.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://arxiv.org/abs/2506.07034
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf

@@ -3,7 +3,12 @@ focus: 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本
 selection_rule: 固定三篇 primary；`riscv_iopmp_2026` 与 `manoni2026cva6cfi` 作为辅助材料，不计入三篇主讲。
 primary:
 - key: riscv_privileged
-  role: Foundational standard substrate / RISC-V privileged spec
+  role: foundational
+  selection_reason: RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: local_pdf_verified
+  source_url: https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf
   evidence: E0 / Foundational standard substrate
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
   auxiliary: []
 - key: riscv_iommu_2023
-  role: Spec/standard SOTA / RISC-V IOMMU
+  role: sota_1
+  selection_reason: RISC-V IOMMU specification is the current standard substrate for DMA isolation and CoVE-IO.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: local_pdf_verified
+  source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf
   evidence: E0 / Spec-standard SOTA
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf
@@ -42,7 +52,12 @@ primary:
   auxiliary:
   - riscv_iopmp_2026
 - key: riscv_aia_2023
-  role: Spec/standard SOTA / RISC-V AIA
+  role: sota_2
+  selection_reason: RISC-V AIA specification is the current interrupt virtualization and ownership substrate.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: local_pdf_verified
+  source_url: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf
   evidence: E0 / Spec-standard SOTA
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf

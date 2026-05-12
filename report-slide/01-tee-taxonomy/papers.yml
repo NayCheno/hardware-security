@@ -3,7 +3,12 @@ focus: 用 SoK/Survey 固定 design space，避免把 SGX、SEV、TrustZone、CC
 selection_rule: 固定三篇 primary；survey/SoK 只作为 taxonomy 和术语入口，不替代一手机制证据。
 primary:
 - key: schneider2022soktee
-  role: Foundational / SoK
+  role: foundational
+  selection_reason: Foundational SoK for hardware-assisted TEE taxonomy across launch, runtime isolation, trusted I/O, storage, and attestation.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: local_pdf_verified
+  source_url: https://arxiv.org/abs/2205.12742
   evidence: E2 / Foundational
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/sok/hardware-supported-trusted-execution-environments/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 可帮助产品/平台做需求拆解和证据清单，但不能作为单个平台的安全证明。
   auxiliary: []
 - key: boubakri2025riscvtee
-  role: Background substrate / survey
+  role: sota_1
+  selection_reason: Recent RISC-V TEE survey used to connect Keystone, Penglai, SPEAR-V, CoVE, and AP-TEE lineages.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: mdpi_html_verified_pdf_403
+  source_url: https://www.mdpi.com/2079-9292/14/21/4171
   evidence: E2 survey / Background substrate
   source_status: mdpi_html_verified_pdf_403
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
@@ -41,7 +51,12 @@ primary:
     commercialization: 适合辅助平台选型；落地依赖 RISC-V 草案成熟度和厂商实现。
   auxiliary: []
 - key: sok-tee
-  role: Background substrate / accelerator TEE SoK
+  role: sota_2
+  selection_reason: Recent accelerator TEE SoK used to cover GPU, NPU, DPU, and SmartNIC design space beyond CPU TEEs.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: local_pdf_verified
+  source_url: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf
   evidence: E2 / Background substrate
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf

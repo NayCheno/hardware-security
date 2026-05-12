@@ -3,7 +3,12 @@ focus: 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
 selection_rule: 固定三篇 primary；survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。
 primary:
 - key: sahita2023cove
-  role: Foundational / arXiv 2023
+  role: foundational
+  selection_reason: CoVE 2023 is the early mainline design material for RISC-V confidential VMs.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://arxiv.org/abs/2304.06167
   evidence: E1 / Foundational
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf
@@ -22,7 +27,12 @@ primary:
     commercialization: 对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
   auxiliary: []
 - key: riscv_ap_tee_2024
-  role: Draft/not ratified / AP-TEE v0.7 RC2
+  role: sota_1
+  selection_reason: AP-TEE draft is the current standards-track source for RISC-V confidential VM semantics.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf
@@ -41,7 +51,12 @@ primary:
     commercialization: 商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
   auxiliary: []
 - key: boubakri2025riscvtee
-  role: Background substrate / Electronics 2025 survey
+  role: sota_2
+  selection_reason: Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave systems.
+  evidence_type: E2 peer-reviewed survey/SoK
+  maturity: peer-reviewed survey/SoK
+  pdf_status: mdpi_html_verified_pdf_403
+  source_url: https://www.mdpi.com/2079-9292/14/21/4171
   evidence: E2 survey / Background substrate
   source_status: mdpi_html_verified_pdf_403
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md

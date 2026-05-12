@@ -3,7 +3,12 @@ focus: 围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA
 selection_rule: 固定三篇 primary；`wu2024rmm` 作为 RMM verification auxiliary，不计入三篇主讲。
 primary:
 - key: li2022cca
-  role: Foundational / OSDI 2022
+  role: foundational
+  selection_reason: OSDI 2022 paper is the foundational peer-reviewed system treatment of Arm CCA, RME, and RMM.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: local_pdf_verified
+  source_url: https://www.usenix.org/conference/osdi22/presentation/li
   evidence: E1 / Foundational
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/design-and-verification-of-arm-cca/paper.pdf
@@ -15,14 +20,19 @@ primary:
   - Realm world and host/tenant separation
   - Granule ownership and GPT/GPC
   - RMM-mediated lifecycle and attestation path
-  experiment_claim: OSDI 系统论文提供设计验证和原型评估；具体数字只在回到原 PDF 后写入。
+  experiment_claim: OSDI 系统论文提供设计验证和原型评估；本阶段只记录可核对的证据类型，定量细节在 slide rewrite 中回引本地 PDF。
   evaluation:
     strengths: Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清。
     limitations: 论文原型不等同于后续完整规范或量产实现。
     commercialization: 商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。
   auxiliary: []
 - key: arm_cca_spec
-  role: Spec/standard SOTA / Arm spec
+  role: sota_1
+  selection_reason: First-party Arm CCA specification defines the current Realm model and standard evidence base.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: source_verified_pdf_unavailable
+  source_url: https://developer.arm.com/documentation/den0125/latest
   evidence: E0 / Spec-standard SOTA
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/arm-cca-specification/README.md
@@ -43,7 +53,12 @@ primary:
   - arm_rme_spec
   - linux_arm_cca_doc
 - key: arm_rmm_spec
-  role: Spec/standard SOTA / Arm RMM spec
+  role: sota_2
+  selection_reason: First-party RMM specification defines Realm management and lifecycle semantics for CCA systems.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: source_verified_pdf_unavailable
+  source_url: https://developer.arm.com/documentation/den0137/latest/
   evidence: E0 / Spec-standard SOTA
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/realm-management-monitor-specification/README.md

@@ -3,9 +3,39 @@
     "directory": "01-tee-taxonomy",
     "direction": "硬件辅助 TEE taxonomy",
     "primary": [
-      {"key": "schneider2022soktee", "evidence": "E2 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "boubakri2025riscvtee", "evidence": "E2 survey / Background substrate", "source_status": "mdpi_html_verified_pdf_403"},
-      {"key": "sok-tee", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
+      {
+        "key": "schneider2022soktee",
+        "evidence": "E2 / Foundational",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "Foundational SoK for hardware-assisted TEE taxonomy across launch, runtime isolation, trusted I/O, storage, and attestation.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2205.12742"
+      },
+      {
+        "key": "boubakri2025riscvtee",
+        "evidence": "E2 survey / Background substrate",
+        "source_status": "mdpi_html_verified_pdf_403",
+        "role": "sota_1",
+        "selection_reason": "Recent RISC-V TEE survey used to connect Keystone, Penglai, SPEAR-V, CoVE, and AP-TEE lineages.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "mdpi_html_verified_pdf_403",
+        "source_url": "https://www.mdpi.com/2079-9292/14/21/4171"
+      },
+      {
+        "key": "sok-tee",
+        "evidence": "E2 / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "Recent accelerator TEE SoK used to cover GPU, NPU, DPU, and SmartNIC design space beyond CPU TEEs.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf"
+      }
     ],
     "auxiliary": []
   },
@@ -13,9 +43,39 @@
     "directory": "02-trustzone-lineage",
     "direction": "Arm TrustZone TEE 与漏洞谱系",
     "primary": [
-      {"key": "arm_trustzone_whitepaper", "evidence": "E4 / Foundational industry evidence", "source_status": "source_verified_pdf_unavailable"},
-      {"key": "pinto2019trustzone", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
-      {"key": "cerdeira2020trustzone", "evidence": "E2 / Peer-reviewed SoK", "source_status": "local_pdf_verified"}
+      {
+        "key": "arm_trustzone_whitepaper",
+        "evidence": "E4 / Foundational industry evidence",
+        "source_status": "source_verified_pdf_unavailable",
+        "role": "foundational",
+        "selection_reason": "First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for this direction.",
+        "evidence_type": "E4 industry/vendor evidence",
+        "maturity": "industry/vendor evidence",
+        "pdf_status": "source_verified_pdf_unavailable",
+        "source_url": "https://developer.arm.com/documentation/PRD29-GENC-009492/c?lang=en"
+      },
+      {
+        "key": "pinto2019trustzone",
+        "evidence": "E2 / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE lineage.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1145/3291047"
+      },
+      {
+        "key": "cerdeira2020trustzone",
+        "evidence": "E2 / Peer-reviewed SoK",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "S&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narrative.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1109/SP40000.2020.00061"
+      }
     ],
     "auxiliary": []
   },
@@ -23,33 +83,131 @@
     "directory": "03-arm-cca-rme-rmm",
     "direction": "Arm CCA / RME / RMM 基础架构",
     "primary": [
-      {"key": "li2022cca", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "arm_cca_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"},
-      {"key": "arm_rmm_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"}
+      {
+        "key": "li2022cca",
+        "evidence": "E1 / Foundational",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "OSDI 2022 paper is the foundational peer-reviewed system treatment of Arm CCA, RME, and RMM.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.usenix.org/conference/osdi22/presentation/li"
+      },
+      {
+        "key": "arm_cca_spec",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "source_verified_pdf_unavailable",
+        "role": "sota_1",
+        "selection_reason": "First-party Arm CCA specification defines the current Realm model and standard evidence base.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "source_verified_pdf_unavailable",
+        "source_url": "https://developer.arm.com/documentation/den0125/latest"
+      },
+      {
+        "key": "arm_rmm_spec",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "source_verified_pdf_unavailable",
+        "role": "sota_2",
+        "selection_reason": "First-party RMM specification defines Realm management and lifecycle semantics for CCA systems.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "source_verified_pdf_unavailable",
+        "source_url": "https://developer.arm.com/documentation/den0137/latest/"
+      }
     ],
     "auxiliary": [
-      {"key": "wu2024rmm", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "wu2024rmm",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "04-arm-cca-deployment",
     "direction": "Arm CCA 细粒度隔离与部署模型",
     "primary": [
-      {"key": "zhang2023shelter", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "zhou2025rcontainer", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "liu2025nanozone", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "zhang2023shelter",
+        "evidence": "E1 / Foundational",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "Shelter is the entry peer-reviewed system for moving CCA from VM Realms to user-space isolation.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming"
+      },
+      {
+        "key": "zhou2025rcontainer",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "RContainer is a peer-reviewed SOTA system for CCA-backed cloud-native container deployment.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/"
+      },
+      {
+        "key": "liu2025nanozone",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "NanoZone is retained as a draft SOTA item for fine-grained CCA memory protection, with evidence limits recorded.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2506.07034"
+      }
     ],
     "auxiliary": [
-      {"key": "liu2025lesstrust", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "source_verified_pdf_unavailable"}
+      {
+        "key": "liu2025lesstrust",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "source_verified_pdf_unavailable"
+      }
     ]
   },
   {
     "directory": "05-arm-cca-io-accelerator-interrupt",
     "direction": "Arm CCA I/O、DMA、accelerator、interrupt",
     "primary": [
-      {"key": "acai2023", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "bertschi2026devlore", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "sok-tee", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
+      {
+        "key": "acai2023",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "ACAI is the early design point for extending Arm CCA toward accelerator execution paths.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2305.15986"
+      },
+      {
+        "key": "bertschi2026devlore",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "Devlore is a recent draft on device interrupt protection for confidential VMs and CCA-like I/O paths.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2408.05835"
+      },
+      {
+        "key": "sok-tee",
+        "evidence": "E2 / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runtime, and attestation.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf"
+      }
     ],
     "auxiliary": []
   },
@@ -57,34 +215,136 @@
     "directory": "06-attestation-boot-lifecycle",
     "direction": "Attestation、boot、lifecycle",
     "primary": [
-      {"key": "seshadri2004swatt", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "rats_rfc", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
-      {"key": "mao2025pdrima", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "seshadri2004swatt",
+        "evidence": "E1 / Foundational",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "SWATT is the classic starting point for remote software attestation problem framing.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1109/SECPRI.2004.1301329"
+      },
+      {
+        "key": "rats_rfc",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.rfc-editor.org/info/rfc9334"
+      },
+      {
+        "key": "mao2025pdrima",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "PDRIMA is treated as a draft SOTA item for RISC-V and IoT attestation, with evidence limits recorded.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2512.06500"
+      }
     ],
     "auxiliary": [
-      {"key": "eat_rfc", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
+      {
+        "key": "eat_rfc",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "07-riscv-primitives",
     "direction": "RISC-V 基础安全 primitives",
     "primary": [
-      {"key": "riscv_privileged", "evidence": "E0 / Foundational standard substrate", "source_status": "local_pdf_verified"},
-      {"key": "riscv_iommu_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
-      {"key": "riscv_aia_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
+      {
+        "key": "riscv_privileged",
+        "evidence": "E0 / Foundational standard substrate",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf"
+      },
+      {
+        "key": "riscv_iommu_2023",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "RISC-V IOMMU specification is the current standard substrate for DMA isolation and CoVE-IO.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf"
+      },
+      {
+        "key": "riscv_aia_2023",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "RISC-V AIA specification is the current interrupt virtualization and ownership substrate.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf"
+      }
     ],
     "auxiliary": [
-      {"key": "riscv_iopmp_2026", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "manoni2026cva6cfi", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "riscv_iopmp_2026",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "manoni2026cva6cfi",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "08-riscv-tee-lineage",
     "direction": "RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V",
     "primary": [
-      {"key": "lee2020keystone", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "feng2021penglai", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "schrammel2023spearv", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"}
+      {
+        "key": "lee2020keystone",
+        "evidence": "E1 / Foundational",
+        "source_status": "author_hosted_eurosys_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE framework paper.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "author_hosted_eurosys_pdf_verified",
+        "source_url": "https://www.shwetashinde.org/publications/keystone_eurosys20.pdf"
+      },
+      {
+        "key": "feng2021penglai",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS after Keystone.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.usenix.org/conference/osdi21/presentation/feng"
+      },
+      {
+        "key": "schrammel2023spearv",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-attestation focus.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1145/3579856.3590264"
+      }
     ],
     "auxiliary": []
   },
@@ -92,9 +352,39 @@
     "directory": "09-riscv-cove-ap-tee",
     "direction": "RISC-V CoVE / AP-TEE confidential VM",
     "primary": [
-      {"key": "sahita2023cove", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "riscv_ap_tee_2024", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "boubakri2025riscvtee", "evidence": "E2 survey / Background substrate", "source_status": "mdpi_html_verified_pdf_403"}
+      {
+        "key": "sahita2023cove",
+        "evidence": "E1 / Foundational",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "CoVE 2023 is the early mainline design material for RISC-V confidential VMs.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2304.06167"
+      },
+      {
+        "key": "riscv_ap_tee_2024",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "AP-TEE draft is the current standards-track source for RISC-V confidential VM semantics.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7"
+      },
+      {
+        "key": "boubakri2025riscvtee",
+        "evidence": "E2 survey / Background substrate",
+        "source_status": "mdpi_html_verified_pdf_403",
+        "role": "sota_2",
+        "selection_reason": "Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave systems.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "mdpi_html_verified_pdf_403",
+        "source_url": "https://www.mdpi.com/2079-9292/14/21/4171"
+      }
     ],
     "auxiliary": []
   },
@@ -102,83 +392,331 @@
     "directory": "10-riscv-cove-io-tee-io",
     "direction": "RISC-V CoVE-IO / TEE-I/O",
     "primary": [
-      {"key": "feng2024siopmp", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "riscv_cove_io_2026", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "riscv_iommu_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
+      {
+        "key": "feng2024siopmp",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "sIOPMP is a peer-reviewed mechanism starting point for RISC-V trusted I/O and DMA protection.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1145/3620665.3640378"
+      },
+      {
+        "key": "riscv_cove_io_2026",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "CoVE-IO and TEE-I/O draft is the current standards-track SOTA for RISC-V confidential I/O.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0"
+      },
+      {
+        "key": "riscv_iommu_2023",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "RISC-V IOMMU specification provides the current DMA isolation substrate for CoVE-IO.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf"
+      }
     ],
     "auxiliary": [
-      {"key": "riscv_aia_2023", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"}
+      {
+        "key": "riscv_aia_2023",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "11-memory-encryption-integrity-replay",
     "direction": "Memory encryption / integrity / replay protection",
     "primary": [
-      {"key": "henson2014memory", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
-      {"key": "amd_sev_snp", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
-      {"key": "arm_cca_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"}
+      {
+        "key": "henson2014memory",
+        "evidence": "E2 / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "Henson 2014 is the background starting point for secure memory encryption, integrity, and replay defense.",
+        "evidence_type": "E2 peer-reviewed survey/SoK",
+        "maturity": "peer-reviewed survey/SoK",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1145/2566673"
+      },
+      {
+        "key": "amd_sev_snp",
+        "evidence": "E4 / Industry evidence",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "AMD SEV-SNP whitepaper captures a mature commercial VM memory integrity and replay-protection design.",
+        "evidence_type": "E4 industry/vendor evidence",
+        "maturity": "industry/vendor evidence",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more"
+      },
+      {
+        "key": "arm_cca_spec",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "source_verified_pdf_unavailable",
+        "role": "sota_2",
+        "selection_reason": "Arm CCA specification defines current Realm memory ownership and granule lifecycle evidence.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "source_verified_pdf_unavailable",
+        "source_url": "https://developer.arm.com/documentation/den0125/latest"
+      }
     ],
     "auxiliary": [
-      {"key": "riscv_ap_tee_2024", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "riscv_ap_tee_2024",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "12-memory-io-fabrics",
     "direction": "Memory / I/O fabrics: CXL、PCIe IDE、RDMA",
     "primary": [
-      {"key": "gouk2022directcxl", "evidence": "E1 primary systems / Background substrate", "source_status": "local_pdf_verified"},
-      {"key": "zhong2024cxltiers", "evidence": "E1 primary systems / Background substrate", "source_status": "local_pdf_verified"},
-      {"key": "wang2025odrp", "evidence": "E1 primary systems / Background substrate", "source_status": "local_pdf_verified"}
+      {
+        "key": "gouk2022directcxl",
+        "evidence": "E1 primary systems / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "DirectCXL is the primary systems-paper entry point for CXL memory fabric research.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.usenix.org/conference/atc22/presentation/gouk"
+      },
+      {
+        "key": "zhong2024cxltiers",
+        "evidence": "E1 primary systems / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "CXL-Tiers is a peer-reviewed OSDI 2024 SOTA system for CXL memory tiering.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.usenix.org/conference/osdi24/presentation/zhong-yuhong"
+      },
+      {
+        "key": "wang2025odrp",
+        "evidence": "E1 primary systems / Background substrate",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "ODRP is a peer-reviewed NSDI 2025 SOTA system for CXL and RDMA data paths.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.usenix.org/conference/nsdi25/presentation/wang-zixuan"
+      }
     ],
     "auxiliary": [
-      {"key": "cxl_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
-      {"key": "pcie_ide", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"}
+      {
+        "key": "cxl_spec",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "pcie_ide",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "source_verified_pdf_unavailable"
+      }
     ]
   },
   {
     "directory": "13-confidential-io-protocol-device-endpoint",
     "direction": "Confidential I/O protocol、trusted device interface、network endpoint",
     "primary": [
-      {"key": "dmtf_spdm_2025", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
-      {"key": "riscv_cove_io_2026", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "li2024folio", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "dmtf_spdm_2025",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "SPDM is the first-party specification foundation for device identity, measurement, and secure sessions.",
+        "evidence_type": "E0 official standard/specification",
+        "maturity": "official standard/specification",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.dmtf.org/dsp/DSP0274"
+      },
+      {
+        "key": "riscv_cove_io_2026",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-I/O track.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0"
+      },
+      {
+        "key": "li2024folio",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "FOLIO is treated as a draft SOTA design exploration for confidential I/O protocol and endpoints.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2403.03360"
+      }
     ],
     "auxiliary": [
-      {"key": "dmtf_spdm_arch_2024", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
-      {"key": "dmtf_spdm_secured_messages_2025", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
-      {"key": "dmtf_spdm_tcp_2024", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},
-      {"key": "pcisig_tdisp_2022", "evidence": "E5 / Candidate metadata-only gated", "source_status": "source_verified_pdf_unavailable"},
-      {"key": "pcisig_tdisp_xt_2025", "evidence": "E5 / Candidate metadata-only gated", "source_status": "source_verified_pdf_unavailable"},
-      {"key": "amd_sev_tio_2023", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
-      {"key": "weinhold2025tlsra", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "nvidia_bluefield_operation_2025", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"}
+      {
+        "key": "dmtf_spdm_arch_2024",
+        "evidence": "E4 / Industry evidence",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "dmtf_spdm_secured_messages_2025",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "dmtf_spdm_tcp_2024",
+        "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "pcisig_tdisp_2022",
+        "evidence": "E5 / Candidate metadata-only gated",
+        "source_status": "source_verified_pdf_unavailable"
+      },
+      {
+        "key": "pcisig_tdisp_xt_2025",
+        "evidence": "E5 / Candidate metadata-only gated",
+        "source_status": "source_verified_pdf_unavailable"
+      },
+      {
+        "key": "amd_sev_tio_2023",
+        "evidence": "E4 / Industry evidence",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "weinhold2025tlsra",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "nvidia_bluefield_operation_2025",
+        "evidence": "E4 / Industry evidence",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "14-accelerator-dpu-smartnic-offload",
     "direction": "Accelerator / DPU / SmartNIC confidential offload",
     "primary": [
-      {"key": "zhu2020hetee", "evidence": "E1 / Foundational peer-reviewed", "source_status": "local_pdf_verified"},
-      {"key": "dhar2024cloudscale", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "wang2026cage", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"}
+      {
+        "key": "zhu2020hetee",
+        "evidence": "E1 / Foundational peer-reviewed",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "HETEE is a foundational peer-reviewed work for heterogeneous CPU-accelerator TEEs.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://ieeexplore.ieee.org/document/9152787"
+      },
+      {
+        "key": "dhar2024cloudscale",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "Cloud-scale acceleration work is a peer-reviewed 2024 SOTA item for confidential accelerator deployment.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://www.acsac.org/2024/program/final/s297.html"
+      },
+      {
+        "key": "wang2026cage",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "CAGE is a recent peer-reviewed SOTA item for GPU accelerator enclaves.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://ira.lib.polyu.edu.hk/handle/10397/117541"
+      }
     ],
     "auxiliary": [
-      {"key": "sang2025portal", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "deng2022strongbox", "evidence": "E1 / Foundational peer-reviewed", "source_status": "local_pdf_verified"},
-      {"key": "nvidia_bluefield_operation_2025", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"}
+      {
+        "key": "sang2025portal",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "deng2022strongbox",
+        "evidence": "E1 / Foundational peer-reviewed",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "nvidia_bluefield_operation_2025",
+        "evidence": "E4 / Industry evidence",
+        "source_status": "local_pdf_verified"
+      }
     ]
   },
   {
     "directory": "15-smartnic-trusted-nic-storage",
     "direction": "SmartNIC / trusted NIC / secure storage data path",
     "primary": [
-      {"key": "zhou2024snic", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "giantsidi2025tnic", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
-      {"key": "chrapek2026hazel", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+      {
+        "key": "zhou2024snic",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "foundational",
+        "selection_reason": "sNIC is the foundational peer-reviewed systems paper for cloud SmartNIC isolation.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf"
+      },
+      {
+        "key": "giantsidi2025tnic",
+        "evidence": "E1 / Peer-reviewed SOTA",
+        "source_status": "local_pdf_verified",
+        "role": "sota_1",
+        "selection_reason": "TNIC is a peer-reviewed ASPLOS 2025 SOTA trusted NIC system.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://dse.in.tum.de/wp-content/uploads/2025/02/TNIC-ASPLOS-2025.pdf"
+      },
+      {
+        "key": "chrapek2026hazel",
+        "evidence": "E3 / Draft-not-ratified",
+        "source_status": "local_pdf_verified",
+        "role": "sota_2",
+        "selection_reason": "Hazel is retained as a draft SOTA item for trusted NIC and secure storage data paths.",
+        "evidence_type": "E3 draft/preprint, not ratified",
+        "maturity": "draft/preprint, not ratified",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://arxiv.org/abs/2510.18756"
+      }
     ],
     "auxiliary": [
-      {"key": "nvidia_bluefield_operation_2025", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
-      {"key": "khalilov2024osmosis", "evidence": "E1 / Peer-reviewed background substrate", "source_status": "local_pdf_verified"}
+      {
+        "key": "nvidia_bluefield_operation_2025",
+        "evidence": "E4 / Industry evidence",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "khalilov2024osmosis",
+        "evidence": "E1 / Peer-reviewed background substrate",
+        "source_status": "local_pdf_verified"
+      }
     ]
   }
 ]

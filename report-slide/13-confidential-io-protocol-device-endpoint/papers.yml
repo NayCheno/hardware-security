@@ -3,7 +3,12 @@ focus: 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合�
 selection_rule: 固定三篇 primary；SPDM 辅助规范、TDISP/TDISP XT、SEV-TIO、TLS+RA 和 BlueField DPU evidence 均为 auxiliary。
 primary:
 - key: dmtf_spdm_2025
-  role: Spec/standard SOTA / DMTF DSP0274 v1.4.0
+  role: foundational
+  selection_reason: SPDM is the first-party specification foundation for device identity, measurement, and secure sessions.
+  evidence_type: E0 official standard/specification
+  maturity: official standard/specification
+  pdf_status: local_pdf_verified
+  source_url: https://www.dmtf.org/dsp/DSP0274
   evidence: E0 / Spec-standard SOTA
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf
@@ -25,7 +30,12 @@ primary:
   - dmtf_spdm_secured_messages_2025
   - dmtf_spdm_tcp_2024
 - key: riscv_cove_io_2026
-  role: Draft/not ratified / CoVE-IO v0.3.0
+  role: sota_1
+  selection_reason: RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-I/O track.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf
@@ -46,7 +56,12 @@ primary:
   - pcisig_tdisp_2022
   - pcisig_tdisp_xt_2025
 - key: li2024folio
-  role: Draft/preprint data-path design point / arXiv 2024
+  role: sota_2
+  selection_reason: FOLIO is treated as a draft SOTA design exploration for confidential I/O protocol and endpoints.
+  evidence_type: E3 draft/preprint, not ratified
+  maturity: draft/preprint, not ratified
+  pdf_status: local_pdf_verified
+  source_url: https://arxiv.org/abs/2403.03360
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/bridge-the-future-high-performance-networks-confidential-vms-without-trusted-io-devices/paper.pdf
