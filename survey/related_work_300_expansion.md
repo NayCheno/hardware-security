@@ -33,6 +33,15 @@ The expansion follows the current survey boundary: Arm/RISC-V confidential-compu
 | P1 | Important mechanism or representative baseline | 70 |
 | P2 | Background, contrast, or boundary-only material | 40 |
 
+## P0/P1 Terminal Status
+
+All 112 P0/P1 metadata-only candidates now have terminal states in
+`survey/p0_p1_candidate_status.md`. The terminal state is either:
+covered by an active canonical reference, explicit backlog/no substantive
+正文 citation, or background substrate that cannot support an Arm CCA,
+RISC-V CoVE/AP-TEE, TDISP, accelerator/device TEE, attestation, or
+ISA/hardware-defense claim until promoted through the reference gate.
+
 ## Immediate Download/Review Queue
 
 Prioritize these newly added candidates because they are closest to the fixed survey scope:
