@@ -59,7 +59,7 @@ ACE 与 CoVE/AP-TEE 共享 TVM/TSM 术语，偏 embedded deployment；与 CHERIo
 
 ### 11. 对后续研究的启发
 
-1. ACE 与 AP-TEE v0.7 的 ABI/semantic diff。2. TSM Rust verification 模板。3. embedded CoVE-IO 设备模型。4. 静态 partition 与 dynamic memory donation 的 tradeoff。5. 面向 certification 的 confidential computing design rules。潜在 venue: USENIX Security、IEEE S&P、ASPLOS、RTSS、HOST。
+1. ACE 与 Draft/not ratified: AP-TEE v0.7 / RC2 for ARC review 的 ABI/semantic diff。2. TSM Rust verification 模板。3. embedded CoVE-IO 设备模型。4. 静态 partition 与 dynamic memory donation 的 tradeoff。5. 面向 certification 的 confidential computing design rules。潜在 venue: USENIX Security、IEEE S&P、ASPLOS、RTSS、HOST。
 
 ### 12. Evidence README Addendum
 - Evidence role: Draft/not ratified. Use with explicit draft, preprint, or not-ratified status; do not treat as ratified standard, mature production evidence, or peer-reviewed consensus unless the source metadata says so.

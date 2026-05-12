@@ -4,14 +4,14 @@
 - Category: `memory-and-io-fabrics`
 - Authors: DMTF SPDM Working Group
 - Year: 2025
-- Venue: DMTF Standard DSP0274 v1.4.0
+- Venue: DMTF DSP0274 v1.4.0, selected as this survey's SPDM snapshot
 - Source: https://www.dmtf.org/dsp/DSP0274
 - PDF source: https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.4.0.pdf
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Spec/standard SOTA. DMTF standard for device identity, measurement, and key exchange; not a complete trusted-I/O system without lifecycle, link, DMA, and interrupt controls.
-- Spec identifier/status: DMTF DSP0274 v1.4.0, published standard.
+- Spec identifier/status: DMTF DSP0274 v1.4.0, selected as this survey's SPDM snapshot; published standard.
 
 <!-- BEGIN PAPER REVIEW -->
 ## Paper Review
@@ -19,7 +19,7 @@
 
 - 论文标题: Security Protocol and Data Model (SPDM) Specification
 - 作者 / 机构: DMTF SPDM Working Group
-- 发表会议 / 年份: DMTF Standard DSP0274 v1.4.0 / 2025
+- 发表会议 / 年份: DMTF DSP0274 v1.4.0, selected as this survey's SPDM snapshot / 2025
 - 领域分类: 架构 / 安全 / 网络
 - 一句话总结: SPDM 定义设备和平台组件之间的能力协商、身份认证、固件/配置 measurement、证书检索、challenge-response 和安全会话建立。
 - 最核心贡献一句话: 它是 confidential I/O 中 device identity 和 measurement evidence 的基础协议。
@@ -66,7 +66,7 @@ SPDM 是 CoVE-IO、PCIe TDISP、PCIe IDE key management、AMD SEV-TIO 和 device
 
 ### 12. Evidence README Addendum
 - Evidence role: Spec/standard SOTA. DMTF standard for device identity, measurement, and key exchange; not a complete trusted-I/O system without lifecycle, link, DMA, and interrupt controls.
-- 标准化 / 发表状态: DMTF published standard, DSP0274 v1.4.0
+- 标准化 / 发表状态: DMTF DSP0274 v1.4.0, selected as this survey's SPDM snapshot; published standard
 - 对应小方向: 机密计算网络 / I/O / fabric 防御; RISC-V CoVE-IO / TEE-I/O
 
 #### 内容摘要

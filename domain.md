@@ -290,7 +290,7 @@
    - 解决方案：描述 confidential VM 所需的 ISA、non-ISA、SoC 和 platform requirements。
    - 实验结果：架构论文/position-style，无完整系统实验。
    - 文章评价：是 CoVE 入口；不能替代 AP-TEE draft spec 的 ABI/state details。
-2. `riscv_ap_tee_2024` — Draft/not ratified；v0.7 draft / not ratified。
+2. `riscv_ap_tee_2024` — Draft/not ratified: AP-TEE v0.7 / RC2。
    - 内容摘要：定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI。
    - 研究背景：CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面。
    - 解决方案：给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share 等规范语义。
@@ -311,7 +311,7 @@
    - 解决方案：设计 scalable I/O protection metadata/checking 机制以提高设备访问控制效率。
    - 实验结果：ASPLOS 论文给出吞吐和开销评估；具体数值以原文为准。
    - 文章评价：RISC-V I/O protection 的 Peer-reviewed SOTA；但只解决 access control，不是完整 CoVE-IO。
-2. `riscv_cove_io_2026` — Draft/not ratified；v0.3.0 draft / not ratified。
+2. `riscv_cove_io_2026` — Draft/not ratified: CoVE-IO v0.3.0。
    - 内容摘要：定义 RISC-V CoVE-IO confidential I/O 架构。
    - 研究背景：TVM 使用真实设备需要覆盖设备身份、DMA、MMIO、interrupt 和 link security。
    - 解决方案：引入 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合。
@@ -378,7 +378,7 @@
    - 内容摘要：CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 等组合；TDISP 关注 PCIe trusted device interface lifecycle。
    - 研究背景：TVM/Realm 使用设备时，需要证明设备接口身份、绑定 interface state、保护 DMA/MMIO，并把 interrupt delivery 纳入同一边界。
    - 解决方案：用 device-interface lifecycle、设备安全管理、link protection 和 I/O translation 协同构造 confidential I/O boundary。
-   - 实验结果：规范草案/ECN metadata，无实验；CoVE-IO v0.3.0 为 draft / not ratified，TDISP public PDF 不可直接下载。
+   - 实验结果：规范草案/ECN metadata，无实验；Draft/not ratified: CoVE-IO v0.3.0；TDISP public PDF 不可直接下载。
    - 文章评价：是本 survey 的 RISC-V confidential I/O 主锚点；必须明确标准状态，避免写成已完全落地规范。
 3. `li2024folio` / `amd_sev_tio_2023` / `weinhold2025tlsra` — Peer-reviewed SOTA plus Industry evidence plus endpoint protocol evidence。
    - 内容摘要：FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径；SEV-TIO 展示 VM trusted I/O 的产业设计；TLS+RA 解决 secure channel 是否终止在 attested TEE 内的问题。
@@ -434,7 +434,7 @@
 | 对象 | 核验结果 | 处理 |
 |---|---|---|
 | 正文 79 个 cite key | 全部存在于 `survey/reference.bib`。 | 无缺失 key。 |
-| RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；AP-TEE v0.7 是 draft/RC2 for ARC review，CoVE-IO v0.3.0 是 draft。 | 作为 Draft/not ratified spec evidence；正文必须标注 draft / not ratified。 |
+| RISC-V AP-TEE / CoVE-IO | GitHub release 已核验并已下载本地 PDF；Draft/not ratified: AP-TEE v0.7 / RC2 for ARC review；Draft/not ratified: CoVE-IO v0.3.0。 | 作为 draft/not-ratified spec evidence；正文必须标注 draft/not ratified。 |
 | `riscv_iommu_2023` / `riscv_aia_2023` | IOMMU v1.0.1 / 20260222 ratified-library release 与 AIA v1.0 ratified June 2023 / 20250312 clarifications 来源核验并已下载本地 PDF。 | 作为 supporting spec；不要写成 TEE 系统论文。 |
 | `sok-tee` | NDSS 2026 accelerator TEE SoK，本地 PDF 已下载。 | 仅用于 accelerator/device TEE taxonomy；不替代通用 TEE SoK。 |
 | `boubakri2025riscvtee` | MDPI HTML 核验；PDF 自动下载 403。 | 作为 survey anchor；机制论断回引原始论文/spec。 |

@@ -36,7 +36,7 @@
 
 ### 5. 实现细节
 
-PDF 未给出完整实现代码或系统实现细节。它更接近架构 proposal。后续应以 RISC-V AP-TEE v0.7、CoVE-IO v0.3.0、IOMMU/AIA 规范补接口和生命周期细节。
+PDF 未给出完整实现代码或系统实现细节。它更接近架构 proposal。后续应以 Draft/not ratified: RISC-V AP-TEE v0.7 / RC2 for ARC review、Draft/not ratified: CoVE-IO v0.3.0、IOMMU/AIA 规范补接口和生命周期细节。
 
 ### 6. 实验设计分析
 
