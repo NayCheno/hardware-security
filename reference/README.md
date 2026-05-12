@@ -30,9 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 67 of 82 reference entries have verified local PDFs.
+Download status: 67 of 82 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
 
-Bibliography corpus status: `survey/reference.bib` now contains 300 entries. The 152 newly added related-work entries are metadata-only candidates, not downloaded/reviewed reference records; see `survey/related_work_300_expansion.md` before turning any of them into正文 evidence.
+Bibliography corpus status: `survey/reference.bib` contains 148 active entries. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. See `survey/related_work_300_expansion.md` before using any candidate.
 
 Newly added or completed in this pass:
 

@@ -6,11 +6,12 @@
 
 当前事实：
 
-- `survey/reference.bib`：300 个 BibTeX 条目。
+- `survey/reference.bib`：148 个 active/verified BibTeX 条目。
+- `survey/candidate_reference.bib`：152 个 metadata-only 候选条目，不作为正文机制 claim 的证据。
 - `survey/*.tex` 正文实际引用：77 个 key，全部能在 Bib 中找到。
-- `reference/`：82 个论文/规范 README 条目，67 个本地 `paper.pdf`。
+- `reference/`：82 个论文/规范 README 条目（不含 category index README），67 个本地 `paper.pdf`。
 - 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、PORTAL、CAGE、StrongBox、S-NIC、TNIC、Hazel 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root 和 accelerator/device TEE 的核心材料。
-- Related-work corpus 扩展：`survey/reference.bib` 已追加 152 条 metadata-only 候选，使总条目达到 300；新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。它们尚未算作已下载/已精读 reference，后续引用前必须先核验作者、venue、DOI/source、PDF，并补 `reference/` 目录。
+- Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。它们尚未算作已下载/已精读 reference，后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
 
 标记规则：
 

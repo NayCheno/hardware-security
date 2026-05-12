@@ -9,7 +9,10 @@ This repository organizes a hardware-security survey and its cited paper library
 ├── survey/
 │   ├── main.tex
 │   ├── reference.bib
+│   ├── candidate_reference.bib
 │   ├── confidential_computing_of_arm_hardware.tex
+│   ├── riscv_confidential_computing.tex
+│   ├── confidential_io_and_network_defense.tex
 │   └── security_of_hardware_design.tex
 ├── reference/
 │   ├── README.md
@@ -36,7 +39,7 @@ pdflatex -interaction=nonstopmode main.tex
 pdflatex -interaction=nonstopmode main.tex
 ```
 
-The bibliography used by the survey lives in `survey/reference.bib`.
+The bibliography used by the survey lives in `survey/reference.bib`. Metadata-only related-work candidates are kept separately in `survey/candidate_reference.bib`; they must not be cited in正文 until their metadata, source, and evidence status are verified and promoted into `survey/reference.bib`.
 
 ## `reference/`
 

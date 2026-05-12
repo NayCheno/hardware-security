@@ -2,9 +2,9 @@
 
 Status date: 2026-05-12
 
-This file records the 152 metadata-only candidates appended to `survey/reference.bib` to expand the survey related-work corpus from 148 to 300 entries.
+This file records the 152 metadata-only candidates stored in `survey/candidate_reference.bib`. They were originally appended to `survey/reference.bib` during corpus expansion, but they are now kept separate from the 148 verified/active bibliography entries used by the survey.
 
-Important rule: these entries are triage candidates, not downloaded/reviewed reference records. Before any candidate is cited substantively in the survey, verify its authors, venue, DOI/source URL, download a public PDF when available, and create the matching `reference/<category>/<paper>/README.md`.
+Important rule: these entries are triage candidates, not downloaded/reviewed reference records. Before any candidate is cited substantively in the survey, verify its authors, venue, DOI/source URL, download a public PDF when available, create the matching `reference/<category>/<paper>/README.md`, and promote a canonical BibTeX entry into `survey/reference.bib`.
 
 ## Scope
 
@@ -270,6 +270,6 @@ Recent web/arXiv searches during this expansion surfaced several current candida
 ## Next Rules for Agents
 
 - Do not treat `@misc` metadata-only entries as reviewed evidence.
-- When a metadata-only entry becomes正文 evidence, replace it with verified BibTeX metadata and add a `reference/` directory with source links and PDF status.
+- When a metadata-only entry becomes正文 evidence, replace it with verified BibTeX metadata in `survey/reference.bib` and add a `reference/` directory with source links and PDF status.
 - SoK/survey candidates should trigger citation expansion only for in-scope mechanism papers, not side-channel or generic network-security branches.
 - For Arm/RISC-V CCA/CoVE claims, prefer original specs and system papers over cross-platform runtime papers.
