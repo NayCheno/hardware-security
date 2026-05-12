@@ -15,6 +15,7 @@
 \definecolor{Accent}{HTML}{A60000}
 \definecolor{Muted}{HTML}{666666}
 \definecolor{LightBG}{HTML}{F7F7F7}
+\definecolor{RuleBG}{HTML}{FFF7F7}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}{\hfill\scriptsize\insertframenumber\,/\,\inserttotalframenumber\hspace{1.2em}\vspace{0.7em}}
 \setbeamercolor{title}{fg=black}
@@ -22,10 +23,86 @@
 \setbeamerfont{frametitle}{series=\bfseries,size=\large}
 \setbeamercolor{section in toc}{fg=black}
 \setbeamertemplate{itemize item}{\textcolor{Accent}{\scriptsize$\blacktriangleright$}}
+\setbeamertemplate{itemize subitem}{\textcolor{Muted}{\scriptsize$\bullet$}}
 \newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
 \newcommand{\Tag}[1]{\textcolor{Accent}{\scriptsize\bfseries #1}}
-\newcommand{\Key}[1]{\textcolor{Muted}{\scriptsize\texttt{#1}}}
+\newcommand{\Key}[1]{\textcolor{Muted}{\scriptsize\texttt{\detokenize{#1}}}}
+\newcommand{\Evidence}[1]{\textcolor{Accent}{\scriptsize\bfseries #1}}
+\newcommand{\SourceState}[1]{\textcolor{Muted}{\scriptsize #1}}
+\newcommand{\Meta}[4]{%
+  {\Key{#1}\quad\Evidence{#2}\par
+  \SourceState{#3}\par
+  \SourceState{#4}\par}}
 \newcommand{\Divider}{\vspace{0.6mm}\hrule\vspace{1.5mm}}
+\newcommand{\RuleBox}[1]{%
+  \vspace{1mm}
+  \fcolorbox{Accent}{RuleBG}{\begin{minipage}{0.96\textwidth}\scriptsize #1\end{minipage}}
+  \vspace{1mm}}
+\newcommand{\DirectionIntro}[4]{%
+\begin{frame}[t]{#1}
+\small
+\textbf{方向定位}\par #2
+\medskip
+\textbf{三篇主讲选择规则}\par #3
+\medskip
+\textbf{证据边界}\par #4
+\end{frame}}
+\newcommand{\DirectionSummary}[5]{%
+\begin{frame}[t]{#1：技术演进总结}
+\small
+\begin{itemize}
+  \item \textbf{基础问题：}#2
+  \item \textbf{第一条推进线：}#3
+  \item \textbf{第二条推进线：}#4
+  \item \textbf{仍需保留的缺口：}#5
+\end{itemize}
+\end{frame}}
+\newcommand{\PaperStory}[8]{%
+\begin{frame}[t]{#1}
+\small
+#2
+\Divider
+\begin{itemize}
+  \item 本组 slide 固定按 7 页展开：标题页、内容摘要、研究背景、核心洞察/解决方案、关键技术、实验结果/证据状态、文章评价。
+  \item 证据等级在每页保留；draft、metadata-only、gated、source-limited 和 industry evidence 不写成已完全落地的学术系统。
+\end{itemize}
+\end{frame}
+\begin{frame}[t]{#1：内容摘要}
+\small
+#2
+\Divider
+#3
+\end{frame}
+\begin{frame}[t]{#1：研究背景}
+\small
+#2
+\Divider
+#4
+\end{frame}
+\begin{frame}[t]{#1：核心洞察 / 解决方案}
+\small
+#2
+\Divider
+#5
+\end{frame}
+\begin{frame}[t]{#1：关键技术}
+\small
+#2
+\Divider
+#6
+\end{frame}
+\begin{frame}[t]{#1：实验结果 / 证据状态}
+\small
+#2
+\Divider
+#7
+\end{frame}
+\begin{frame}[t]{#1：文章评价}
+\small
+#2
+\Divider
+#8
+\end{frame}}
 \newcommand{\PaperFrame}[7]{%
 \begin{frame}[t]
   \frametitle{#1}

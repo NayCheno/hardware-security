@@ -1,9 +1,10 @@
 PDF=main.pdf
 TEX=main.tex
+SOURCES=$(TEX) config/preamble.tex $(wildcard */section.tex)
 
 all: $(PDF)
 
-$(PDF): $(TEX) config/preamble.tex
+$(PDF): $(SOURCES)
 	xelatex -interaction=nonstopmode $(TEX)
 	xelatex -interaction=nonstopmode $(TEX)
 

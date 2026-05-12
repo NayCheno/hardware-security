@@ -2,6 +2,8 @@
 
 This directory contains a LaTeX/Beamer scaffold for the hardware-security survey slide report.
 
+`main.pdf` is generated locally for QA and review. It is intentionally ignored by Git and should not be committed.
+
 ## Build
 
 ```bash
@@ -22,13 +24,16 @@ The build uses `xelatex` to support Chinese text.
 
 ## Expansion rule
 
-For each selected paper, expand the current summary slide into:
+For each selected primary paper, keep a seven-slide mini-story:
 
 1. Title / venue / role
 2. 内容摘要
 3. 研究背景
-4. 解决方案 / 核心洞察 / 技术模块
-5. 实验结果
-6. 文章评价：优点、不足、商业落地潜力
+4. 核心洞察 / 解决方案
+5. 关键技术
+6. 实验结果 / 证据状态
+7. 文章评价：优点、不足、商业落地潜力
 
 Evidence labels must be preserved: Foundational, Peer-reviewed SOTA, Spec/standard SOTA, Draft/not ratified, Industry evidence, Background substrate, Candidate/metadata-only.
+
+Each direction keeps exactly three `primary` entries in `papers.yml`. Combined evidence packages are split into one primary paper/spec plus `auxiliary` comparison materials that do not count toward the three-paper rule. Missing-PDF, gated, metadata-only, and source-limited entries may describe source status only; they must not carry strong experimental claims.

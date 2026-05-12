@@ -1,11 +1,38 @@
 
-\section{总览与使用说明}
+\section{总览与证据规则}
 \begin{frame}{Report-slide 目录目标}
 \small
 \begin{itemize}
   \item 将现有 \texttt{domain.md} 的小方向三篇精选材料，从单一矩阵拆成可编译、可维护、可扩展的 LaTeX slide 目录。
-  \item 每个小方向一个子目录，包含 \texttt{section.tex} 与 \texttt{papers.yml}；后续可继续补图、表、实验细节和讲者备注。
-  \item 版式参考上传 PDF 的结构：先给方向背景与技术演进，再对每篇文章按“内容摘要、研究背景、解决方案、实验结果、文章评价”展开。
+  \item 每个小方向一个子目录，包含 \texttt{section.tex} 与 \texttt{papers.yml}；\texttt{papers.yml} 固定记录三篇 \texttt{primary} 主讲材料与不计数的 \texttt{auxiliary} 对比材料。
+  \item 版式参考上传 PDF 的结构：先给方向背景与技术演进，再对每篇文章按“内容摘要、研究背景、解决方案、关键技术、实验结果、文章评价”展开。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{全局证据等级与可写 claim}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}lY@{}}
+\toprule
+标签 & Slide 中允许的表述 \\
+\midrule
+Foundational / E1-E2 & 可作为方向入口或 taxonomy 起点；系统性能和机制 claim 必须回到原论文或规范。 \\
+Peer-reviewed SOTA / E1 & 可写机制、实验和 threat model；具体数值只使用本地 PDF/官方来源已核验内容。 \\
+Spec/standard SOTA / E0 & 可写规范语义、接口和状态；不写独立实验结论，除非规范自身给出。 \\
+Draft/not ratified / E3 & 只写标准化方向和草案状态；标题或证据行必须显式标注 draft/not ratified。 \\
+Industry evidence / E4 & 只支撑厂商产品行为、部署实践或 building block；不当作普适安全证明。 \\
+Background substrate / E2-E4 & 只支撑相邻背景、谱系、生态或 substrate 机制；不能替代本方向的一手机制证据。 \\
+Candidate/metadata-only / E5 & 只写 public metadata、gated/source-limited 状态；不支撑强机制或性能 claim。 \\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\begin{frame}{主讲材料展开契约}
+\small
+\begin{itemize}
+  \item 每篇主讲材料固定 7 页：标题页、内容摘要、研究背景、核心洞察/解决方案、关键技术、实验结果/证据状态、文章评价。
+  \item 每个方向固定 3 篇主讲材料；组合条目必须拆成 1 篇主讲材料和若干辅助对比材料，辅助材料不计入三篇。
+  \item 每篇文章评价统一写三块：优点、不足、商业落地潜力/条件/风险。
+  \item 缺 PDF、gated、metadata-only 或 source-limited 材料只保留来源状态和保守解释，不写强实验结论。
 \end{itemize}
 \end{frame}
 
