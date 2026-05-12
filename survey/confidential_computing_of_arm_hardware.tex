@@ -111,7 +111,7 @@ gap, not as an Arm official interface or production CCA migration standard.
 \textbf{Aster} is treated with a similar boundary discipline. It is useful
 peer-reviewed evidence that Arm CCA can be studied as an Android AVF backend,
 including pVM launch policy, DICE-compatible attestation, rollback protection,
-and per-pVM memory protection~\cite{kuhne2026aster}. It is not an Arm official
+and per-pVM memory protection~\cite{kuhne2026aster,tcg_dice_2018}. It is not an Arm official
 mobile profile, and its evaluation is constrained by the absence of native
 CCA-enabled Android hardware. The survey therefore uses it as emerging mobile
 deployment evidence rather than as production Android CCA availability.
@@ -124,7 +124,7 @@ Later systems work also shows that Arm CCA is being pushed toward finer-grained 
 
 \subsubsection{Attestation for Realms}
 
-Isolation alone does not let a remote party decide whether to provision secrets to a workload. Arm CCA therefore couples protected execution with attestation evidence describing the platform state, the management monitor, and the initial Realm state~\cite{arm_cca_spec,arm_rmm_spec}. The \textbf{RATS} architecture defines the attester, verifier, relying-party, evidence, and appraisal roles, while the \textbf{Entity Attestation Token (EAT)} standard provides a general token format for carrying attestation claims in a machine-consumable form~\cite{rats_rfc,eat_rfc}. More broadly, studies of attestation mechanisms for TEEs emphasize that the practical value of attestation depends on what is measured, how claims are encoded, and how a verifier evaluates them~\cite{menetrey2022attestation}. In this sense, attestation converts confidential execution from a local hardware property into a system property that can be consumed by remote tenants, orchestration systems, and key brokers.
+Isolation alone does not let a remote party decide whether to provision secrets to a workload. Arm CCA therefore couples protected execution with attestation evidence describing the platform state, the management monitor, and the initial Realm state~\cite{arm_cca_spec,arm_rmm_spec}. The \textbf{RATS} architecture defines the attester, verifier, relying-party, evidence, and appraisal roles, while the \textbf{Entity Attestation Token (EAT)} standard provides a general token format for carrying attestation claims in a machine-consumable form~\cite{rats_rfc,eat_rfc}. \textbf{DICE} supplies lower-level boot identity vocabulary by deriving a Compound Device Identifier from a Unique Device Secret and first mutable code measurement before mutable code runs~\cite{tcg_dice_2018}. More broadly, studies of attestation mechanisms for TEEs emphasize that the practical value of attestation depends on what is measured, how claims are encoded, and how a verifier evaluates them~\cite{menetrey2022attestation}. In this sense, attestation converts confidential execution from a local hardware property into a system property that can be consumed by remote tenants, orchestration systems, and key brokers.
 
 \subsubsection{Broader Attestation Context in Arm Systems}
 

@@ -34,7 +34,7 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2016cflatcontrolflowattestation` | P0 | `attestation-boot-lifecycle` | 2016 | Backlog control-flow attestation; no substantive citation until canonical paper is ingested. |
 | `rw2017lofatlowoverheadcontrol` | P0 | `attestation-boot-lifecycle` | 2017 | Backlog hardware CFA; no substantive citation until canonical paper is ingested. |
 | `rw2019vrasedverifiedhardwaresoftwareco` | P0 | `attestation-boot-lifecycle` | 2019 | Backlog verified RA design; no substantive citation until canonical paper is ingested. |
-| `rw2021deviceidentifiercompositionengine` | P0 | `attestation-boot-lifecycle` | 2021 | Backlog standard candidate for DICE; promote official DICE source before substantive citation. |
+| `rw2021deviceidentifiercompositionengine` | P0 | `attestation-boot-lifecycle` | 2021 | Covered by active official TCG reference `tcg_dice_2018`; candidate remains metadata-only. |
 | `rw2023remoteattestationproceduresarchitecture` | P0 | `attestation-boot-lifecycle` | 2023 | Covered by active reference `rats_rfc`; candidate remains metadata-only. |
 | `rw2008flickerexecutioninfrastructuretcbminimization` | P0 | `hardware-tee-architecture` | 2008 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2010trustvisorefficienttcbreductionattestation` | P0 | `hardware-tee-architecture` | 2010 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
@@ -141,6 +141,7 @@ These entries were promoted as canonical keys during the `next-plan.md` implemen
 | `kuhne2026aster` | P2/emerging active | `arm-confidential-computing` | Added as active emerging reference with verified PDF and README; cited for Android AVF-on-CCA deployment only. |
 | `khalilov2024osmosis` | P2/background substrate | `memory-and-io-fabrics` | Added as active background substrate with verified PDF and README; cited for SmartNIC resource management only. |
 | `schluter2024heckler` | Boundary-only | `survey/excluded_attack_reference.bib` | Added only to excluded attack bibliography and boundary prose; no active正文 citation. |
+| `tcg_dice_2018` | One-hop P0 promotion | `attestation` | Added from Aster citation triage as official DICE UDS/CDI reference with verified PDF and README. |
 
 ## Promotion Gate
 
