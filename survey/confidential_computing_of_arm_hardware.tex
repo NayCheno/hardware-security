@@ -68,7 +68,7 @@ Recent systems research makes this point concrete. \textbf{ACAI} studies how acc
 
 \subsubsection{User-Space, Containers, and Virtualized Realms}
 
-One reason Arm CCA has attracted attention is that it can support several deployment models above the raw hardware interface. \textbf{SHELTER} explores user-space isolation with Arm CCA hardware primitives~\cite{zhang2023shelter}. \textbf{RContainer} extends the same substrate toward confidential containers~\cite{zhou2025rcontainer}. \textbf{virtCCA} studies virtualized CCA deployments that combine Realm-style protection with existing Arm trust infrastructure~\cite{xu2026virtcca}. These works are useful in a survey because they show that CCA is not restricted to one software packaging model; rather, it is being used as a common basis for protected processes, containers, and virtualized workloads.
+One reason Arm CCA has attracted attention is that it can support several deployment models above the raw hardware interface. \textbf{SHELTER} explores user-space isolation with Arm CCA hardware primitives~\cite{zhang2023shelter}. \textbf{RContainer} extends the same substrate toward confidential containers~\cite{zhou2025rcontainer}. \textbf{virtCCA} studies virtualized CCA deployments that combine Realm-style protection with existing Arm trust infrastructure~\cite{xu2026virtcca}. \textbf{Aster} brings the same question into the Android ecosystem by mapping Android Virtualization Framework protected VMs to CCA Realms and identifying the boot, attestation, rollback, and memory-protection changes needed for mobile protected workloads~\cite{kuhne2026aster}. These works are useful in a survey because they show that CCA is not restricted to one software packaging model; rather, it is being used as a common basis for protected processes, containers, virtualized workloads, and mobile protected VMs.
 
 \begin{table*}[t]
 \centering
@@ -81,6 +81,7 @@ One reason Arm CCA has attracted attention is that it can support several deploy
 User-space isolation & SHELTER & Process or application compartment & Realm/GPT/GPC-backed user-space isolation & E1 primary paper & Not a general VM or container deployment. \\
 Container isolation & RContainer & Container workload & CCA primitives beneath container packaging & E1 primary paper & Deployment maturity and orchestration integration remain open. \\
 Virtualized CCA & virtCCA & Virtualized Realm/CCA stack & CCA combined with existing Arm trust infrastructure & E3 arXiv/preprint evidence & Nested trust and virtualization complexity. \\
+Mobile protected VM & Aster & Android AVF protected VM & Realm-world pVM execution with DICE, policy, rollback, and memory-protection integration & E1 emerging mobile CCA evidence & Evaluated with emulator/Armv8.2 approximation rather than native CCA Android hardware. \\
 Intra-process isolation & NanoZone; More Granular, Less Trust & Fine-grained compartment inside a process & Granule ownership and Realm-style memory protection & E3 plus E1 & Granularity and draft/preprint status vary by work. \\
 CVM maintenance & CPC & Migration, snapshot, and resource reclamation procedure & Guest-side confidential procedure plus CPTI-style intra-CVM isolation & E1 primary paper & Arm CCA evidence uses official simulator rather than production hardware. \\
 Inter-CVM sharing & CAEC & Communication between confidential VMs & Attestation plus controlled sharing over CCA substrate & E3 arXiv evidence & Not an Arm official interface; sharing policy remains research. \\
@@ -106,6 +107,14 @@ management problem. The paper's AMD SEV-SNP prototype provides real-machine
 performance evidence, while the Arm CCA prototype is simulator-based; therefore
 this survey uses CPC as peer-reviewed evidence for the maintenance/lifecycle
 gap, not as an Arm official interface or production CCA migration standard.
+
+\textbf{Aster} is treated with a similar boundary discipline. It is useful
+peer-reviewed evidence that Arm CCA can be studied as an Android AVF backend,
+including pVM launch policy, DICE-compatible attestation, rollback protection,
+and per-pVM memory protection~\cite{kuhne2026aster}. It is not an Arm official
+mobile profile, and its evaluation is constrained by the absence of native
+CCA-enabled Android hardware. The survey therefore uses it as emerging mobile
+deployment evidence rather than as production Android CCA availability.
 
 \subsubsection{Fine-Grained Isolation Above the Base Architecture}
 

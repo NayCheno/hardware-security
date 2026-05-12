@@ -36,6 +36,11 @@ ownership, not a secondary OS scheduling detail~\cite{bertschi2026devlore}.
 For RISC-V, AIA and CoVE-IO provide the architectural vocabulary for trusted MSI
 and interrupt handling, while Arm platforms rely on SMMU and interrupt
 controller integration in the broader CCA system model~\cite{riscv_aia_2023,riscv_cove_io_2026,arm_smmu_spec}.
+Attack-only work such as HECKLER shows why this boundary matters: malicious
+interrupt delivery can undermine confidential VMs, but this survey keeps
+HECKLER in the excluded attack bibliography and uses it only as motivation for
+interrupt ownership requirements.\footnote{\url{https://www.usenix.org/conference/usenixsecurity24/presentation/schluter};
+metadata is kept in \texttt{survey/excluded\_attack\_reference.bib}.}
 
 \subsubsection{Network and Offload-Specific Risks}
 
@@ -77,9 +82,14 @@ on-NIC RAM, cache, accelerators, DMA, and bus bandwidth before offloaded network
 functions can be treated as tenant-confidential components~\cite{zhou2024snic}.
 \textbf{TNIC} takes a different route by placing a minimal root of trust at the
 NIC, providing transferable authentication and non-equivocation for trustworthy
-distributed systems~\cite{giantsidi2025tnic}. These works are not substitutes
-for VM memory protection, SPDM, or TDISP. They clarify what a NIC or DPU must
-provide if it becomes a real endpoint of a confidential data path.
+distributed systems~\cite{giantsidi2025tnic}. \textbf{OSMOSIS} adds a
+background resource-management view: multi-tenant SmartNIC kernels contend for
+on-NIC compute, DMA, egress bandwidth, and local memory, so a programmable
+offload endpoint also needs scheduling and QoS mechanisms before it can be
+operationally usable in a multi-tenant setting~\cite{khalilov2024osmosis}.
+These works are not substitutes for VM memory protection, SPDM, or TDISP. They
+clarify what a NIC or DPU must provide if it becomes a real endpoint of a
+confidential data path.
 
 \subsection{Protocol Layer: Identity, Session Security, and Device State}
 
@@ -297,14 +307,17 @@ describes fTPM support and its limitations rather than a complete production
 confidential networking TEE, and it does not by itself bind a workload channel,
 DMA policy, or TDISP/SPDM lifecycle to the DPU state.
 
-S-NIC and TNIC fill two additional gaps. S-NIC answers how a SmartNIC can
-isolate tenant network functions from other functions and from the NIC OS, while
-TNIC answers how a NIC can provide a small, verifiable trust root for networked
-protocols~\cite{zhou2024snic,giantsidi2025tnic}. Hazel then shows how DPU/SmartNIC
+S-NIC, TNIC, and OSMOSIS fill three additional gaps. S-NIC answers how a
+SmartNIC can isolate tenant network functions from other functions and from the
+NIC OS, TNIC answers how a NIC can provide a small, verifiable trust root for
+networked protocols, and OSMOSIS answers how a SmartNIC can multiplex
+compute, DMA, egress, and memory resources among tenants with explicit QoS
+policies~\cite{zhou2024snic,giantsidi2025tnic,khalilov2024osmosis}. Hazel then shows how DPU/SmartNIC
 offload can be used in a secure storage data path while preserving freshness
 properties~\cite{chrapek2026hazel}. Together these papers make the DPU/NIC
 category more precise: one must distinguish local resource isolation, endpoint
-attestation, protocol-level non-equivocation, and storage freshness.
+attestation, protocol-level non-equivocation, resource-management QoS, and
+storage freshness.
 
 For survey classification, these systems are neither ordinary firewall/IDS
 papers nor complete replacements for CoVE-IO or TDISP. They are evidence that
@@ -328,7 +341,7 @@ Attested service channel & Does the application channel terminate in the atteste
 DMA and MMIO authority & Which memory and registers may the device access? & SMMU, RISC-V IOMMU, IOPMP, sIOPMP & Enforce address translation and transaction filtering. \\
 Interrupt and event delivery & Can completion and error events be delivered without host spoofing or confusion? & AIA, trusted MSI, Devlore-style interrupt ownership & Keep device ownership coherent after asynchronous events. \\
 Link and fabric protection & What protects traffic across PCIe, CXL, RDMA, and remote-memory paths? & PCIe IDE, CXL fabric controls, protected RDMA/remote paging designs & Protect data once it leaves CPU-local memory paths. \\
-NIC-local root and function isolation & Can a SmartNIC/DPU isolate tenant functions or provide a trusted network primitive? & S-NIC, TNIC, vendor DPU OP-TEE/fTPM building blocks & Treat NICs and DPUs as explicit but incomplete trust endpoints that still need attestation, lifecycle, DMA, and channel binding. \\
+NIC-local root and function isolation & Can a SmartNIC/DPU isolate tenant functions, multiplex resources, or provide a trusted network primitive? & S-NIC, TNIC, OSMOSIS resource-management substrate, vendor DPU OP-TEE/fTPM building blocks & Treat NICs and DPUs as explicit but incomplete trust endpoints that still need attestation, lifecycle, DMA, channel binding, and resource policy. \\
 Confidential storage data path & Can remote storage preserve confidentiality, integrity, and freshness? & Hazel, protected NVMe-oF metadata, DPU crypto offload & Extend confidential I/O beyond packets into persistent remote state. \\
 Device-local confidential execution & Does the accelerator or offload engine hold secrets or execute trusted code? & ACAI, PORTAL, CAGE, StrongBox, Graviton, Telekine, Honeycomb, ShEF, ITX, XpuTEE source-limited metadata, SGX-FPGA source-limited metadata, HETEE, CloudScale, vendor BlueField OP-TEE/fTPM building blocks, accelerator TEE designs & Extend or avoid extending the TCB to accelerators and offload devices; do not treat vendor building blocks or source-limited metadata as complete confidential-networking TEEs. \\ \bottomrule
 \end{tabular}
@@ -357,7 +370,7 @@ NVMe-oF, and remote-memory systems define the fabric paths that protected data
 may cross, but they are background substrate unless composed with device
 identity, lifecycle, and DMA controls. Accelerator, SmartNIC, NIC, and DPU work
 such as ACAI, PORTAL, CAGE, StrongBox, ITX, HETEE, CloudScale, S-NIC, TNIC,
-Hazel, and BlueField OP-TEE/fTPM shows that device-local, NIC-local,
+OSMOSIS, Hazel, and BlueField OP-TEE/fTPM shows that device-local, NIC-local,
 storage-path, or controller-mediated execution can contribute building blocks
 for a confidential boundary. A survey that focuses only on CPU TEE mechanisms
 would miss this entire class of
