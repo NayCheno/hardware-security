@@ -369,12 +369,12 @@
     "primary": [
       {
         "key": "sahita2023cove",
-        "evidence": "E1 / Foundational",
+        "evidence": "E3 / Foundational public preprint",
         "source_status": "local_pdf_verified",
         "role": "foundational",
         "selection_reason": "CoVE 2023 is the early mainline design material for RISC-V confidential VMs.",
-        "evidence_type": "E1 peer-reviewed primary work",
-        "maturity": "peer-reviewed primary work",
+        "evidence_type": "E3 public preprint/proposal",
+        "maturity": "public preprint/proposal, not peer-reviewed",
         "pdf_status": "local_pdf_verified",
         "source_url": "https://arxiv.org/abs/2304.06167"
       },

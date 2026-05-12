@@ -44,7 +44,7 @@ primary:
   - PMP/enclave lineage
   - CoVE/AP-TEE confidential VM lineage
   - RISC-V open hardware/software co-design
-  experiment_claim: 规范/Survey，无新实验；PDF/source-limited 时只写 taxonomy 辅助，不写强机制或性能 claim。
+  experiment_claim: 规范/Survey，无新实验；MDPI HTML 与本地 PDF 已核验，但仍只写 taxonomy 辅助，不写强机制或性能 claim。
   evaluation:
     strengths: 能把 RISC-V 小方向和顶层 taxonomy 接起来。
     limitations: 机制细节必须回到 Keystone/Penglai/SPEAR-V/AP-TEE/CoVE-IO 原始材料。

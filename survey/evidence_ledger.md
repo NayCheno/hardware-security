@@ -55,7 +55,7 @@ attestation-lineage promotion, and the three-primary slide selection pass.
 | `06-attestation-boot-lifecycle` | `seshadri2004swatt` (E1) | `rats_rfc` (E0) | `nunes2019vrased` (E1) |
 | `07-riscv-primitives` | `riscv_privileged` (E0) | `riscv_iommu_2023` (E0) | `riscv_aia_2023` (E0) |
 | `08-riscv-tee-lineage` | `lee2020keystone` (E1) | `feng2021penglai` (E1) | `schrammel2023spearv` (E1) |
-| `09-riscv-cove-ap-tee` | `sahita2023cove` (E1) | `riscv_ap_tee_2024` (E3) | `boubakri2025riscvtee` (E2 survey) |
+| `09-riscv-cove-ap-tee` | `sahita2023cove` (E3 public preprint/proposal; foundational role) | `riscv_ap_tee_2024` (E3) | `boubakri2025riscvtee` (E2 survey) |
 | `10-riscv-cove-io-tee-io` | `feng2024siopmp` (E1) | `riscv_cove_io_2026` (E3) | `riscv_iommu_2023` (E0) |
 | `11-memory-encryption-integrity-replay` | `henson2014memory` (E2) | `amd_sev_snp` (E4) | `arm_cca_spec` (E0) |
 | `12-memory-io-fabrics` | `gouk2022directcxl` (E1 primary systems) | `zhong2024cxltiers` (E1 primary systems) | `wang2025odrp` (E1 primary systems) |

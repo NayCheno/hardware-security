@@ -68,7 +68,7 @@ primary:
   - Fine-grained memory protection over CCA
   - Granule/lifecycle scaling pressure
   - Intra-process isolation comparison with less-trust management
-  experiment_claim: 规范/Survey，无新实验；证据基础是 arXiv 预印本的设计和评估线索，draft/not ratified 状态下只作为前沿方向证据。
+  experiment_claim: arXiv 预印本提供设计与评估线索；draft/not ratified 状态下只作为前沿方向证据，不能写成同行评议共识或成熟生产证据。
   evaluation:
     strengths: 直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿。
     limitations: 预印本尚不能代表同行评议共识或硬件/OS 生态成熟度。

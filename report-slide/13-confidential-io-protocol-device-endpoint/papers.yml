@@ -73,7 +73,7 @@ primary:
   - SEV-SNP CVM networking path analysis
   - DPDK data-plane optimization
   - Trusted-I/O versus untrusted-device tradeoff
-  experiment_claim: 规范/Survey，无新实验；证据基础是 arXiv preprint 的原型评估，报告接近理想 TIO 网络配置；结论不能泛化到 plaintext accelerator、storage 或 RDMA offload。
+  experiment_claim: arXiv preprint 提供 SEV-SNP/DPDK 网络路径原型评估，报告接近理想 TIO 网络配置；结论不能泛化到 plaintext accelerator、storage 或 RDMA offload。
   evaluation:
     strengths: 防止把 SPDM/TDISP/IDE 写成所有网络性能问题的唯一答案。
     limitations: 基于 SEV-SNP 网络场景，不证明 Arm CCA/CoVE、SmartNIC/DPU 或 storage offload 的同等安全/性能。

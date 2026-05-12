@@ -12,7 +12,7 @@
 \toprule
 角色 & 主讲材料 & 证据类型 \\
 \midrule
-架构入口 & RISC-V CoVE reference architecture & Foundational / E1 arXiv 2023 \\
+架构入口 & RISC-V CoVE reference architecture & Foundational role / E3 public preprint \\
 规范草案 & RISC-V AP-TEE / CoVE TVM 规范草案 & Draft/not ratified / E3 AP-TEE v0.7 RC2 \\
 谱系定位 & RISC-V TEE 谱系辅助材料 & Background substrate / E2 survey \\
 \bottomrule
@@ -23,7 +23,7 @@
 
 \PaperStory
 {RISC-V CoVE reference architecture}
-{\Meta{sahita2023cove}{Foundational / E1 arXiv 2023}{source: local PDF verified}{claim: reference architecture}}
+{\Meta{sahita2023cove}{Foundational role / E3 public preprint}{source: local PDF verified}{claim: reference architecture proposal}}
 {\begin{itemize}
   \item CoVE reference architecture 提出 RISC-V confidential computing 参考架构方向。
   \item 它明确 confidential VM 需要 ISA、non-ISA、SoC 与 platform requirements 的配合。
@@ -42,8 +42,8 @@
   \item Host/hypervisor trust reduction for TVM。
 \end{itemize}}
 {\begin{itemize}
-  \item 架构论文/position-style，无完整系统实验。
-  \item 具体 ABI、状态机和 lifecycle details 需要 AP-TEE draft 支撑。
+  \item Public preprint/proposal，提供 reference-architecture 论证而非同行评议系统评测。
+  \item 具体 ABI、状态机和 lifecycle details 需要 AP-TEE draft 支撑；不能写成 ratified standard 或生产实现证据。
 \end{itemize}}
 {\begin{itemize}
   \item \textbf{优点：}CoVE confidential VM 入口材料，把 RISC-V 从 enclave lineage 推向 TVM 模型。
@@ -90,7 +90,7 @@
 \end{itemize}}
 {\begin{itemize}
   \item RISC-V TEE 论文和规范发展快，taxonomy 容易断裂。
-  \item Survey 可帮助定位系统谱系；本地 PDF 自动下载受阻，因此不承担机制或性能 claim。
+  \item Survey 可帮助定位系统谱系；MDPI HTML 与本地 PDF 已核验，但仍不承担机制或性能 claim。
 \end{itemize}}
 {\begin{itemize}
   \item 核心洞察是按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类。
@@ -107,7 +107,7 @@
 \end{itemize}}
 {\begin{itemize}
   \item \textbf{优点：}有助横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
-  \item \textbf{不足：}自动 PDF 下载受阻，不能替代原始机制论文或官方规范。
+  \item \textbf{不足：}survey 粒度无法替代原始机制论文或官方规范。
   \item \textbf{商业落地：}适合产品路线图分类；风险在分类滞后和 threat model 被误合并。
 \end{itemize}}
 
