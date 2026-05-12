@@ -1,0 +1,44 @@
+\section{Attestation、boot、lifecycle}
+\begin{frame}{Attestation、boot、lifecycle}
+\small
+\textbf{方向定位：}区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier policy。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & SWATT: 软件 attestation 早期代表 & Foundational / IEEE S\&P 2004 \\ 
+SOTA/规范 1 & RATS 架构与 Entity Attestation Token & Spec/standard SOTA / RFC 9334 + RFC 9711 \\ 
+SOTA/规范 2 & Policy-driven runtime integrity measurement & Draft/not ratified / arXiv 2025 \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{SWATT: 软件 attestation 早期代表}
+{seshadri2004swatt | Foundational / IEEE S\&P 2004}
+{提出软件 attestation 的早期代表方法。}
+{低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性。}
+{用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。}
+{论文在嵌入式节点场景评估；安全性强依赖时间和硬件假设。}
+{历史价值高；现代高威胁模型下适用性有限。商业应用应转向硬件 RoT 与标准化 evidence。}
+
+\PaperFrame
+{RATS 架构与 Entity Attestation Token}
+{rats\_rfc + eat\_rfc | Spec/standard SOTA / RFC 9334 + RFC 9711}
+{RATS 定义 attester、verifier、relying party、evidence、reference values 和 attestation results；EAT 定义 token claims。}
+{多平台 attestation 同时需要可互操作的架构术语和证据编码。}
+{RATS 规范化 evidence 生成、传递、评估角色与消息；EAT 用 CWT/JWT 承载实体状态和安全属性 claims。}
+{RFC，无实验。}
+{标准化落地潜力强；不能说明某平台测量链是否充分，也不能替代 CCA/CoVE 平台规范。}
+
+\PaperFrame
+{Policy-driven runtime integrity measurement}
+{mao2025pdrima | Draft/not ratified / arXiv 2025}
+{研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。}
+{secure boot/launch attestation 不能覆盖运行时状态变化。}
+{把策略驱动的 runtime measurement 融入 attestation。}
+{arXiv 论文，本地 PDF 可用；具体结果需回引原文。}
+{适合补 runtime attestation；不要把它泛化为 CCA/CoVE 的完整 evidence chain。}
+

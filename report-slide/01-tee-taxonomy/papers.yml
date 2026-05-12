@@ -1,0 +1,30 @@
+direction: 硬件辅助 TEE taxonomy
+focus: 用 SoK/Survey 先固定 design space，避免把不同架构的 TEE 混成产品罗列。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: schneider2022soktee
+  role: Foundational / SoK, arXiv 2022
+  title: 硬件辅助 TEE 总体设计空间
+  summary: 系统化整理硬件辅助 TEE 的 launch、runtime isolation、trusted I/O、secure storage、attestation
+    与 TCB 维度。
+  background: SGX、SEV、TrustZone、Sanctum、Keystone 等平台名称相似，但威胁模型、硬件假设和部署场景差异很大。
+  solution: 用机制级 taxonomy 替代产品级罗列，把不同 TEE 统一映射到可比较的安全属性。妙处在于先定义比较坐标，再放入具体平台。
+  experiment: Survey/SoK，无新实验；证据来自公开论文和规范比较。
+  comment: 适合做本项目顶层分类。不足是时间截面停在 2022 年，CCA、CoVE/AP-TEE、CoVE-IO 和 accelerator TEE 需要额外补充；商业落地价值主要体现在评估框架与需求拆解。
+- key: boubakri2025riscvtee
+  role: Background substrate / Electronics 2025 survey
+  title: RISC-V secure enclave 与 TEE 谱系 survey
+  summary: 梳理 RISC-V secure enclave 与 TEE 研究谱系。
+  background: RISC-V TEE 从 PMP monitor 到 confidential VM 的发展分散在论文、草案和原型中，容易产生谱系断裂。
+  solution: 按 RISC-V TEE 设计点组织 Keystone、Penglai、SPEAR-V、CoVE 等工作，作为 taxonomy bridge。
+  experiment: Survey，无新实验；PDF 自动下载受限时应以 HTML/metadata 核验并回引原始论文。
+  comment: 适合补 RISC-V taxonomy；机制细节必须回到原始论文和 AP-TEE/CoVE-IO spec。商业潜力在于帮助做 RISC-V
+    平台技术选型。
+- key: sok-tee
+  role: Background substrate / NDSS 2026 SoK
+  title: Accelerator TEE 设计空间
+  summary: 系统化分析 accelerator TEE 设计。
+  background: Confidential workload 依赖 GPU/NPU/DPU/SmartNIC 后，CPU TEE 边界无法单独覆盖数据路径。
+  solution: 把 accelerator TEE 拆成设备身份、内存/总线保护、runtime TCB、调度、attestation 等维度。
+  experiment: Survey/SoK，无新实验。
+  comment: 非常适合 I/O/accelerator 小方向；不能替代通用 TEE SoK。商业价值在于为 DPU/GPU 安全产品定义评估清单。

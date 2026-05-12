@@ -1,0 +1,44 @@
+\section{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
+\begin{frame}{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
+\small
+\textbf{方向定位：}从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & Keystone: 开源 RISC-V TEE 框架 & Foundational / arXiv 2019 \\ 
+SOTA/规范 1 & Penglai: scalable enclave memory protection & Peer-reviewed SOTA / OSDI 2021 \\ 
+SOTA/规范 2 & SPEAR-V: low-overhead RISC-V enclave primitive & Peer-reviewed SOTA / ACM AsiaCCS 2023 \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{Keystone: 开源 RISC-V TEE 框架}
+{lee2020keystone | Foundational / arXiv 2019}
+{开源 RISC-V TEE 框架。}
+{商业 TEE 难定制、难验证，RISC-V 提供开放硬件/软件协同机会。}
+{用 PMP、security monitor 和 runtime abstraction 构建 enclave。}
+{论文报告 CoreMark/Beebs/RV8 开销低，IOZone 可明显更高；具体数值以原文为准。}
+{RISC-V TEE baseline；适合解释 PMP-based enclave 的优缺点。}
+
+\PaperFrame
+{Penglai: scalable enclave memory protection}
+{feng2021penglai | Peer-reviewed SOTA / OSDI 2021}
+{面向大规模 enclave 的 scalable memory protection。}
+{serverless/microservice 场景需要大量动态 enclave，传统 PMP region 数量有限。}
+{引入更可扩展的内存保护和 metadata 管理机制。}
+{OSDI 论文报告可支持大量 enclave 和较大安全内存；具体指标以原文为准。}
+{系统贡献强；商业落地门槛在硬件修改和标准化。}
+
+\PaperFrame
+{SPEAR-V: low-overhead RISC-V enclave primitive}
+{schrammel2023spearv | Peer-reviewed SOTA / ACM AsiaCCS 2023}
+{提出低开销、实用的 RISC-V enclave primitive。}
+{需要灵活、低开销、可抵抗部分 controlled-channel 风险的 enclave 机制。}
+{用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离。}
+{论文报告 protected/unprotected 场景低开销；具体数值以原文为准。}
+{机制设计漂亮；尚非 RISC-V 标准，落地取决于硬件采纳。}
+

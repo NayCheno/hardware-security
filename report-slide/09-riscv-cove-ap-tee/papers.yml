@@ -1,0 +1,29 @@
+direction: RISC-V CoVE / AP-TEE confidential VM
+focus: 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: sahita2023cove
+  role: Foundational / arXiv 2023
+  title: RISC-V CoVE reference architecture
+  summary: 提出 RISC-V CoVE confidential computing 参考架构方向。
+  background: 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任。
+  solution: 描述 confidential VM 所需的 ISA、non-ISA、SoC 和 platform requirements。
+  experiment: 架构论文/position-style，无完整系统实验。
+  comment: 是 CoVE 入口；不能替代 AP-TEE draft spec 的 ABI/state details。
+- key: riscv_ap_tee_2024
+  role: Draft/not ratified / AP-TEE v0.7 RC2
+  title: RISC-V AP-TEE / CoVE TVM 规范草案
+  summary: 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI。
+  background: CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面。
+  solution: 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share
+    等规范语义。
+  experiment: 规范草案，无实验。
+  comment: 当前最重要的 RISC-V CCA 对照材料；必须标注 draft / not ratified。
+- key: boubakri2025riscvtee
+  role: Background substrate / Electronics 2025 survey
+  title: RISC-V TEE 谱系辅助材料
+  summary: 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系。
+  background: RISC-V TEE 论文和规范发展快，survey 可减少分类断裂。
+  solution: 按 secure enclave / TEE mechanism 分类和对比。
+  experiment: Survey，无新实验。
+  comment: 适合辅助写作；mechanism claims 应回引 CoVE paper 和 AP-TEE spec。

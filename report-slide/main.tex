@@ -1,0 +1,36 @@
+
+\input{config/preamble}
+\title{Hardware Security Survey Report Slides}
+\subtitle{Arm/RISC-V 机密计算、I/O/Data-path 防御与硬件设计防御}
+\author{report-slide scaffold}
+\date{\today}
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+\input{00-overview/section}
+\input{01-tee-taxonomy/section}
+\input{02-trustzone-lineage/section}
+\input{03-arm-cca-rme-rmm/section}
+\input{04-arm-cca-deployment/section}
+\input{05-arm-cca-io-accelerator-interrupt/section}
+\input{06-attestation-boot-lifecycle/section}
+\input{07-riscv-primitives/section}
+\input{08-riscv-tee-lineage/section}
+\input{09-riscv-cove-ap-tee/section}
+\input{10-riscv-cove-io-tee-io/section}
+\input{11-memory-encryption-integrity-replay/section}
+\input{12-memory-io-fabrics/section}
+\input{13-confidential-io-protocol-device-endpoint/section}
+\input{14-accelerator-dpu-smartnic-offload/section}
+\input{15-smartnic-trusted-nic-storage/section}
+\begin{frame}{下一步扩展规则}
+\small
+\begin{itemize}
+  \item 每篇文章从当前一页概要扩展为 5--7 页：标题页、内容摘要、研究背景、核心洞察/解决方案、关键技术、实验结果、文章评价。
+  \item 所有 draft、metadata-only、gated、industry evidence 必须在标题或脚注显式标注证据等级。
+  \item 所有性能数据必须回到原论文或规范页面核验；不得只从二手 survey 复制。
+  \item 每个小方向最后补一页“技术演进总结图”，仿照参考 PDF 的维度总结页。
+\end{itemize}
+\end{frame}
+\end{document}

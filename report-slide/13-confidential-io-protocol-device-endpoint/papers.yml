@@ -1,0 +1,37 @@
+direction: Confidential I/O protocol、trusted device interface、network endpoint
+focus: 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: dmtf_spdm_2025 + dmtf_spdm_arch_2024
+  role: Foundational / DMTF spec + white paper
+  title: SPDM device identity and measurement
+  summary: 定义 SPDM 的 device identity、measurement、capability negotiation、secured session
+    和 architecture role。
+  background: confidential workload 使用真实设备时，host 对设备的普通枚举结果不足以作为可信证据。
+  solution: 通过 SPDM 让 requester 获取 responder 身份、测量和安全会话能力；secured messages 与 SPDM
+    over TCP 补充会话保护和传输绑定。
+  experiment: 规范/白皮书，无新实验；证据类型是标准化接口和协议语义。
+  comment: 适合作为机密计算 device identity/evidence 层基础；不能单独证明 DMA、interrupt 或 link path
+    已安全。
+- key: riscv_cove_io_2026 + pcisig_tdisp_2022 + pcisig_tdisp_xt_2025
+  role: Draft + gated metadata
+  title: CoVE-IO 与 TDISP/TDISP XT
+  summary: CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted
+    MSI 等组合。
+  background: TVM/Realm 使用设备时，需要证明设备接口身份、绑定 interface state、保护 DMA/MMIO，并把 interrupt
+    delivery 纳入同一边界。
+  solution: 用 device-interface lifecycle、设备安全管理、link protection 和 I/O translation
+    协同构造 confidential I/O boundary。
+  experiment: 规范草案/ECN metadata，无实验；TDISP/TDISP XT public PDFs 不可直接下载。
+  comment: 是本 survey 的 RISC-V confidential I/O 主锚点；必须明确标准状态，避免写成已完全落地规范。
+- key: li2024folio + amd_sev_tio_2023 + weinhold2025tlsra
+  role: Peer-reviewed SOTA + industry + protocol evidence
+  title: trusted network/offload tradeoff
+  summary: FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径；SEV-TIO 展示 VM trusted
+    I/O 产业设计；TLS+RA 绑定 attested TEE 与 TLS channel。
+  background: 网络和 accelerator offload 会把 plaintext、queue state、keys、model state 或
+    TLS private key 带出 CPU confidential boundary。
+  solution: 分别代表三种路线：避免信任设备、把设备纳入 trusted I/O boundary、以及用 attested TLS 把 application
+    channel 与 TEE evidence 绑定。
+  experiment: FOLIO 和 TLS+RA 为系统/协议论文，有原型评估；SEV-TIO 为 white paper，无独立学术实验。
+  comment: 适合写 trusted network/offload tradeoff；AMD 和 TLS+RA 材料只作 cross-platform evidence。

@@ -1,0 +1,44 @@
+\section{Arm CCA / RME / RMM 基础架构}
+\begin{frame}{Arm CCA / RME / RMM 基础架构}
+\small
+\textbf{方向定位：}围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & Arm Confidential Computing Architecture & Foundational / OSDI 2022 \\ 
+SOTA/规范 1 & Arm CCA 架构规范 & Spec/standard SOTA / Arm spec 2025 \\ 
+SOTA/规范 2 & RMM 规范与形式化验证补充 & Spec/standard SOTA + verification evidence \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{Arm Confidential Computing Architecture}
+{li2022cca | Foundational / OSDI 2022}
+{提出并验证 Arm CCA 的核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle。}
+{云场景下 host 仍需管理资源，但不应看到 tenant workload 数据。}
+{把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm。}
+{OSDI 系统论文提供设计验证和原型评估；正文引用时应以原论文数据为准。}
+{Arm CCA 主线第一篇；商业落地潜力强，因为机制进入 Arm 架构和 Linux 文档。}
+
+\PaperFrame
+{Arm CCA 架构规范}
+{arm\_cca\_spec | Spec/standard SOTA / Arm spec 2025}
+{给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义。}
+{研究论文需要落到稳定的硬件/固件 ABI 和平台行为。}
+{规范化 CCA/RME 相关对象、状态、接口和安全语义。}
+{规范，无实验。}
+{正文写机制时最权威；但不是性能或实现可用性的证据。商业价值取决于硬件平台与生态实现。}
+
+\PaperFrame
+{RMM 规范与形式化验证补充}
+{arm\_rmm\_spec + wu2024rmm | Spec/standard SOTA + verification evidence}
+{RMM spec 定义 Realm 管理软件接口；ESBMC 工作验证 RMM 组件。}
+{RMM 位于 CCA TCB 核心，状态机或内存管理错误会破坏 Realm 安全。}
+{规范提供接口契约，验证工作用 model checking 检查关键组件属性。}
+{Spec 无实验；验证论文覆盖范围有限，不能泛化到完整 RMM。}
+{适合讨论 CCA 正确性和 TCB 风险；商业落地依赖完整实现、验证覆盖和硬件支持。}
+

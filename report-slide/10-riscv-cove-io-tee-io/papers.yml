@@ -1,0 +1,28 @@
+direction: RISC-V CoVE-IO / TEE-I/O
+focus: 把设备身份、DMA/MMIO、interrupt、link security 与 I/O translation 放到同一边界。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: feng2024siopmp
+  role: Foundational / ASPLOS 2024
+  title: 'sIOPMP: scalable I/O protection for TEE'
+  summary: 提出面向 TEE 的 scalable I/O protection。
+  background: DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口。
+  solution: 设计 scalable I/O protection metadata/checking 机制以提高设备访问控制效率。
+  experiment: ASPLOS 论文给出吞吐和开销评估；具体数值以原文为准。
+  comment: RISC-V I/O protection 的 Peer-reviewed SOTA；但只解决 access control，不是完整 CoVE-IO。
+- key: riscv_cove_io_2026
+  role: Draft/not ratified / CoVE-IO v0.3.0
+  title: RISC-V CoVE-IO 规范草案
+  summary: 定义 RISC-V CoVE-IO confidential I/O 架构。
+  background: TVM 使用真实设备需要覆盖设备身份、DMA、MMIO、interrupt 和 link security。
+  solution: 引入 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合。
+  experiment: 规范草案，无实验。
+  comment: 当前最重要的 RISC-V confidential I/O 规范；必须标注 draft。
+- key: riscv_iommu_2023 + riscv_aia_2023
+  role: Spec/standard SOTA
+  title: IOMMU 与 AIA 支撑 CoVE-IO
+  summary: IOMMU 和 AIA 分别支撑设备 DMA translation/protection 与 interrupt delivery。
+  background: CoVE-IO 不能只靠 PMP 或 CPU page table，必须处理设备侧地址转换和中断路径。
+  solution: IOMMU 控制设备可访问地址空间，AIA 提供中断架构基础。
+  experiment: 规范，无实验。
+  comment: 适合作为机制表支撑；不是单独的 confidential I/O 方案。

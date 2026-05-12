@@ -1,0 +1,137 @@
+[
+  {
+    "directory": "01-tee-taxonomy",
+    "direction": "硬件辅助 TEE taxonomy",
+    "papers": [
+      "schneider2022soktee",
+      "boubakri2025riscvtee",
+      "sok-tee"
+    ]
+  },
+  {
+    "directory": "02-trustzone-lineage",
+    "direction": "Arm TrustZone TEE 与漏洞谱系",
+    "papers": [
+      "arm_trustzone_whitepaper",
+      "pinto2019trustzone",
+      "cerdeira2020trustzone"
+    ]
+  },
+  {
+    "directory": "03-arm-cca-rme-rmm",
+    "direction": "Arm CCA / RME / RMM 基础架构",
+    "papers": [
+      "li2022cca",
+      "arm_cca_spec",
+      "arm_rmm_spec + wu2024rmm"
+    ]
+  },
+  {
+    "directory": "04-arm-cca-deployment",
+    "direction": "Arm CCA 细粒度隔离与部署模型",
+    "papers": [
+      "zhang2023shelter",
+      "zhou2025rcontainer",
+      "liu2025nanozone + liu2025lesstrust"
+    ]
+  },
+  {
+    "directory": "05-arm-cca-io-accelerator-interrupt",
+    "direction": "Arm CCA I/O、DMA、accelerator、interrupt",
+    "papers": [
+      "acai2023",
+      "bertschi2026devlore",
+      "sok-tee"
+    ]
+  },
+  {
+    "directory": "06-attestation-boot-lifecycle",
+    "direction": "Attestation、boot、lifecycle",
+    "papers": [
+      "seshadri2004swatt",
+      "rats_rfc + eat_rfc",
+      "mao2025pdrima"
+    ]
+  },
+  {
+    "directory": "07-riscv-primitives",
+    "direction": "RISC-V 基础安全 primitives",
+    "papers": [
+      "riscv_privileged",
+      "riscv_iommu_2023 + riscv_iopmp_2026",
+      "riscv_aia_2023 + manoni2026cva6cfi"
+    ]
+  },
+  {
+    "directory": "08-riscv-tee-lineage",
+    "direction": "RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V",
+    "papers": [
+      "lee2020keystone",
+      "feng2021penglai",
+      "schrammel2023spearv"
+    ]
+  },
+  {
+    "directory": "09-riscv-cove-ap-tee",
+    "direction": "RISC-V CoVE / AP-TEE confidential VM",
+    "papers": [
+      "sahita2023cove",
+      "riscv_ap_tee_2024",
+      "boubakri2025riscvtee"
+    ]
+  },
+  {
+    "directory": "10-riscv-cove-io-tee-io",
+    "direction": "RISC-V CoVE-IO / TEE-I/O",
+    "papers": [
+      "feng2024siopmp",
+      "riscv_cove_io_2026",
+      "riscv_iommu_2023 + riscv_aia_2023"
+    ]
+  },
+  {
+    "directory": "11-memory-encryption-integrity-replay",
+    "direction": "Memory encryption / integrity / replay protection",
+    "papers": [
+      "henson2014memory",
+      "amd_sev_snp",
+      "arm_cca_spec + riscv_ap_tee_2024"
+    ]
+  },
+  {
+    "directory": "12-memory-io-fabrics",
+    "direction": "Memory / I/O fabrics: CXL、PCIe IDE、RDMA",
+    "papers": [
+      "gouk2022directcxl",
+      "zhong2024cxltiers",
+      "wang2025odrp"
+    ]
+  },
+  {
+    "directory": "13-confidential-io-protocol-device-endpoint",
+    "direction": "Confidential I/O protocol、trusted device interface、network endpoint",
+    "papers": [
+      "dmtf_spdm_2025 + dmtf_spdm_arch_2024",
+      "riscv_cove_io_2026 + pcisig_tdisp_2022 + pcisig_tdisp_xt_2025",
+      "li2024folio + amd_sev_tio_2023 + weinhold2025tlsra"
+    ]
+  },
+  {
+    "directory": "14-accelerator-dpu-smartnic-offload",
+    "direction": "Accelerator / DPU / SmartNIC confidential offload",
+    "papers": [
+      "zhu2020hetee",
+      "dhar2024cloudscale",
+      "wang2026cage + sang2025portal + deng2022strongbox"
+    ]
+  },
+  {
+    "directory": "15-smartnic-trusted-nic-storage",
+    "direction": "SmartNIC / trusted NIC / secure storage data path",
+    "papers": [
+      "zhou2024snic",
+      "giantsidi2025tnic",
+      "chrapek2026hazel"
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+
+\documentclass[aspectratio=169,10pt]{ctexbeamer}
+\usefonttheme{professionalfonts}
+\usetheme{default}
+\usepackage{fontspec}
+\IfFontExistsTF{Noto Serif CJK SC}{\setCJKmainfont{Noto Serif CJK SC}}{\setCJKmainfont{FandolSong}}
+\IfFontExistsTF{Noto Sans CJK SC}{\setCJKsansfont{Noto Sans CJK SC}}{\setCJKsansfont{FandolHei}}
+\IfFontExistsTF{DejaVu Sans}{\setsansfont{DejaVu Sans}}{\setsansfont{Arial}}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{ragged2e}
+\definecolor{Accent}{HTML}{A60000}
+\definecolor{Muted}{HTML}{666666}
+\definecolor{LightBG}{HTML}{F7F7F7}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\hfill\scriptsize\insertframenumber\,/\,\inserttotalframenumber\hspace{1.2em}\vspace{0.7em}}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{frametitle}{fg=black}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+\setbeamercolor{section in toc}{fg=black}
+\setbeamertemplate{itemize item}{\textcolor{Accent}{\scriptsize$\blacktriangleright$}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcommand{\Tag}[1]{\textcolor{Accent}{\scriptsize\bfseries #1}}
+\newcommand{\Key}[1]{\textcolor{Muted}{\scriptsize\texttt{#1}}}
+\newcommand{\Divider}{\vspace{0.6mm}\hrule\vspace{1.5mm}}
+\newcommand{\PaperFrame}[7]{%
+\begin{frame}[t]
+  \frametitle{#1}
+  \vspace{-2mm}
+  {\Tag{#2}}\Divider
+  \begin{columns}[t,totalwidth=\textwidth]
+    \begin{column}{0.49\textwidth}
+      {\scriptsize\textbf{内容摘要}\par #3\par\medskip
+      \textbf{研究背景}\par #4\par\medskip
+      \textbf{解决方案}\par #5\par}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      {\scriptsize\textbf{实验结果}\par #6\par\medskip
+      \textbf{文章评价}\par #7\par}
+    \end{column}
+  \end{columns}
+\end{frame}}

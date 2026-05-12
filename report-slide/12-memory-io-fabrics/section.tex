@@ -1,0 +1,44 @@
+\section{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
+\begin{frame}{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
+\small
+\textbf{方向定位：}说明 data path 不再局限于 CPU 本地内存，confidential boundary 必须跨 fabric 建模。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & DirectCXL memory disaggregation & Foundational / USENIX ATC 2022 \\ 
+SOTA/规范 1 & CXL memory tiers in virtualized environments & Peer-reviewed SOTA / OSDI 2024 \\ 
+SOTA/规范 2 & Programmable RDMA on-demand remote paging & Peer-reviewed SOTA / NSDI 2025 \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{DirectCXL memory disaggregation}
+{gouk2022directcxl | Foundational / USENIX ATC 2022}
+{研究 DirectCXL memory disaggregation。}
+{CXL 让内存位置和访问路径脱离本地 DRAM 假设。}
+{实现对 CXL-attached memory 的高性能直接访问。}
+{ATC 论文提供系统评估；具体指标以原文为准。}
+{用于说明 fabric 改变 confidential boundary 的数据路径；不是 TEE 论文。}
+
+\PaperFrame
+{CXL memory tiers in virtualized environments}
+{zhong2024cxltiers | Peer-reviewed SOTA / OSDI 2024}
+{研究虚拟化环境中的 CXL memory tiers 管理。}
+{云平台需要在本地/远端/分层内存间调度资源。}
+{面向 virtualized environment 设计 memory tier 管理系统。}
+{OSDI 论文提供云/系统评估；具体指标以原文为准。}
+{适合支撑“host 管理资源但不应破坏 confidential boundary”的讨论。}
+
+\PaperFrame
+{Programmable RDMA on-demand remote paging}
+{wang2025odrp | Peer-reviewed SOTA / NSDI 2025}
+{用 programmable RDMA 支持 on-demand remote paging。}
+{远程内存和 RDMA 让数据离开 CPU/本地内存路径。}
+{把 remote paging 与 programmable RDMA 数据路径结合。}
+{NSDI 论文提供系统评估；具体指标以原文为准。}
+{可说明 confidential computing 不能只看 CPU 内部隔离；不是直接防御论文。}
+

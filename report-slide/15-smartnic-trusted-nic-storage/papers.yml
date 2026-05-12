@@ -1,0 +1,40 @@
+direction: SmartNIC / trusted NIC / secure storage data path
+focus: 把 NIC-local root、secure offload、resource management 与 confidential storage
+  分开写。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: zhou2024snic
+  role: Peer-reviewed SOTA / EuroSys 2024
+  title: 'S-NIC: SmartNIC function isolation'
+  summary: S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions。
+  background: SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS
+    和其他租户函数可能泄漏或篡改 state。
+  solution: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA
+    isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics。
+  experiment: 硬件面积约 +8.89%，功耗约 +11.45%，function throughput worst-case 下降小于 1.7%。
+  comment: 非常适合 secure vNIC/vSwitch/offload taxonomy；不是完整 VM/Realm trusted I/O 方案，需要和
+    SPDM/TDISP/TEE evidence 组合。
+- key: giantsidi2025tnic
+  role: Peer-reviewed SOTA / ASPLOS 2025
+  title: 'TNIC: trusted NIC architecture'
+  summary: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication
+    和 non-equivocation。
+  background: CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate。
+  solution: 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议；用 Tamarin
+    验证核心性质。
+  experiment: 相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC。
+  comment: 适合 network endpoint root-of-trust 讨论；不替代 confidential VM memory protection
+    或 device lifecycle 标准。
+- key: chrapek2026hazel
+  role: Draft/not ratified / arXiv 2026
+  title: 'Hazel: secure disaggregated storage data path'
+  summary: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用
+    BlueField-3 offload 降低开销。
+  background: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和
+    replay freshness。
+  solution: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual
+    consistency 和 DPU crypto offload。
+  experiment: 常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latency 平均约 2.2%；小随机 freshness
+    I/O 是弱点。
+  comment: 适合补 confidential storage/network data path；必须标注 arXiv/preprint，且仍需底层设备
+    attestation 与 trusted I/O 组合。

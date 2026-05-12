@@ -1,0 +1,44 @@
+direction: Accelerator / DPU / SmartNIC confidential offload
+focus: 从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CCA accelerator。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: zhu2020hetee
+  role: Foundational / IEEE S&P 2020
+  title: 'HETEE: rack-scale heterogeneous TEE'
+  summary: 提出 HETEE，用 rack-level security controller 与 PCIe ExpressFabric 动态隔离 GPU/FPGA/TPU
+    等 accelerator。
+  background: CPU TEE 不能天然保护 accelerator offload path，敏感数据进入 GPU/driver/PCIe fabric
+    后仍可能暴露。
+  solution: 用 Security Controller 作为 thin TCB，管理 accelerator assignment、加密认证、remote
+    attestation、secure cleanup 和资源回收。
+  experiment: 真实硬件原型；ResNet152 inference 最大 throughput overhead 2.17%，training 最大
+    overhead 0.95%。
+  comment: 是 accelerator confidential offload 的 foundational work；早于 TDISP/SPDM/CoVE-IO，需与现代
+    trusted I/O 标准对照。
+- key: dhar2024cloudscale
+  role: Peer-reviewed SOTA / ACSAC 2024
+  title: CloudScale confidential computing with heterogeneous devices
+  summary: 提出 cloud-scale Security Controller，使 TEE-enabled nodes 与 legacy non-TEE
+    DSA nodes 能共同支持 confidential workloads。
+  background: 数据中心内大多数 DSA 节点没有 TEE 能力，用户在性能和安全之间被迫取舍。
+  solution: SC 作为 TEE proxy，执行 access control、attestation、key exchange 和 protected
+    data path。
+  experiment: AI、Redis、file-system workloads 平均 1.5-5% overhead，可扩展到 2236 concurrent
+    NPUs running CNNs。
+  comment: 更接近 cloud-scale DPU/SmartNIC/NPU resource-pool 问题；仍需和 vendor DPU RoT、SPDM/TDISP/IDE
+    标准结合。
+- key: wang2026cage + sang2025portal + deng2022strongbox
+  role: Peer-reviewed SOTA + historical baseline
+  title: CAGE / PORTAL / StrongBox
+  summary: CAGE 适配 Arm CCA Realm 的 GPU/FPGA accelerator workflow；PORTAL 为 Arm CCA
+    mobile SoC 设备访问提供 protected plaintext region；StrongBox 是 TrustZone-era Arm endpoint
+    GPU TEE baseline。
+  background: CCA/TrustZone 保护 CPU-side execution 后，GPU/NPU/FPGA/SoC peripheral 会成为
+    plaintext 和 device-control 的新边界。
+  solution: CAGE 用 shadow task、GPC/GPT 和 Monitor 检查 accelerator task；PORTAL 用 System
+    Realm/SMMU/GPT 保护 device-access region；StrongBox 用 TrustZone/TZASC/Stage-2 translation
+    保护 GPU task RAM 与 MMIO。
+  experiment: CAGE GPU benchmark 开销 0.58%-5.31%、FPGA 开销 9.61%-16.30%；PORTAL 报告 9.8%
+    one-time overhead 和 1.07x-9.07x 性能收益；StrongBox 报告 4.70%-15.26% 开销。
+  comment: CAGE/PORTAL 是 Arm CCA device/accelerator Peer-reviewed SOTA；StrongBox 是历史
+    baseline，不能写成 CCA Realm 机制。

@@ -1,0 +1,44 @@
+\section{Arm CCA I/O、DMA、accelerator、interrupt}
+\begin{frame}{Arm CCA I/O、DMA、accelerator、interrupt}
+\small
+\textbf{方向定位：}把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & ACAI: CCA accelerator execution & Foundational / arXiv 2023 \\ 
+SOTA/规范 1 & Devlore: device interrupt protection & Draft/not ratified / arXiv \\ 
+SOTA/规范 2 & Accelerator TEE SoK for CCA I/O & Background substrate / NDSS 2026 SoK \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{ACAI: CCA accelerator execution}
+{acai2023 | Foundational / arXiv 2023}
+{研究如何用 Arm CCA 保护 accelerator execution。}
+{Confidential workloads 需要使用加速器，CPU Realm 不能默认保护 offload 路径。}
+{围绕 CCA-aware accelerator execution path 设计保护机制。}
+{arXiv 系统论文提供原型结果；具体数值需回引原文。}
+{是 Arm CCA accelerator 方向的重要入口；成熟度受制于设备支持和驱动 TCB。}
+
+\PaperFrame
+{Devlore: device interrupt protection}
+{bertschi2026devlore | Draft/not ratified / arXiv}
+{关注 confidential VM 的 device interrupt protection。}
+{即便 DMA 受控，设备 interrupt 也可能暴露或破坏 confidential VM 的状态与所有权。}
+{把 interrupt delivery、device ownership 与 confidential boundary 绑定。}
+{arXiv 论文，本地 PDF 可用；具体数据需回引原文。}
+{很好地说明 interrupt 不是外围问题；落地需硬件、firmware、OS 和 hypervisor 协同。}
+
+\PaperFrame
+{Accelerator TEE SoK for CCA I/O}
+{sok-tee | Background substrate / NDSS 2026 SoK}
+{为 accelerator TEE 提供设计空间。}
+{GPU/NPU/DPU/SmartNIC 的 TEE 机制比 CPU TEE 更分散。}
+{分类设备身份、内存路径、队列、runtime、driver TCB、attestation。}
+{Survey/SoK，无新实验。}
+{可作为本方向的 SoK；必须与 ACAI/Devlore/Arm SMMU/RME-DA 等一手材料配合。}
+

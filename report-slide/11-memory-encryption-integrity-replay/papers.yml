@@ -1,0 +1,29 @@
+direction: Memory encryption / integrity / replay protection
+focus: 避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
+selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
+papers:
+- key: henson2014memory
+  role: Foundational / ACM CSUR 2014
+  title: Memory encryption survey
+  summary: 综述内存加密既有技术。
+  background: 离芯片内存和物理攻击会暴露数据，单纯访问控制不等于加密。
+  solution: 分类 memory encryption、integrity、counter/replay protection 等技术路线。
+  experiment: Survey，无新实验。
+  comment: 最适合帮助本项目避免概念混淆；时间较早，需要结合 SEV-SNP/CCA/CoVE 更新。
+- key: amd_sev_snp
+  role: Industry evidence / AMD whitepaper/spec
+  title: AMD SEV-SNP as industry evidence
+  summary: SEV-SNP 在 VM memory encryption 基础上加强完整性与 host 隔离。
+  background: 早期 encrypted VM 面临 nested page table 和 host-controlled metadata 风险。
+  solution: 引入 secure nested paging 和完整性相关保护。
+  experiment: 厂商技术材料，无独立实验。
+  comment: 有商业落地；应与攻击论文如 HERACLES 一起讨论限制。不要把 x86 主线扩成本文核心。
+- key: arm_cca_spec + riscv_ap_tee_2024
+  role: Spec/standard SOTA + draft
+  title: CCA/CoVE 的 memory ownership 与 lifecycle
+  summary: 通过 ownership/access-control 与 lifecycle 保护 confidential workload memory。
+  background: CCA/CoVE 需要让 host 管理资源但不能读取 protected memory。
+  solution: Arm 用 GPT/GPC 和 Realm lifecycle；RISC-V AP-TEE 用 TVM/TSM 和 memory donation/reclaim/share
+    等语义。
+  experiment: 规范，无实验。
+  comment: 它们主要定义 access-control/lifecycle，不应被误写成 memory encryption survey 的替代品。

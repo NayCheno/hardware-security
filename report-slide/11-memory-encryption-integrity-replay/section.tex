@@ -1,0 +1,44 @@
+\section{Memory encryption / integrity / replay protection}
+\begin{frame}{Memory encryption / integrity / replay protection}
+\small
+\textbf{方向定位：}避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & Memory encryption survey & Foundational / ACM CSUR 2014 \\ 
+SOTA/规范 1 & AMD SEV-SNP as industry evidence & Industry evidence / AMD whitepaper/spec \\ 
+SOTA/规范 2 & CCA/CoVE 的 memory ownership 与 lifecycle & Spec/standard SOTA + draft \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{Memory encryption survey}
+{henson2014memory | Foundational / ACM CSUR 2014}
+{综述内存加密既有技术。}
+{离芯片内存和物理攻击会暴露数据，单纯访问控制不等于加密。}
+{分类 memory encryption、integrity、counter/replay protection 等技术路线。}
+{Survey，无新实验。}
+{最适合帮助本项目避免概念混淆；时间较早，需要结合 SEV-SNP/CCA/CoVE 更新。}
+
+\PaperFrame
+{AMD SEV-SNP as industry evidence}
+{amd\_sev\_snp | Industry evidence / AMD whitepaper/spec}
+{SEV-SNP 在 VM memory encryption 基础上加强完整性与 host 隔离。}
+{早期 encrypted VM 面临 nested page table 和 host-controlled metadata 风险。}
+{引入 secure nested paging 和完整性相关保护。}
+{厂商技术材料，无独立实验。}
+{有商业落地；应与攻击论文如 HERACLES 一起讨论限制。不要把 x86 主线扩成本文核心。}
+
+\PaperFrame
+{CCA/CoVE 的 memory ownership 与 lifecycle}
+{arm\_cca\_spec + riscv\_ap\_tee\_2024 | Spec/standard SOTA + draft}
+{通过 ownership/access-control 与 lifecycle 保护 confidential workload memory。}
+{CCA/CoVE 需要让 host 管理资源但不能读取 protected memory。}
+{Arm 用 GPT/GPC 和 Realm lifecycle；RISC-V AP-TEE 用 TVM/TSM 和 memory donation/reclaim/share 等语义。}
+{规范，无实验。}
+{它们主要定义 access-control/lifecycle，不应被误写成 memory encryption survey 的替代品。}
+

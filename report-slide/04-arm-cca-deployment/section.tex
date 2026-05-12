@@ -1,0 +1,44 @@
+\section{Arm CCA 细粒度隔离与部署模型}
+\begin{frame}{Arm CCA 细粒度隔离与部署模型}
+\small
+\textbf{方向定位：}从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & Shelter: CCA 用户态隔离 & Foundational / USENIX Security 2023 \\ 
+SOTA/规范 1 & RContainer: CCA 安全容器 & Peer-reviewed SOTA / NDSS 2025 \\ 
+SOTA/规范 2 & 更细粒度 CCA 隔离 & Draft + Peer-reviewed SOTA evidence \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{Shelter: CCA 用户态隔离}
+{zhang2023shelter | Foundational / USENIX Security 2023}
+{用 Arm CCA 支持用户态隔离。}
+{Realm 机制不必只服务 VM，进程内/用户态敏感代码也需要低 TCB 隔离。}
+{把 CCA primitives 封装成可供 user-space compartment 使用的隔离模型。}
+{USENIX Security 论文提供原型与开销评估；具体数值回引原文。}
+{开辟 CCA 细粒度使用方式；落地取决于 CCA 硬件普及和 OS/runtime 集成。}
+
+\PaperFrame
+{RContainer: CCA 安全容器}
+{zhou2025rcontainer | Peer-reviewed SOTA / NDSS 2025}
+{把 Arm CCA 扩展到安全容器架构。}
+{容器比 VM 更轻，但内核共享导致隔离边界弱。}
+{用 CCA 硬件 primitives 为容器建立更强的机密性边界。}
+{NDSS 系统论文提供原型评估；具体结果需以论文数据为准。}
+{贴近云原生落地；挑战是容器生态、编排系统和 CCA lifecycle 的耦合。}
+
+\PaperFrame
+{更细粒度 CCA 隔离}
+{liu2025nanozone + liu2025lesstrust | Draft + Peer-reviewed SOTA evidence}
+{研究 Arm CCA 上更可扩展、更细粒度的内存和进程内隔离。}
+{只用 Realm/VM 粒度会造成管理成本和隔离粒度之间的矛盾。}
+{探索 CCA granule/lifecycle 能否支撑更小保护域和更少管理者信任。}
+{NanoZone 为 arXiv；LessTrust 为 TIFS 论文，具体评估需回到原文。}
+{方向前沿；商业潜力取决于硬件成本、kernel/runtime 改造和开发者可用性。}
+

@@ -41,6 +41,23 @@ survey/*.vrb
 survey/*.xdv
 survey/*.pdf
 
+# LaTeX build artifacts for report-slide sources.
+# report-slide/main.pdf is generated locally for QA and is not tracked.
+next-plan.md
+report-slide/slide-example.pdf
+report-slide/main.pdf
+report-slide/*.aux
+report-slide/*.log
+report-slide/*.nav
+report-slide/*.out
+report-slide/*.snm
+report-slide/*.toc
+report-slide/*.vrb
+report-slide/*.fls
+report-slide/*.fdb_latexmk
+report-slide/*.synctex.gz
+report-slide/*.xdv
+
 # Temporary/download leftovers
 *.tmp
 *.temp

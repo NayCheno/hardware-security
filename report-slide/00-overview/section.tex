@@ -1,0 +1,36 @@
+
+\section{总览与使用说明}
+\begin{frame}{Report-slide 目录目标}
+\small
+\begin{itemize}
+  \item 将现有 \texttt{domain.md} 的小方向三篇精选材料，从单一矩阵拆成可编译、可维护、可扩展的 LaTeX slide 目录。
+  \item 每个小方向一个子目录，包含 \texttt{section.tex} 与 \texttt{papers.yml}；后续可继续补图、表、实验细节和讲者备注。
+  \item 版式参考上传 PDF 的结构：先给方向背景与技术演进，再对每篇文章按“内容摘要、研究背景、解决方案、实验结果、文章评价”展开。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{分类小方向清单}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}lY@{}}
+\toprule
+目录 & 小方向 \\
+\midrule
+01-tee-taxonomy & 硬件辅助 TEE taxonomy \\ 
+02-trustzone-lineage & Arm TrustZone TEE 与漏洞谱系 \\ 
+03-arm-cca-rme-rmm & Arm CCA / RME / RMM 基础架构 \\ 
+04-arm-cca-deployment & Arm CCA 细粒度隔离与部署模型 \\ 
+05-arm-cca-io-accelerator-interrupt & Arm CCA I/O、DMA、accelerator、interrupt \\ 
+06-attestation-boot-lifecycle & Attestation、boot、lifecycle \\ 
+07-riscv-primitives & RISC-V 基础安全 primitives \\ 
+08-riscv-tee-lineage & RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V \\ 
+09-riscv-cove-ap-tee & RISC-V CoVE / AP-TEE confidential VM \\ 
+10-riscv-cove-io-tee-io & RISC-V CoVE-IO / TEE-I/O \\ 
+11-memory-encryption-integrity-replay & Memory encryption / integrity / replay protection \\ 
+12-memory-io-fabrics & Memory / I/O fabrics: CXL、PCIe IDE、RDMA \\ 
+13-confidential-io-protocol-device-endpoint & Confidential I/O protocol、trusted device interface、network endpoint \\ 
+14-accelerator-dpu-smartnic-offload & Accelerator / DPU / SmartNIC confidential offload \\ 
+15-smartnic-trusted-nic-storage & SmartNIC / trusted NIC / secure storage data path \\ 
+
+\bottomrule
+\end{tabularx}
+\end{frame}

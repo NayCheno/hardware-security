@@ -26,6 +26,17 @@ This repository organizes a hardware-security survey and its cited paper library
 │   │       ├── paper.pdf
 │   │       └── README.md
 │   └── ...
+├── report-slide/
+│   ├── main.tex
+│   ├── Makefile
+│   ├── manifest.json
+│   ├── config/
+│   │   └── preamble.tex
+│   ├── 00-overview/
+│   │   └── section.tex
+│   └── <direction>/
+│       ├── section.tex
+│       └── papers.yml
 └── .codex/
     └── skills/
         └── reference-paper-review/
@@ -46,6 +57,26 @@ pdflatex -interaction=nonstopmode main.tex
 The active bibliography used by the survey lives in `survey/reference.bib`; it currently contains 100 active in-scope entries, and the正文 cites 98 unique keys with no missing BibTeX definitions. SGX runtime/container background substrate entries that are not cited by the current正文 live in `survey/background_runtime_reference.bib`; they are retained for historical comparison only and are not active evidence. Metadata-only related-work candidates are kept separately in `survey/candidate_reference.bib`; they must not be cited in正文 until their metadata, source, and evidence status are verified and promoted into `survey/reference.bib`. Out-of-scope attack-only bibliography entries are preserved separately in `survey/excluded_attack_reference.bib`; it currently contains 64 entries for future attack-scope work and they are not active survey evidence. The P0/P1 subset is controlled by `survey/p0_p1_candidate_status.md`, which assigns all 112 P0/P1 candidates to terminal states: active canonical coverage, explicit backlog/no substantive citation, or background substrate. Recent top-conference coverage is audited in `survey/top_conference_coverage_audit.md`, and one-hop expansion decisions are recorded in `survey/citation_expansion_triage.md`.
 
 Evidence classes are defined in `survey/main.tex`: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked sources.
+
+## `report-slide/`
+
+`report-slide/` contains the LaTeX/Beamer source for the Chinese slide report. It is a presentation layer derived from the taxonomy and evidence matrix in `domain.md`; slide-specific structure should not be copied back into the survey matrix.
+
+Build from inside this directory:
+
+```bash
+cd report-slide
+make
+```
+
+For a stricter local check, run:
+
+```bash
+cd report-slide
+make check
+```
+
+`report-slide/main.pdf` is generated locally for review and is intentionally ignored by Git. `report-slide/slide-example.pdf` is a local visual reference for the desired talk style and is not part of the tracked slide source.
 
 ## `reference/`
 

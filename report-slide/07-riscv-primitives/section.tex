@@ -1,0 +1,44 @@
+\section{RISC-V 基础安全 primitives}
+\begin{frame}{RISC-V 基础安全 primitives}
+\small
+\textbf{方向定位：}把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & RISC-V privileged architecture & Foundational / RISC-V privileged spec \\ 
+SOTA/规范 1 & RISC-V IOMMU 与 IOPMP & Spec/standard SOTA + draft \\ 
+SOTA/规范 2 & AIA 与 RISC-V CFI & Spec/standard SOTA + CFI draft evidence \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{RISC-V privileged architecture}
+{riscv\_privileged | Foundational / RISC-V privileged spec}
+{定义 RISC-V privilege modes、PMP、virtualization 和相关保护基础。}
+{RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发。}
+{通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离。}
+{规范，无实验。}
+{所有 RISC-V TEE 讨论的底座；不是 confidential VM 的完整方案。商业价值在于可形成开放生态的共识基础。}
+
+\PaperFrame
+{RISC-V IOMMU 与 IOPMP}
+{riscv\_iommu\_2023 + riscv\_iopmp\_2026 | Spec/standard SOTA + draft}
+{定义 RISC-V I/O translation/protection 架构。}
+{DMA/总线 master 可绕过 CPU-side PMP/页表，TEE 需要 I/O 侧隔离。}
+{IOMMU 约束设备地址转换和访问权限；IOPMP 通过 requester/memory-domain/entry matching 过滤 I/O transaction。}
+{规范，无实验。}
+{是 CoVE-IO 讨论的基础材料；IOPMP 仍是 draft，不是单独的 TEE 设计。}
+
+\PaperFrame
+{AIA 与 RISC-V CFI}
+{riscv\_aia\_2023 + manoni2026cva6cfi | Spec/standard SOTA + CFI draft evidence}
+{AIA 定义 interrupt/MSI/virtual interrupt 基础；CVA6-CFI 实现并评估 Zicfiss/Zicfilp。}
+{confidential I/O 需要可信 interrupt delivery；runtime memory-safety/CFI 需要独立于 CCA/CoVE 的控制流防护。}
+{AIA 规范化 interrupt controller 与 MSI；CVA6-CFI 用 shadow stack 和 landing pad 单元实现 backward/forward-edge CFI。}
+{AIA 为规范无实验；CVA6-CFI 报告约 1.0\% area overhead、MiBench automotive 子集最高 15.6\% performance overhead。}
+{AIA 支撑 trusted MSI/interrupt ownership；CVA6-CFI 说明 RISC-V CFI 的硬件成本，但不等同于 TEE 隔离。}
+

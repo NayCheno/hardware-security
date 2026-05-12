@@ -1,0 +1,44 @@
+\section{RISC-V CoVE / AP-TEE confidential VM}
+\begin{frame}{RISC-V CoVE / AP-TEE confidential VM}
+\small
+\textbf{方向定位：}把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+\medskip
+
+\begin{tabularx}{\textwidth}{@{}lYl@{}}
+\toprule
+角色 & 文章/材料 & 证据类型 \\ 
+\midrule
+方向入口 & RISC-V CoVE reference architecture & Foundational / arXiv 2023 \\ 
+SOTA/规范 1 & RISC-V AP-TEE / CoVE TVM 规范草案 & Draft/not ratified / AP-TEE v0.7 RC2 \\ 
+SOTA/规范 2 & RISC-V TEE 谱系辅助材料 & Background substrate / Electronics 2025 survey \\ 
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\PaperFrame
+{RISC-V CoVE reference architecture}
+{sahita2023cove | Foundational / arXiv 2023}
+{提出 RISC-V CoVE confidential computing 参考架构方向。}
+{多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任。}
+{描述 confidential VM 所需的 ISA、non-ISA、SoC 和 platform requirements。}
+{架构论文/position-style，无完整系统实验。}
+{是 CoVE 入口；不能替代 AP-TEE draft spec 的 ABI/state details。}
+
+\PaperFrame
+{RISC-V AP-TEE / CoVE TVM 规范草案}
+{riscv\_ap\_tee\_2024 | Draft/not ratified / AP-TEE v0.7 RC2}
+{定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI。}
+{CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面。}
+{给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share 等规范语义。}
+{规范草案，无实验。}
+{当前最重要的 RISC-V CCA 对照材料；必须标注 draft / not ratified。}
+
+\PaperFrame
+{RISC-V TEE 谱系辅助材料}
+{boubakri2025riscvtee | Background substrate / Electronics 2025 survey}
+{把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系。}
+{RISC-V TEE 论文和规范发展快，survey 可减少分类断裂。}
+{按 secure enclave / TEE mechanism 分类和对比。}
+{Survey，无新实验。}
+{适合辅助写作；mechanism claims 应回引 CoVE paper 和 AP-TEE spec。}
+
