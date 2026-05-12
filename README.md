@@ -42,6 +42,8 @@ pdflatex -interaction=nonstopmode main.tex
 
 The bibliography used by the survey lives in `survey/reference.bib`. Metadata-only related-work candidates are kept separately in `survey/candidate_reference.bib`; they must not be cited in正文 until their metadata, source, and evidence status are verified and promoted into `survey/reference.bib`. The P0/P1 subset is controlled by `survey/p0_p1_candidate_status.md`, which assigns all 112 P0/P1 candidates to terminal states: active canonical coverage, explicit backlog/no substantive citation, or background substrate.
 
+Evidence classes are defined in `survey/main.tex`: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked sources.
+
 ## `reference/`
 
 `reference/` stores the paper library for cited work. The intended layout is:

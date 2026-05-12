@@ -77,6 +77,41 @@ as first-class parts of the confidential-computing boundary. Finally, the
 hardware-design section surveys cross-architecture ISA and microarchitectural
 defenses that complement those confidential-computing mechanisms.
 
+\section{Methodology and Evidence Ranking}
+
+This survey separates evidence strength from topical relevance. A source may
+be important to the taxonomy while still being unsuitable for a mechanism-level
+claim. We therefore use the following evidence classes when deciding how a
+reference may support the text:
+
+\begin{table}[htbp]
+\centering
+\caption{Evidence Classes and Citation Rules}
+\label{tab:evidence_ranking}
+\begin{tabular}{@{}p{0.12\linewidth}p{0.36\linewidth}p{0.42\linewidth}@{}}
+\toprule
+\textbf{Class} & \textbf{Evidence type} & \textbf{Allowed use in this survey} \\ \midrule
+E0 & Official ratified specification, architecture manual, RFC, or standards document & Normative mechanism and status claims, with no experimental claims unless the source provides them. \\
+E1 & Peer-reviewed primary research paper & Mechanism, evaluation, and threat-model claims supported by the reviewed paper and its recorded source/PDF status. \\
+E2 & Survey, SoK, or secondary review & Taxonomy, terminology, and coverage guidance; original mechanism claims are traced back to primary papers or specifications. \\
+E3 & Public draft, release candidate, or not-ratified specification & Current standardization direction, always labelled as draft, release candidate, or not ratified. \\
+E4 & Vendor, industry, or product documentation & Industry evidence for product behavior or deployment practice, not proof of general security unless independently supported. \\
+E5 & Metadata-only, gated, blocked-PDF, or HTML-only evidence & Existence, source status, or backlog classification only; no substantive mechanism claim unless promoted or paired with stronger public evidence. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+The citation rules are intentionally conservative. First, all mechanism claims
+prefer E0 or E1 sources. Second, E2 sources such as surveys and SoKs are used as
+maps of the literature, not as substitutes for original mechanisms. Third, E3
+drafts are useful for current architecture direction, but the text must state
+their draft or not-ratified status. Fourth, E4 industry documents are treated
+as deployment or product evidence and kept separate from peer-reviewed system
+claims. Fifth, E5 sources, including metadata-only \texttt{rw...} candidates and
+member-gated documents, do not support substantive text claims unless a public
+source supports the same claim. When a source has mixed properties, such as a
+public metadata page for a gated specification or an HTML-only survey, the more
+restrictive citation rule controls the claim.
+
 \input{confidential_computing_of_arm_hardware}
 
 \input{riscv_confidential_computing}
