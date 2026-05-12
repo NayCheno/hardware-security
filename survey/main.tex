@@ -112,6 +112,45 @@ source supports the same claim. When a source has mixed properties, such as a
 public metadata page for a gated specification or an HTML-only survey, the more
 restrictive citation rule controls the claim.
 
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{Key Sources and Evidence Roles}
+\label{tab:key_source_roles}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.09\linewidth}p{0.24\linewidth}p{0.33\linewidth}@{}}
+\toprule
+\textbf{Key} & \textbf{Class} & \textbf{Status/version} & \textbf{Allowed claim in this survey} \\ \midrule
+\texttt{arm\_cca\_spec} & E0 & Arm official specification, 2025 & CCA architecture semantics, Realm security state, and architectural protection model. \\
+\texttt{arm\_rme\_spec} & E0 & Arm official RME specification, 2025 & RME, GPT/GPC, granule ownership, and physical-address-space semantics. \\
+\texttt{arm\_rmm\_spec} & E0 & Arm official RMM specification, 2025 & RMM lifecycle, RMI/RSI interface roles, and monitor-side CCA state. \\
+\texttt{li2022cca} & E1 & OSDI 2022 primary paper & Arm CCA design and verification claims supported by the paper. \\
+\texttt{arm\_smmu\_spec} & E0 & Arm SMMUv3 architecture specification & DMA translation and system I/O mediation substrate, not complete trusted I/O by itself. \\
+\texttt{riscv\_privileged} & E0 & RISC-V privileged architecture & Privilege modes, PMP/ePMP/Smepmp, virtualization substrate, and page-table semantics. \\
+\texttt{riscv\_iommu\_2023} & E0 & RISC-V IOMMU v1.0.0 ratified release & Device-side DMA translation substrate for confidential-I/O composition. \\
+\texttt{riscv\_aia\_2023} & E0 & RISC-V AIA v1.0 release & AIA/IMSIC interrupt substrate and trusted-MSI vocabulary. \\
+\texttt{riscv\_iopmp\_2026} & E3 & IOPMP v0.8.2 draft, not ratified & Current I/O protection direction; draft status must remain visible. \\
+\texttt{sahita2023cove} & E3 & CoVE public preprint / proposal & CoVE motivation and reference-architecture direction, not ratified ABI detail. \\
+\texttt{riscv\_ap\_tee\_2024} & E3 & AP-TEE v0.7 draft / RC2, not ratified & RISC-V TVM/TSM lifecycle and ABI direction, labelled as draft. \\
+\texttt{riscv\_cove\_io\_2026} & E3 & CoVE-IO v0.3.0 draft, not ratified & Trusted-I/O architecture direction for RISC-V TVMs, labelled as draft. \\
+\texttt{dmtf\_spdm\_2025} & E0 & DMTF DSP0274 v1.4.0 standard & SPDM identity, measurement, negotiation, and key-exchange semantics. \\
+\texttt{pcisig\_tdisp\_2022} & E5 & Public ECN metadata; member-gated PDF & TDISP existence, affected-specification metadata, and high-level device-interface role only. \\
+\texttt{eat\_rfc} & E0 & RFC 9711, Standards Track & EAT claim/token encoding for attestation evidence. \\
+\texttt{rats\_rfc} & E0 & RFC 9334, Standards Track & RATS attester, verifier, relying-party, evidence, and appraisal roles. \\
+\begin{tabular}[t]{@{}l@{}}\texttt{nvidia\_bluefield}\\\texttt{operation\_2025}\end{tabular} & E4 & NVIDIA BlueField public documentation & DPU OP-TEE/fTPM building-block evidence only, not complete confidential networking proof. \\
+\texttt{boubakri2025riscvtee} & E2/E5 & Survey source; local PDF blocked / source verified & RISC-V TEE taxonomy support only; mechanism claims return to primary papers or specs. \\
+\texttt{schneider2022soktee} & E2 & Hardware-supported TEE SoK / survey & Cross-platform TEE design-space taxonomy and terminology. \\
+\texttt{li2024sokteechoices} & E2 & ASIA CCS 2024 SoK & TEE runtime design-choice and pitfall taxonomy, not platform-specific mechanism proof. \\
+\texttt{sok-tee} & E2 & Accelerator TEE SoK & Accelerator/device-TEE taxonomy; not general CCA or CoVE mechanism evidence. \\
+\texttt{feng2024siopmp} & E1 & ASPLOS 2024 primary paper & sIOPMP mechanism and evaluation claims for scalable I/O protection. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:key_source_roles} makes the strongest sources and the main
+boundary cases visible in the paper body. In particular, draft RISC-V
+specifications, vendor documents, surveys, and gated PCI-SIG metadata are
+listed with their restricted claim roles rather than being treated as ordinary
+mechanism evidence.
+
 \input{confidential_computing_of_arm_hardware}
 
 \input{riscv_confidential_computing}
