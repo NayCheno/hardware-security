@@ -238,21 +238,36 @@
         "source_url": "https://www.rfc-editor.org/info/rfc9334"
       },
       {
-        "key": "mao2025pdrima",
-        "evidence": "E3 / Draft-not-ratified",
+        "key": "nunes2019vrased",
+        "evidence": "E1 / Peer-reviewed SOTA",
         "source_status": "local_pdf_verified",
         "role": "sota_2",
-        "selection_reason": "PDRIMA is treated as a draft SOTA item for RISC-V and IoT attestation, with evidence limits recorded.",
-        "evidence_type": "E3 draft/preprint, not ratified",
-        "maturity": "draft/preprint, not ratified",
+        "selection_reason": "VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software remote attestation.",
+        "evidence_type": "E1 peer-reviewed primary work",
+        "maturity": "peer-reviewed primary work",
         "pdf_status": "local_pdf_verified",
-        "source_url": "https://arxiv.org/abs/2512.06500"
+        "source_url": "https://www.usenix.org/conference/usenixsecurity19/presentation/de-oliveira-nunes"
       }
     ],
     "auxiliary": [
       {
         "key": "eat_rfc",
         "evidence": "E0 / Spec-standard SOTA",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "abera2016cflat",
+        "evidence": "E1 / Peer-reviewed primary",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "dessouky2017lofat",
+        "evidence": "E1 / Peer-reviewed primary",
+        "source_status": "local_pdf_verified"
+      },
+      {
+        "key": "mao2025pdrima",
+        "evidence": "E3 / Draft-not-ratified",
         "source_status": "local_pdf_verified"
       }
     ]

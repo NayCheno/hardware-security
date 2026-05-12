@@ -6,14 +6,14 @@
 
 当前事实：
 
-- `survey/reference.bib`：100 个 active in-scope BibTeX 条目。
+- `survey/reference.bib`：104 个 active in-scope BibTeX 条目。
 - `survey/background_runtime_reference.bib`：2 个 SGX runtime/container background substrate BibTeX 条目；不作为当前正文 active evidence。
 - `survey/excluded_attack_reference.bib`：64 个 out-of-scope attack-only BibTeX 条目；仅为未来攻击范围研究保留，不作为当前正文 active evidence。
 - `survey/candidate_reference.bib`：152 个 metadata-only 候选条目，不作为正文机制 claim 的证据。
 - `survey/p0_p1_candidate_status.md`：112 个 P0/P1 metadata-only 候选的终态记录；每个条目都已标为 active canonical coverage、backlog/no substantive citation 或 background substrate。
-- `survey/*.tex` 正文实际引用：98 个 key，全部能在 Bib 中找到。
-- `reference/`：99 个论文/规范记录 README（不含目录索引或空 SoK 占位 README），84 个本地 `paper.pdf`。
-- 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP/TDISP XT metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、DICE、PORTAL、CAGE、StrongBox、Graviton、Telekine、Honeycomb、ShEF、XpuTEE source-limited metadata、SGX-FPGA source-limited metadata、SoC-FPGA SoK、S-NIC、TNIC、Hazel、Hardware Isolation、CPC、aDNS、Voodoo、CoFunc、Aster、OSMOSIS 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root、Arm CCA deployment、ISA/hardware-design defense 和 accelerator/device TEE 的核心或背景材料。
+- `survey/*.tex` 正文实际引用：102 个 key，全部能在 Bib 中找到。
+- `reference/`：102 个论文/规范记录 README（不含目录索引或空 SoK 占位 README），88 个本地 `paper.pdf`。
+- 本轮补全：RISC-V AP-TEE、CoVE-IO、IOMMU、AIA、ACPI、AMD SEV-SNP、Pinto TrustZone survey、Cerdeira TrustZone SoK、Ling TrustZone attestation、c-FLAT、LO-FAT、VRASED、Komodo 已下载并验证；新增 `li2024sokteechoices`、Sanctum、CURE、MI6、TIMBER-V、Cerberus、ACE、OpenCCA、CAEC、IOPMP、CVA6-CFI、RV-CURE、CHERIoT、Henson memory encryption survey；本轮再次补齐 SPDM、SPDM secured messages、SPDM over TCP、SPDM architecture white paper、AMD SEV-TIO、FOLIO、TDISP/TDISP XT metadata、ITX accelerator confidential computing、HETEE、CloudScale heterogeneous devices、NVIDIA BlueField OP-TEE/fTPM、TLS+RA、DICE、PORTAL、CAGE、StrongBox、Graviton、Telekine、Honeycomb、ShEF、XpuTEE source-limited metadata、SGX-FPGA source-limited metadata、SoC-FPGA SoK、S-NIC、TNIC、Hazel、Hardware Isolation、CPC、aDNS、Voodoo、CoFunc、Aster、OSMOSIS 作为机密计算 I/O、网络路径、endpoint attestation、SmartNIC/NIC root、Arm CCA deployment、ISA/hardware-design defense 和 accelerator/device TEE 的核心或背景材料。
 - Related-work corpus 扩展：152 条 metadata-only 候选已从 active bibliography 拆到 `survey/candidate_reference.bib`；2 条 SGX runtime/container 背景 BibTeX 已拆到 `survey/background_runtime_reference.bib`；64 条 out-of-scope attack-only BibTeX 已拆到 `survey/excluded_attack_reference.bib`，避免与当前三条 defense/spec survey 主线混作 active evidence。新增候选覆盖 TEE runtime、secure processor lineage、Arm CCA、RISC-V CoVE/AP-TEE、attestation、confidential I/O/fabric、accelerator TEE、ISA/hardware defense 与 memory encryption/integrity。P0/P1 候选已经在 `survey/p0_p1_candidate_status.md` 中进入终态：已由 canonical active reference 覆盖的继续用 canonical key，未验证的保持 backlog/no substantive citation 或 background substrate。后续引用前必须先核验作者、venue、DOI/source、PDF，补 `reference/` 目录，并以 canonical key 晋升到 `survey/reference.bib`。
 
 标记规则：
@@ -73,7 +73,7 @@
 | Arm CCA / RME / RMM 基础架构 | 已覆盖-可投稿 | `li2022cca`, `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` | 无成熟专门 SoK；以规范和 OSDI 论文为准 | Foundational `li2022cca`; Spec/standard SOTA `arm_cca_spec`, `arm_rmm_spec`; Draft/not ratified verification evidence `wu2024rmm` | 已补机制表；仍保留 RMI/RSI ABI 与 RMM state-machine 细化缺口。 |
 | Arm CCA 细粒度隔离与部署模型 | 已覆盖-基础 | `survey/confidential_computing_of_arm_hardware.tex` 已新增 deployment taxonomy，覆盖 user-space、container、virtualized CCA、intra-process、inter-CVM sharing、device/accelerator paths，并区分 Realm/RMM 机制与研究原型成熟度 | 无成熟专门 SoK；按系统论文追踪 | Foundational `zhang2023shelter`; Peer-reviewed SOTA `zhou2025rcontainer`, `liu2025lesstrust`; Draft/not ratified / arXiv emerging `liu2025nanozone`, `xu2026virtcca`, `bertschi2025opencca`, `abdollahi2025caec` | 待深化 RMM/RMI/RSI lifecycle 与部署模型工程接口。 |
 | Arm CCA I/O、DMA、accelerator、interrupt | 已覆盖-基础 | 正文提到 SMMU、ACAI、Devlore、PORTAL、CAGE、fabric，并区分 device access、accelerator workflow、interrupt ownership；accelerator baseline 已补 Graviton、Telekine、Honeycomb、ShEF、XpuTEE、SGX-FPGA 和 SoC-FPGA SoK 的证据强度；confidential I/O lifecycle/state-machine 表已补 | `sok-tee`; `perkins2024socsok` 仅作 accelerator/SoC-FPGA TEE SoK | Foundational `acai2023`, `volos2018graviton`; Peer-reviewed SOTA `sang2025portal`, `wang2026cage`, `hunt2020telekine`, `zhao2022shef`, `mai2023honeycomb`; Draft/not ratified `bertschi2026devlore`; Source-limited metadata `fan2025xputee`, `xia2021sgxfpga`; Background substrate `sok-tee`, `perkins2024socsok` | 待深化 RME-DA/MEC、SMMU 与 SPDM/TDISP production composition。 |
-| Attestation、boot、lifecycle | 已覆盖-基础 | `rats_rfc`, `eat_rfc`, `tcg_dice_2018`, `menetrey2022attestation`, `psa_certified`, `ling2021trustzoneatt`, `chen2024mraima`, `mao2025pdrima`, `seshadri2004swatt`, `defrawy2012smart`, `asokan2015seda`, `delignatlavaud2025adns`；Arm CCA vs RISC-V CoVE/AP-TEE claim-strength table 已明确 E0/E1 与 E3 边界 | `menetrey2022attestation` | Foundational `seshadri2004swatt`; Spec/standard SOTA `rats_rfc`, `eat_rfc`, `tcg_dice_2018`; Peer-reviewed SOTA `delignatlavaud2025adns`; Draft/not ratified `mao2025pdrima`; E3 `riscv_ap_tee_2024` | 待深化 verifier policy、runtime freshness、DICE-derived identity、attested naming 和 platform-specific evidence profile。 |
+| Attestation、boot、lifecycle | 已覆盖-基础 | `rats_rfc`, `eat_rfc`, `tcg_dice_2018`, `menetrey2022attestation`, `psa_certified`, `ling2021trustzoneatt`, `chen2024mraima`, `mao2025pdrima`, `seshadri2004swatt`, `defrawy2012smart`, `asokan2015seda`, `abera2016cflat`, `dessouky2017lofat`, `nunes2019vrased`, `delignatlavaud2025adns`；Arm CCA vs RISC-V CoVE/AP-TEE claim-strength table 已明确 E0/E1 与 E3 边界 | `menetrey2022attestation` | Foundational `seshadri2004swatt`; Spec/standard SOTA `rats_rfc`, `eat_rfc`, `tcg_dice_2018`; Peer-reviewed SOTA `nunes2019vrased`, `delignatlavaud2025adns`; Runtime/control-flow lineage `abera2016cflat`, `dessouky2017lofat`; Draft/not ratified `mao2025pdrima`; E3 `riscv_ap_tee_2024` | 待深化 verifier policy、runtime freshness、DICE-derived identity、attested naming 和 platform-specific evidence profile。 |
 | RISC-V 基础安全 primitives | 已覆盖-基础 | `survey/riscv_confidential_computing.tex` 已新增 platform primitives table，区分 PMP/ePMP/Smepmp、H-extension、AIA/IMSIC、IOMMU、IOPMP 等 substrate specs 与 AP-TEE/CoVE、CoVE-IO draft confidential-VM/I/O work；`survey/security_of_hardware_design.tex` 继续覆盖 Zicfilp/Zicfiss、CFI 和 memory-safety hardening | `boubakri2025riscvtee` 可辅助 | Spec/standard SOTA `riscv_privileged`, `riscv_iommu_2023`, `riscv_aia_2023`; Draft/not ratified `riscv_iopmp_2026`, `riscv_ap_tee_2024`, `riscv_cove_io_2026`, `manoni2026cva6cfi`; Background substrate `boubakri2025riscvtee` | 待深化 H-extension/TSM ABI、IOPMP 与 CoVE-IO composition 状态更新。 |
 | RISC-V TEE lineage: Sanctum/Keystone/CURE/MI6/Penglai/SPEAR-V | 已覆盖-基础 | `survey/riscv_confidential_computing.tex` 已引用 `costan2016sanctum`, `lee2020keystone`, `weiser2019timberv`, `bahmani2021cure`, `bourgeat2019mi6`, `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace` | `boubakri2025riscvtee`; `schneider2022soktee`; `li2024sokteechoices` | Foundational `costan2016sanctum`, `lee2020keystone`; Peer-reviewed SOTA `feng2021penglai`, `schrammel2023spearv`, `lee2022cerberus`, `ozga2025ace`; Background substrate `boubakri2025riscvtee`, `schneider2022soktee`, `li2024sokteechoices` | 待深化 lineage 表：TCB、sharing、metadata、硬件修改和 CoVE/AP-TEE 迁移关系。 |
 | RISC-V CoVE / AP-TEE confidential VM | 已覆盖-可投稿 | `survey/riscv_confidential_computing.tex` 已补 TVM、TSM/TSM-driver、Supervisor Domains、memory donation/reclaim/share、attestation、lifecycle/state-machine 摘要，并纠正 CCA 对比到 bare PMP 的层级问题 | `boubakri2025riscvtee`; CoVE 原论文和 AP-TEE spec | Foundational `sahita2023cove`; Draft/not ratified `riscv_ap_tee_2024`; Background substrate `boubakri2025riscvtee` | 保留 COVH/COVG ABI 和 TSM state-machine corner cases 细化缺口。 |
@@ -92,6 +92,8 @@
 | `pinto2019trustzone` | `reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/` | TrustZone 背景、系统软件、应用模式；本地 PDF 可用 | 只作为 TrustZone survey，不代表 CCA threat model。 |
 | `cerdeira2020trustzone` | `reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/` | TrustZone-assisted TEE 漏洞 taxonomy、接口/TCB 风险；本地 PDF 可用 | 用于解释 CCA 动机和 TrustZone 局限，不直接证明 CCA 安全性。 |
 | `menetrey2022attestation` | `reference/attestation/exploratory-study-attestation-mechanisms-for-tees/` | TEE attestation 机制、证据和 verifier 视角 | Generic attestation survey；Arm CCA/CoVE 证据链仍需回到规范。 |
+| `abera2016cflat`, `dessouky2017lofat`, `nunes2019vrased` | `reference/attestation/c-flat-control-flow-attestation-embedded-systems-software/`, `reference/attestation/lo-fat-low-overhead-control-flow-attestation-hardware/`, `reference/attestation/vrased-verified-hardware-software-co-design-remote-attestation/` | Runtime/control-flow attestation 和 verified RA co-design；本地 PDF 均已下载并解析 | 只支撑 runtime/control-flow/verified RA lineage；不替代 RATS/EAT、CCA/CoVE evidence profile 或 device attestation。 |
+| `ferraiuolo2017komodo` | `reference/trusted-execution-environments/komodo-verification-disentangle-secure-enclave-hardware-software/` | Verified enclave monitor、hardware/software split 和 TrustZone prototype；本地 PDF 已下载并解析 | 用于 verified TEE monitor lineage；不作为 Arm CCA、RISC-V CoVE/AP-TEE 或 production SGX 证据。 |
 | `boubakri2025riscvtee` | `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | RISC-V secure enclaves / TEE 谱系；可连接 Sanctum、Keystone、CURE、MI6、Penglai、SPEAR-V、CoVE、ACE | E2 peer-reviewed survey；MDPI HTML 与本地 PDF 已核验；机制 claims 应回引原论文/spec。 |
 | `sok-tee` | `reference/accelerator-tees/sok/analysis-accelerator-tee-designs/` | Accelerator TEE taxonomy；可支撑 ACAI、Devlore、CoVE-IO、TDISP/IDE 讨论 | 只用于 accelerator/device TEE，不作为通用 CCA/CoVE SoK。 |
 | `henson2014memory` | `reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/` | Memory encryption taxonomy；本地 PDF 已下载并解析 | 不是 TEE SoK；用于区分 encryption/integrity/replay 与 access-control。 |
@@ -241,12 +243,12 @@
    - 解决方案：RATS 规范化 evidence 生成、传递、评估的角色与消息；EAT 用 CWT/JWT 承载实体状态和安全属性 claims。
    - 实验结果：RFC，无实验。
    - 文章评价：标准化落地潜力强；不能说明某平台测量链是否充分，也不能替代 CCA/CoVE 平台规范。
-3. `mao2025pdrima` — Draft/not ratified；arXiv 2025。
-   - 内容摘要：研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。
-   - 研究背景：secure boot/launch attestation 不能覆盖运行时状态变化。
-   - 解决方案：把策略驱动的 runtime measurement 融入 attestation。
-   - 实验结果：arXiv 论文，本地 PDF 可用；具体结果需回引原文。
-   - 文章评价：适合补 runtime attestation；不要把它泛化为 CCA/CoVE 的完整 evidence chain。
+3. `nunes2019vrased` — Peer-reviewed SOTA；USENIX Security 2019。
+   - 内容摘要：设计并验证面向 simple embedded devices 的 hardware/software remote attestation root。
+   - 研究背景：RA 安全性依赖硬件、软件和协议共同成立，但早期方案缺少实现级机器可检查证明。
+   - 解决方案：用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性。
+   - 实验结果：论文在 MSP430/Basys3 FPGA 上实现并评估，展示 verified RA design 的可行性；具体资源、性能和证明规模以原文为准。
+   - 文章评价：证据强，适合做 verified RA co-design anchor；不足是目标为 simple embedded devices，不能泛化到 CCA Realm、CoVE TVM 或 DPU/NIC endpoint evidence profile。`abera2016cflat`、`dessouky2017lofat` 和 `mao2025pdrima` 作为 runtime/control-flow attestation auxiliary。
 
 ### 3.7 RISC-V 基础安全 primitives
 
@@ -505,6 +507,7 @@
 | 已完成初稿 | 写入 side-channel / physical leakage out-of-scope statement，说明 excluded attack bibliography 不进入当前 defense/specification 主线。 | `survey/excluded_attack_reference.bib`; `schluter2025heracles` |
 | 已完成初稿 | 补 Arm CCA 机制表，细化 RMI、RSI、RIPAS、PAS、granule lifecycle、GPT/GPC、RMM state machine。 | `arm_cca_spec`, `arm_rme_spec`, `arm_rmm_spec`, `linux_arm_cca_doc` |
 | 已完成初稿 | 补 Arm CCA deployment taxonomy，纳入研究平台、CVM maintenance、Android/mobile protected VM、inter-CVM sharing、OpenCCA/CAEC 与现有 Realm lifecycle 的关系；OpenCCA/CAEC 仍标为 arXiv/emerging/Draft-not-ratified 证据。 | `bertschi2025opencca`, `abdollahi2025caec`, `xu2026virtcca`, `zhang2023shelter`, `zhou2025rcontainer`, `liu2025lesstrust`, `chen2024cpc`, `kuhne2026aster` |
+| 已完成初稿 | 从 P0/P1 backlog 晋升 runtime/control-flow attestation 和 verified enclave lineage，补 c-FLAT、LO-FAT、VRASED、Komodo 本地 PDF 与 active citation。 | `abera2016cflat`, `dessouky2017lofat`, `nunes2019vrased`, `ferraiuolo2017komodo` |
 | 待深化 | 补 vendor NIC/DPU attestation、secure vNIC/vSwitch/offload production evidence，以及 SPDM/TDISP 与 SmartNIC local root 的组合关系。 | `sok-tee`, `zhou2024snic`, `giantsidi2025tnic`, `nvidia_bluefield_operation_2025`, `chrapek2026hazel` |
 
 ## 7. 联网核验来源
@@ -528,6 +531,7 @@
 - CloudScale heterogeneous devices: https://www.acsac.org/2024/program/final/s297.html and https://www.shwetashinde.org/publications/cloudscale_acsac24.pdf
 - NVIDIA BlueField OP-TEE/fTPM: https://docs.nvidia.com/networking/display/bluefieldbsp480/ftpm%2Bover%2Bop-tee
 - TLS+RA endpoint attestation: https://www.usenix.org/conference/atc25/presentation/weinhold
+- Runtime/control-flow attestation and verified enclave lineage: https://research.aalto.fi/en/publications/c-flat-control-flow-attestation-for-embedded-systems-software/, https://arxiv.org/abs/1706.03754, https://www.usenix.org/conference/usenixsecurity19/presentation/de-oliveira-nunes, and https://research.google/pubs/komodo-using-verification-to-disentangle-secure-enclave-hardware-from-software/
 - Accelerator TEE SoK: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf
 - RISC-V TEE survey: https://www.mdpi.com/2079-9292/14/21/4171
 - TEE design-choice SoK: https://doi.org/10.1145/3634737.3644993 and https://people.csail.mit.edu/mengyuanli/files/asiaccs_sok.pdf

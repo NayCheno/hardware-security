@@ -30,9 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 84 of 99 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
+Download status: 88 of 102 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
 
-Bibliography corpus status: `survey/reference.bib` contains 100 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 64 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. `survey/top_conference_coverage_audit.md` records the recent top-conference additions and boundary decisions; `survey/citation_expansion_triage.md` records one-hop citation-expansion decisions; `survey/pdf_recovery_log.md` records missing-PDF recovery attempts and claim boundaries. See `survey/related_work_300_expansion.md` before using any candidate.
+Bibliography corpus status: `survey/reference.bib` contains 104 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 64 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. `survey/top_conference_coverage_audit.md` records the recent top-conference additions and boundary decisions; `survey/citation_expansion_triage.md` records one-hop citation-expansion decisions; `survey/pdf_recovery_log.md` records missing-PDF recovery attempts and claim boundaries. See `survey/related_work_300_expansion.md` before using any candidate.
 
 Evidence role classes follow the survey methodology: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked or HTML-only evidence. Gated or unavailable PDFs are recorded as unavailable; no private access is assumed.
 
@@ -49,6 +49,10 @@ Newly added or completed in this pass:
 - `reference/attestation/secure-boot-trusted-boot-remote-attestation-arm-trustzone-iot/`
 - `reference/attestation/remote-attestation-procedures-rats-architecture/`
 - `reference/attestation/entity-attestation-token-rfc9711/`
+- `reference/attestation/c-flat-control-flow-attestation-embedded-systems-software/`
+- `reference/attestation/lo-fat-low-overhead-control-flow-attestation-hardware/`
+- `reference/attestation/vrased-verified-hardware-software-co-design-remote-attestation/`
+- `reference/trusted-execution-environments/komodo-verification-disentangle-secure-enclave-hardware-software/`
 - `reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/`
 - `reference/risc-v-confidential-computing/sanctum-minimal-hardware-extensions-strong-software-isolation/`
 - `reference/risc-v-confidential-computing/cure-customizable-resilient-enclaves/`
@@ -106,7 +110,6 @@ Entries without a verified local PDF yet:
 - `reference/arm-confidential-computing/arm-cca-specification/`
 - `reference/arm-confidential-computing/linux-arm-cca-documentation/`
 - `reference/arm-confidential-computing/more-granular-less-trust-arm-cca-intra-process-isolation/`
-- `reference/arm-confidential-computing/realm-management-extension-architecture-specification/`
 - `reference/arm-confidential-computing/realm-management-monitor-specification/`
 - `reference/attestation/mra-ima-enhanced-mutual-remote-attestation-arm-trustzone/`
 - `reference/attestation/psa-certified-security-framework/`
@@ -114,8 +117,6 @@ Entries without a verified local PDF yet:
 - `reference/accelerator-tees/sgx-fpga-trusted-execution-cpu-fpga-heterogeneous-architecture/`
 - `reference/memory-and-io-fabrics/pci-express-integrity-and-data-encryption/`
 - `reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/`
-- `reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/`
-- `reference/trusted-execution-environments/arm-security-technology-trustzone/`
 
 Notes:
 

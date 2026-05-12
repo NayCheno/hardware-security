@@ -68,9 +68,27 @@ This taxonomy is especially important for Arm and RISC-V confidential-computing 
 
 Trusted-execution support remains one of the clearest ways in which hardware security mechanisms appear as complete platform designs rather than isolated instructions. In the Arm ecosystem, \textbf{TrustZone} provides the classical two-world TEE model and has been used as the basis for a large body of systems work and security analysis~\cite{arm_trustzone_whitepaper,pinto2019trustzone,guan2017trustshadow,cerdeira2020trustzone}. Arm CCA extends this line further by introducing \textbf{Realms} for confidential workloads under stronger host-side adversary assumptions~\cite{li2022cca,arm_cca_spec,arm_rme_spec}. More broadly, the comparison between TrustZone-style TEEs and CCA-style confidential execution shows how trusted-execution design has moved from isolating a privileged security service toward protecting workloads against stronger software adversaries.
 
+Verified enclave monitors are an important intermediate point in that lineage.
+\textbf{Komodo} shows how enclave-management policy can be moved out of fixed
+hardware and into a machine-checked software monitor while relying on smaller
+hardware primitives for isolation, memory protection, and attestation
+support~\cite{ferraiuolo2017komodo}. Its role here is not to stand in for Arm
+CCA or CoVE/AP-TEE, but to show why verification and small monitor interfaces
+matter for TEE design.
+
 \subsubsection{Boot-Time Trust and Measured Launch}
 
 Trusted execution is closely connected to how a platform establishes trust at boot time. Work on secure boot, trusted boot, and remote attestation for Arm TrustZone-based devices demonstrates that the security of the runtime environment depends on a measured launch chain rather than on isolation alone~\cite{ling2021trustzoneatt,chen2024mraima,mao2025pdrima}. At a broader systems level, \textbf{SWATT}, \textbf{SMART}, and \textbf{SEDA} show recurring design requirements for attestation and roots of trust: measurements must be attributable, fresh, and tied to a concrete execution context~\cite{seshadri2004swatt,defrawy2012smart,asokan2015seda}. For hardware designers, this means that the relevant trust anchor is not simply a privileged mode or a secure memory region; it is the combination of launch-time measurement, protected execution, and verifiable system state.
+
+Runtime attestation adds another layer: the verifier may need evidence about
+the path a program actually took, not only the code image that booted.
+\textbf{C-FLAT} introduces control-flow attestation with TrustZone-protected
+measurement, \textbf{LO-FAT} moves that measurement into hardware to avoid
+software instrumentation overhead, and \textbf{VRASED} demonstrates a formally
+verified hardware/software RA co-design for simple embedded devices
+~\cite{abera2016cflat,dessouky2017lofat,nunes2019vrased}. These papers do not
+replace RATS/EAT or platform-specific CCA/CoVE evidence profiles; they explain
+why runtime evidence and root-of-trust implementation details matter.
 
 \subsection{I/O, DMA, and Accelerator Mediation}
 

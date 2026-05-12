@@ -2,9 +2,9 @@
 
 \DirectionIntro
 {Attestation、boot、lifecycle}
-{本方向区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier policy，避免把一次性启动测量写成持续可信。}
-{三篇主讲材料是 \Key{seshadri2004swatt}、\Key{rats_rfc}、\Key{mao2025pdrima}；\Key{eat_rfc} 只作为 token-format auxiliary。}
-{RFC 页只写规范语义和证据类型；draft runtime measurement 只写前沿方向，不泛化成 CCA/CoVE 完整证据链。}
+{本方向区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy，避免把一次性启动测量写成持续可信。}
+{三篇主讲材料是 \Key{seshadri2004swatt}、\Key{rats_rfc}、\Key{nunes2019vrased}；\Key{eat_rfc}、\Key{abera2016cflat}、\Key{dessouky2017lofat}、\Key{mao2025pdrima} 作为 auxiliary。}
+{RFC 页只写规范语义和证据类型；verified RA 只写 simple embedded device 范围，不泛化成 CCA/CoVE 完整证据链。}
 
 \begin{frame}{Attestation、boot、lifecycle：三篇主讲材料}
 \scriptsize
@@ -14,11 +14,11 @@
 \midrule
 历史入口 & SWATT: 软件 attestation 早期代表 & Foundational / E1 IEEE S\&P 2004 \\
 标准架构 & RATS 架构 & Spec-standard SOTA / E0 RFC 9334 \\
-运行时测量 & Policy-driven runtime integrity measurement & Draft/not ratified / E3 arXiv 2025 \\
+Verified RA & VRASED verified RA co-design & Peer-reviewed SOTA / E1 USENIX Security 2019 \\
 \bottomrule
 \end{tabularx}
 \medskip
-\SourceState{辅助材料：\Key{eat_rfc} 是 RFC 9711 EAT token/claim encoding，不计入三篇，也不替代 RATS 架构。}
+\SourceState{辅助材料：\Key{eat_rfc} 是 EAT token/claim encoding；\Key{abera2016cflat}、\Key{dessouky2017lofat}、\Key{mao2025pdrima} 只补 runtime/control-flow attestation lineage。}
 \end{frame}
 
 \PaperStory
@@ -82,38 +82,38 @@
 \end{itemize}}
 
 \PaperStory
-{Policy-driven runtime integrity measurement}
-{\Meta{mao2025pdrima}{Draft/not ratified / E3 arXiv 2025}{source: local PDF verified}{claim: draft runtime measurement design}}
+{VRASED verified RA co-design}
+{\Meta{nunes2019vrased}{Peer-reviewed SOTA / E1 USENIX Security 2019}{source: local PDF verified}{claim: verified RA co-design for simple embedded devices}}
 {\begin{itemize}
-  \item PDRIMA 研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。
-  \item 它补充 secure boot/launch attestation 之后的运行期状态问题。
+  \item VRASED 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root。
+  \item 它把硬件隔离、软件 attestation routine 和形式化证明放进同一个 co-design。
 \end{itemize}}
 {\begin{itemize}
-  \item Secure boot 和 launch attestation 只能覆盖启动或装载时刻。
-  \item Workload 运行后，代码、配置、policy 和状态变化仍需 freshness 与可解释 evidence。
+  \item RA 安全性依赖硬件、软件和协议共同成立。
+  \item 早期方案很少对实现级安全性质做机器可检查证明，低端 IoT 设备还需要控制硬件成本。
 \end{itemize}}
 {\begin{itemize}
-  \item 核心洞察是把 policy-driven runtime measurement 融入 attestation。
-  \item Verifier 可以按 policy 关注运行期状态变化，而不是只看启动测量。
+  \item 核心洞察是用少量硬件扩展保护 attestation 代码、密钥和内存访问。
+  \item 软件 RA routine 与硬件约束一起被形式化验证，而不是只给协议草图。
 \end{itemize}}
 {\begin{itemize}
-  \item Policy-driven runtime measurement。
-  \item TrustZone-based TEE measurement path。
-  \item Runtime attestation evidence generation。
+  \item Hardware/software RA root co-design。
+  \item Formal verification of security sub-properties。
+  \item MSP430/Basys3 FPGA implementation。
 \end{itemize}}
 {\begin{itemize}
-  \item arXiv 论文，本地 PDF 可用。
-  \item Draft/not-ratified 状态下只写保守机制方向，不写成同行评议共识。
+  \item USENIX Security 2019 peer-reviewed paper。
+  \item 论文报告 simple embedded device 原型和 verification evidence；具体资源、性能和证明规模以原文为准。
 \end{itemize}}
 {\begin{itemize}
-  \item \textbf{优点：}补上 secure boot/launch attestation 之后的 runtime freshness 问题。
-  \item \textbf{不足：}TrustZone-based draft 不能泛化成 CCA/CoVE 的完整 evidence chain。
-  \item \textbf{商业落地：}适合安全运维和 runtime compliance；风险在策略管理、性能成本和证据解释一致性。
+  \item \textbf{优点：}证据强，结合形式化验证、硬件/软件 co-design 和真实原型。
+  \item \textbf{不足：}目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。
+  \item \textbf{商业落地：}适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
 \end{itemize}}
 
 \DirectionSummary
 {Attestation、boot、lifecycle}
 {SWATT 说明早期 remote attestation 依赖软件测量和 timing 假设，现代方案需要硬件 RoT 与标准化 evidence。}
 {RATS 把 attester/verifier/relying party、evidence、endorsement、reference value、appraisal policy 和 result 统一成架构词汇。}
-{Runtime measurement 把关注点从 launch-time 扩展到运行期 freshness，但 draft evidence 不能被写成成熟平台能力。}
+{VRASED 说明 RA root 本身也需要硬件/软件 co-design 和机器可检查证明；C-FLAT/LO-FAT 补 runtime control-flow evidence lineage。}
 {后续 CCA、CoVE、SPDM/TDISP、DPU/NIC attestation 都需要映射到 RATS/EAT 与平台特定 evidence profile。}

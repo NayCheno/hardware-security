@@ -31,9 +31,9 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2025rcontainersecurecontainerarchitecturearm` | P0 | `arm-trustzone-cca` | 2025 | Covered by active reference `zhou2025rcontainer`; candidate remains metadata-only. |
 | `rw2026devloredeviceinterruptprotectionconfidential` | P0 | `arm-trustzone-cca` | 2026 | Covered by active reference `bertschi2026devlore`; candidate remains metadata-only. |
 | `rw2002bindfinegrainedattestationservice` | P0 | `attestation-boot-lifecycle` | 2002 | Backlog foundational attestation; no substantive citation until canonical paper is ingested. |
-| `rw2016cflatcontrolflowattestation` | P0 | `attestation-boot-lifecycle` | 2016 | Backlog control-flow attestation; no substantive citation until canonical paper is ingested. |
-| `rw2017lofatlowoverheadcontrol` | P0 | `attestation-boot-lifecycle` | 2017 | Backlog hardware CFA; no substantive citation until canonical paper is ingested. |
-| `rw2019vrasedverifiedhardwaresoftwareco` | P0 | `attestation-boot-lifecycle` | 2019 | Backlog verified RA design; no substantive citation until canonical paper is ingested. |
+| `rw2016cflatcontrolflowattestation` | P0 | `attestation-boot-lifecycle` | 2016 | Covered by active reference `abera2016cflat`; candidate remains metadata-only. |
+| `rw2017lofatlowoverheadcontrol` | P0 | `attestation-boot-lifecycle` | 2017 | Covered by active reference `dessouky2017lofat`; candidate remains metadata-only. |
+| `rw2019vrasedverifiedhardwaresoftwareco` | P0 | `attestation-boot-lifecycle` | 2019 | Covered by active reference `nunes2019vrased`; candidate remains metadata-only. |
 | `rw2021deviceidentifiercompositionengine` | P0 | `attestation-boot-lifecycle` | 2021 | Covered by active official TCG reference `tcg_dice_2018`; candidate remains metadata-only. |
 | `rw2023remoteattestationproceduresarchitecture` | P0 | `attestation-boot-lifecycle` | 2023 | Covered by active reference `rats_rfc`; candidate remains metadata-only. |
 | `rw2008flickerexecutioninfrastructuretcbminimization` | P0 | `hardware-tee-architecture` | 2008 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
@@ -99,7 +99,7 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2012hyperwallsecurevirtualizationcloudcomputing` | P1 | `hardware-tee-architecture` | 2012 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2013inktagsecureapplicationsuntrustedoperating` | P1 | `hardware-tee-architecture` | 2013 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2014isoxflexiblearchitecturehardware` | P1 | `hardware-tee-architecture` | 2014 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
-| `rw2017komodoverificationdisentanglesecureenclave` | P1 | `hardware-tee-architecture` | 2017 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
+| `rw2017komodoverificationdisentanglesecureenclave` | P1 | `hardware-tee-architecture` | 2017 | Covered by active reference `ferraiuolo2017komodo`; candidate remains metadata-only. |
 | `rw2005controlflowintegrityprinciplesimplementations` | P1 | `isa-hardware-defense` | 2005 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
 | `rw2009baggyboundscheckingefficientbackwards` | P1 | `isa-hardware-defense` | 2009 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
 | `rw2009softboundhighlycompatiblecompletespatial` | P1 | `isa-hardware-defense` | 2009 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |

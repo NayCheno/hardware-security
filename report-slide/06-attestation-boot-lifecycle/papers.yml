@@ -1,6 +1,6 @@
 direction: Attestation、boot、lifecycle
-focus: 区分 secure boot、launch attestation、runtime freshness、evidence profile 与 verifier policy。
-selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary。
+focus: 区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。
+selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。
 primary:
 - key: seshadri2004swatt
   role: foundational
@@ -51,29 +51,29 @@ primary:
     commercialization: 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
   auxiliary:
   - eat_rfc
-- key: mao2025pdrima
+- key: nunes2019vrased
   role: sota_2
-  selection_reason: PDRIMA is treated as a draft SOTA item for RISC-V and IoT attestation, with evidence limits recorded.
-  evidence_type: E3 draft/preprint, not ratified
-  maturity: draft/preprint, not ratified
+  selection_reason: VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software remote attestation.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
   pdf_status: local_pdf_verified
-  source_url: https://arxiv.org/abs/2512.06500
-  evidence: E3 / Draft-not-ratified
+  source_url: https://www.usenix.org/conference/usenixsecurity19/presentation/de-oliveira-nunes
+  evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
-  reference: reference/attestation/pdrima-policy-driven-runtime-integrity-measurement-attestation/paper.pdf
-  title: Policy-driven runtime integrity measurement
-  summary: 研究 TrustZone-based TEE 的 policy-driven runtime integrity measurement attestation。
-  background: Secure boot 和 launch attestation 只能覆盖启动或装载时刻，不能自动证明运行时状态持续可信。
-  insight_solution: 把策略驱动的 runtime measurement 融入 attestation，让 verifier 能按 policy 关注运行期状态变化。
+  reference: reference/attestation/vrased-verified-hardware-software-co-design-remote-attestation/paper.pdf
+  title: VRASED verified RA co-design
+  summary: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root。
+  background: RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明。
+  insight_solution: 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性。
   key_technologies:
-  - Policy-driven runtime measurement
-  - TrustZone-based TEE measurement path
-  - Runtime attestation evidence generation
-  experiment_claim: arXiv 论文，本地 PDF 可用；draft/not-ratified 状态下只写保守机制方向。
+  - Hardware/software RA root co-design
+  - Formal verification of security sub-properties
+  - MSP430/Basys3 FPGA implementation
+  experiment_claim: USENIX Security 2019 peer-reviewed paper; reports prototype and verification evidence for simple embedded devices.
   evaluation:
-    strengths: 补上 secure boot/launch attestation 之后的 runtime freshness 问题。
-    limitations: TrustZone-based draft 不能泛化成 CCA/CoVE 的完整 evidence chain。
-    commercialization: 适合安全运维和 runtime compliance；风险在策略管理、性能成本和证据解释一致性。
+    strengths: 证据强，结合形式化验证、硬件/软件 co-design 和真实原型。
+    limitations: 目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。
+    commercialization: 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
   auxiliary: []
 auxiliary:
 - key: eat_rfc
@@ -82,3 +82,21 @@ auxiliary:
   source_status: local_pdf_verified
   reference: reference/attestation/entity-attestation-token-rfc9711/paper.pdf
   use: 辅助说明 Entity Attestation Token 的 CWT/JWT claim/token encoding；不计入三篇主讲，也不替代 RATS 架构或平台证据语义。
+- key: abera2016cflat
+  role: Runtime/control-flow attestation lineage
+  evidence: E1 / Peer-reviewed primary
+  source_status: local_pdf_verified
+  reference: reference/attestation/c-flat-control-flow-attestation-embedded-systems-software/paper.pdf
+  use: 辅助说明 control-flow attestation 问题起点；不计入三篇主讲。
+- key: dessouky2017lofat
+  role: Hardware CFA lineage
+  evidence: E1 / Peer-reviewed primary
+  source_status: local_pdf_verified
+  reference: reference/attestation/lo-fat-low-overhead-control-flow-attestation-hardware/paper.pdf
+  use: 辅助说明硬件 control-flow attestation 如何降低插桩开销；不计入三篇主讲。
+- key: mao2025pdrima
+  role: Draft runtime measurement auxiliary
+  evidence: E3 / Draft-not-ratified
+  source_status: local_pdf_verified
+  reference: reference/attestation/pdrima-policy-driven-runtime-integrity-measurement-attestation/paper.pdf
+  use: 辅助说明 policy-driven runtime measurement 前沿方向；不计入三篇主讲。
