@@ -171,10 +171,14 @@
   {
     "directory": "15-smartnic-trusted-nic-storage",
     "direction": "SmartNIC / trusted NIC / secure storage data path",
-    "papers": [
-      "zhou2024snic",
-      "giantsidi2025tnic",
-      "chrapek2026hazel"
+    "primary": [
+      {"key": "zhou2024snic", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "giantsidi2025tnic", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "chrapek2026hazel", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": [
+      {"key": "nvidia_bluefield_operation_2025", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
+      {"key": "khalilov2024osmosis", "evidence": "E1 / Peer-reviewed background substrate", "source_status": "local_pdf_verified"}
     ]
   }
 ]
