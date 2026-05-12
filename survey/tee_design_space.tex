@@ -1,0 +1,32 @@
+\section{TEE Design Space and Evidence Boundaries}
+
+Before comparing Arm CCA, RISC-V CoVE/AP-TEE, and confidential I/O, it is
+useful to separate the design dimensions that recur across TEE systems. Survey
+and SoK sources provide the taxonomy for this section, while platform-specific
+mechanism claims in later sections still return to primary papers and official
+specifications~\cite{schneider2022soktee,li2024sokteechoices,boubakri2025riscvtee,sok-tee}.
+
+\begin{table*}[t]
+\centering
+\caption{TEE Design-Space Dimensions and Evidence Boundaries}
+\label{tab:tee_design_space}
+\begin{tabular}{@{}p{0.15\linewidth}p{0.29\linewidth}p{0.24\linewidth}p{0.22\linewidth}@{}}
+\toprule
+\textbf{Dimension} & \textbf{Survey question} & \textbf{Typical mechanisms} & \textbf{Evidence boundary} \\ \midrule
+Launch and admission & How does a protected domain enter a known initial state before receiving secrets? & Secure boot, measured launch, Realm/TVM creation, monitor-mediated acceptance & Use SoK sources for vocabulary; use CCA, AP-TEE, and platform specs for mechanism details. \\
+Runtime isolation & Which agents can observe or mutate execution state and protected memory during operation? & World/domain separation, PMP, GPT/GPC, page lifecycle, enclave monitor policy & Distinguish process, enclave, Realm, and confidential-VM threat models. \\
+Trusted I/O & How can a protected workload use devices without handing data authority back to the host? & SMMU/IOMMU/IOPMP, SPDM, TDISP, PCIe IDE, CoVE-IO, device assignment & Treat drafts, gated specifications, and vendor documents under their restricted evidence classes. \\
+Secure storage and persistence & What protects data once it leaves CPU-local protected memory or survives reboot? & Sealing, RPMB/fTPM, encrypted storage, freshness metadata, remote-storage integrity & Do not infer storage freshness or rollback protection from execution isolation alone. \\
+Attestation and verifier policy & What evidence lets a remote party decide whether to release keys or trust a service? & RATS roles, EAT tokens, platform evidence, device evidence, endpoint binding & RFCs define roles and token formats; platform claims need platform-specific evidence. \\
+TCB and excluded attacks & Which hardware, firmware, runtime, host, and device components remain trusted or out of scope? & Monitor/RMM/TSM, firmware roots, device managers, verifier policy, side-channel exclusions & Keep side-channel and physical attacks as threat-boundary statements unless a mechanism directly addresses them. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:tee_design_space} provides the bridge used by the rest of the
+survey. Arm CCA and RISC-V CoVE/AP-TEE both address launch, runtime isolation,
+attestation, and TCB control, but they expose different interfaces and
+standardization status. Confidential I/O and secure storage extend the same
+questions beyond CPU execution into DMA, interrupts, links, devices, and
+persistent or remote state. Keeping these dimensions separate prevents three
+common overclaims: treating attestation as isolation, treating memory ownership
+as storage freshness, and treating device identity as complete trusted I/O.
