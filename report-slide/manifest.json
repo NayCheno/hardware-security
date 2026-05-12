@@ -12,11 +12,12 @@
   {
     "directory": "02-trustzone-lineage",
     "direction": "Arm TrustZone TEE 与漏洞谱系",
-    "papers": [
-      "arm_trustzone_whitepaper",
-      "pinto2019trustzone",
-      "cerdeira2020trustzone"
-    ]
+    "primary": [
+      {"key": "arm_trustzone_whitepaper", "evidence": "E4 / Foundational industry evidence", "source_status": "source_verified_pdf_unavailable"},
+      {"key": "pinto2019trustzone", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
+      {"key": "cerdeira2020trustzone", "evidence": "E2 / Peer-reviewed SoK", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": []
   },
   {
     "directory": "03-arm-cca-rme-rmm",

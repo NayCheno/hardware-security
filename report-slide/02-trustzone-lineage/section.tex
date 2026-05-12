@@ -1,44 +1,117 @@
 \section{Arm TrustZone TEE 与漏洞谱系}
-\begin{frame}{Arm TrustZone TEE 与漏洞谱系}
-\small
-\textbf{方向定位：}把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。
-\medskip
 
+\DirectionIntro
+{Arm TrustZone TEE 与漏洞谱系}
+{本方向把 TrustZone 作为 Arm CCA 的历史前景和边界对照：双世界模型解释了 Arm TEE 的起点，漏洞 SoK 解释了为什么后续需要更强的 Realm/CCA 边界。}
+{三篇主讲材料分别是 Arm TrustZone 白皮书、TrustZone 综合 survey、TrustZone-assisted TEE 漏洞 SoK；它们不作为 CCA/RME/RMM 的机制证明。}
+{TrustZone 页只写历史模型、生态分类和漏洞谱系；所有 CCA/Realm、RME/RMM、SMMU 或 System Realm claim 都留到后续 Arm CCA 方向。}
+
+\begin{frame}{Arm TrustZone TEE 与漏洞谱系：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & Arm TrustZone 白皮书 & Foundational / Arm whitepaper \\ 
-SOTA/规范 1 & Demystifying Arm TrustZone & Background substrate / ACM CSUR 2019 survey \\ 
-SOTA/规范 2 & TrustZone-assisted TEE 漏洞 SoK & Background substrate / IEEE S\&P 2020 SoK \\ 
+历史入口 & Arm TrustZone 白皮书 & Foundational / E4 industry evidence \\
+生态谱系 & Demystifying Arm TrustZone & Background substrate / E2 survey \\
+风险动机 & TrustZone-assisted TEE 漏洞 SoK & Peer-reviewed SoK / E2 \\
 \bottomrule
 \end{tabularx}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {Arm TrustZone 白皮书}
-{arm\_trustzone\_whitepaper | Foundational / Arm whitepaper}
-{介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型。}
-{移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来。}
-{在处理器、互连和外设路径传播安全状态，形成双世界系统。}
-{白皮书，无实验。}
-{历史基础价值高；不应当作 CCA 或 confidential VM 的 threat model 证据。商业上是移动 SoC 安全服务的经典基础。}
+{\Meta{arm_trustzone_whitepaper}{Foundational / E4 industry evidence}{source: source verified, PDF unavailable}{claim: TrustZone base model only}}
+{\begin{itemize}
+  \item 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型。
+  \item 本 deck 用它说明 Arm TEE 历史起点，不把它当作 CCA 或 Realm 机制。
+\end{itemize}}
+{\begin{itemize}
+  \item 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来。
+  \item TrustZone 提供的是 SoC-wide security state，而不是 confidential VM 的 host/tenant 分离模型。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是在 CPU、互连和外设路径传播安全状态。
+  \item 解决方案是 Secure world / Non-secure world 双世界隔离。
+\end{itemize}}
+{\begin{itemize}
+  \item Secure world and Non-secure world。
+  \item NS bit and security state propagation。
+  \item Secure monitor and trusted service boundary。
+\end{itemize}}
+{\begin{itemize}
+  \item 白皮书/industry evidence，无独立实验。
+  \item 只支撑 TrustZone 基础模型；不写 CCA/RME/RMM 或 confidential VM claim。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}历史基础价值高，能解释 Arm TEE 双世界起点。
+  \item \textbf{不足：}不代表 CCA/RME/RMM 的 threat model 或接口。
+  \item \textbf{商业落地：}已长期进入移动和嵌入式 SoC；风险在 legacy TCB 大、接口复杂和迁移边界不同。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Demystifying Arm TrustZone}
-{pinto2019trustzone | Background substrate / ACM CSUR 2019 survey}
-{全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作。}
-{TrustZone 长期被广泛部署，但公开系统化资料不足。}
-{按系统软件、TEE、虚拟化和应用场景分类。}
-{Survey，无新实验。}
-{适合写 TrustZone 背景；对 CCA/RME 不完整。商业价值在于帮助厂商盘点老 TEE 生态。}
+{\Meta{pinto2019trustzone}{Background substrate / E2 survey}{source: local PDF verified}{claim: ecosystem survey only}}
+{\begin{itemize}
+  \item 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作。
+  \item 本 deck 用它补 TrustZone 生态背景。
+\end{itemize}}
+{\begin{itemize}
+  \item TrustZone 长期部署广，但公开系统化资料不足。
+  \item 不同 TEE OS、TA、虚拟化和 IoT 用法的边界容易被混写。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 TrustZone 从单一硬件特性展开成生态和系统软件谱系。
+  \item 解决方案是按系统软件、TEE、虚拟化和应用场景分类。
+\end{itemize}}
+{\begin{itemize}
+  \item TEE OS and trusted applications。
+  \item Hardware-assisted virtualization use cases。
+  \item IoT/mobile deployment and lifecycle patterns。
+\end{itemize}}
+{\begin{itemize}
+  \item Survey，无新实验。
+  \item 只支撑背景和生态分类；机制或漏洞 claim 需回到对应一手材料。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}适合写 TrustZone 背景和生态谱系。
+  \item \textbf{不足：}对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
+  \item \textbf{商业落地：}有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {TrustZone-assisted TEE 漏洞 SoK}
-{cerdeira2020trustzone | Background substrate / IEEE S\&P 2020 SoK}
-{归纳 TrustZone-assisted TEE 的主流漏洞类型和根因。}
-{TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞。}
-{按漏洞面、接口、权限边界和实现缺陷建立 taxonomy。}
-{SoK/漏洞分析，无新系统实验。}
-{能支撑“为什么需要更强 CCA threat model”；不能替代 CCA 机制分析。商业价值在安全审计与迁移评估。}
+{\Meta{cerdeira2020trustzone}{Peer-reviewed SoK / E2}{source: local PDF verified}{claim: vulnerability taxonomy only}}
+{\begin{itemize}
+  \item 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因。
+  \item 本 deck 用它说明 TrustZone-era TEE 的接口和 TCB 风险。
+\end{itemize}}
+{\begin{itemize}
+  \item TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞。
+  \item 这些问题解释了为什么 CCA 要重新定义 Realm、RMM 和 host/tenant 边界。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是漏洞往往来自 TEE OS、TA、driver、secure monitor 和世界切换边界。
+  \item 解决方案是按漏洞面、接口、权限边界和实现缺陷建立 taxonomy。
+\end{itemize}}
+{\begin{itemize}
+  \item Trusted application and TEE OS attack surface。
+  \item Secure monitor and driver interface risk。
+  \item Vulnerability taxonomy and root-cause grouping。
+\end{itemize}}
+{\begin{itemize}
+  \item SoK/漏洞分析，无新系统实验。
+  \item 不证明 CCA 安全性；只提供历史风险和迁移动机。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}能支撑“为什么需要更强 CCA threat model”的历史动机。
+  \item \textbf{不足：}不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。
+  \item \textbf{商业落地：}适合安全审计和迁移评估；条件是缩小 TCB、规范接口并建立漏洞治理。
+\end{itemize}}
 
+\DirectionSummary
+{Arm TrustZone TEE 与漏洞谱系}
+{TrustZone 白皮书固定双世界和 SoC security state 的历史起点。}
+{Pinto survey 把 TrustZone 生态、TEE OS、TA、虚拟化和 IoT/mobile 用法组织成背景谱系。}
+{Cerdeira SoK 把接口复杂性和 TCB 漏洞变成后续 CCA/RME/RMM 的迁移动机。}
+{本方向只解释历史和风险，不把 TrustZone threat model 写成 CCA/Realm 的安全结论。}

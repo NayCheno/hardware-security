@@ -1,28 +1,61 @@
 direction: Arm TrustZone TEE 与漏洞谱系
 focus: 把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+selection_rule: 固定三篇 primary；TrustZone 白皮书、survey 和漏洞 SoK 只支撑历史背景、生态和迁移动机。
+primary:
 - key: arm_trustzone_whitepaper
   role: Foundational / Arm whitepaper
+  evidence: E4 / Foundational industry evidence
+  source_status: source_verified_pdf_unavailable
+  reference: reference/trusted-execution-environments/arm-security-technology-trustzone/README.md
   title: Arm TrustZone 白皮书
   summary: 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型。
   background: 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来。
-  solution: 在处理器、互连和外设路径传播安全状态，形成双世界系统。
-  experiment: 白皮书，无实验。
-  comment: 历史基础价值高；不应当作 CCA 或 confidential VM 的 threat model 证据。商业上是移动 SoC 安全服务的经典基础。
+  insight_solution: 在处理器、互连和外设路径传播安全状态，形成双世界系统。
+  key_technologies:
+  - Secure world / Non-secure world
+  - NS bit and SoC security state propagation
+  - Secure monitor and trusted service boundary
+  experiment_claim: 白皮书/industry evidence，无独立实验；只支撑 TrustZone 基础模型。
+  evaluation:
+    strengths: 历史基础价值高，能解释 Arm TEE 的双世界起点。
+    limitations: 不代表 CCA/RME/RMM 或 confidential VM threat model。
+    commercialization: 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
+  auxiliary: []
 - key: pinto2019trustzone
-  role: Background substrate / ACM CSUR 2019 survey
+  role: Background substrate / ACM CSUR survey
+  evidence: E2 / Background substrate
+  source_status: local_pdf_verified
+  reference: reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/paper.pdf
   title: Demystifying Arm TrustZone
   summary: 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作。
-  background: TrustZone 长期被广泛部署，但公开系统化资料不足。
-  solution: 按系统软件、TEE、虚拟化和应用场景分类。
-  experiment: Survey，无新实验。
-  comment: 适合写 TrustZone 背景；对 CCA/RME 不完整。商业价值在于帮助厂商盘点老 TEE 生态。
+  background: TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一。
+  insight_solution: 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map。
+  key_technologies:
+  - TEE OS and trusted applications
+  - Hardware-assisted virtualization use cases
+  - IoT and mobile deployment patterns
+  experiment_claim: Survey，无新实验；只支撑背景和生态分类。
+  evaluation:
+    strengths: 适合写 TrustZone 背景和生态谱系。
+    limitations: 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
+    commercialization: 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
+  auxiliary: []
 - key: cerdeira2020trustzone
-  role: Background substrate / IEEE S&P 2020 SoK
+  role: Background substrate / IEEE S&P SoK
+  evidence: E2 / Peer-reviewed SoK
+  source_status: local_pdf_verified
+  reference: reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/paper.pdf
   title: TrustZone-assisted TEE 漏洞 SoK
   summary: 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因。
   background: TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞。
-  solution: 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy。
-  experiment: SoK/漏洞分析，无新系统实验。
-  comment: 能支撑“为什么需要更强 CCA threat model”；不能替代 CCA 机制分析。商业价值在安全审计与迁移评估。
+  insight_solution: 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界。
+  key_technologies:
+  - Trusted application and TEE OS attack surface
+  - Secure monitor / driver interface risk
+  - Vulnerability taxonomy and root-cause grouping
+  experiment_claim: SoK/漏洞分析，无新系统实验；不证明 CCA 安全性。
+  evaluation:
+    strengths: 能支撑“为什么需要更强 CCA threat model”的历史动机。
+    limitations: 不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。
+    commercialization: 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
+  auxiliary: []
