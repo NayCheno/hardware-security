@@ -1,44 +1,117 @@
 \section{硬件辅助 TEE taxonomy}
-\begin{frame}{硬件辅助 TEE taxonomy}
-\small
-\textbf{方向定位：}用 SoK/Survey 先固定 design space，避免把不同架构的 TEE 混成产品罗列。
-\medskip
 
+\DirectionIntro
+{硬件辅助 TEE taxonomy}
+{本方向先建立 design space：硬件 TEE 不是产品名列表，而是 launch、runtime isolation、I/O、storage、attestation 和 TCB 的组合。}
+{三篇主讲材料分别覆盖通用硬件 TEE SoK、RISC-V TEE 谱系 survey、accelerator TEE SoK；它们都是 taxonomy 入口，不替代后续方向的一手机制证据。}
+{Survey/SoK 页只写分类、术语和比较维度；涉及 CCA、CoVE、SPDM/TDISP、GPU/DPU/SmartNIC 的机制或实验结论，必须回到后续方向的论文、规范或本地 PDF。}
+
+\begin{frame}{硬件辅助 TEE taxonomy：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & 硬件辅助 TEE 总体设计空间 & Foundational / SoK, arXiv 2022 \\ 
-SOTA/规范 1 & RISC-V secure enclave 与 TEE 谱系 survey & Background substrate / Electronics 2025 survey \\ 
-SOTA/规范 2 & Accelerator TEE 设计空间 & Background substrate / NDSS 2026 SoK \\ 
+方向入口 & 硬件辅助 TEE 总体设计空间 & Foundational / E2 SoK \\
+RISC-V 谱系桥接 & RISC-V secure enclave 与 TEE 谱系 survey & Background substrate / E2-E5 \\
+设备侧扩展 & Accelerator TEE 设计空间 & Background substrate / E2 SoK \\
 \bottomrule
 \end{tabularx}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {硬件辅助 TEE 总体设计空间}
-{schneider2022soktee | Foundational / SoK, arXiv 2022}
-{系统化整理硬件辅助 TEE 的 launch、runtime isolation、trusted I/O、secure storage、attestation 与 TCB 维度。}
-{SGX、SEV、TrustZone、Sanctum、Keystone 等平台名称相似，但威胁模型、硬件假设和部署场景差异很大。}
-{用机制级 taxonomy 替代产品级罗列，把不同 TEE 统一映射到可比较的安全属性。妙处在于先定义比较坐标，再放入具体平台。}
-{Survey/SoK，无新实验；证据来自公开论文和规范比较。}
-{适合做本项目顶层分类。不足是时间截面停在 2022 年，CCA、CoVE/AP-TEE、CoVE-IO 和 accelerator TEE 需要额外补充；商业落地价值主要体现在评估框架与需求拆解。}
+{\Meta{schneider2022soktee}{Foundational / E2 SoK}{source: local PDF verified}{claim: taxonomy and terminology only}}
+{\begin{itemize}
+  \item 系统化整理硬件辅助 TEE 的 launch、runtime isolation、trusted I/O、secure storage、attestation 与 TCB 维度。
+  \item 本 deck 用它定义比较坐标，而不是直接复述各平台营销名词。
+\end{itemize}}
+{\begin{itemize}
+  \item SGX、SEV、TrustZone、Sanctum、Keystone 等平台常被放在同一张表里，但威胁模型和硬件假设差异很大。
+  \item 如果没有统一 taxonomy，后续 Arm CCA、RISC-V CoVE、I/O 和 accelerator 方向会混写。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是先定义机制级坐标，再把平台映射进去。
+  \item 解决方案是按 launch、runtime、I/O、storage、attestation、TCB 等维度组织 design space。
+\end{itemize}}
+{\begin{itemize}
+  \item Launch chain and measurement。
+  \item Runtime isolation and memory ownership。
+  \item Trusted I/O、secure storage、attestation 与 TCB 边界。
+\end{itemize}}
+{\begin{itemize}
+  \item Survey/SoK，无新实验。
+  \item 证据用途限于 taxonomy、术语和覆盖范围；性能和机制细节必须回到对应原论文或规范。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}适合作为全 deck 顶层分类坐标。
+  \item \textbf{不足：}2022 时间截面不能覆盖 CCA、CoVE-IO、TDISP 和 accelerator TEE 的最新进展。
+  \item \textbf{商业落地：}可转化为需求拆解和评估清单；不能作为单个平台的安全证明。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {RISC-V secure enclave 与 TEE 谱系 survey}
-{boubakri2025riscvtee | Background substrate / Electronics 2025 survey}
-{梳理 RISC-V secure enclave 与 TEE 研究谱系。}
-{RISC-V TEE 从 PMP monitor 到 confidential VM 的发展分散在论文、草案和原型中，容易产生谱系断裂。}
-{按 RISC-V TEE 设计点组织 Keystone、Penglai、SPEAR-V、CoVE 等工作，作为 taxonomy bridge。}
-{Survey，无新实验；PDF 自动下载受限时应以 HTML/metadata 核验并回引原始论文。}
-{适合补 RISC-V taxonomy；机制细节必须回到原始论文和 AP-TEE/CoVE-IO spec。商业潜力在于帮助做 RISC-V 平台技术选型。}
+{\Meta{boubakri2025riscvtee}{Background substrate / E2-E5 survey}{source: source verified, PDF limited}{claim: taxonomy bridge only}}
+{\begin{itemize}
+  \item 梳理 RISC-V secure enclave 与 TEE 研究谱系。
+  \item 在本 deck 中用于连接 PMP-based enclave、Keystone/Penglai/SPEAR-V 和 CoVE/AP-TEE。
+\end{itemize}}
+{\begin{itemize}
+  \item RISC-V TEE 发展分散在论文、原型和规范草案中。
+  \item 没有谱系桥接时，pre-CoVE enclave 和 confidential VM 容易被混成同一类机制。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把开放 ISA 的 TEE 发展按机制和阶段拆开。
+  \item 解决方案是把 enclave lineage、confidential VM lineage、I/O 草案和硬件 substrate 分层组织。
+\end{itemize}}
+{\begin{itemize}
+  \item PMP/ePMP/Smepmp based isolation。
+  \item Keystone、Penglai、SPEAR-V 等 enclave 系统。
+  \item CoVE/AP-TEE 与 CoVE-IO draft 方向。
+\end{itemize}}
+{\begin{itemize}
+  \item Survey，无新实验。
+  \item PDF/source-limited 状态下只写 taxonomy 辅助，不写强机制或性能 claim。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}能把 RISC-V 小方向放回顶层 taxonomy。
+  \item \textbf{不足：}具体机制必须回引 Keystone、Penglai、SPEAR-V、AP-TEE 和 CoVE-IO 原始材料。
+  \item \textbf{商业落地：}可辅助 RISC-V 平台选型；风险在草案状态和厂商实现差异。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Accelerator TEE 设计空间}
-{sok-tee | Background substrate / NDSS 2026 SoK}
-{系统化分析 accelerator TEE 设计。}
-{Confidential workload 依赖 GPU/NPU/DPU/SmartNIC 后，CPU TEE 边界无法单独覆盖数据路径。}
-{把 accelerator TEE 拆成设备身份、内存/总线保护、runtime TCB、调度、attestation 等维度。}
-{Survey/SoK，无新实验。}
-{非常适合 I/O/accelerator 小方向；不能替代通用 TEE SoK。商业价值在于为 DPU/GPU 安全产品定义评估清单。}
+{\Meta{sok-tee}{Background substrate / E2 SoK}{source: local PDF verified}{claim: accelerator taxonomy only}}
+{\begin{itemize}
+  \item 系统化分析 GPU/NPU/DPU/SmartNIC 等 accelerator TEE 设计。
+  \item 在本 deck 中用于把 CPU Realm/TVM 边界延伸到设备、队列、总线和 runtime。
+\end{itemize}}
+{\begin{itemize}
+  \item Confidential workload 一旦 offload 到 GPU/NIC/DPU，明文、queue state、key 和 model state 可能离开 CPU TEE。
+  \item CPU TEE taxonomy 无法单独解释 accelerator/device trust boundary。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是设备侧 TEE 需要独立的身份、内存、调度和 attestation 维度。
+  \item 解决方案是用 accelerator-specific design space 组织后续 ACAI、HETEE、CAGE、S-NIC、TNIC 等材料。
+\end{itemize}}
+{\begin{itemize}
+  \item Device identity and attestation。
+  \item Protected device memory、queue state and link/fabric path。
+  \item Runtime/driver TCB、scheduling and cleanup。
+\end{itemize}}
+{\begin{itemize}
+  \item Survey/SoK，无新实验。
+  \item 只能支撑 accelerator/device TEE taxonomy；具体数值和方案 claim 回到主讲论文或规范。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}为 I/O、accelerator、SmartNIC 三组方向提供统一语言。
+  \item \textbf{不足：}不能替代 CCA、CoVE-IO、SPDM/TDISP 或具体 GPU/DPU 系统的一手证据。
+  \item \textbf{商业落地：}可形成 DPU/GPU 安全产品评估清单；落地依赖设备 RoT、标准接口和可验证 runtime。
+\end{itemize}}
 
+\DirectionSummary
+{硬件辅助 TEE taxonomy}
+{先用通用 TEE SoK 固定 launch、runtime isolation、I/O、storage、attestation 与 TCB 坐标。}
+{RISC-V survey 把 PMP-based enclave 到 CoVE/AP-TEE 的谱系接上，避免把原型和规范草案混写。}
+{Accelerator TEE SoK 把 GPU/NPU/DPU/SmartNIC 纳入设备侧 trust boundary。}
+{所有 survey/SoK 都只作为地图；后续强 claim 必须回到一手论文、规范、本地 PDF 或官方来源。}

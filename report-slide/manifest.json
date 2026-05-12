@@ -2,11 +2,12 @@
   {
     "directory": "01-tee-taxonomy",
     "direction": "硬件辅助 TEE taxonomy",
-    "papers": [
-      "schneider2022soktee",
-      "boubakri2025riscvtee",
-      "sok-tee"
-    ]
+    "primary": [
+      {"key": "schneider2022soktee", "evidence": "E2 / Foundational", "source_status": "local_pdf_verified"},
+      {"key": "boubakri2025riscvtee", "evidence": "E2/E5 / Background substrate", "source_status": "source_verified_pdf_limited"},
+      {"key": "sok-tee", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": []
   },
   {
     "directory": "02-trustzone-lineage",
