@@ -1,28 +1,62 @@
 direction: 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V'
 focus: 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。
-selection_rule: 第一篇为 foundational/方向入口，后两篇优先选择 SOTA/spec/draft/industry evidence。
-papers:
+selection_rule: 固定三篇 primary；不引入辅助材料，直接呈现 RISC-V enclave lineage。
+primary:
 - key: lee2020keystone
   role: Foundational / arXiv 2019
+  evidence: E1 / Foundational
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf
   title: 'Keystone: 开源 RISC-V TEE 框架'
-  summary: 开源 RISC-V TEE 框架。
-  background: 商业 TEE 难定制、难验证，RISC-V 提供开放硬件/软件协同机会。
-  solution: 用 PMP、security monitor 和 runtime abstraction 构建 enclave。
-  experiment: 论文报告 CoreMark/Beebs/RV8 开销低，IOZone 可明显更高；具体数值以原文为准。
-  comment: RISC-V TEE baseline；适合解释 PMP-based enclave 的优缺点。
+  summary: 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave。
+  background: 商业 TEE 难定制、难验证；RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline。
+  insight_solution: 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架。
+  key_technologies:
+  - PMP-based enclave isolation
+  - Security monitor and runtime abstraction
+  - Open RISC-V TEE software/hardware co-design
+  experiment_claim: 论文报告 CoreMark/Beebs/RV8 等开销结果；具体数字以本地 PDF 为准。
+  evaluation:
+    strengths: RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
+    limitations: arXiv/foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+    commercialization: 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
+  auxiliary: []
 - key: feng2021penglai
   role: Peer-reviewed SOTA / OSDI 2021
+  evidence: E1 / Peer-reviewed SOTA
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf
   title: 'Penglai: scalable enclave memory protection'
-  summary: 面向大规模 enclave 的 scalable memory protection。
-  background: serverless/microservice 场景需要大量动态 enclave，传统 PMP region 数量有限。
-  solution: 引入更可扩展的内存保护和 metadata 管理机制。
-  experiment: OSDI 论文报告可支持大量 enclave 和较大安全内存；具体指标以原文为准。
-  comment: 系统贡献强；商业落地门槛在硬件修改和标准化。
+  summary: 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求。
+  background: 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存。
+  insight_solution: 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化。
+  key_technologies:
+  - Scalable enclave memory protection
+  - Metadata management for enclave lifecycle
+  - Serverless/microservice-oriented enclave scaling
+  experiment_claim: OSDI 论文报告可支持大量 enclave 和较大安全内存；具体指标以本地 PDF 为准。
+  evaluation:
+    strengths: 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
+    limitations: 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
+    commercialization: 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
+  auxiliary: []
 - key: schrammel2023spearv
   role: Peer-reviewed SOTA / ACM AsiaCCS 2023
+  evidence: E1 / Peer-reviewed SOTA
+  source_status: local_pdf_verified
+  reference: reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf
   title: 'SPEAR-V: low-overhead RISC-V enclave primitive'
-  summary: 提出低开销、实用的 RISC-V enclave primitive。
-  background: 需要灵活、低开销、可抵抗部分 controlled-channel 风险的 enclave 机制。
-  solution: 用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离。
-  experiment: 论文报告 protected/unprotected 场景低开销；具体数值以原文为准。
-  comment: 机制设计漂亮；尚非 RISC-V 标准，落地取决于硬件采纳。
+  summary: 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离。
+  background: RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive。
+  insight_solution: 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互。
+  key_technologies:
+  - Tag/metadata enclave primitive
+  - Bidirectional sandbox and nested isolation
+  - Low-overhead protected/unprotected transitions
+  experiment_claim: AsiaCCS 论文报告 protected/unprotected 场景低开销；具体数值以本地 PDF 为准。
+  evaluation:
+    strengths: 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
+    limitations: Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
+    commercialization: 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
+  auxiliary: []
+auxiliary: []

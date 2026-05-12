@@ -1,44 +1,119 @@
 \section{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
-\begin{frame}{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
-\small
-\textbf{方向定位：}从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。
-\medskip
 
+\DirectionIntro
+{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
+{本方向呈现 RISC-V enclave 从 PMP-based baseline 到 scalable memory protection，再到 tag/metadata primitive 的演进。}
+{三篇主讲材料是 \Key{lee2020keystone}、\Key{feng2021penglai}、\Key{schrammel2023spearv}；本方向不设置 auxiliary。}
+{这些论文是 enclave lineage，不直接等同于后续 CoVE/AP-TEE confidential VM 标准或生产平台。}
+
+\begin{frame}{RISC-V TEE lineage：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & Keystone: 开源 RISC-V TEE 框架 & Foundational / arXiv 2019 \\ 
-SOTA/规范 1 & Penglai: scalable enclave memory protection & Peer-reviewed SOTA / OSDI 2021 \\ 
-SOTA/规范 2 & SPEAR-V: low-overhead RISC-V enclave primitive & Peer-reviewed SOTA / ACM AsiaCCS 2023 \\ 
+方向入口 & Keystone: 开源 RISC-V TEE 框架 & Foundational / E1 arXiv 2019 \\
+规模化内存 & Penglai: scalable enclave memory protection & Peer-reviewed SOTA / E1 OSDI 2021 \\
+新 primitive & SPEAR-V: low-overhead RISC-V enclave primitive & Peer-reviewed SOTA / E1 AsiaCCS 2023 \\
 \bottomrule
 \end{tabularx}
+\medskip
+\SourceState{三篇均有本地 PDF；Keystone 是 foundational baseline，Penglai/SPEAR-V 是 peer-reviewed SOTA。}
 \end{frame}
 
-\PaperFrame
+\PaperStory
 {Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone | Foundational / arXiv 2019}
-{开源 RISC-V TEE 框架。}
-{商业 TEE 难定制、难验证，RISC-V 提供开放硬件/软件协同机会。}
-{用 PMP、security monitor 和 runtime abstraction 构建 enclave。}
-{论文报告 CoreMark/Beebs/RV8 开销低，IOZone 可明显更高；具体数值以原文为准。}
-{RISC-V TEE baseline；适合解释 PMP-based enclave 的优缺点。}
+{\Meta{lee2020keystone}{Foundational / E1 arXiv 2019}{source: local PDF verified}{claim: PMP-based enclave baseline}}
+{\begin{itemize}
+  \item Keystone 是开源 RISC-V TEE 框架。
+  \item 它用 PMP、security monitor 和 runtime abstraction 构建 enclave。
+\end{itemize}}
+{\begin{itemize}
+  \item 商业 TEE 难定制、难验证。
+  \item RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展框架。
+  \item 解决方案给 RISC-V enclave 研究提供开源软硬件协同基线。
+\end{itemize}}
+{\begin{itemize}
+  \item PMP-based enclave isolation。
+  \item Security monitor and runtime abstraction。
+  \item Open RISC-V TEE software/hardware co-design。
+\end{itemize}}
+{\begin{itemize}
+  \item 论文报告 CoreMark/Beebs/RV8 等开销结果。
+  \item 具体数字以本地 PDF 为准；本页只保留结论类型和证据边界。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
+  \item \textbf{不足：}arXiv/foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+  \item \textbf{商业落地：}开源可定制性强；风险在 PMP region 限制、生态成熟度和 security monitor 正确性。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {Penglai: scalable enclave memory protection}
-{feng2021penglai | Peer-reviewed SOTA / OSDI 2021}
-{面向大规模 enclave 的 scalable memory protection。}
-{serverless/microservice 场景需要大量动态 enclave，传统 PMP region 数量有限。}
-{引入更可扩展的内存保护和 metadata 管理机制。}
-{OSDI 论文报告可支持大量 enclave 和较大安全内存；具体指标以原文为准。}
-{系统贡献强；商业落地门槛在硬件修改和标准化。}
+{\Meta{feng2021penglai}{Peer-reviewed SOTA / E1 OSDI 2021}{source: local PDF verified}{claim: scalable enclave mechanism and evaluation}}
+{\begin{itemize}
+  \item Penglai 面向大规模 enclave 的 scalable memory protection。
+  \item 它回应 serverless/microservice 对大量动态 enclave 的需求。
+\end{itemize}}
+{\begin{itemize}
+  \item 传统 PMP region 数量有限。
+  \item 大量 enclave、动态生命周期和更大受保护内存会暴露 PMP-based baseline 的规模瓶颈。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是让内存保护和 metadata 管理可随 enclave 数量扩展。
+  \item 解决方案把 RISC-V enclave 从少量静态隔离推进到云端规模化场景。
+\end{itemize}}
+{\begin{itemize}
+  \item Scalable enclave memory protection。
+  \item Metadata management for enclave lifecycle。
+  \item Serverless/microservice-oriented enclave scaling。
+\end{itemize}}
+{\begin{itemize}
+  \item OSDI 论文报告可支持大量 enclave 和较大安全内存。
+  \item 具体指标以本地 PDF 为准，不在本 deck 中复制未核对数字。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
+  \item \textbf{不足：}需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
+  \item \textbf{商业落地：}适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
+\end{itemize}}
 
-\PaperFrame
+\PaperStory
 {SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv | Peer-reviewed SOTA / ACM AsiaCCS 2023}
-{提出低开销、实用的 RISC-V enclave primitive。}
-{需要灵活、低开销、可抵抗部分 controlled-channel 风险的 enclave 机制。}
-{用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离。}
-{论文报告 protected/unprotected 场景低开销；具体数值以原文为准。}
-{机制设计漂亮；尚非 RISC-V 标准，落地取决于硬件采纳。}
+{\Meta{schrammel2023spearv}{Peer-reviewed SOTA / E1 AsiaCCS 2023}{source: local PDF verified}{claim: tag/metadata enclave primitive}}
+{\begin{itemize}
+  \item SPEAR-V 提出低开销、实用的 RISC-V enclave primitive。
+  \item 它用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离。
+\end{itemize}}
+{\begin{itemize}
+  \item RISC-V enclave 需要更灵活、低开销的硬件 primitive。
+  \item 只靠 PMP region 难以表达更细 protected/unprotected 交互和部分 controlled-channel 风险缓解。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达。
+  \item 解决方案支持更细粒度 protected/unprotected 交互、双向 sandbox 和嵌套隔离。
+\end{itemize}}
+{\begin{itemize}
+  \item Tag/metadata enclave primitive。
+  \item Bidirectional sandbox and nested isolation。
+  \item Low-overhead protected/unprotected transitions。
+\end{itemize}}
+{\begin{itemize}
+  \item AsiaCCS 论文报告 protected/unprotected 场景低开销。
+  \item 具体数值以本地 PDF 为准；论文证据不等同于 ISA 标准或生产硬件。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
+  \item \textbf{不足：}Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
+  \item \textbf{商业落地：}适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
+\end{itemize}}
 
+\DirectionSummary
+{RISC-V TEE lineage}
+{Keystone 建立 PMP-based open enclave baseline，让 RISC-V TEE 研究有可裁剪的软硬件框架。}
+{Penglai 把重点转向 scalable memory protection，回应 serverless/microservice 的大量动态 enclave 需求。}
+{SPEAR-V 进一步探索 tag/metadata primitive，试图降低开销并支持更灵活的双向 sandbox 和嵌套隔离。}
+{这条 lineage 解释 enclave primitive 如何演进，但后续 CoVE/AP-TEE confidential VM 仍需要独立规范和 attestation/evidence 语义。}

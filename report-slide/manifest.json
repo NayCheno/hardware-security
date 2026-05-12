@@ -81,11 +81,12 @@
   {
     "directory": "08-riscv-tee-lineage",
     "direction": "RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V",
-    "papers": [
-      "lee2020keystone",
-      "feng2021penglai",
-      "schrammel2023spearv"
-    ]
+    "primary": [
+      {"key": "lee2020keystone", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
+      {"key": "feng2021penglai", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"},
+      {"key": "schrammel2023spearv", "evidence": "E1 / Peer-reviewed SOTA", "source_status": "local_pdf_verified"}
+    ],
+    "auxiliary": []
   },
   {
     "directory": "09-riscv-cove-ap-tee",
