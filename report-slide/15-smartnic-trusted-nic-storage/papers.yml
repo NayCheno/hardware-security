@@ -80,7 +80,7 @@ primary:
   - Counter leasing and KBS/TEE-assisted control path
   - NVMe metadata plus Hazel Merkle Tree freshness
   - BlueField-3 crypto offload for NVMe-oF data path
-  experiment_claim: arXiv 论文报告常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latency 平均约 2.2%；小随机 freshness I/O 是弱点。
+  experiment_claim: 规范/Survey，无新实验；证据基础是 arXiv 论文原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latency 平均约 2.2%；小随机 freshness I/O 是弱点。
   evaluation:
     strengths: 把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。
     limitations: 仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。

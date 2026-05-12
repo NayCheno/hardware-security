@@ -44,7 +44,7 @@ primary:
   - TDI/TDM/DSM device-domain vocabulary
   - SPDM/TDISP and PCIe IDE linkage
   - Trusted MSI and interrupt-path concepts
-  experiment_claim: 规范草案，无实验；draft/not-ratified，不能写成 ratified standard 或 production CoVE-IO stack。
+  experiment_claim: 规范/Survey，无新实验；draft/not-ratified，不能写成 ratified standard 或 production CoVE-IO stack。
   evaluation:
     strengths: 当前最重要的 RISC-V confidential I/O 规范入口。
     limitations: v0.3.0 draft 仍可能变化，不证明任一硬件或 OS 实现成熟。
@@ -68,7 +68,7 @@ primary:
   - Device DMA translation/protection
   - I/O page-table permission semantics
   - Integration point with CoVE-IO trusted device lifecycle
-  experiment_claim: 规范，无实验；只支撑公开 I/O translation/protection 语义，不证明完整 confidential I/O。
+  experiment_claim: 规范/Survey，无新实验；只支撑公开 I/O translation/protection 语义，不证明完整 confidential I/O。
   evaluation:
     strengths: CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点。
     limitations: IOMMU 不是单独的 confidential I/O 方案，也不覆盖 device identity、SPDM/TDISP 或 link security。

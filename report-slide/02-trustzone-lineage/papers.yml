@@ -44,7 +44,7 @@ primary:
   - TEE OS and trusted applications
   - Hardware-assisted virtualization use cases
   - IoT and mobile deployment patterns
-  experiment_claim: Survey，无新实验；只支撑背景和生态分类。
+  experiment_claim: 规范/Survey，无新实验；只支撑背景和生态分类。
   evaluation:
     strengths: 适合写 TrustZone 背景和生态谱系。
     limitations: 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
@@ -68,7 +68,7 @@ primary:
   - Trusted application and TEE OS attack surface
   - Secure monitor / driver interface risk
   - Vulnerability taxonomy and root-cause grouping
-  experiment_claim: SoK/漏洞分析，无新系统实验；不证明 CCA 安全性。
+  experiment_claim: 规范/Survey，无新实验；证据基础是 SoK/漏洞 taxonomy，不证明 CCA 安全性。
   evaluation:
     strengths: 能支撑“为什么需要更强 CCA threat model”的历史动机。
     limitations: 不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。

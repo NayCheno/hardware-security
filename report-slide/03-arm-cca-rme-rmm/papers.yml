@@ -44,7 +44,7 @@ primary:
   - Realm security state and PAS ownership
   - Memory delegation, RIPAS and lifecycle vocabulary
   - Attestation and platform interface semantics
-  experiment_claim: 官方规范，无实验；只写公开规范语义，不写不可见或未下载 PDF 的细节。
+  experiment_claim: 规范/Survey，无新实验；只写公开规范语义，不写不可见或未下载 PDF 的细节。
   evaluation:
     strengths: 写 CCA 机制和状态语义时最权威。
     limitations: 不是性能、可用性或具体实现正确性的证据。
@@ -70,7 +70,7 @@ primary:
   - RMI/RSI interface boundary
   - Realm and REC lifecycle
   - Granule state transition and measurement hooks
-  experiment_claim: 官方规范，无实验；只写公开 RMM/RMI/RSI lifecycle 概念。
+  experiment_claim: 规范/Survey，无新实验；只写公开 RMM/RMI/RSI lifecycle 概念。
   evaluation:
     strengths: 能把 RMM 作为 CCA TCB 核心讲清。
     limitations: 不证明任一 RMM 实现正确，且本地 PDF 不可用时不能写不可见细节。

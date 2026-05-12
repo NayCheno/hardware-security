@@ -20,7 +20,7 @@ primary:
   - CCA-aware accelerator execution path
   - Protected DMA and command/data movement
   - Driver/runtime TCB boundary for offload
-  experiment_claim: arXiv 系统论文提供原型结果；draft/not-ratified 状态下具体性能和安全结论需回引本地 PDF。
+  experiment_claim: 规范/Survey，无新实验；证据基础是 arXiv 系统论文原型结果，draft/not-ratified 状态下具体性能和安全结论需回引本地 PDF。
   evaluation:
     strengths: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
     limitations: 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
@@ -44,7 +44,7 @@ primary:
   - Confidential-device interrupt ownership
   - Interrupt delivery mediation
   - VM/device lifecycle coupling
-  experiment_claim: arXiv 论文且本地 PDF 可用；本 deck 只写机制方向和证据状态，不写未复核数字。
+  experiment_claim: 规范/Survey，无新实验；证据基础是本地已核验 arXiv PDF，本 deck 只写机制方向和证据状态，不写未复核数字。
   evaluation:
     strengths: 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
     limitations: Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
@@ -68,7 +68,7 @@ primary:
   - Accelerator/device TEE design taxonomy
   - Device identity and attestation vocabulary
   - Memory, queue, runtime and driver TCB dimensions
-  experiment_claim: Survey/SoK，无新实验；primary mechanism claim 必须回引原始论文、规范或平台文档。
+  experiment_claim: 规范/Survey，无新实验；primary mechanism claim 必须回引原始论文、规范或平台文档。
   evaluation:
     strengths: 能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
     limitations: 不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。

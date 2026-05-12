@@ -20,7 +20,7 @@ primary:
   - Off-chip memory confidentiality threat model
   - Memory authentication and integrity taxonomy
   - Counter/freshness/replay-protection tradeoff
-  experiment_claim: Survey，无新实验；证据来自既有论文、系统设计和攻击案例。
+  experiment_claim: 规范/Survey，无新实验；证据来自既有论文、系统设计和攻击案例。
   evaluation:
     strengths: 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
     limitations: 2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
@@ -68,7 +68,7 @@ primary:
   - Realm and protected address space lifecycle
   - GPT/GPC ownership and access-control semantics
   - RIPAS / memory state transition concepts
-  experiment_claim: 官方规范来源已核验但本地 PDF 不可用；无新实验，只使用公开架构概念。
+  experiment_claim: 规范/Survey，无新实验；官方规范来源已核验但本地 PDF 不可用，只使用公开架构概念。
   evaluation:
     strengths: 给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据。
     limitations: 不能把未下载的非公开细节写成已复核机制，也不能把 access-control/lifecycle 写成 encryption/integrity proof。

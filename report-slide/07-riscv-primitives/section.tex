@@ -4,7 +4,7 @@
 {RISC-V 基础安全 primitives}
 {本方向把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开，防止把基础机制误写成完整 confidential computing。}
 {三篇主讲材料是 \Key{riscv_privileged}、\Key{riscv_iommu_2023}、\Key{riscv_aia_2023}；\Key{riscv_iopmp_2026} 和 \Key{manoni2026cva6cfi} 是辅助材料。}
-{规范页统一写为无新实验；draft auxiliary 明确不作为 ratified standard、TEE 边界或生产证据。}
+{规范页统一写为“规范/Survey，无新实验”；draft auxiliary 明确不作为 ratified standard、TEE 边界或生产证据。}
 
 \begin{frame}{RISC-V 基础安全 primitives：三篇主讲材料}
 \scriptsize
@@ -42,7 +42,7 @@ DMA/I/O 底座 & RISC-V IOMMU & Spec-standard SOTA / E0 \\
   \item Trap, translation and supervisor/guest isolation vocabulary。
 \end{itemize}}
 {\begin{itemize}
-  \item 规范，无实验。
+  \item 规范/Survey，无新实验。
   \item 只提供架构语义，不证明任一 TEE 或 confidential VM 实现。
 \end{itemize}}
 {\begin{itemize}
@@ -72,7 +72,7 @@ DMA/I/O 底座 & RISC-V IOMMU & Spec-standard SOTA / E0 \\
   \item CoVE-IO substrate for DMA isolation discussions。
 \end{itemize}}
 {\begin{itemize}
-  \item 规范，无实验。
+  \item 规范/Survey，无新实验。
   \item Ratified-library spec 只能支撑公开架构语义，不证明具体平台安全或性能。
 \end{itemize}}
 {\begin{itemize}
@@ -102,7 +102,7 @@ DMA/I/O 底座 & RISC-V IOMMU & Spec-standard SOTA / E0 \\
   \item Trusted interrupt-delivery substrate for confidential I/O。
 \end{itemize}}
 {\begin{itemize}
-  \item AIA 为规范，无实验。
+  \item 规范/Survey，无新实验；AIA 只提供规范语义。
   \item 辅助 CFI preprint 的实现数字不作为 AIA 或 TEE 隔离证据。
 \end{itemize}}
 {\begin{itemize}

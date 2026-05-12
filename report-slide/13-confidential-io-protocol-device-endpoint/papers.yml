@@ -20,7 +20,7 @@ primary:
   - Device certificate and measurement retrieval
   - Challenge-response and transcript binding
   - Key exchange for secured control messages
-  experiment_claim: DMTF published standard，无新实验；它证明协议语义，不证明设备内部隔离、DMA、interrupt 或 data path 已安全。
+  experiment_claim: 规范/Survey，无新实验；它证明协议语义，不证明设备内部隔离、DMA、interrupt 或 data path 已安全。
   evaluation:
     strengths: 是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。
     limitations: 单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。
@@ -47,7 +47,7 @@ primary:
   - TDI/TDM/DSM and TSM/RDSM lifecycle
   - SPDM plus TDISP plus PCIe IDE composition
   - IOMMU/IOPMP/AIA trusted DMA and interrupt substrate
-  experiment_claim: CoVE-IO 是 draft，无新实验；TDISP/TDISP XT PDF member-gated，只能写 public metadata 和 high-level lifecycle role。
+  experiment_claim: 规范/Survey，无新实验；CoVE-IO 是 draft，TDISP/TDISP XT PDF member-gated，只能写 public metadata 和 high-level lifecycle role。
   evaluation:
     strengths: 给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
     limitations: v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
@@ -73,7 +73,7 @@ primary:
   - SEV-SNP CVM networking path analysis
   - DPDK data-plane optimization
   - Trusted-I/O versus untrusted-device tradeoff
-  experiment_claim: arXiv preprint 有原型评估，报告接近理想 TIO 网络配置；结论不能泛化到 plaintext accelerator、storage 或 RDMA offload。
+  experiment_claim: 规范/Survey，无新实验；证据基础是 arXiv preprint 的原型评估，报告接近理想 TIO 网络配置；结论不能泛化到 plaintext accelerator、storage 或 RDMA offload。
   evaluation:
     strengths: 防止把 SPDM/TDISP/IDE 写成所有网络性能问题的唯一答案。
     limitations: 基于 SEV-SNP 网络场景，不证明 Arm CCA/CoVE、SmartNIC/DPU 或 storage offload 的同等安全/性能。

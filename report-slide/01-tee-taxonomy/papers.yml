@@ -20,7 +20,7 @@ primary:
   - launch 与初始化信任链
   - runtime isolation 与内存访问控制
   - trusted I/O、secure storage、attestation
-  experiment_claim: Survey/SoK，无新实验；只能支撑分类、术语和覆盖范围。
+  experiment_claim: 规范/Survey，无新实验；只能支撑分类、术语和覆盖范围。
   evaluation:
     strengths: 适合作为全 deck 的分类坐标。
     limitations: 时间截面停在 2022 年，不能覆盖 CCA、CoVE-IO 和 accelerator TEE 的最新机制。
@@ -44,7 +44,7 @@ primary:
   - PMP/enclave lineage
   - CoVE/AP-TEE confidential VM lineage
   - RISC-V open hardware/software co-design
-  experiment_claim: Survey，无新实验；PDF/source-limited 时只写 taxonomy 辅助，不写强机制或性能 claim。
+  experiment_claim: 规范/Survey，无新实验；PDF/source-limited 时只写 taxonomy 辅助，不写强机制或性能 claim。
   evaluation:
     strengths: 能把 RISC-V 小方向和顶层 taxonomy 接起来。
     limitations: 机制细节必须回到 Keystone/Penglai/SPEAR-V/AP-TEE/CoVE-IO 原始材料。
@@ -68,7 +68,7 @@ primary:
   - device identity and attestation
   - protected device memory and queue state
   - runtime/driver TCB and scheduling boundary
-  experiment_claim: Survey/SoK，无新实验；只能支撑 accelerator/device TEE taxonomy。
+  experiment_claim: 规范/Survey，无新实验；只能支撑 accelerator/device TEE taxonomy。
   evaluation:
     strengths: 能把 I/O、accelerator、SmartNIC 小方向纳入同一比较框架。
     limitations: 不能替代 CCA、CoVE-IO、SPDM/TDISP 或具体 GPU/DPU 系统的一手证据。

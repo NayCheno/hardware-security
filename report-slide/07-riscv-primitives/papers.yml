@@ -20,7 +20,7 @@ primary:
   - M/S/U and virtualization privilege modes
   - PMP/ePMP/Smepmp memory protection substrate
   - Trap, translation and supervisor/guest isolation vocabulary
-  experiment_claim: 规范，无实验；只提供架构语义，不证明任一 TEE 或 confidential VM 实现。
+  experiment_claim: 规范/Survey，无新实验；只提供架构语义，不证明任一 TEE 或 confidential VM 实现。
   evaluation:
     strengths: 所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
     limitations: 不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
@@ -44,7 +44,7 @@ primary:
   - Device address translation and protection
   - I/O page-table and permission semantics
   - CoVE-IO substrate for DMA isolation discussions
-  experiment_claim: 规范，无实验；ratified-library spec 只能支撑公开架构语义，不证明具体平台安全或性能。
+  experiment_claim: 规范/Survey，无新实验；ratified-library spec 只能支撑公开架构语义，不证明具体平台安全或性能。
   evaluation:
     strengths: 是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
     limitations: IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
@@ -69,7 +69,7 @@ primary:
   - Advanced interrupt controller architecture
   - MSI and virtual interrupt semantics
   - Trusted interrupt-delivery substrate for confidential I/O
-  experiment_claim: AIA 为规范无实验；辅助 CFI preprint 的实现数字不作为 AIA 或 TEE 隔离证据。
+  experiment_claim: 规范/Survey，无新实验；辅助 CFI preprint 的实现数字不作为 AIA 或 TEE 隔离证据。
   evaluation:
     strengths: 为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。
     limitations: 不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。

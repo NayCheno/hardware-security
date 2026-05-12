@@ -44,7 +44,7 @@ primary:
   - TVM/TSM lifecycle and SBI ABI
   - COVH/COVG host/guest interface split
   - Memory donation, reclaim and sharing semantics
-  experiment_claim: 规范草案，无实验；draft/not-ratified，不能写成 ratified standard 或 production ABI。
+  experiment_claim: 规范/Survey，无新实验；draft/not-ratified，不能写成 ratified standard 或 production ABI。
   evaluation:
     strengths: 当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。
     limitations: v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。
@@ -68,7 +68,7 @@ primary:
   - RISC-V enclave and TEE taxonomy
   - Pre-CoVE versus CoVE/AP-TEE classification
   - Survey bridge for representative systems
-  experiment_claim: Survey，无新实验；本地 PDF 已核验，但仍只使用 taxonomy/background claim。
+  experiment_claim: 规范/Survey，无新实验；本地 PDF 已核验，但仍只使用 taxonomy/background claim。
   evaluation:
     strengths: 有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
     limitations: Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。

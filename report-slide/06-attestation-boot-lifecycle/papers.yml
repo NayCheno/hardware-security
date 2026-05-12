@@ -44,7 +44,7 @@ primary:
   - Attester/verifier/relying-party roles
   - Evidence, endorsements, reference values and appraisal policy
   - Attestation results and freshness vocabulary
-  experiment_claim: RFC 架构规范，无实验；不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义。
+  experiment_claim: 规范/Survey，无新实验；不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义。
   evaluation:
     strengths: 是跨平台 attestation 术语和 verifier policy 的权威基线。
     limitations: 不证明任一平台测量链充分，也不定义完整 token claim encoding。
