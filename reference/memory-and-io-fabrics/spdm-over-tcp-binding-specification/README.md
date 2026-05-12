@@ -11,6 +11,7 @@
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Spec/standard SOTA. DMTF transport binding for SPDM over TCP; transport support only, not a device-isolation or memory-protection mechanism.
+- Spec identifier/status: DMTF DSP0287 v1.0.0, published standard.
 
 <!-- BEGIN REVIEW -->
 ## Review

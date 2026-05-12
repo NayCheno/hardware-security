@@ -85,21 +85,24 @@ provide if it becomes a real endpoint of a confidential data path.
 
 \subsubsection{SPDM as Device Identity and Measurement Substrate}
 
-The \textbf{Security Protocol and Data Model (SPDM)} provides a protocol for
-device authentication, measurement retrieval, version and capability
-negotiation, and session establishment~\cite{dmtf_spdm_2025,dmtf_spdm_arch_2024}.
+The \textbf{Security Protocol and Data Model (SPDM; DMTF DSP0274 v1.4.0 in
+this survey snapshot)} provides a protocol for device authentication,
+measurement retrieval, version and capability negotiation, and session
+establishment~\cite{dmtf_spdm_2025,dmtf_spdm_arch_2024}.
 In confidential-computing systems, SPDM is valuable because the host's view of a
 device is not enough. A tenant or trusted manager needs evidence about the
 device identity and state before allowing that device to participate in a
 protected data path.
 
-SPDM secured messages add confidentiality and integrity for protocol exchanges
-after session establishment~\cite{dmtf_spdm_secured_messages_2025}. SPDM over
-TCP extends the transport setting so that SPDM can be used beyond only local
-bus-oriented interactions~\cite{dmtf_spdm_tcp_2024}. These specifications do
-not themselves define a complete confidential I/O architecture. Their role is
-to supply the identity, measurement, and secure-channel substrate that higher
-level mechanisms such as TDISP, CoVE-IO, and trusted I/O designs can rely on.
+Secured Messages Using SPDM (DMTF DSP0277 v2.0.0) adds confidentiality and
+integrity for protocol exchanges after session
+establishment~\cite{dmtf_spdm_secured_messages_2025}. SPDM over TCP (DMTF
+DSP0287 v1.0.0) extends the transport setting so that SPDM can be used beyond
+only local bus-oriented interactions~\cite{dmtf_spdm_tcp_2024}. These
+specifications do not themselves define a complete confidential I/O
+architecture. Their role is to supply the identity, measurement, and
+secure-channel substrate that higher level mechanisms such as TDISP, CoVE-IO,
+and trusted I/O designs can rely on.
 
 \subsubsection{TDISP and Trusted Device Interfaces}
 
@@ -108,7 +111,8 @@ interface can be placed into a TEE-aware trust state and assigned to a
 confidential workload~\cite{pcisig_tdisp_2022}. The cited PCI-SIG material is a
 public ECN/metadata page whose download target is member-gated, so this survey
 uses it only for TDISP's public existence, affected-specification metadata, and
-device-interface lifecycle role rather than for unreleased normative details.
+device-interface lifecycle role rather than for unreleased normative details
+such as exact messages, state-machine rules, or conformance requirements.
 Device identity alone is not enough. The platform also needs a way to bind a
 particular device interface, function, or trusted device interface to the
 workload that will use it. TDISP therefore belongs at the device-interface
@@ -298,8 +302,9 @@ Confidential I/O and network defense is the point where confidential computing
 becomes a whole-platform problem. SPDM and secured messages provide identity,
 measurement, and session foundations. TDISP and CoVE-IO introduce trusted
 device-interface lifecycle concepts, with TDISP cited here only through public
-metadata and CoVE-IO still a draft. TLS+RA-style protocols bind application
-channels to attested endpoints. SMMU, IOMMU, IOPMP, and sIOPMP constrain DMA
+metadata rather than gated normative state-machine rules, and CoVE-IO still a
+draft. TLS+RA-style protocols bind application channels to attested endpoints.
+SMMU, IOMMU, IOPMP, and sIOPMP constrain DMA
 authority. AIA and trusted MSI address interrupt delivery. PCIe IDE, CXL, RDMA,
 NVMe-oF, and remote-memory systems define the fabric paths that protected data
 may cross, but they are background substrate unless composed with device

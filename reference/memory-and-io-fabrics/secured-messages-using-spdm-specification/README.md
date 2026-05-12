@@ -11,6 +11,7 @@
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Spec/standard SOTA. DMTF standard for SPDM secured messages; protects the control channel, not PCIe/CXL data paths by itself.
+- Spec identifier/status: DMTF DSP0277 v2.0.0, published standard.
 
 <!-- BEGIN REVIEW -->
 ## Review

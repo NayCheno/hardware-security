@@ -11,6 +11,7 @@
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
 - Evidence role: Spec/standard SOTA. DMTF standard for device identity, measurement, and key exchange; not a complete trusted-I/O system without lifecycle, link, DMA, and interrupt controls.
+- Spec identifier/status: DMTF DSP0274 v1.4.0, published standard.
 
 <!-- BEGIN REVIEW -->
 ## Review
