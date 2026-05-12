@@ -12,7 +12,7 @@
 \toprule
 角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & Keystone: 开源 RISC-V TEE 框架 & Foundational / E1 arXiv 2019 \\
+方向入口 & Keystone: 开源 RISC-V TEE 框架 & Foundational / E1 EuroSys 2020 \\
 规模化内存 & Penglai: scalable enclave memory protection & Peer-reviewed SOTA / E1 OSDI 2021 \\
 新 primitive & SPEAR-V: low-overhead RISC-V enclave primitive & Peer-reviewed SOTA / E1 AsiaCCS 2023 \\
 \bottomrule
@@ -23,7 +23,7 @@
 
 \PaperStory
 {Keystone: 开源 RISC-V TEE 框架}
-{\Meta{lee2020keystone}{Foundational / E1 arXiv 2019}{source: local PDF verified}{claim: PMP-based enclave baseline}}
+{\Meta{lee2020keystone}{Foundational / E1 EuroSys 2020}{source: author-hosted EuroSys PDF verified}{claim: PMP-based enclave baseline}}
 {\begin{itemize}
   \item Keystone 是开源 RISC-V TEE 框架。
   \item 它用 PMP、security monitor 和 runtime abstraction 构建 enclave。
@@ -47,7 +47,7 @@
 \end{itemize}}
 {\begin{itemize}
   \item \textbf{优点：}RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
-  \item \textbf{不足：}arXiv/foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+  \item \textbf{不足：}EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
   \item \textbf{商业落地：}开源可定制性强；风险在 PMP region 限制、生态成熟度和 security monitor 正确性。
 \end{itemize}}
 

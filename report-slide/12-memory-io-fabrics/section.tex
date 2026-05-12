@@ -12,9 +12,9 @@
 \toprule
 角色 & 主讲材料 & 证据类型 \\
 \midrule
-CXL disaggregation & DirectCXL memory disaggregation & Background substrate / E2 ATC 2022 \\
-CXL tiers & CXL memory tiers in virtualized environments & Background substrate / E2 OSDI 2024 \\
-RDMA remote paging & Programmable RDMA on-demand remote paging & Background substrate / E2 NSDI 2025 \\
+CXL disaggregation & DirectCXL memory disaggregation & E1 primary systems / background role \\
+CXL tiers & CXL memory tiers in virtualized environments & E1 primary systems / background role \\
+RDMA remote paging & Programmable RDMA on-demand remote paging & E1 primary systems / background role \\
 \bottomrule
 \end{tabularx}
 \medskip
@@ -23,7 +23,7 @@ RDMA remote paging & Programmable RDMA on-demand remote paging & Background subs
 
 \PaperStory
 {DirectCXL memory disaggregation}
-{\Meta{gouk2022directcxl}{Background substrate / E2 ATC 2022}{source: local PDF verified}{claim: CXL fabric data-path context}}
+{\Meta{gouk2022directcxl}{E1 primary systems / background role}{source: local PDF verified}{claim: CXL fabric data-path context}}
 {\begin{itemize}
   \item DirectCXL 研究 CXL-attached memory 的高性能直接访问。
   \item 它展示内存可被远端/池化 fabric 重新组织，而不是固定在 CPU 本地 DRAM。
@@ -53,7 +53,7 @@ RDMA remote paging & Programmable RDMA on-demand remote paging & Background subs
 
 \PaperStory
 {CXL memory tiers in virtualized environments}
-{\Meta{zhong2024cxltiers}{Background substrate / E2 OSDI 2024}{source: local PDF verified}{claim: CXL tier management context}}
+{\Meta{zhong2024cxltiers}{E1 primary systems / background role}{source: local PDF verified}{claim: CXL tier management context}}
 {\begin{itemize}
   \item 这篇工作研究虚拟化环境中 CXL memory tiers 的资源管理、placement 与性能权衡。
   \item 它把 CXL 视为 cloud resource-management substrate，而不是安全边界本身。
@@ -83,7 +83,7 @@ RDMA remote paging & Programmable RDMA on-demand remote paging & Background subs
 
 \PaperStory
 {Programmable RDMA on-demand remote paging}
-{\Meta{wang2025odrp}{Background substrate / E2 NSDI 2025}{source: local PDF verified}{claim: RDMA remote-memory data-path context}}
+{\Meta{wang2025odrp}{E1 primary systems / background role}{source: local PDF verified}{claim: RDMA remote-memory data-path context}}
 {\begin{itemize}
   \item ODRP 用 programmable RDMA 支撑 on-demand remote paging。
   \item 它说明远程内存可以进入高性能 data path，而不是只作为慢速后台存储。

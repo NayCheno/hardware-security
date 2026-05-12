@@ -3,9 +3,9 @@ focus: 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadat
 selection_rule: 固定三篇 primary；不引入辅助材料，直接呈现 RISC-V enclave lineage。
 primary:
 - key: lee2020keystone
-  role: Foundational / arXiv 2019
+  role: Foundational / EuroSys 2020
   evidence: E1 / Foundational
-  source_status: local_pdf_verified
+  source_status: author_hosted_eurosys_pdf_verified
   reference: reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf
   title: 'Keystone: 开源 RISC-V TEE 框架'
   summary: 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave。
@@ -18,7 +18,7 @@ primary:
   experiment_claim: 论文报告 CoreMark/Beebs/RV8 等开销结果；具体数字以本地 PDF 为准。
   evaluation:
     strengths: RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
-    limitations: arXiv/foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+    limitations: EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
     commercialization: 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
   auxiliary: []
 - key: feng2021penglai

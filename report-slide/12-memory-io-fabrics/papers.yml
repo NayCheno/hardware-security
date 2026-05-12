@@ -4,7 +4,7 @@ selection_rule: 固定三篇 primary；`cxl_spec` 与 `pcie_ide` 作为 fabric/l
 primary:
 - key: gouk2022directcxl
   role: Foundational systems paper / USENIX ATC 2022
-  evidence: E2 / Background substrate
+  evidence: E1 primary systems / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/directcxl-direct-access-high-performance-memory-disaggregation/paper.pdf
   title: Direct Access, High-Performance Memory Disaggregation with DirectCXL
@@ -24,7 +24,7 @@ primary:
   - cxl_spec
 - key: zhong2024cxltiers
   role: Peer-reviewed systems SOTA / OSDI 2024
-  evidence: E2 / Background substrate
+  evidence: E1 primary systems / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/managing-memory-tiers-with-cxl-in-virtualized-environments/paper.pdf
   title: Managing Memory Tiers with CXL in Virtualized Environments
@@ -44,7 +44,7 @@ primary:
   - cxl_spec
 - key: wang2025odrp
   role: Peer-reviewed systems SOTA / NSDI 2025
-  evidence: E2 / Background substrate
+  evidence: E1 primary systems / Background substrate
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/odrp-on-demand-remote-paging-with-programmable-rdma/paper.pdf
   title: 'ODRP: on-demand remote paging with programmable RDMA'

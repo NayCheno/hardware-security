@@ -9,10 +9,11 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-- Evidence role: Background substrate. RDMA/remote-paging background substrate; use for data-path context, not as proof of a complete confidential-computing boundary.
+- Evidence type: E1 peer-reviewed primary systems paper.
+- Narrative role: Background substrate. RDMA/remote-paging background substrate; use for data-path context, not as proof of a complete confidential-computing boundary.
 <!-- BEGIN PAPER REVIEW -->
 ## Paper Review
-Canonical BibTeX key: `wang2025odrp`. Evidence role: Background substrate. RDMA/remote-paging background substrate; use for data-path context, not as proof of a complete confidential-computing boundary.
+Canonical BibTeX key: `wang2025odrp`. Evidence type: E1 peer-reviewed primary systems paper. Narrative role: Background substrate. RDMA/remote-paging background substrate; use for data-path context, not as proof of a complete confidential-computing boundary.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for ODRP: on-demand remote paging with programmable RDMA. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
 <!-- END PAPER REVIEW -->

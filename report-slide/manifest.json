@@ -4,7 +4,7 @@
     "direction": "硬件辅助 TEE taxonomy",
     "primary": [
       {"key": "schneider2022soktee", "evidence": "E2 / Foundational", "source_status": "local_pdf_verified"},
-      {"key": "boubakri2025riscvtee", "evidence": "E2/E5 / Background substrate", "source_status": "source_verified_pdf_limited"},
+      {"key": "boubakri2025riscvtee", "evidence": "E2 survey / Background substrate", "source_status": "mdpi_html_verified_pdf_403"},
       {"key": "sok-tee", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
     ],
     "auxiliary": []
@@ -94,7 +94,7 @@
     "primary": [
       {"key": "sahita2023cove", "evidence": "E1 / Foundational", "source_status": "local_pdf_verified"},
       {"key": "riscv_ap_tee_2024", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"},
-      {"key": "boubakri2025riscvtee", "evidence": "E2/E5 / Background substrate", "source_status": "source_verified_pdf_limited"}
+      {"key": "boubakri2025riscvtee", "evidence": "E2 survey / Background substrate", "source_status": "mdpi_html_verified_pdf_403"}
     ],
     "auxiliary": []
   },
@@ -126,9 +126,9 @@
     "directory": "12-memory-io-fabrics",
     "direction": "Memory / I/O fabrics: CXL、PCIe IDE、RDMA",
     "primary": [
-      {"key": "gouk2022directcxl", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
-      {"key": "zhong2024cxltiers", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
-      {"key": "wang2025odrp", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"}
+      {"key": "gouk2022directcxl", "evidence": "E1 primary systems / Background substrate", "source_status": "local_pdf_verified"},
+      {"key": "zhong2024cxltiers", "evidence": "E1 primary systems / Background substrate", "source_status": "local_pdf_verified"},
+      {"key": "wang2025odrp", "evidence": "E1 primary systems / Background substrate", "source_status": "local_pdf_verified"}
     ],
     "auxiliary": [
       {"key": "cxl_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "local_pdf_verified"},

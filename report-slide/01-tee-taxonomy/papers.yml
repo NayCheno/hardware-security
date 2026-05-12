@@ -23,8 +23,8 @@ primary:
   auxiliary: []
 - key: boubakri2025riscvtee
   role: Background substrate / survey
-  evidence: E2/E5 / Background substrate
-  source_status: source_verified_pdf_limited
+  evidence: E2 survey / Background substrate
+  source_status: mdpi_html_verified_pdf_403
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
   title: RISC-V secure enclave 与 TEE 谱系 survey
   summary: 梳理 RISC-V secure enclave 与 TEE 研究谱系。

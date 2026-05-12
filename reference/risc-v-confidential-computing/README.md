@@ -23,7 +23,7 @@ Suggested reading order:
 | Key | Reference | Status | Use in `domain.md` |
 |---|---|---|---|
 | `costan2016sanctum` | `sanctum-minimal-hardware-extensions-strong-software-isolation/` | USENIX Security 2016, local PDF available, Review available | Foundational RISC-V/open-hardware enclave baseline. |
-| `lee2020keystone` | `keystone-open-framework-architecting-tees/` | arXiv 2019, local PDF available, Review available | Foundational RISC-V enclave framework. |
+| `lee2020keystone` | `keystone-open-framework-architecting-tees/` | EuroSys 2020, author-hosted final PDF available, Review available | Foundational RISC-V enclave framework. |
 | `bahmani2021cure` | `cure-customizable-resilient-enclaves/` | USENIX Security 2021/arXiv, local PDF available, Review available | RISC-V customizable enclave and peripheral-binding baseline. |
 | `bourgeat2019mi6` | `mi6-secure-enclaves-speculative-out-of-order-processor/` | MICRO 2019/arXiv, local PDF available, Review available | RISC-V speculative OoO enclave and microarchitectural isolation baseline. |
 | `feng2021penglai` | `penglai-scalable-memory-protection/` | OSDI 2021, local PDF available, Review available | Peer-reviewed SOTA for scalable RISC-V enclave memory protection. |
@@ -35,6 +35,6 @@ Suggested reading order:
 | `riscv_cove_io_2026` | `risc-v-cove-io-specification/` | Draft/not ratified: CoVE-IO v0.3.0, local PDF available, Review available | Draft/not ratified source for trusted I/O, DMA/MMIO, device identity, and interrupt-path concepts. |
 | `riscv_iommu_2023` | `risc-v-iommu-specification/` | v1.0.1 / 20260222 ratified-library release, local PDF available, Review available | Spec/standard SOTA for I/O translation/protection references in CoVE-IO discussion. |
 | `riscv_aia_2023` | `risc-v-advanced-interrupt-architecture/` | v1.0 ratified June 2023 with 20250312 clarifications, local PDF available, Review available | Spec/standard SOTA for interrupt architecture and trusted MSI / confidential I/O discussion. |
-| `boubakri2025riscvtee` | `a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | Electronics 2025 survey, HTML source verified, PDF blocked by 403, Review available | Background substrate survey anchor; use alongside original papers/specs. |
+| `boubakri2025riscvtee` | `a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/` | Electronics 2025 survey, MDPI HTML verified, automated PDF download blocked by 403, Review available | E2 background substrate survey anchor; use alongside original papers/specs. |
 | `lee2022cerberus` | `cerberus-formal-approach-secure-efficient-enclave-memory-sharing/` | ACM CCS 2022, local PDF available, Review available | Formal enclave memory-sharing baseline for Keystone/RISC-V and future confidential-VM shared-memory comparisons. |
 | `ozga2025ace` | `ace-confidential-computing-embedded-risc-v-systems/` | arXiv 2025, local PDF available, Review available | Draft/not ratified source for embedded RISC-V confidential computing with auditable/formally oriented firmware. |

@@ -42,8 +42,8 @@ primary:
   auxiliary: []
 - key: boubakri2025riscvtee
   role: Background substrate / Electronics 2025 survey
-  evidence: E2/E5 / Background substrate
-  source_status: source_verified_pdf_limited
+  evidence: E2 survey / Background substrate
+  source_status: mdpi_html_verified_pdf_403
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
   title: RISC-V TEE 谱系辅助材料
   summary: 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtime 和 confidential VM。

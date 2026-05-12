@@ -9,10 +9,11 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified
 
-- Evidence role: Background substrate. CXL memory-disaggregation background substrate; use for data-path/fabric context, not as Arm CCA or CoVE security evidence.
+- Evidence type: E1 peer-reviewed primary systems paper.
+- Narrative role: Background substrate. CXL memory-disaggregation background substrate; use for data-path/fabric context, not as Arm CCA or CoVE security evidence.
 <!-- BEGIN PAPER REVIEW -->
 ## Paper Review
-Canonical BibTeX key: `gouk2022directcxl`. Evidence role: Background substrate. CXL memory-disaggregation background substrate; use for data-path/fabric context, not as Arm CCA or CoVE security evidence.
+Canonical BibTeX key: `gouk2022directcxl`. Evidence type: E1 peer-reviewed primary systems paper. Narrative role: Background substrate. CXL memory-disaggregation background substrate; use for data-path/fabric context, not as Arm CCA or CoVE security evidence.
 
 This README records the source/PDF availability above and should be treated as the local evidence-status record for Direct Access, High-Performance Memory Disaggregation with DirectCXL. When citing this reference in the survey正文, keep the claim within the stated evidence role and cite stronger primary or official sources for mechanism details outside this source's scope.
 <!-- END PAPER REVIEW -->
