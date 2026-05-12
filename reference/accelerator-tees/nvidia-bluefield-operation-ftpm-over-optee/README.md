@@ -10,7 +10,8 @@
 - Local PDF: `paper.pdf`
 - Download status: downloaded and verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: Industry evidence for DPU-side OP-TEE/fTPM, platform identity, protected storage, and limitations of current commercial DPU TEE support.
+- Evidence class: E4 vendor documentation with verified local PDF
+- SOTA role: Industry evidence for DPU-side OP-TEE/fTPM, platform identity, and protected-storage building blocks. Do not use as proof of a complete production confidential networking TEE.
 
 <!-- BEGIN PAPER REVIEW -->
 ## Paper Review

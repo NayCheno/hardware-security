@@ -10,7 +10,8 @@
 - Local PDF: unavailable
 - Download status: unavailable: official PDF is behind PCI-SIG member access; public metadata page verified on 2026-05-12
 - Survey lane: confidential-computing network/I/O/data-path defense
-- SOTA role: foundational PCIe trusted I/O virtualization protocol used by CoVE-IO, AMD SEV-TIO, and emerging TEE-I/O stacks.
+- Evidence class: E3/E5 hybrid; public PCI-SIG metadata and related public implementation documents only, not a reviewed public PDF
+- SOTA role: Spec/industry SOTA for trusted device-interface lifecycle, with gated-spec limitations. Use only for public TDISP existence, role, and lifecycle concepts unless a public source supports the detail.
 
 <!-- BEGIN PAPER REVIEW -->
 ## Paper Review
@@ -66,8 +67,8 @@ TDISP 与 SPDM、Secured Messages、PCIe IDE、CoVE-IO、AMD SEV-TIO 和 acceler
 
 ### 12. SOTA README Addendum
 
-- SOTA 定位: Spec/industry SOTA
-- 标准化 / 发表状态: PCI-SIG ECN, official PDF member-gated
+- SOTA 定位: Spec/industry SOTA, public-metadata limited
+- 标准化 / 发表状态: PCI-SIG ECN; official PDF member-gated; local evidence is public metadata, not full spec text
 - 对应小方向: 机密计算网络 / I/O / fabric 防御; RISC-V CoVE-IO / TEE-I/O
 
 #### 内容摘要
@@ -88,5 +89,5 @@ Confidential VM 不能默认相信 host-controlled device assignment。
 
 #### 文章评价
 
-是 trusted I/O taxonomy 的核心标准，但因 PDF member-gated，正文应注明证据来源限制。
+是 trusted I/O taxonomy 的核心标准，但因 PDF member-gated，正文只能使用 public metadata / related public documentation 支撑的结论，不能写成已精读完整公开规范。
 <!-- END PAPER REVIEW -->
