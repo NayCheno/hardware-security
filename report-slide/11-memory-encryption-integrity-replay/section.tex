@@ -1,44 +1,119 @@
 \section{Memory encryption / integrity / replay protection}
-\begin{frame}{Memory encryption / integrity / replay protection}
-\small
-\textbf{方向定位：}避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
-\medskip
 
+\DirectionIntro
+{Memory encryption / integrity / replay protection}
+{本方向专门区分 access control、ownership、encryption、integrity、freshness/replay，避免把平台 lifecycle 机制写成加密或完整性机制。}
+{三篇主讲材料是 \Key{henson2014memory}、\Key{amd_sev_snp}、\Key{arm_cca_spec}；\Key{riscv_ap_tee_2024} 只作为 RISC-V lifecycle auxiliary。}
+{Henson 是 survey taxonomy，SEV-SNP 是 industry evidence，Arm CCA 是 source-verified spec；RISC-V AP-TEE 必须保留 draft/not-ratified 标签。}
+
+\begin{frame}{Memory encryption / integrity / replay：三篇主讲材料}
+\scriptsize
 \begin{tabularx}{\textwidth}{@{}lYl@{}}
 \toprule
-角色 & 文章/材料 & 证据类型 \\ 
+角色 & 主讲材料 & 证据类型 \\
 \midrule
-方向入口 & Memory encryption survey & Foundational / ACM CSUR 2014 \\ 
-SOTA/规范 1 & AMD SEV-SNP as industry evidence & Industry evidence / AMD whitepaper/spec \\ 
-SOTA/规范 2 & CCA/CoVE 的 memory ownership 与 lifecycle & Spec/standard SOTA + draft \\ 
+Taxonomy anchor & Memory Encryption survey & Background substrate / E2 ACM CSUR 2014 \\
+Commercial direction & AMD SEV-SNP memory-integrity evidence & Industry evidence / E4 \\
+Ownership lifecycle & Arm CCA memory ownership and lifecycle & Spec-standard SOTA / E0 \\
 \bottomrule
 \end{tabularx}
+\medskip
+\SourceState{辅助材料：\Key{riscv_ap_tee_2024} 用于 TVM/TSM memory donation/reclaim/share 对照，不计入三篇主讲。}
 \end{frame}
 
-\PaperFrame
-{Memory encryption survey}
-{henson2014memory | Foundational / ACM CSUR 2014}
-{综述内存加密既有技术。}
-{离芯片内存和物理攻击会暴露数据，单纯访问控制不等于加密。}
-{分类 memory encryption、integrity、counter/replay protection 等技术路线。}
-{Survey，无新实验。}
-{最适合帮助本项目避免概念混淆；时间较早，需要结合 SEV-SNP/CCA/CoVE 更新。}
+\PaperStory
+{Memory Encryption survey}
+{\Meta{henson2014memory}{Background substrate / E2 ACM CSUR 2014}{source: local PDF verified}{claim: taxonomy for encryption/integrity/replay}}
+{\begin{itemize}
+  \item 这篇 survey 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡。
+  \item 它把 encryption、authentication、attestation、secure boot 和 access control 的边界拆开。
+\end{itemize}}
+{\begin{itemize}
+  \item Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文。
+  \item 物理访问、DMA、bus snooping 和 memory modification 让主存保护不能只靠软件权限。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是先定义威胁和目标，再讨论 memory controller、OS 辅助或专用设备。
+  \item 解决方案不是单一系统，而是给出 encryption、integrity、freshness/replay 的 taxonomy。
+\end{itemize}}
+{\begin{itemize}
+  \item Off-chip memory confidentiality threat model。
+  \item Memory authentication and integrity taxonomy。
+  \item Counter/freshness/replay-protection tradeoff。
+\end{itemize}}
+{\begin{itemize}
+  \item Survey，无新实验。
+  \item 证据来自既有论文、系统设计和攻击案例，不能作为现代 SEV-SNP/CCA/CoVE 机制 proof。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
+  \item \textbf{不足：}2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
+  \item \textbf{商业落地：}适合作为架构 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
+\end{itemize}}
 
-\PaperFrame
-{AMD SEV-SNP as industry evidence}
-{amd\_sev\_snp | Industry evidence / AMD whitepaper/spec}
-{SEV-SNP 在 VM memory encryption 基础上加强完整性与 host 隔离。}
-{早期 encrypted VM 面临 nested page table 和 host-controlled metadata 风险。}
-{引入 secure nested paging 和完整性相关保护。}
-{厂商技术材料，无独立实验。}
-{有商业落地；应与攻击论文如 HERACLES 一起讨论限制。不要把 x86 主线扩成本文核心。}
+\PaperStory
+{AMD SEV-SNP memory-integrity evidence}
+{\Meta{amd\_sev\_snp}{Industry evidence / E4}{source: local PDF verified}{claim: vendor mechanism, not peer-reviewed proof}}
+{\begin{itemize}
+  \item SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护。
+  \item 它把 memory encryption 与 host metadata isolation 绑定到 VM lifecycle。
+\end{itemize}}
+{\begin{itemize}
+  \item 早期 encrypted VM 面临 nested page table、reverse map metadata 和 malicious hypervisor 控制面风险。
+  \item 仅有 memory confidentiality 不能覆盖 alias、replay、validation 和 ownership metadata 风险。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是 host 不能被允许任意重映射 private guest memory。
+  \item 解决方案引入 secure nested paging、RMP 等机制，把 ownership/validation 与 encrypted VM 结合。
+\end{itemize}}
+{\begin{itemize}
+  \item Secure Nested Paging。
+  \item Reverse Map Table / memory ownership metadata。
+  \item Integrity-oriented VM isolation controls。
+\end{itemize}}
+{\begin{itemize}
+  \item 厂商技术材料，无独立学术实验。
+  \item 本组 slide 只把它作为 industry evidence，不写成 peer-reviewed security proof。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}展示 memory encryption 走向 integrity/metadata protection 的商用方向。
+  \item \textbf{不足：}vendor whitepaper 不证明所有部署抵抗实现攻击、侧信道或 verifier policy 错误。
+  \item \textbf{商业落地：}云平台相关性强；风险在供应商绑定、固件/微码版本和策略透明度。
+\end{itemize}}
 
-\PaperFrame
-{CCA/CoVE 的 memory ownership 与 lifecycle}
-{arm\_cca\_spec + riscv\_ap\_tee\_2024 | Spec/standard SOTA + draft}
-{通过 ownership/access-control 与 lifecycle 保护 confidential workload memory。}
-{CCA/CoVE 需要让 host 管理资源但不能读取 protected memory。}
-{Arm 用 GPT/GPC 和 Realm lifecycle；RISC-V AP-TEE 用 TVM/TSM 和 memory donation/reclaim/share 等语义。}
-{规范，无实验。}
-{它们主要定义 access-control/lifecycle，不应被误写成 memory encryption survey 的替代品。}
+\PaperStory
+{Arm CCA memory ownership and lifecycle}
+{\Meta{arm\_cca\_spec}{Spec-standard SOTA / E0}{source: verified official page, local PDF unavailable}{claim: public CCA ownership/lifecycle concepts}}
+{\begin{itemize}
+  \item Arm CCA 用 Realm、GPT/GPC、RIPAS 和 lifecycle 语义保护 confidential workload memory ownership。
+  \item 本页只使用官方 source 已核验的公开架构概念。
+\end{itemize}}
+{\begin{itemize}
+  \item CCA 需要让 host 管理资源，同时不能直接读取或破坏 Realm protected memory。
+  \item 这里的重点是 ownership/access-control，不是 memory-encryption survey 的替代品。
+\end{itemize}}
+{\begin{itemize}
+  \item 核心洞察是把 granule ownership 和 protected address space lifecycle 标准化。
+  \item \Key{riscv_ap_tee_2024} 作为辅助材料，对照 TVM/TSM memory donation/reclaim/share。
+\end{itemize}}
+{\begin{itemize}
+  \item Realm and protected address space lifecycle。
+  \item GPT/GPC ownership and access-control semantics。
+  \item RIPAS / memory state transition concepts。
+\end{itemize}}
+{\begin{itemize}
+  \item 官方规范来源已核验但本地 PDF 不可用；无新实验。
+  \item 不能把未下载的非公开细节写成已复核机制；AP-TEE 辅助材料仍是 draft/not-ratified。
+\end{itemize}}
+{\begin{itemize}
+  \item \textbf{优点：}给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据。
+  \item \textbf{不足：}access-control/lifecycle 不等于 encryption/integrity proof。
+  \item \textbf{商业落地：}适合说明 Arm CCA 标准边界；风险在真实硬件、固件实现和云平台策略仍需 production evidence。
+\end{itemize}}
 
+\DirectionSummary
+{Memory encryption / integrity / replay}
+{Henson survey 先把 confidentiality、integrity、freshness/replay 和 access control 的目标拆开。}
+{SEV-SNP 表明商用 confidential VM 已从 encryption 走向 metadata/integrity-oriented isolation。}
+{Arm CCA 和 RISC-V AP-TEE 更偏 ownership/lifecycle/access-control；它们不能替代 memory-encryption taxonomy。}
+{后续写 CXL、PCIe IDE、TDISP、SmartNIC/NIC root 时，需要继续区分 memory encryption、link encryption、device identity 和 host/device ownership。}

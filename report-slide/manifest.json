@@ -113,10 +113,13 @@
   {
     "directory": "11-memory-encryption-integrity-replay",
     "direction": "Memory encryption / integrity / replay protection",
-    "papers": [
-      "henson2014memory",
-      "amd_sev_snp",
-      "arm_cca_spec + riscv_ap_tee_2024"
+    "primary": [
+      {"key": "henson2014memory", "evidence": "E2 / Background substrate", "source_status": "local_pdf_verified"},
+      {"key": "amd_sev_snp", "evidence": "E4 / Industry evidence", "source_status": "local_pdf_verified"},
+      {"key": "arm_cca_spec", "evidence": "E0 / Spec-standard SOTA", "source_status": "source_verified_pdf_unavailable"}
+    ],
+    "auxiliary": [
+      {"key": "riscv_ap_tee_2024", "evidence": "E3 / Draft-not-ratified", "source_status": "local_pdf_verified"}
     ]
   },
   {
