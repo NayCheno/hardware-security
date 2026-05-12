@@ -82,6 +82,7 @@ User-space isolation & SHELTER & Process or application compartment & Realm/GPT/
 Container isolation & RContainer & Container workload & CCA primitives beneath container packaging & E1 primary paper & Deployment maturity and orchestration integration remain open. \\
 Virtualized CCA & virtCCA & Virtualized Realm/CCA stack & CCA combined with existing Arm trust infrastructure & E3 arXiv/preprint evidence & Nested trust and virtualization complexity. \\
 Intra-process isolation & NanoZone; More Granular, Less Trust & Fine-grained compartment inside a process & Granule ownership and Realm-style memory protection & E3 plus E1 & Granularity and draft/preprint status vary by work. \\
+CVM maintenance & CPC & Migration, snapshot, and resource reclamation procedure & Guest-side confidential procedure plus CPTI-style intra-CVM isolation & E1 primary paper & Arm CCA evidence uses official simulator rather than production hardware. \\
 Inter-CVM sharing & CAEC & Communication between confidential VMs & Attestation plus controlled sharing over CCA substrate & E3 arXiv evidence & Not an Arm official interface; sharing policy remains research. \\
 Device and accelerator access & PORTAL; CAGE; Devlore & SoC device, accelerator workflow, or interrupt path & SMMU, GPT/GPC, GPC-backed checks, and Realm-aware mediation & E1 plus E3 & Device identity and complete trusted-I/O lifecycle are still incomplete. \\ \bottomrule
 \end{tabular}
@@ -94,6 +95,17 @@ path stress different parts of the architecture. The table also keeps evidence
 roles visible: peer-reviewed systems can support their own mechanisms and
 measurements, while arXiv or pre-standardization work is treated as emerging
 research evidence rather than as proof of mature deployment.
+
+\textbf{CPC} adds a separate lifecycle dimension to this deployment taxonomy:
+CVM maintenance. Instead of giving an untrusted host direct access to guest
+private state or moving maintenance modules into firmware, CPC lets the host
+trigger tenant-trusted maintenance procedures inside the CVM through dedicated
+vCPU scheduling semantics~\cite{chen2024cpc}. This makes live migration,
+snapshotting, and resource reclamation part of the confidential-computing
+management problem. The paper's AMD SEV-SNP prototype provides real-machine
+performance evidence, while the Arm CCA prototype is simulator-based; therefore
+this survey uses CPC as peer-reviewed evidence for the maintenance/lifecycle
+gap, not as an Arm official interface or production CCA migration standard.
 
 \subsubsection{Fine-Grained Isolation Above the Base Architecture}
 
