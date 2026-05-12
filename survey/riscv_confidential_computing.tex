@@ -129,6 +129,40 @@ firmware components from different vendors or projects. Attestation is the
 mechanism that turns that composition into something a remote tenant can
 evaluate.
 
+\subsection{RISC-V Platform Primitives for Confidential VMs}
+
+RISC-V confidential computing depends on several architectural primitives that
+are security-relevant but not all confidential-computing mechanisms by
+themselves. Table~\ref{tab:riscv_platform_primitives} separates substrate
+specifications from the draft confidential-VM and trusted-I/O layers. This
+distinction prevents PMP, IOMMU, AIA, or IOPMP from being described as complete
+CoVE/AP-TEE equivalents merely because they are necessary parts of a platform.
+
+\begin{table*}[t]
+\centering
+\caption{RISC-V Platform Primitives for Confidential VMs}
+\label{tab:riscv_platform_primitives}
+\scriptsize
+\begin{tabular}{@{}p{0.15\linewidth}p{0.26\linewidth}p{0.16\linewidth}p{0.18\linewidth}p{0.15\linewidth}@{}}
+\toprule
+\textbf{Primitive} & \textbf{Role} & \textbf{Confidential-computing body?} & \textbf{Maturity} & \textbf{Survey use} \\ \midrule
+PMP/ePMP/Smepmp & CPU-side physical access control and monitor-enforced protection regions & No & Privileged architecture / extension substrate & Enclave and monitor baseline. \\
+H-extension & Virtualization substrate for guest execution and host/guest separation & No & Architectural substrate in the privileged specification family & TVM execution substrate. \\
+AIA/IMSIC & Interrupt and MSI architecture for virtualized interrupt delivery & No & AIA v1.0 release & Trusted-MSI context for CoVE-IO. \\
+IOMMU & Device-side address translation and DMA permission enforcement & No & RISC-V IOMMU v1.0.0 ratified release & DMA isolation substrate. \\
+IOPMP & Requester-aware transaction filtering outside the CPU path & No & IOPMP v0.8.2 draft, not ratified & DMA bypass defense direction. \\
+AP-TEE/CoVE & TVM, TSM, memory lifecycle, and ABI direction for confidential VMs & Yes & AP-TEE v0.7 draft / CoVE proposal, not ratified & Core RISC-V confidential-VM direction. \\
+CoVE-IO & Trusted I/O ABI, device identity, TDI lifecycle, trusted MMIO/DMA, and trusted MSI direction & Yes & CoVE-IO v0.3.0 draft, not ratified & Trusted-I/O direction for TVMs. \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+The table also fixes the standardization hierarchy used in the remainder of
+this section. The IOMMU and AIA are treated as official architectural
+substrate, while IOPMP, AP-TEE, and CoVE-IO retain their draft or
+pre-ratification status. As a result, the survey can discuss how these pieces
+compose without implying that every primitive has the same maturity or claim
+strength.
+
 \subsection{RISC-V Confidential I/O}
 
 \subsubsection{Why CoVE Needs I/O Standardization}
