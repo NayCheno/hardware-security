@@ -50,7 +50,7 @@ three-slot slide selection pass.
 
 | Direction | Primary 1 | Primary 2 | Primary 3 |
 |---|---|---|---|
-| `01-tee-taxonomy` | `schneider2022soktee` (E2) | `boubakri2025riscvtee` (E2 survey) | `sok-tee` (E2) |
+| `01-tee-taxonomy` | `li2024sokteechoices` (E2 peer-reviewed taxonomy anchor) | `boubakri2025riscvtee` (E2 survey) | `sok-tee` (E2) |
 | `02-trustzone-lineage` | `arm_trustzone_whitepaper` (E4) | `pinto2019trustzone` (E2) | `cerdeira2020trustzone` (E2) |
 | `03-arm-cca-rme-rmm` | `li2022cca` (E1) | `arm_cca_spec` (E0) | `arm_rmm_spec` (E0) |
 | `04-arm-cca-deployment` | `zhang2023shelter` (E1) | `zhou2025rcontainer` (E1) | `liu2025nanozone` (E3) |
@@ -60,9 +60,9 @@ three-slot slide selection pass.
 | `08-riscv-tee-lineage` | `lee2020keystone` (E1) | `feng2021penglai` (E1) | `schrammel2023spearv` (E1) |
 | `09-riscv-cove-ap-tee` | `sahita2023cove` (E3 public preprint/proposal) | `riscv_ap_tee_2024` (E3) | `boubakri2025riscvtee` (E2 survey) |
 | `10-riscv-cove-io-tee-io` | `feng2024siopmp` (E1) | `riscv_cove_io_2026` (E3) | `riscv_iommu_2023` (E0) |
-| `11-memory-encryption-integrity-replay` | `henson2014memory` (E2) | `amd_sev_snp` (E4) | `arm_cca_spec` (E0) |
+| `11-memory-encryption-integrity-replay` | `henson2014memory` (E2) | `rogers2007bonsai` (E1 memory-integrity/freshness mechanism) | `amd_sev_snp` (E4 industry evidence) |
 | `12-memory-io-fabrics` | `gouk2022directcxl` (E1 primary systems) | `zhong2024cxltiers` (E1 primary systems) | `wang2025odrp` (E1 primary systems) |
-| `13-confidential-io-protocol-device-endpoint` | `dmtf_spdm_2025` (E0) | `riscv_cove_io_2026` (E3) | `li2024folio` (E3) |
+| `13-confidential-io-protocol-device-endpoint` | `dmtf_spdm_2025` (E0) | `riscv_cove_io_2026` (E3) | `weinhold2025tlsra` (E1 endpoint/channel binding) |
 | `14-accelerator-dpu-smartnic-offload` | `zhu2020hetee` (E1) | `dhar2024cloudscale` (E1) | `wang2026cage` (E1) |
 | `15-smartnic-trusted-nic-storage` | `zhou2024snic` (E1) | `giantsidi2025tnic` (E1) | `chrapek2026hazel` (E3) |
 
@@ -80,6 +80,9 @@ three-slot slide selection pass.
 | `mccune2008flicker`, `mccune2010trustvisor`, `noorman2013sancus`, `koeberl2015tytan` | Active E1 references with verified PDFs | Use for foundational TEE/attestation/embedded trust-anchor lineage only; do not infer modern CCA/CoVE production semantics. |
 | `devietti2008hardbound`, `nagarakatte2012watchdog`, `watson2015cheri` | Active E1 references with verified PDFs | Use for capability and hardware memory-safety lineage; modern CHERI/CHERIoT/RV-CURE claims still require their current primary/spec evidence. |
 | `suh2003aegis`, `suh2003memoryintegrity`, `rogers2007bonsai` | Active E1 references with verified PDFs | Use for secure-processor memory encryption/integrity/freshness lineage; vendor/spec-only CCA/SEV-SNP sources must not be the sole mechanism proof for replay/freshness claims. |
+| `schneider2022soktee` | Supplementary E3/preprint taxonomy boundary in `01-tee-taxonomy` | Keep as historical hardware-supported TEE SoK context; do not present it as the peer-reviewed taxonomy anchor. |
+| `arm_cca_spec` in direction 11 | Auxiliary E0 ownership/access-control contrast | Use for Realm memory ownership and lifecycle vocabulary only; not as memory-integrity/freshness primary evidence. |
+| `li2024folio` in direction 13 | Auxiliary E3 contrast/related work | Use to show high-performance confidential networking without trusting I/O devices; not as protocol/device-endpoint primary evidence. |
 | Attack-only bibliography | 64 excluded entries | Do not promote into active defense/spec evidence without a new attack-scope plan. |
 
 ## Validation Commands

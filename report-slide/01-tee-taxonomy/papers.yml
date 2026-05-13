@@ -2,75 +2,79 @@ direction: 硬件辅助 TEE taxonomy
 focus: 用 SoK/Survey 固定 design space，避免把 SGX、SEV、TrustZone、CCA、CoVE 和 accelerator TEE 混成产品罗列。
 selection_rule: 固定三篇 primary；survey/SoK 只作为 taxonomy 和术语入口，不替代一手机制证据。
 primary:
-- key: schneider2022soktee
-  role: foundational
+- key: li2024sokteechoices
+  role: taxonomy_anchor
   selection_slot: primary_1
   paper_type: sok
   claim_strength: E2
-  selection_reason: Foundational SoK for hardware-assisted TEE taxonomy across launch, runtime isolation, trusted I/O, storage,
-    and attestation.
+  selection_reason: Peer-reviewed ASIA CCS 2024 SoK used as the main taxonomy anchor for TEE design choices and pitfalls.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
   pdf_status: local_pdf_verified
-  source_url: https://arxiv.org/abs/2205.12742
-  evidence: E2 / Foundational
+  source_url: https://dl.acm.org/doi/10.1145/3634737.3637642
+  evidence: E2 / Peer-reviewed taxonomy anchor
   source_status: local_pdf_verified
-  reference: reference/trusted-execution-environments/sok/hardware-supported-trusted-execution-environments/paper.pdf
-  title: 硬件辅助 TEE 总体设计空间
-  auxiliary: []
+  reference: reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/paper.pdf
+  title: TEE design choices and pitfalls taxonomy
+  auxiliary:
+  - schneider2022soktee
   slides:
     summary:
-      claim: 系统化整理硬件辅助 TEE 的 launch、runtime isolation、trusted I/O、secure storage、attes。
+      claim: Peer-reviewed SoK for TEE design choices, pitfalls, runtime lifecycle, and cross-platform taxonomy.
       points:
-      - 系统化整理硬件辅助 TEE 的 launch、runtime isolation、trusted I/O、secure storage、attestation 与 TCB 维度
+      - Peer-reviewed SoK for TEE design choices and pitfalls
+      - Connects runtime lifecycle and cross-platform taxonomy
       visual:
-        title: 证据定位
+        title: Evidence position
         items:
-        - 槽位：primary_1
-        - 类型：sok
-        - 证据：E2 / Foundational
-        - 来源：local_pdf_verified
+        - 'slot: primary_1'
+        - 'type: sok'
+        - 'evidence: E2 / Peer-reviewed taxonomy anchor'
+        - 'source: local_pdf_verified'
     background:
-      claim: SGX、SEV、TrustZone、Sanctum、Keystone 等平台名称相似，但威胁模型、硬件假设和部署场景差异很大
+      claim: TEE taxonomy should not be organized only by product name; each platform makes different launch, runtime, storage,
+        I/O, and attestation choices.
       points:
-      - SGX、SEV、TrustZone、Sanctum、Keystone 等平台名称相似，但威胁模型、硬件假设和部署场景差异很大
+      - TEE taxonomy should not be organized only by product name
+      - Launch, runtime, storage, I/O, and attestation choices differ across platforms
       visual:
-        title: 问题边界
+        title: Problem boundary
         items:
-        - 保护对象
-        - 攻击/管理边界
-        - 现有方法缺口
+        - protected object
+        - management boundary
+        - method gap
     solution:
-      claim: 用机制级 taxonomy 替代产品级罗列，把不同 TEE 映射到可比较的安全属性
+      claim: Use design-choice and pitfall taxonomy to connect SGX, SEV, TDX, CCA, CoVE, and RISC-V enclave lineage.
       points:
-      - 用机制级 taxonomy 替代产品级罗列，把不同 TEE 映射到可比较的安全属性
+      - Use design-choice and pitfall taxonomy
+      - Connect SGX, SEV, TDX, CCA, CoVE, and RISC-V enclave lineage
       visual:
-        title: 关键机制
+        title: Mechanism view
         items:
-        - launch 与初始化信任链
-        - runtime isolation 与内存访问控制
-        - trusted I/O、secure storage、attestation
+        - launch/admission choices
+        - runtime isolation and lifecycle
+        - attestation, storage, I/O and verifier policy
     experiments:
-      claim: 规范/Survey，无新实验
+      claim: SoK/survey with no new experiments (无新实验); supports taxonomy, coverage, and design-choice framing only.
       points:
-      - 规范/Survey，无新实验
-      - 只能支撑分类、术语和覆盖范围
+      - SoK/survey with no new experiments (无新实验)
+      - Mechanism claims still need original papers or specifications
       visual:
-        title: 证据强度
+        title: Evidence strength
         items:
-        - 类型：E2 peer-reviewed survey/SoK
-        - 成熟度：peer-reviewed survey/SoK
-        - PDF：local_pdf_verified
+        - 'type: E2 peer-reviewed survey/SoK'
+        - 'maturity: peer-reviewed survey/SoK'
+        - 'PDF: local_pdf_verified'
     evaluation:
-      claim: 适合作为全 deck 的分类坐标
-      strengths: 适合作为全 deck 的分类坐标。
-      limitations: 时间截面停在 2022 年，不能覆盖 CCA、CoVE-IO 和 accelerator TEE 的最新机制。
-      commercialization: 可帮助产品/平台做需求拆解和证据清单，但不能作为单个平台的安全证明。
+      claim: Best used as the peer-reviewed taxonomy anchor for the whole deck.
+      strengths: Best used as the peer-reviewed taxonomy anchor for the whole deck.
+      limitations: As a SoK, it does not replace platform papers, official specifications, or production evidence.
+      commercialization: Useful as a platform design checklist; deployment still depends on implementation and verifier policy.
 - key: boubakri2025riscvtee
-  role: sota_1
+  role: riscv_survey_bridge
   selection_slot: primary_2
   paper_type: sok
-  claim_strength: E2 survey
+  claim_strength: E2
   selection_reason: Recent RISC-V TEE survey used to connect Keystone, Penglai, SPEAR-V, CoVE, and AP-TEE lineages.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
@@ -130,7 +134,7 @@ primary:
       limitations: 机制细节必须回到 Keystone/Penglai/SPEAR-V/AP-TEE/CoVE-IO 原始材料。
       commercialization: 适合辅助平台选型；落地依赖 RISC-V 草案成熟度和厂商实现。
 - key: sok-tee
-  role: sota_2
+  role: accelerator_sok_bridge
   selection_slot: primary_3
   paper_type: sok
   claim_strength: E2
@@ -192,4 +196,11 @@ primary:
       strengths: 能把 I/O、accelerator、SmartNIC 小方向纳入同一比较框架。
       limitations: 不能替代 CCA、CoVE-IO、SPDM/TDISP 或具体 GPU/DPU 系统的一手证据。
       commercialization: 可转化为 DPU/GPU 安全产品评估清单；落地依赖设备 RoT 与标准接口。
-auxiliary: []
+auxiliary:
+- key: schneider2022soktee
+  role: supplementary preprint taxonomy boundary
+  evidence: E3 / Preprint SoK boundary
+  source_status: local_pdf_verified
+  reference: reference/trusted-execution-environments/sok/hardware-supported-trusted-execution-environments/paper.pdf
+  use: Supplementary 2022 hardware-supported TEE SoK; arXiv/preprint status stays explicit and it no longer occupies a primary
+    taxonomy slot.

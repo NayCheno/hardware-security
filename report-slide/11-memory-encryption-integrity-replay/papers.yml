@@ -3,7 +3,7 @@ focus: 避免把 access control、ownership、encryption、integrity、freshness
 selection_rule: 固定三篇 primary；`riscv_ap_tee_2024` 作为 AP-TEE/CoVE lifecycle auxiliary，不计入三篇主讲。
 primary:
 - key: henson2014memory
-  role: foundational
+  role: taxonomy_background
   selection_slot: primary_1
   paper_type: sok
   claim_strength: E2
@@ -67,12 +67,83 @@ primary:
       strengths: 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
       limitations: 2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
       commercialization: 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
-- key: amd_sev_snp
-  role: sota_1
+- key: rogers2007bonsai
+  role: peer_reviewed_mechanism_anchor
   selection_slot: primary_2
+  paper_type: system
+  claim_strength: E1
+  selection_reason: Peer-reviewed Bonsai Merkle Tree mechanism anchor for memory integrity, freshness, and replay protection.
+  evidence_type: E1 peer-reviewed primary paper
+  maturity: peer-reviewed primary paper
+  pdf_status: local_pdf_verified
+  source_url: https://doi.org/10.1109/MICRO.2007.16
+  evidence: E1 / Peer-reviewed mechanism anchor
+  source_status: local_pdf_verified
+  reference: reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/paper.pdf
+  title: Bonsai Merkle Trees for memory integrity and freshness
+  auxiliary:
+  - suh2003aegis
+  - suh2003memoryintegrity
+  slides:
+    summary:
+      claim: Bonsai Merkle Trees use counter/tree metadata to detect tamper and replay, anchoring memory freshness evidence.
+      points:
+      - Counter/tree metadata detects tamper and replay
+      - Provides peer-reviewed evidence for memory integrity and freshness
+      visual:
+        title: Evidence position
+        items:
+        - 'slot: primary_2'
+        - 'type: system'
+        - 'evidence: E1 / Peer-reviewed mechanism anchor'
+        - 'source: local_pdf_verified'
+    background:
+      claim: Encryption alone cannot detect stale or modified memory values returned by an untrusted memory system.
+      points:
+      - Encryption alone cannot detect stale or modified memory values
+      - Freshness requires integrity trees, counters, or authenticated roots
+      visual:
+        title: Problem boundary
+        items:
+        - memory tamper
+        - stale-data replay
+        - OS/performance-friendly metadata
+    solution:
+      claim: Address-independent seed encryption and Bonsai Merkle Trees reduce secure-processor integrity-tree overhead.
+      points:
+      - Address-independent seed encryption reduces OS friction
+      - Bonsai Merkle Trees authenticate counter metadata and root state
+      visual:
+        title: Mechanism view
+        items:
+        - AISE counter-mode seed
+        - BMT over encryption counters
+        - root MAC for replay/tamper detection
+    experiments:
+      claim: MICRO 2007 peer-reviewed paper reports secure-processor simulation results and reduced memory-integrity overhead.
+      points:
+      - MICRO 2007 peer-reviewed secure-processor simulation
+      - Historical performance numbers are lineage evidence, not direct CCA/SEV-SNP product comparison
+      visual:
+        title: Evidence strength
+        items:
+        - 'type: E1 peer-reviewed primary paper'
+        - 'maturity: peer-reviewed primary paper'
+        - 'PDF: local_pdf_verified'
+    evaluation:
+      claim: Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.
+      strengths: Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.
+      limitations: Secure-processor lineage is not the same as a modern confidential-VM product; deployment claims still need
+        SEV-SNP, TDX, CCA, or CoVE evidence.
+      commercialization: Useful for memory-controller integrity-tree design; productization depends on metadata storage, root
+        protection, and performance budget.
+- key: amd_sev_snp
+  role: industry_evidence
+  selection_slot: primary_3
   paper_type: vendor
   claim_strength: E4
-  selection_reason: AMD SEV-SNP whitepaper captures a mature commercial VM memory integrity and replay-protection design.
+  selection_reason: AMD SEV-SNP remains industry evidence for modern VM memory-integrity deployment, but not the sole mechanism
+    proof.
   evidence_type: E4 industry/vendor evidence
   maturity: industry/vendor evidence
   pdf_status: local_pdf_verified
@@ -80,7 +151,7 @@ primary:
   evidence: E4 / Industry evidence
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf
-  title: AMD SEV-SNP as memory-integrity industry evidence
+  title: AMD SEV-SNP industry memory-integrity evidence
   auxiliary: []
   slides:
     summary:
@@ -90,7 +161,7 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 槽位：primary_2
+        - 槽位：primary_3
         - 类型：vendor
         - 证据：E4 / Industry evidence
         - 来源：local_pdf_verified
@@ -130,75 +201,29 @@ primary:
       strengths: 展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。
       limitations: Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。
       commercialization: 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
+auxiliary:
 - key: arm_cca_spec
-  role: sota_2
-  selection_slot: primary_3
-  paper_type: spec
-  claim_strength: E0
-  selection_reason: Arm CCA specification defines current Realm memory ownership and granule lifecycle evidence.
-  evidence_type: E0 official standard/specification
-  maturity: official standard/specification
-  pdf_status: source_verified_pdf_unavailable
-  source_url: https://developer.arm.com/documentation/den0125/latest
-  evidence: E0 / Spec-standard SOTA
+  role: ownership/access-control contrast
+  evidence: E0 / Spec contrast
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/arm-cca-specification/README.md
-  title: Arm CCA memory ownership and lifecycle
-  auxiliary:
-  - riscv_ap_tee_2024
-  slides:
-    summary:
-      claim: Arm CCA 用 Realm、GPT/GPC、RIPAS 和 lifecycle 语义保护 confidential workload memo。
-      points:
-      - Arm CCA 用 Realm、GPT/GPC、RIPAS 和 lifecycle 语义保护 confidential workload memory ownership
-      visual:
-        title: 证据定位
-        items:
-        - 槽位：primary_3
-        - 类型：spec
-        - 证据：E0 / Spec-standard SOTA
-        - 来源：source_verified_pdf_unavailable
-    background:
-      claim: CCA 需要让 host 管理资源，同时不能直接读取或破坏 Realm protected memory
-      points:
-      - CCA 需要让 host 管理资源，同时不能直接读取或破坏 Realm protected memory
-      - 这里的重点是 ownership/access-control，不是 memory-encryption survey 的替代品
-      visual:
-        title: 问题边界
-        items:
-        - 保护对象
-        - 攻击/管理边界
-        - 现有方法缺口
-    solution:
-      claim: 通过 CCA/RME 公共概念描述 Realm lifecycle、granule ownership、protected address spa。
-      points:
-      - 通过 CCA/RME 公共概念描述 Realm lifecycle、granule ownership、protected address space 和 host/Realm transition
-      visual:
-        title: 关键机制
-        items:
-        - Realm and protected address space lifecycle
-        - GPT/GPC ownership and access-control semantics
-        - RIPAS / memory state transition concepts
-    experiments:
-      claim: 规范/Survey，无新实验
-      points:
-      - 规范/Survey，无新实验
-      - 官方规范来源已核验但本地 PDF 不可用，只使用公开架构概念
-      visual:
-        title: 证据强度
-        items:
-        - 类型：E0 official standard/specification
-        - 成熟度：official standard/specification
-        - PDF：source_verified_pdf_unavailable
-    evaluation:
-      claim: 给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据
-      strengths: 给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据。
-      limitations: 不能把未下载的非公开细节写成已复核机制，也不能把 access-control/lifecycle 写成 encryption/integrity proof。
-      commercialization: 适合说明 Arm server/mobile CCA 的标准边界；风险在真实硬件、固件实现和云平台策略尚需 production evidence。
-auxiliary:
+  use: 'Contrast only: Arm CCA defines Realm ownership/lifecycle/access-control concepts, not a peer-reviewed memory-integrity/freshness
+    mechanism anchor.'
+- key: suh2003aegis
+  role: Foundational secure-processor lineage
+  evidence: E1 / Peer-reviewed mechanism anchor
+  source_status: local_pdf_verified
+  reference: reference/architecture-and-platform-security/aegis-architecture-tamper-evident-tamper-resistant-processing/paper.pdf
+  use: Auxiliary secure-processor tamper-evident/tamper-resistant processing lineage for memory-integrity mechanisms.
+- key: suh2003memoryintegrity
+  role: Foundational memory-integrity mechanism
+  evidence: E1 / Peer-reviewed mechanism anchor
+  source_status: local_pdf_verified
+  reference: reference/architecture-and-platform-security/efficient-memory-integrity-verification-encryption-secure-processors/paper.pdf
+  use: Auxiliary mechanism bridge for efficient memory-integrity verification and encryption before Bonsai.
 - key: riscv_ap_tee_2024
   role: Draft/not ratified / AP-TEE v0.7 RC2
   evidence: E3 / Draft-not-ratified
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf
-  use: 辅助对照 RISC-V TVM/TSM memory donation/reclaim/share lifecycle；不计入三篇主讲，也不写成 ratified standard。
+  use: Auxiliary contrast for RISC-V TVM/TSM memory donation, reclaim, and sharing lifecycle; not counted as primary and not treated as a ratified standard.

@@ -4,17 +4,17 @@
     "direction": "硬件辅助 TEE taxonomy",
     "primary": [
       {
-        "key": "schneider2022soktee",
-        "evidence": "E2 / Foundational",
+        "key": "li2024sokteechoices",
+        "evidence": "E2 / Peer-reviewed taxonomy anchor",
         "source_status": "local_pdf_verified",
         "selection_slot": "primary_1",
         "paper_type": "sok",
         "claim_strength": "E2",
-        "selection_reason": "Foundational SoK for hardware-assisted TEE taxonomy across launch, runtime isolation, trusted I/O, storage, and attestation.",
+        "selection_reason": "Peer-reviewed ASIA CCS 2024 SoK used as the main taxonomy anchor for TEE design choices and pitfalls.",
         "evidence_type": "E2 peer-reviewed survey/SoK",
         "maturity": "peer-reviewed survey/SoK",
         "pdf_status": "local_pdf_verified",
-        "source_url": "https://arxiv.org/abs/2205.12742"
+        "source_url": "https://dl.acm.org/doi/10.1145/3634737.3637642"
       },
       {
         "key": "boubakri2025riscvtee",
@@ -22,7 +22,7 @@
         "source_status": "local_pdf_verified",
         "selection_slot": "primary_2",
         "paper_type": "sok",
-        "claim_strength": "E2 survey",
+        "claim_strength": "E2",
         "selection_reason": "Recent RISC-V TEE survey used to connect Keystone, Penglai, SPEAR-V, CoVE, and AP-TEE lineages.",
         "evidence_type": "E2 peer-reviewed survey/SoK",
         "maturity": "peer-reviewed survey/SoK",
@@ -43,7 +43,16 @@
         "source_url": "https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf"
       }
     ],
-    "auxiliary": []
+    "auxiliary": [
+      {
+        "key": "schneider2022soktee",
+        "role": "supplementary preprint taxonomy boundary",
+        "evidence": "E3 / Preprint SoK boundary",
+        "source_status": "local_pdf_verified",
+        "reference": "reference/trusted-execution-environments/sok/hardware-supported-trusted-execution-environments/paper.pdf",
+        "use": "Supplementary 2022 hardware-supported TEE SoK; arXiv/preprint status stays explicit and it no longer occupies a primary taxonomy slot."
+      }
+    ]
   },
   {
     "directory": "02-trustzone-lineage",
@@ -138,8 +147,11 @@
     "auxiliary": [
       {
         "key": "wu2024rmm",
+        "role": "Draft/not ratified verification evidence",
         "evidence": "E3 / Draft-not-ratified",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/arm-confidential-computing/verifying-components-of-arm-cca-with-esbmc/paper.pdf",
+        "use": "辅助说明 RMM 组件验证风险；不作为完整 RMM 正确性或成熟 production evidence。"
       }
     ]
   },
@@ -190,8 +202,11 @@
     "auxiliary": [
       {
         "key": "liu2025lesstrust",
+        "role": "Peer-reviewed SOTA / TIFS 2025",
         "evidence": "E1 / Peer-reviewed SOTA",
-        "source_status": "source_verified_pdf_unavailable"
+        "source_status": "source_verified_pdf_unavailable",
+        "reference": "reference/arm-confidential-computing/more-granular-less-trust-arm-cca-intra-process-isolation/README.md",
+        "use": "辅助对比 intra-process isolation 和 untrusted management threat model；本地 PDF 不可用时不写具体实验数字。"
       }
     ]
   },
@@ -288,23 +303,35 @@
     "auxiliary": [
       {
         "key": "eat_rfc",
+        "role": "Spec/standard SOTA / RFC 9711",
         "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/attestation/entity-attestation-token-rfc9711/paper.pdf",
+        "use": "辅助说明 Entity Attestation Token 的 CWT/JWT claim/token encoding；不计入三篇主讲，也不替代 RATS 架构或平台证据语义。"
       },
       {
         "key": "abera2016cflat",
+        "role": "Runtime/control-flow attestation lineage",
         "evidence": "E1 / Peer-reviewed primary",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/attestation/c-flat-control-flow-attestation-embedded-systems-software/paper.pdf",
+        "use": "辅助说明 control-flow attestation 问题起点；不计入三篇主讲。"
       },
       {
         "key": "dessouky2017lofat",
+        "role": "Hardware CFA lineage",
         "evidence": "E1 / Peer-reviewed primary",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/attestation/lo-fat-low-overhead-control-flow-attestation-hardware/paper.pdf",
+        "use": "辅助说明硬件 control-flow attestation 如何降低插桩开销；不计入三篇主讲。"
       },
       {
         "key": "mao2025pdrima",
+        "role": "Draft runtime measurement auxiliary",
         "evidence": "E3 / Draft-not-ratified",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/attestation/pdrima-policy-driven-runtime-integrity-measurement-attestation/paper.pdf",
+        "use": "辅助说明 policy-driven runtime measurement 前沿方向；不计入三篇主讲。"
       }
     ]
   },
@@ -355,13 +382,19 @@
     "auxiliary": [
       {
         "key": "riscv_iopmp_2026",
+        "role": "Draft/not ratified / RISC-V IOPMP v0.8.2",
         "evidence": "E3 / Draft-not-ratified",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/risc-v-confidential-computing/risc-v-iopmp-architecture-specification/paper.pdf",
+        "use": "辅助说明 I/O requester、memory-domain 和 entry matching；draft/not-ratified，不作为独立 TEE 或 ratified standard。"
       },
       {
         "key": "manoni2026cva6cfi",
+        "role": "Draft/not ratified / arXiv CFI implementation",
         "evidence": "E3 / Draft-not-ratified",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/architecture-and-platform-security/cva6-cfi-first-glance-risc-v-control-flow-integrity-extensions/paper.pdf",
+        "use": "辅助说明 Zicfiss/Zicfilp 在 CVA6 的 CFI implementation evidence；不作为 TEE、DMA isolation 或 CoVE/AP-TEE 边界证据。"
       }
     ]
   },
@@ -504,8 +537,11 @@
     "auxiliary": [
       {
         "key": "riscv_aia_2023",
+        "role": "Spec/standard SOTA / RISC-V AIA",
         "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf",
+        "use": "辅助说明 trusted MSI、interrupt ownership 和 virtual interrupt substrate；不计入三篇主讲，也不是完整 CoVE-IO 方案。"
       }
     ]
   },
@@ -527,37 +563,64 @@
         "source_url": "https://doi.org/10.1145/2566673"
       },
       {
+        "key": "rogers2007bonsai",
+        "evidence": "E1 / Peer-reviewed mechanism anchor",
+        "source_status": "local_pdf_verified",
+        "selection_slot": "primary_2",
+        "paper_type": "system",
+        "claim_strength": "E1",
+        "selection_reason": "Peer-reviewed Bonsai Merkle Tree mechanism anchor for memory integrity, freshness, and replay protection.",
+        "evidence_type": "E1 peer-reviewed primary paper",
+        "maturity": "peer-reviewed primary paper",
+        "pdf_status": "local_pdf_verified",
+        "source_url": "https://doi.org/10.1109/MICRO.2007.16"
+      },
+      {
         "key": "amd_sev_snp",
         "evidence": "E4 / Industry evidence",
         "source_status": "local_pdf_verified",
-        "selection_slot": "primary_2",
+        "selection_slot": "primary_3",
         "paper_type": "vendor",
         "claim_strength": "E4",
-        "selection_reason": "AMD SEV-SNP whitepaper captures a mature commercial VM memory integrity and replay-protection design.",
+        "selection_reason": "AMD SEV-SNP remains industry evidence for modern VM memory-integrity deployment, but not the sole mechanism proof.",
         "evidence_type": "E4 industry/vendor evidence",
         "maturity": "industry/vendor evidence",
         "pdf_status": "local_pdf_verified",
         "source_url": "https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more"
-      },
-      {
-        "key": "arm_cca_spec",
-        "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "source_verified_pdf_unavailable",
-        "selection_slot": "primary_3",
-        "paper_type": "spec",
-        "claim_strength": "E0",
-        "selection_reason": "Arm CCA specification defines current Realm memory ownership and granule lifecycle evidence.",
-        "evidence_type": "E0 official standard/specification",
-        "maturity": "official standard/specification",
-        "pdf_status": "source_verified_pdf_unavailable",
-        "source_url": "https://developer.arm.com/documentation/den0125/latest"
       }
     ],
     "auxiliary": [
       {
+        "key": "arm_cca_spec",
+        "role": "ownership/access-control contrast",
+        "evidence": "E0 / Spec contrast",
+        "source_status": "source_verified_pdf_unavailable",
+        "reference": "reference/arm-confidential-computing/arm-cca-specification/README.md",
+        "use": "Contrast only: Arm CCA defines Realm ownership/lifecycle/access-control concepts, not a peer-reviewed memory-integrity/freshness mechanism anchor."
+      },
+      {
+        "key": "suh2003aegis",
+        "role": "Foundational secure-processor lineage",
+        "evidence": "E1 / Peer-reviewed mechanism anchor",
+        "source_status": "local_pdf_verified",
+        "reference": "reference/architecture-and-platform-security/aegis-architecture-tamper-evident-tamper-resistant-processing/paper.pdf",
+        "use": "Auxiliary secure-processor tamper-evident/tamper-resistant processing lineage for memory-integrity mechanisms."
+      },
+      {
+        "key": "suh2003memoryintegrity",
+        "role": "Foundational memory-integrity mechanism",
+        "evidence": "E1 / Peer-reviewed mechanism anchor",
+        "source_status": "local_pdf_verified",
+        "reference": "reference/architecture-and-platform-security/efficient-memory-integrity-verification-encryption-secure-processors/paper.pdf",
+        "use": "Auxiliary mechanism bridge for efficient memory-integrity verification and encryption before Bonsai."
+      },
+      {
         "key": "riscv_ap_tee_2024",
+        "role": "Draft/not ratified / AP-TEE v0.7 RC2",
         "evidence": "E3 / Draft-not-ratified",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf",
+        "use": "Auxiliary contrast for RISC-V TVM/TSM memory donation, reclaim, and sharing lifecycle; not counted as primary and not treated as a ratified standard."
       }
     ]
   },
@@ -608,13 +671,19 @@
     "auxiliary": [
       {
         "key": "cxl_spec",
+        "role": "Spec/standard SOTA / CXL 3.1",
         "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/compute-express-link-specification/paper.pdf",
+        "use": "辅助说明 CXL fabric 与 memory-expansion 语义；不证明 confidential-computing boundary 自然成立。"
       },
       {
         "key": "pcie_ide",
+        "role": "Spec/standard SOTA / PCIe IDE",
         "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "source_verified_pdf_unavailable"
+        "source_status": "source_verified_pdf_unavailable",
+        "reference": "reference/memory-and-io-fabrics/pci-express-integrity-and-data-encryption/README.md",
+        "use": "辅助说明 PCIe link integrity/encryption；不等同于完整 trusted-I/O lifecycle、TDISP 或 device-isolation claim。"
       }
     ]
   },
@@ -649,59 +718,83 @@
         "source_url": "https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0"
       },
       {
-        "key": "li2024folio",
-        "evidence": "E3 / Draft-not-ratified",
+        "key": "weinhold2025tlsra",
+        "evidence": "E1 / Peer-reviewed endpoint channel-binding evidence",
         "source_status": "local_pdf_verified",
         "selection_slot": "primary_3",
         "paper_type": "system",
-        "claim_strength": "E3",
-        "selection_reason": "FOLIO is treated as a draft SOTA design exploration for confidential I/O protocol and endpoints.",
-        "evidence_type": "E3 draft/preprint, not ratified",
-        "maturity": "draft/preprint, not ratified",
+        "claim_strength": "E1",
+        "selection_reason": "Peer-reviewed endpoint/channel-binding evidence for integrating remote attestation into TLS.",
+        "evidence_type": "E1 peer-reviewed primary paper",
+        "maturity": "peer-reviewed primary paper",
         "pdf_status": "local_pdf_verified",
-        "source_url": "https://arxiv.org/abs/2403.03360"
+        "source_url": "https://www.usenix.org/conference/atc25/presentation/weinhold"
       }
     ],
     "auxiliary": [
       {
         "key": "dmtf_spdm_arch_2024",
+        "role": "Industry explanatory white paper",
         "evidence": "E4 / Industry evidence",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/spdm-architecture-white-paper/paper.pdf",
+        "use": "解释 SPDM 架构角色；不替代 DSP0274/DSP0277 规范。"
       },
       {
         "key": "dmtf_spdm_secured_messages_2025",
+        "role": "Spec/standard SOTA / SPDM secured messages",
         "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/secured-messages-using-spdm-specification/paper.pdf",
+        "use": "辅助说明 SPDM control-plane message protection；不保护 PCIe/CXL data path。"
       },
       {
         "key": "dmtf_spdm_tcp_2024",
+        "role": "Spec/standard SOTA / SPDM over TCP",
         "evidence": "E0 / Spec-standard SOTA",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/spdm-over-tcp-binding-specification/paper.pdf",
+        "use": "辅助说明 network-reachable attested endpoint；不是 device isolation 或 memory protection。"
       },
       {
         "key": "pcisig_tdisp_2022",
+        "role": "Candidate/metadata-only / PCI-SIG TDISP",
         "evidence": "E5 / Candidate metadata-only gated",
-        "source_status": "source_verified_pdf_unavailable"
+        "source_status": "source_verified_pdf_unavailable",
+        "reference": "reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/README.md",
+        "use": "只支撑 TDISP existence 和 high-level trusted device-interface lifecycle；不支撑 gated normative message/state-machine claim。"
       },
       {
         "key": "pcisig_tdisp_xt_2025",
+        "role": "Candidate/metadata-only / PCI-SIG TDISP XT",
         "evidence": "E5 / Candidate metadata-only gated",
-        "source_status": "source_verified_pdf_unavailable"
+        "source_status": "source_verified_pdf_unavailable",
+        "reference": "reference/memory-and-io-fabrics/pcie-tee-device-interface-security-protocol-tdisp/README.md",
+        "use": "只支撑 PCI-SIG public metadata 中 IDE、ATS、TDISP affected areas；不推断 XT/TE rules。"
       },
       {
         "key": "amd_sev_tio_2023",
+        "role": "Industry evidence / AMD SEV-TIO",
         "evidence": "E4 / Industry evidence",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/amd-sev-tio-trusted-io/paper.pdf",
+        "use": "x86 industry 对照：TDISP、SPDM、IDE、RMP/IOMMU 和 firmware-mediated binding 的组合。"
       },
       {
-        "key": "weinhold2025tlsra",
-        "evidence": "E1 / Peer-reviewed SOTA",
-        "source_status": "local_pdf_verified"
+        "key": "li2024folio",
+        "role": "contrast / related work",
+        "evidence": "E3 / Draft-not-ratified contrast",
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/bridge-the-future-high-performance-networks-confidential-vms-without-trusted-io-devices/paper.pdf",
+        "use": "Contrast only: shows high-performance confidential networking without trusting I/O devices; not a protocol/device-endpoint primary anchor."
       },
       {
         "key": "nvidia_bluefield_operation_2025",
+        "role": "Industry evidence / BlueField OP-TEE/fTPM",
         "evidence": "E4 / Industry evidence",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/paper.pdf",
+        "use": "辅助说明 vendor DPU/NIC attestation building blocks；保留 testing/development-key 限制，不写成完整 production DPU TEE。"
       }
     ]
   },
@@ -752,18 +845,27 @@
     "auxiliary": [
       {
         "key": "sang2025portal",
+        "role": "Peer-reviewed SOTA / Arm CCA device access",
         "evidence": "E1 / Peer-reviewed SOTA",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/arm-confidential-computing/portal-fast-secure-device-access-arm-cca/paper.pdf",
+        "use": "辅助对比 CCA device-access plaintext region、System Realm/SMMU/GPT 机制；不替代 PCIe SPDM/TDISP lifecycle。"
       },
       {
         "key": "deng2022strongbox",
+        "role": "Foundational / TrustZone-era Arm endpoint GPU TEE",
         "evidence": "E1 / Foundational peer-reviewed",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/accelerator-tees/strongbox-gpu-tee-arm-endpoints/paper.pdf",
+        "use": "历史 baseline；不能写成 CCA/Realm 机制。"
       },
       {
         "key": "nvidia_bluefield_operation_2025",
+        "role": "Industry evidence / vendor DPU OP-TEE/fTPM",
         "evidence": "E4 / Industry evidence",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/paper.pdf",
+        "use": "辅助说明 vendor DPU/NIC attestation building blocks；保留 fTPM TA testing/development-key 限制，不写成完整 production DPU TEE。"
       }
     ]
   },
@@ -814,13 +916,19 @@
     "auxiliary": [
       {
         "key": "nvidia_bluefield_operation_2025",
+        "role": "Industry evidence / vendor DPU OP-TEE/fTPM",
         "evidence": "E4 / Industry evidence",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/paper.pdf",
+        "use": "辅助说明 vendor NIC/DPU attestation 与 OP-TEE/fTPM building blocks；保留 fTPM TA testing/development-key 限制，不写成 complete production DPU TEE。"
       },
       {
         "key": "khalilov2024osmosis",
+        "role": "Peer-reviewed background substrate / USENIX ATC 2024",
         "evidence": "E1 / Peer-reviewed background substrate",
-        "source_status": "local_pdf_verified"
+        "source_status": "local_pdf_verified",
+        "reference": "reference/memory-and-io-fabrics/osmosis-enabling-multi-tenancy-datacenter-smartnics/paper.pdf",
+        "use": "辅助说明 SmartNIC multi-tenancy、resource scheduling 和 QoS；不能引用为 confidential I/O、TEE、SPDM、TDISP 或 attestation evidence。"
       }
     ]
   }
