@@ -1,0 +1,414 @@
+direction: "硬件辅助 TEE taxonomy"
+story_version: 1
+slides:
+- slide_id: d01-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "TEE taxonomy 这一节要先拆设计轴，而不是把 SGX、TrustZone、CCA、CoVE 和 accelerator TEE 排成产品清单。"
+  narrative:
+  - "Li 2024 SoK 从 server-side TEE 的 trust relationship、resource management、attestation 和 I/O 设计选择入手，适合做总分类入口。"
+  - "Boubakri 2025 RISC-V survey 把 Keystone、Penglai、SPEAR-V、CoVE、AP-TEE 串成 RISC-V 纵向谱系。"
+  - "Accelerator TEE SoK 补上 GPU、NPU、DPU、SmartNIC 等非 CPU 计算路径，避免 taxonomy 只围绕 CPU enclave。"
+  - "三篇都是 E2 survey/SoK，能支撑分类和边界，不能替代原始论文或规范的机制 claim。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 01-tee-taxonomy."
+  - "Li 2024 SoK p.1 abstract; Boubakri 2025 p.1 abstract; Accelerator TEE SoK p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "taxonomy 的三层证据"
+    data:
+      steps:
+      - label: "TEE design choices"
+        claim: "抽象 trust boundary 与设计取舍"
+        evidence: "Li 2024 SoK"
+      - label: "RISC-V lineage"
+        claim: "开放 ISA 下 enclave 到 TVM 的谱系"
+        evidence: "Boubakri 2025 survey"
+      - label: "Accelerator TEE"
+        claim: "device/accelerator TCB 与 data path"
+        evidence: "Accelerator TEE SoK"
+  source_note: "本页只建立分类入口；survey 证据不直接承担具体机制和性能结论。"
+
+- slide_id: d01-01-li2024-summary
+  paper_key: li2024sokteechoices
+  slide_type: summary
+  claim: "Li 2024 SoK 的价值在于把 server-side TEE 拆成设计选择和 pitfall，而不是再列一遍商业 TEE 名单。"
+  narrative:
+  - "论文把 TEE 放在 cloud remote execution 场景下讨论，核心问题是用户、CSP、硬件厂商和 attestation service 之间如何分配信任。"
+  - "它关注 design choices 的安全后果，例如谁管理资源、谁验证 evidence、哪些组件进入 TCB。"
+  - "这篇适合作为本报告总 taxonomy anchor，因为它能解释不同 TEE 为什么不可直接横向比较。"
+  - "在本 deck 中，它承担分类框架，不承担某个 TEE 机制已经安全的证明。"
+  evidence_refs:
+  - "Li 2024 SoK p.1 abstract: structured analysis of TEE design choices and pitfalls."
+  - "Li 2024 SoK Fig.1: cloud computation trust relationship comparison."
+  proof_object:
+    type: comparison_matrix
+    title: "SoK 贡献位置"
+    data:
+      columns: ["维度", "本页判断"]
+      rows:
+      - ["研究对象", "server-side TEE 的 trust relationship 与 design choices"]
+      - ["可支撑", "taxonomy、pitfall、跨系统比较"]
+      - ["不可支撑", "单个系统的机制正确性或性能数字"]
+      - ["汇报用途", "作为后续 Arm/RISC-V/device TEE 的公共坐标系"]
+  source_note: "依据 Li 2024 SoK 摘要、Figure 1 和 introduction 的设计选择叙事重写。"
+
+- slide_id: d01-02-li2024-background
+  paper_key: li2024sokteechoices
+  slide_type: background
+  claim: "TEE taxonomy 需要先回答“谁被排除在信任边界外”，否则后续所有隔离机制都会被误读。"
+  narrative:
+  - "云 TEE 的承诺是让用户把敏感 workload 放到不完全可信的 server-side platform 上执行。"
+  - "但不同系统把 CSP、host OS、hypervisor、firmware、attestation service 和 device driver 放在不同信任位置。"
+  - "如果不显式写 trust relationship，同一个词 enclave、realm、TVM 在不同系统中会指向不同安全边界。"
+  - "因此本节用 SoK 的分类轴先约束后续章节的比较语言。"
+  evidence_refs:
+  - "Li 2024 SoK p.1-p.2 introduction: server-side TEE trust relationship and design choices."
+  - "Li 2024 SoK Fig.1: comparison of cloud computation trust relationships."
+  proof_object:
+    type: comparison_matrix
+    title: "taxonomy 先问的三个问题"
+    data:
+      columns: ["问题", "为什么重要", "后续章节用法"]
+      rows:
+      - ["谁管理资源", "资源管理者可能观察或影响 workload", "区分 host、monitor、RMM、TSM"]
+      - ["谁给 evidence", "attestation service 可能进入用户信任链", "区分 quote、report、measurement"]
+      - ["谁在 data path", "I/O 和 device driver 可能绕过 CPU enclave", "连接 accelerator 与 confidential I/O"]
+  source_note: "问题拆分来自 SoK 对 trust relationship、attestation 和 resource management 设计轴的归纳。"
+
+- slide_id: d01-03-li2024-solution
+  paper_key: li2024sokteechoices
+  slide_type: solution
+  claim: "这篇 SoK 的方法是把 TEE 设计拆成可比较的轴，再讨论每个轴的安全 pitfall。"
+  narrative:
+  - "它不是提出新 TEE，而是把已有设计放到统一框架中比较。"
+  - "分类轴覆盖 computation trust relationship、TEE lifecycle、attestation、memory/resource management 和 I/O 相关设计。"
+  - "pitfall 分析提醒读者不要把硬件隔离自动等同于端到端安全。"
+  - "这正好服务于本报告的写法：每个方向都要写证据边界，而不是只写系统名。"
+  evidence_refs:
+  - "Li 2024 SoK Section 2-4: design choices and pitfall-oriented analysis."
+  - "Li 2024 SoK p.1 abstract: evaluates security impact of varied design choices."
+  proof_object:
+    type: mechanism_flow
+    title: "SoK 分析路径"
+    data:
+      stages:
+      - "定义 server-side TEE 场景"
+      - "拆 trust relationship"
+      - "归纳 design choices"
+      - "映射安全 pitfall"
+      - "给出未来研究方向"
+  source_note: "流程按 Li 2024 SoK 的引言和章节组织重绘。"
+
+- slide_id: d01-04-li2024-experiments
+  paper_key: li2024sokteechoices
+  slide_type: experiments
+  claim: "这篇是 SoK，无新实验；它的证据强度来自系统化分类，而不是测评或机制实现。"
+  narrative:
+  - "论文贡献是整理和评估 TEE design choices，对应 E2 taxonomy evidence。"
+  - "它可以用来说明某类系统设计会引入什么信任假设，但不能替代原始论文的实现或量化证据。"
+  - "当后续页提到 CCA、CoVE、accelerator TEE 的机制时，必须回引对应原始论文或规范。"
+  - "本报告因此把它放在 taxonomy slot，不把它写成 SOTA 系统。"
+  evidence_refs:
+  - "Li 2024 SoK p.1 abstract and Section 1: SoK/taxonomy contribution."
+  - "survey/evidence_ledger.md Evidence Classes: E2 supports taxonomy and framing."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "E2 证据边界"
+    data:
+      columns: ["能证明", "不能证明"]
+      rows:
+      - ["设计轴和术语边界", "某个 TEE 机制正确"]
+      - ["pitfall 分类", "某个系统性能优劣"]
+      - ["跨系统比较框架", "产品部署安全性"]
+  source_note: "无新实验；本页按照 evidence ledger 的 E2 使用规则限定 claim。"
+
+- slide_id: d01-05-li2024-evaluation
+  paper_key: li2024sokteechoices
+  slide_type: evaluation
+  claim: "这篇 SoK 最适合做总入口，但它的弱点是抽象层高，落到 CCA/CoVE/I/O 时必须补一手证据；无新实验。"
+  narrative:
+  - "优点是把 trust relationship 和 design choice 写成可比较对象，能防止后续章节变成产品堆叠。"
+  - "不足是 survey 级总结会压平各系统 threat model 的细节。"
+  - "商业落地意义在于帮助读者判断不同 TEE 方案的可部署前提，例如谁运营 verifier、谁控制 firmware update。"
+  - "汇报时要把它作为地图，而不是把地图当成系统证据。"
+  evidence_refs:
+  - "Li 2024 SoK Section 1 and discussion sections: design choices, pitfalls, research directions."
+  - "survey/evidence_ledger.md Taxonomy Axes and Evidence Classes."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "设计轴清楚，适合做报告坐标系"]
+      - ["短板", "不能替代原始机制和性能证据"]
+      - ["落地价值", "帮助评估 TEE 方案的信任链和运维前提"]
+      - ["使用规则", "只作 taxonomy anchor，机制 claim 回到原文"]
+  source_note: "评价结合 SoK 定位和本仓库 E2 evidence boundary。"
+
+- slide_id: d01-06-boubakri-summary
+  paper_key: boubakri2025riscvtee
+  slide_type: summary
+  claim: "Boubakri 2025 的作用是把 RISC-V TEE 从 PMP enclave 谱系延伸到 CoVE/AP-TEE，而不是提供新机制。"
+  narrative:
+  - "论文综述 RISC-V secure enclaves 与 TEEs，覆盖 Sanctum、Keystone、Penglai、SPEAR-V、CoVE 等路线。"
+  - "它适合连接 08 的 RISC-V enclave lineage 与 09 的 CoVE/AP-TEE confidential VM。"
+  - "由于它是 survey，具体 PMP、IOMMU、TVM、attestation 机制都要回到原始 paper/spec。"
+  - "在 taxonomy 章节中，它补上 CPU TEE 之外的 RISC-V 纵向演进轴。"
+  evidence_refs:
+  - "Boubakri 2025 p.1 abstract: surveys RISC-V secure enclaves and trusted execution environments."
+  - "Boubakri 2025 README Paper Review Section 3: survey path from primitives to representative systems."
+  proof_object:
+    type: evolution_timeline
+    title: "RISC-V TEE 谱系"
+    data:
+      steps:
+      - label: "PMP enclave"
+        claim: "Keystone 等开放框架"
+        evidence: "survey taxonomy"
+      - label: "scalable enclave"
+        claim: "Penglai/SPEAR-V 等机制扩展"
+        evidence: "survey lineage"
+      - label: "confidential VM"
+        claim: "CoVE/AP-TEE 走向 TVM"
+        evidence: "survey cross-check"
+  source_note: "谱系图依据 Boubakri 2025 摘要和本地 README review 的 lineage 归纳。"
+
+- slide_id: d01-07-boubakri-background
+  paper_key: boubakri2025riscvtee
+  slide_type: background
+  claim: "RISC-V 的开放性带来的是设计分叉，不是天然安全；taxonomy 必须区分 enclave、monitor 和 confidential VM。"
+  narrative:
+  - "RISC-V TEE 研究从 PMP 隔离起步，但后续系统引入不同的 monitor、tagging、memory ownership 和 virtual machine 抽象。"
+  - "同样叫 secure enclave 的系统，TCB、内存管理、I/O 边界和 attestation 模型可能完全不同。"
+  - "CoVE/AP-TEE 又把问题从进程/应用 enclave 推向 TVM lifecycle。"
+  - "这就是为什么本报告不能用一个 RISC-V TEE 标签覆盖所有系统。"
+  evidence_refs:
+  - "Boubakri 2025 p.1-p.3 introduction: RISC-V secure enclave and TEE landscape."
+  - "Boubakri 2025 README Section 2: RISC-V secure enclaves and TEE development routes."
+  proof_object:
+    type: comparison_matrix
+    title: "RISC-V TEE 必须拆开的层级"
+    data:
+      columns: ["层级", "核心对象", "风险"]
+      rows:
+      - ["ISA primitive", "PMP/ePMP/IOMMU/AIA", "只给 building blocks"]
+      - ["enclave framework", "runtime/monitor/app enclave", "TCB 与资源管理不同"]
+      - ["confidential VM", "TVM/TSM/lifecycle", "更接近 CCA/TDX 语义"]
+      - ["I/O extension", "device/DMA/interrupt", "需要独立 trusted I/O 证据"]
+  source_note: "层级拆分来自 Boubakri 2025 对 RISC-V TEE 路线的 survey 归纳。"
+
+- slide_id: d01-08-boubakri-solution
+  paper_key: boubakri2025riscvtee
+  slide_type: solution
+  claim: "这篇 survey 给出的有效用法，是用 lineage 表校准每个 RISC-V 系统处在什么抽象层。"
+  narrative:
+  - "它把原始系统按 primitive、architecture、monitor/runtime、memory/I/O/attestation support 和 representative system 串起来。"
+  - "对于 Keystone、Penglai、SPEAR-V，后续应该分别读原文中的 PMP、GPT/MMT、tagged memory。"
+  - "对于 CoVE/AP-TEE，后续应该读 spec 中的 TVM、TSM、measurement 和 memory conversion。"
+  - "所以本页的解决方案不是采用 survey 结论，而是把 survey 变成阅读路线图。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 3: primitive -> architecture -> monitor/runtime -> representative system path."
+  - "Boubakri 2025 p.1 abstract: survey scope covers RISC-V secure enclaves and TEEs."
+  proof_object:
+    type: mechanism_flow
+    title: "阅读路线"
+    data:
+      stages:
+      - "先定 primitive"
+      - "再看 enclave/TVM 抽象"
+      - "核对 trusted monitor"
+      - "检查 memory/I/O support"
+      - "回到原始论文或规范"
+  source_note: "流程来自本地 README review 对 survey 方法的概括。"
+
+- slide_id: d01-09-boubakri-experiments
+  paper_key: boubakri2025riscvtee
+  slide_type: experiments
+  claim: "这篇是 survey，无新实验；它能帮我们补 coverage，但不能给 Keystone、Penglai、CoVE 的机制结果背书。"
+  narrative:
+  - "论文没有提出新系统或新 formal model。"
+  - "它汇总已有系统和规范，适合做 coverage matrix。"
+  - "如果需要写运行代价、安全属性或 ABI/state machine，必须改引对应原始 paper/spec。"
+  - "本报告在 08/09 章节会把它作为 lineage cross-check，而不是主机制证据。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 6: Survey 无新实验."
+  - "survey/evidence_ledger.md Boundary Records: survey mechanisms must cite original papers/specs."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "coverage 与 claim 的边界"
+    data:
+      columns: ["可用作", "不可用作"]
+      rows:
+      - ["RISC-V TEE coverage 清单", "PMP/GPT/TVM 机制证明"]
+      - ["系统谱系对照", "某系统测评数据来源"]
+      - ["术语归类", "draft spec 成熟度判断替代品"]
+  source_note: "无新实验；证据边界按 README review 和 evidence ledger 写入。"
+
+- slide_id: d01-10-boubakri-evaluation
+  paper_key: boubakri2025riscvtee
+  slide_type: evaluation
+  claim: "它是 RISC-V 线索的好目录，但需要和原文配套使用；无新实验。"
+  narrative:
+  - "优点是时间新，能覆盖 Keystone 后的 CoVE/AP-TEE 等材料。"
+  - "不足是不同系统的 threat model 与成熟度被 survey 语言压缩。"
+  - "商业化角度，它提醒 RISC-V confidential computing 还处在从研究系统到规范化的过渡期。"
+  - "使用时要明确区分 published system、draft spec 和 survey summary。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 8: survey limitations and draft-status risk."
+  - "Boubakri 2025 README Section 11: follow-up research directions."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "更新的 RISC-V TEE lineage 和 coverage"]
+      - ["短板", "机制细节必须回到原始材料"]
+      - ["落地判断", "规范化路线仍在演进"]
+      - ["汇报位置", "taxonomy 和 cross-check，不做机制 primary"]
+  source_note: "评价基于本地 README review，不添加 survey 未证明的机制结论。"
+
+- slide_id: d01-11-accelteesok-summary
+  paper_key: sok-tee
+  slide_type: summary
+  claim: "Accelerator TEE SoK 把 taxonomy 从 CPU enclave 扩展到 GPU、DPU、NPU、SmartNIC 的计算和数据路径。"
+  narrative:
+  - "论文指出 accelerator TEE 已成为敏感高性能计算的重要方向，但现有研究往往绑定特定 CPU 或 accelerator。"
+  - "它把 accelerator TEE 分成 Host-type、Acc.-type 和 Mix-type 等架构模式。"
+  - "它还比较了 access control、memory encryption、runtime、attestation 等安全方案。"
+  - "在本报告中，它是 05、14、15 的共同 taxonomy anchor。"
+  evidence_refs:
+  - "Accelerator TEE SoK p.1 abstract: analyzes accelerator TEE designs and need for standard criteria."
+  - "Accelerator TEE SoK Fig.1 and Table II: Host-type, Acc.-type, Mix-type architecture overview."
+  proof_object:
+    type: comparison_matrix
+    title: "accelerator TEE 三类架构"
+    data:
+      columns: ["类别", "可信边界", "典型风险"]
+      rows:
+      - ["Host-type", "host TEE 管 accelerator workflow", "device path 仍需保护"]
+      - ["Acc.-type", "accelerator 内部有可信根", "硬件改造和生态成本高"]
+      - ["Mix-type", "host/device 共同承担 TCB", "边界组合复杂"]
+  source_note: "架构分类来自 Figure 1 和 Table II；本页不复用原图。"
+
+- slide_id: d01-12-accelteesok-background
+  paper_key: sok-tee
+  slide_type: background
+  claim: "只保护 CPU 内存并不能保护 accelerator workload，因为敏感数据会进入 DMA、device memory 和 accelerator runtime。"
+  narrative:
+  - "AI、图计算、网络和存储卸载会把秘密模型、输入数据和中间结果送到 accelerator。"
+  - "传统 CPU TEE 的安全边界经常止于 CPU package 或 VM memory，不覆盖 device-local state。"
+  - "Accelerator TEE 的难点是 device identity、command queue、DMA buffer、memory encryption 和 attestation 要一起考虑。"
+  - "这为后续 Arm CCA I/O、DPU/SmartNIC 和 confidential storage 章节提供问题边界。"
+  evidence_refs:
+  - "Accelerator TEE SoK p.1 abstract: sensitive data/code in accelerators need confidentiality, integrity, isolation."
+  - "Accelerator TEE SoK Fig.2: attack vectors of accelerator computing."
+  proof_object:
+    type: path_compare
+    title: "CPU TEE vs accelerator TEE"
+    data:
+      paths:
+      - label: "CPU-centric TEE"
+        steps: ["CPU memory", "enclave/realm", "host untrusted"]
+        note: "主要保护 CPU 执行和内存"
+      - label: "Accelerator TEE"
+        steps: ["DMA buffer", "device runtime", "device memory", "result path"]
+        note: "必须覆盖跨设备 data path"
+  source_note: "问题路径依据 SoK 的 attack-vector 图和 architecture overview 重绘。"
+
+- slide_id: d01-13-accelteesok-solution
+  paper_key: sok-tee
+  slide_type: solution
+  claim: "这篇 SoK 的可用成果是一个分层 checklist，用来检查 accelerator TEE 是否只保护了入口，还是覆盖了完整 data path。"
+  narrative:
+  - "Table I 给出被分析的 accelerator TEE 范围，Table III/IV 比较安全方案和 access control 偏好。"
+  - "Figure 3 把 memory encryption workflow 作为重要维度，而不是只看 enclave 创建。"
+  - "对本报告来说，最有用的是把 device identity、access control、memory path、runtime 和 attestation 拆开讲。"
+  - "这样可以避免把任意 GPU enclave 或 SmartNIC offload 都写成同一类 confidential I/O。"
+  evidence_refs:
+  - "Accelerator TEE SoK Table I: overview of analyzed accelerator TEEs."
+  - "Accelerator TEE SoK Table III-Table IV and Fig.3: security solutions, access control, memory encryption workflows."
+  proof_object:
+    type: mechanism_flow
+    title: "accelerator TEE checklist"
+    data:
+      stages:
+      - "device identity"
+      - "command/runtime isolation"
+      - "DMA and memory access control"
+      - "memory encryption/integrity"
+      - "attestation and lifecycle"
+  source_note: "checklist 综合 Table I、Table III、Table IV 和 Figure 3。"
+
+- slide_id: d01-14-accelteesok-experiments
+  paper_key: sok-tee
+  slide_type: experiments
+  claim: "这篇是 SoK，无新实验；它能比较方案类别，但不能替代 HETEE、CloudScale、CAGE、TNIC 等原文结果。"
+  narrative:
+  - "论文主要贡献是分析现有 accelerator TEE designs。"
+  - "它可以说明不同系统覆盖哪些安全环节。"
+  - "它不能直接证明某个 GPU/DPU/NIC 系统的性能数据或部署成熟度。"
+  - "后续涉及具体结果时，必须回到相应系统论文。"
+  evidence_refs:
+  - "Accelerator TEE SoK p.1 abstract and Table I: analysis of accelerator TEE designs."
+  - "survey/evidence_ledger.md Evidence Classes: E2 supports taxonomy and framing."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "SoK 证据使用规则"
+    data:
+      columns: ["可用", "不可用"]
+      rows:
+      - ["设计空间分类", "具体系统性能结论"]
+      - ["安全方案覆盖比较", "device TCB 正确性证明"]
+      - ["后续章节索引", "商业可部署性背书"]
+  source_note: "无新实验；本页只写 E2 taxonomy claim。"
+
+- slide_id: d01-15-accelteesok-evaluation
+  paper_key: sok-tee
+  slide_type: evaluation
+  claim: "Accelerator TEE SoK 的价值是补齐非 CPU data path；局限是它仍需要和每个系统的一手证据配合；无新实验。"
+  narrative:
+  - "优点是把 accelerator TEE 的架构模式和安全组件拆得清楚。"
+  - "不足是不同 accelerator 的硬件能力差异很大，survey 分类很难覆盖实现细节。"
+  - "商业落地上，它揭示 GPU/DPU/SmartNIC TEE 需要硬件、驱动、firmware、cloud scheduler 同时配合。"
+  - "本报告把它用作 taxonomy anchor，并在 14/15 用一手系统论文补机制和结果。"
+  evidence_refs:
+  - "Accelerator TEE SoK Table II-Table IV: design and security solution comparison."
+  - "Accelerator TEE SoK Fig.1-Fig.3: architecture, attack vectors, memory encryption workflows."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "覆盖 GPU/NPU/DPU/SmartNIC 等非 CPU TEE"]
+      - ["短板", "不能代替系统论文的机制和结果"]
+      - ["落地价值", "指出硬件、runtime、attestation 必须协同"]
+      - ["汇报位置", "连接 taxonomy 与 I/O/offload 章节"]
+  source_note: "评价依据 SoK 的分类表和本报告 evidence boundary。"
+
+- slide_id: d01-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "本方向的 takeaway 是先按 trust boundary、ISA lineage、device data path 建坐标，再进入具体 Arm/RISC-V/I/O 机制。"
+  narrative:
+  - "Li 2024 SoK 给出通用 TEE design-choice 坐标。"
+  - "Boubakri 2025 survey 给出 RISC-V TEE 的纵向谱系。"
+  - "Accelerator TEE SoK 把非 CPU 计算和 device-local data path 纳入 taxonomy。"
+  - "三个 E2 来源共同约束术语，但后续机制 claim 必须来自 E0/E1/E3 原始材料。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Evidence Classes and Slide Primary Ledger."
+  - "Li 2024 p.1; Boubakri 2025 p.1; Accelerator TEE SoK p.1."
+  proof_object:
+    type: comparison_matrix
+    title: "后续章节如何使用 taxonomy"
+    data:
+      columns: ["后续章节", "使用方式"]
+      rows:
+      - ["Arm CCA", "用 trust boundary 区分 Realm/RMM/host"]
+      - ["RISC-V CoVE", "用 lineage 区分 enclave 与 TVM"]
+      - ["Confidential I/O", "用 device data path 拆 DMA/MMIO/interrupt"]
+      - ["Accelerator/NIC", "用 accelerator checklist 查 TCB 与 data path"]
+  source_note: "方向总结来自三篇 SoK 的互补关系和 evidence ledger 的 E2 限制。"

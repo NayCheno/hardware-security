@@ -1,0 +1,411 @@
+direction: "Arm CCA / RME / RMM 基础架构"
+story_version: 1
+slides:
+- slide_id: d03-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "Arm CCA 主线要围绕 Realm、RME、RMM 和 granule lifecycle，而不是把它写成 TrustZone 的新名字。"
+  narrative:
+  - "Li 2022 OSDI 论文是 peer-reviewed 系统入口，解释 CCA 为什么要让 untrusted host 继续管理资源但不能读写 Realm。"
+  - "Arm CCA 官方规范是 E0 规范入口，但本仓库只有 source-page evidence，不能补写不可复核细节。"
+  - "RMM 规范定义 Realm 管理和 lifecycle 语义，本仓库同样只有公开 source-page/README 证据。"
+  - "三者共同建立 CCA 的可信边界：机制由论文讲，标准语义由规范限定，细节只写可复核部分。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 03-arm-cca-rme-rmm."
+  - "Li 2022 p.1 abstract; Arm CCA spec README; RMM spec README."
+  proof_object:
+    type: evolution_timeline
+    title: "CCA 基础证据层"
+    data:
+      steps:
+      - label: "OSDI 2022"
+        claim: "CCA/RME/RMM peer-reviewed design"
+        evidence: "Li 2022"
+      - label: "Arm CCA spec"
+        claim: "Realm model official source"
+        evidence: "source page only"
+      - label: "RMM spec"
+        claim: "Realm lifecycle manager"
+        evidence: "source page only"
+  source_note: "本页严格区分本地 PDF 证据和 source-page-only 规范证据。"
+
+- slide_id: d03-01-li2022cca-summary
+  paper_key: li2022cca
+  slide_type: summary
+  claim: "Li 2022 CCA 论文的核心是让 host 保留资源管理能力，同时用 RME/RMM 阻止它破坏 Realm 机密性和完整性。"
+  narrative:
+  - "论文提出 Arm CCA，提供 Realm 作为对 privileged system software 不透明的 secure execution environment。"
+  - "它引入 Realm Management Monitor，host 可以请求创建和运行 Realm，但 RMM 保护 Realm 状态。"
+  - "granule protection table 和 physical address space 语义让内存所有权成为硬件检查对象。"
+  - "它是本报告 CCA 基础架构的一手系统论文。"
+  evidence_refs:
+  - "Li 2022 p.1 abstract: CCA provides Realms opaque to untrusted OSes and hypervisors."
+  - "Li 2022 Table 1: CCA access control policy for granules and security states."
+  proof_object:
+    type: mechanism_flow
+    title: "CCA 核心对象"
+    data:
+      stages:
+      - "host 请求管理 Realm"
+      - "RMM 运行在更高特权 Realm world"
+      - "GPT 记录 granule ownership"
+      - "RME 执行访问检查"
+      - "Realm 执行 tenant workload"
+  source_note: "机制图按论文摘要、RMM 描述和 Table 1 access-control policy 重绘。"
+
+- slide_id: d03-02-li2022cca-background
+  paper_key: li2022cca
+  slide_type: background
+  claim: "CCA 要解决的矛盾是云平台仍要管理硬件资源，但 tenant 不再愿意信任 hypervisor 和 host OS。"
+  narrative:
+  - "敏感数据越来越多地运行在 commodity cloud provider 上。"
+  - "传统虚拟化把 hypervisor 作为强 TCB，但 hypervisor/OS 代码量大且漏洞多。"
+  - "完全移除 host 管理能力又不现实，因为云平台仍需调度 CPU、内存和设备。"
+  - "CCA 的设计点是在资源管理与安全隔离之间划边界。"
+  evidence_refs:
+  - "Li 2022 p.1 introduction: sensitive private data and untrusted privileged system software."
+  - "Li 2022 Section 2: background on CCA/RME/RMM resource management split."
+  proof_object:
+    type: comparison_matrix
+    title: "传统 VM 与 Realm 的信任差异"
+    data:
+      columns: ["对象", "传统 VM", "CCA Realm"]
+      rows:
+      - ["host OS/hypervisor", "可信管理者", "不可信资源管理者"]
+      - ["tenant memory", "host 可管理且可观察", "host 管理但不能直接访问"]
+      - ["firmware/monitor", "平台启动辅助", "RMM 成为隔离 enforcement TCB"]
+      - ["安全目标", "虚拟化隔离", "机密性和完整性隔离"]
+  source_note: "对比依据论文 introduction 对 untrusted privileged software 的问题设定。"
+
+- slide_id: d03-03-li2022cca-solution
+  paper_key: li2022cca
+  slide_type: solution
+  claim: "CCA 的机制关键是 granule ownership 与 RMM mediation，把 host 操作变成受检查的 lifecycle 请求。"
+  narrative:
+  - "内存以 granule 为基本管理单位，不同 physical address space 表示不同安全状态。"
+  - "host 不能直接改变 Realm 受保护状态，而要通过 RMI 调 RMM。"
+  - "Realm 内软件通过 RSI 与 RMM 交互，避免把 host 放回 trusted path。"
+  - "论文还强调 verification，说明 CCA 设计不仅是接口集合，也需要可验证的访问控制不变量。"
+  evidence_refs:
+  - "Li 2022 Section 3: CCA design with Realm, RMM, RMI and RSI."
+  - "Li 2022 Table 1: access control policy over granules and security state."
+  proof_object:
+    type: path_compare
+    title: "两条接口路径"
+    data:
+      paths:
+      - label: "host path"
+        steps: ["host/hypervisor", "RMI call", "RMM check", "granule lifecycle update"]
+        note: "资源管理被 RMM mediation"
+      - label: "realm path"
+        steps: ["Realm payload", "RSI call", "RMM service", "attestation/lifecycle response"]
+        note: "tenant 不直接信任 host"
+  source_note: "接口路径依据论文对 RMI/RSI 和 granule access policy 的描述重绘。"
+
+- slide_id: d03-04-li2022cca-experiments
+  paper_key: li2022cca
+  slide_type: experiments
+  claim: "Li 2022 的证据重点是设计与验证，而不是把 CCA 当成完整商用性能评测。"
+  narrative:
+  - "论文题目明确包含 Design and Verification，核心证据之一是 CCA 访问控制和组件验证。"
+  - "它能支撑 CCA/RME/RMM 机制边界和不变量讨论。"
+  - "不能把它扩展成所有 Arm CCA 产品、I/O 或 accelerator 场景已经安全。"
+  - "后续 I/O/accelerator 章节必须引用 ACAI、Devlore、CAGE 等补充材料。"
+  evidence_refs:
+  - "Li 2022 title and p.1 abstract: Design and Verification of Arm CCA."
+  - "Li 2022 Table 1 and verification sections: access-control policy and verification focus."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "Li 2022 可支撑的 claim"
+    data:
+      columns: ["可支撑", "不能外推"]
+      rows:
+      - ["Realm/RMM/GPT 基础机制", "所有 CCA 部署安全"]
+      - ["host 与 Realm 权限边界", "device assignment 已安全"]
+      - ["设计验证思路", "商业 silicon 行为"]
+  source_note: "本页按 E1 system evidence 使用，不外推到 I/O 或商用部署。"
+
+- slide_id: d03-05-li2022cca-evaluation
+  paper_key: li2022cca
+  slide_type: evaluation
+  claim: "这篇论文把 CCA 的关键抽象讲清楚，但它只是基础架构入口，不覆盖后续所有部署和设备问题。"
+  narrative:
+  - "优点是把 host resource management 与 Realm protection 的分工讲得清晰。"
+  - "不足是设备、interrupt、accelerator、container/user-space 等扩展不是主贡献。"
+  - "商业潜力来自云 confidential VM 的清晰边界和 Arm 生态标准化路径。"
+  - "落地风险在 RMM TCB、firmware update、ABI 兼容和跨设备 data path。"
+  evidence_refs:
+  - "Li 2022 Section 3-5: CCA design, RMM and verification."
+  - "survey/evidence_ledger.md Boundary Records for Arm CCA and I/O-related directions."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "Realm/RMM/granule ownership 基础清楚"]
+      - ["短板", "不覆盖 trusted I/O 和细粒度部署全部问题"]
+      - ["落地价值", "云 confidential VM 的 Arm 标准路径"]
+      - ["风险", "RMM TCB 与 lifecycle/ABI 管理"]
+  source_note: "评价基于论文范围和本报告后续方向的证据分工。"
+
+- slide_id: d03-06-armccaspec-summary
+  paper_key: arm_cca_spec
+  slide_type: summary
+  claim: "Arm CCA 规范是 Realm 模型的官方语义来源，但本仓库只有 source-page evidence，不能写不可复核的细节。"
+  narrative:
+  - "README 记录 official Arm documentation page 已验证，但本地 PDF 不可用。"
+  - "因此它可以支撑 Arm CCA 规范存在、官方来源和高层 Realm model。"
+  - "它不能支撑细粒度 ABI、私有状态机或未公开下载材料中的细节。"
+  - "本 deck 对它的使用必须比对 Li 2022 和 RMM README。"
+  evidence_refs:
+  - "Arm CCA spec README p.1 metadata: official Arm documentation page verified, local PDF unavailable."
+  - "Arm CCA spec README Paper Review: use only public architecture concepts and avoid unavailable non-public details."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "source-page-only 规范边界"
+    data:
+      columns: ["可以写", "不能写"]
+      rows:
+      - ["官方 CCA 规范入口", "不可复核 ABI 细节"]
+      - ["Realm 高层概念", "私有状态机推断"]
+      - ["E0 source status", "本地 PDF 页码内容"]
+  source_note: "本页完全依据 README evidence-status record，不补写缺失 PDF 内容。"
+
+- slide_id: d03-07-armccaspec-background
+  paper_key: arm_cca_spec
+  slide_type: background
+  claim: "规范页的价值是把 CCA 从研究论文推到官方架构语义，但 source gap 必须显式显示。"
+  narrative:
+  - "研究论文解释设计动机和验证，规范承担实现者语义。"
+  - "Arm CCA 规范的官方来源意味着它是 E0 spec evidence。"
+  - "但本地 PDF 不可用会限制我们引用页码、表格和状态机。"
+  - "所以 slide 里要写 source_verified_pdf_unavailable，而不是假装有完整 PDF。"
+  evidence_refs:
+  - "Arm CCA spec README p.1: Download status records access-denied HTML and no stable public PDF endpoint."
+  - "survey/evidence_ledger.md Boundary Records: arm_cca_spec source-page evidence only."
+  proof_object:
+    type: comparison_matrix
+    title: "论文与规范的互补"
+    data:
+      columns: ["来源", "用途", "限制"]
+      rows:
+      - ["Li 2022", "机制和验证叙事", "不是最新完整规范"]
+      - ["Arm CCA spec README", "官方规范入口", "本地 PDF 不可用"]
+      - ["RMM spec README", "管理组件入口", "细节同样受 source gap 限制"]
+  source_note: "背景依据 README download status 和 evidence ledger boundary。"
+
+- slide_id: d03-08-armccaspec-solution
+  paper_key: arm_cca_spec
+  slide_type: solution
+  claim: "对 source-limited 规范，正确做法是只提公开概念，并把细节留给已验证的一手论文或未来 PDF。"
+  narrative:
+  - "可以写 CCA 是 Arm 官方 confidential compute architecture。"
+  - "可以写 Realm、RME、RMM 等公开概念的关系，但不展开不可查 ABI。"
+  - "需要机制细节时，回到 Li 2022 的本地 PDF。"
+  - "需要 RMM lifecycle 时，引用 RMM source-page status，同时标明限制。"
+  evidence_refs:
+  - "Arm CCA spec README Paper Review p.1: use only public architecture concepts."
+  - "Li 2022 Section 3 and Table 1: local-PDF mechanism evidence for CCA access policy."
+  proof_object:
+    type: mechanism_flow
+    title: "source-limited 使用流程"
+    data:
+      stages:
+      - "确认官方来源"
+      - "记录 PDF 不可用"
+      - "只写公开概念"
+      - "机制细节回引 Li 2022"
+      - "不推断私有状态"
+  source_note: "流程来自 README evidence contract，不是规范内容再生成。"
+
+- slide_id: d03-09-armccaspec-experiments
+  paper_key: arm_cca_spec
+  slide_type: experiments
+  claim: "这是规范 source record，无新实验；本地 PDF 不可用使它只能承担公开语义边界。"
+  narrative:
+  - "E0 表示 official specification source，不表示有实验。"
+  - "source_verified_pdf_unavailable 表示不能引用本地 PDF 的页码或表格细节。"
+  - "它能支撑 Arm CCA 官方规范存在和公开概念。"
+  - "它不能支撑量化结果、系统实现或设备路径安全。"
+  evidence_refs:
+  - "Arm CCA spec README p.1 Download status and Evidence class fields."
+  - "survey/evidence_ledger.md Section Evidence Classes: E0 is normative interface evidence only when source is available."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "证据状态"
+    data:
+      columns: ["字段", "含义"]
+      rows:
+      - ["paper_type", "spec"]
+      - ["claim_strength", "E0"]
+      - ["source_status", "source_verified_pdf_unavailable"]
+      - ["实验", "无新实验"]
+  source_note: "无新实验；source status 来自本地 README。"
+
+- slide_id: d03-10-armccaspec-evaluation
+  paper_key: arm_cca_spec
+  slide_type: evaluation
+  claim: "Arm CCA 规范是最高权威来源，但当前本地证据只允许保守引用；无新实验。"
+  narrative:
+  - "优点是官方规范入口明确，是标准语义的锚点。"
+  - "不足是本仓库未持有可复核 PDF，不能做页级细节引用。"
+  - "商业化意义在于 CCA 是 Arm 平台 confidential computing 的标准化方向。"
+  - "报告中应把它和 Li 2022/RMM 组合使用，避免 spec-only 过度 claim。"
+  evidence_refs:
+  - "Arm CCA spec README p.1 Evidence role and Download status fields."
+  - "survey/evidence_ledger.md Boundary Records: use public concepts and avoid unavailable details."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "官方规范入口"]
+      - ["短板", "本地 PDF 不可用"]
+      - ["落地价值", "Arm CCA 标准化方向"]
+      - ["使用规则", "只写公开概念，机制回引 Li 2022"]
+  source_note: "评价按 README evidence-status record 保守写入。"
+
+- slide_id: d03-11-rmmspec-summary
+  paper_key: arm_rmm_spec
+  slide_type: summary
+  claim: "RMM 规范把 CCA 的管理者从抽象概念落到 Realm lifecycle 组件，但本地证据同样受 source gap 限制。"
+  narrative:
+  - "README 记录 Realm Management Monitor Specification 的官方 source page 和 CDN URL 已验证。"
+  - "本地 PDF 不可用，自动下载返回 access-denied HTML。"
+  - "因此它可以作为 RMM 官方入口和 lifecycle 语义锚点。"
+  - "具体 ABI/state-machine 细节必须避免展开，除非来自公开可复核来源。"
+  evidence_refs:
+  - "RMM spec README p.1 metadata: official Arm documentation page and CDN URL verified."
+  - "RMM spec README p.1 Download status: local PDF unavailable, automated download access denied."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "RMM source status"
+    data:
+      columns: ["可用信息", "边界"]
+      rows:
+      - ["官方 RMM specification source", "无本地 PDF"]
+      - ["RMM lifecycle role", "不展开私有 ABI"]
+      - ["E0 spec status", "不写未复核状态机"]
+  source_note: "本页只使用 README 中可复核的 source-status 信息。"
+
+- slide_id: d03-12-rmmspec-background
+  paper_key: arm_rmm_spec
+  slide_type: background
+  claim: "RMM 的必要性来自 CCA 的基本分工：host 能管理资源，但 Realm 关键状态必须由更小、更可信的组件 mediation。"
+  narrative:
+  - "如果 host 直接管理 Realm lifecycle，就会重新成为 tenant 的强 TCB。"
+  - "RMM 位于更高特权和 Realm world 语义中，承担 Realm 创建、运行、内存转换等管理入口。"
+  - "RMM 规范因此是 CCA 可信边界的核心文档。"
+  - "但本 deck 对细节的讲解仍以 Li 2022 本地 PDF 为主。"
+  evidence_refs:
+  - "RMM spec README Paper Review p.1: official RMM source-page evidence with local PDF unavailable."
+  - "Li 2022 p.1 abstract and Section 3: RMM firmware runs at higher privilege and protects Realms."
+  proof_object:
+    type: comparison_matrix
+    title: "为什么需要 RMM"
+    data:
+      columns: ["操作", "host 直接做的问题", "RMM mediation 的作用"]
+      rows:
+      - ["create Realm", "host 可伪造初始状态", "检查 lifecycle"]
+      - ["map memory", "host 可破坏 ownership", "约束 granule transition"]
+      - ["run Realm", "host 可窥视状态", "隔离 execution state"]
+      - ["attestation", "host 可影响 evidence", "绑定可信测量"]
+  source_note: "表格结合 Li 2022 对 RMM 的机制描述和 RMM README 的规范定位。"
+
+- slide_id: d03-13-rmmspec-solution
+  paper_key: arm_rmm_spec
+  slide_type: solution
+  claim: "RMM 的机制角色可以概括为 lifecycle gatekeeper：所有敏感 Realm 状态转换都要经过它。"
+  narrative:
+  - "RMM 接收 host 侧管理请求，也服务 Realm 内部请求。"
+  - "它维护或检查与 granule ownership、Realm state、measurement 相关的安全不变量。"
+  - "它把 host 的管理意图转化为受限状态转换。"
+  - "本页讲的是角色模型，不写不可复核的 RMM ABI 字段。"
+  evidence_refs:
+  - "Li 2022 Section 3: RMI/RSI and RMM mediation of Realm management."
+  - "RMM spec README Evidence role: use only public RMM concepts and avoid unavailable non-public details."
+  proof_object:
+    type: mechanism_flow
+    title: "RMM gatekeeper 模型"
+    data:
+      stages:
+      - "host 发起管理请求"
+      - "RMM 检查 Realm/granule 状态"
+      - "执行受限状态转换"
+      - "Realm 通过 RSI 请求服务"
+      - "RMM 返回受信结果"
+  source_note: "机制角色来自 Li 2022；source-limited 规范只作官方入口。"
+
+- slide_id: d03-14-rmmspec-experiments
+  paper_key: arm_rmm_spec
+  slide_type: experiments
+  claim: "RMM 规范无新实验；当前本地状态只能支撑 RMM 官方 source 和公开角色，不支撑性能或实现评测。"
+  narrative:
+  - "它是 specification，不是系统评测论文。"
+  - "source_verified_pdf_unavailable 限制了页级和表级引用。"
+  - "可以写 RMM 是 CCA Realm 管理和 lifecycle 的规范入口。"
+  - "不能写 RMM 实现代价、code size 或产品状态。"
+  evidence_refs:
+  - "RMM spec README p.1 Download status and Evidence class fields."
+  - "survey/evidence_ledger.md Evidence Classes and Boundary Records for arm_rmm_spec."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "证据状态"
+    data:
+      columns: ["字段", "含义"]
+      rows:
+      - ["paper_type", "spec"]
+      - ["claim_strength", "E0"]
+      - ["source_status", "source_verified_pdf_unavailable"]
+      - ["实验", "无新实验"]
+  source_note: "无新实验；只保留可复核 source-status claim。"
+
+- slide_id: d03-15-rmmspec-evaluation
+  paper_key: arm_rmm_spec
+  slide_type: evaluation
+  claim: "RMM 规范是 CCA 实现者必须面对的核心入口，但本报告只能保守使用当前 source-page evidence；无新实验。"
+  narrative:
+  - "优点是明确 RMM 作为 Realm lifecycle 管理组件的官方位置。"
+  - "不足是本地 PDF 不可用，无法做规范细节级讲解。"
+  - "商业落地上，RMM 的 ABI、更新和验证质量会直接影响 CCA 平台可信度。"
+  - "报告中应把它作为规范锚点，并把机制细节落回 Li 2022 或后续公开材料。"
+  evidence_refs:
+  - "RMM spec README Evidence role and Download status fields."
+  - "Li 2022 Section 3-5: local PDF evidence for RMM role and CCA design."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "官方 RMM specification 入口"]
+      - ["短板", "本地 PDF 不可用"]
+      - ["落地价值", "Realm lifecycle TCB 的核心"]
+      - ["使用规则", "只写角色和公开概念"]
+  source_note: "评价不扩展到不可复核的 RMM state-machine 细节。"
+
+- slide_id: d03-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "CCA 基础架构的汇报线是 Li 2022 讲机制，Arm specs 给官方锚点，所有 source gap 必须显式暴露。"
+  narrative:
+  - "Li 2022 给出 Realm、RMM、RME、granule ownership 和 verification 的一手系统证据。"
+  - "Arm CCA spec README 给出官方规范入口，但本地 PDF 不可用。"
+  - "RMM spec README 给出 lifecycle 管理组件入口，但同样不能展开未复核细节。"
+  - "下一步进入 deployment、I/O、CoVE 对照时，不能把基础 CCA 直接外推到所有数据路径。"
+  evidence_refs:
+  - "Li 2022 p.1 and Table 1; Arm CCA spec README; RMM spec README."
+  - "survey/evidence_ledger.md Boundary Records for arm_cca_spec and arm_rmm_spec."
+  proof_object:
+    type: comparison_matrix
+    title: "方向 takeaways"
+    data:
+      columns: ["来源", "承担的 claim"]
+      rows:
+      - ["Li 2022", "基础机制和验证"]
+      - ["Arm CCA spec", "官方 CCA 入口和公开概念"]
+      - ["RMM spec", "Realm lifecycle 管理入口"]
+      - ["后续章节", "deployment/I/O/accelerator 需要额外证据"]
+  source_note: "方向总结严格按本地 evidence status 区分可讲和不可讲内容。"

@@ -1,296 +1,800 @@
 \section{Memory encryption / integrity / replay protection}
 
-\begin{frame}[t]{Memory encryption / integrity / replay protection：方向开场}
-\DeckKicker{11-memory-encryption-integrity-replay}
-\ClaimLine{避免把 access control、ownership、encryption、integrity、freshness/replay 混写。}
+\begin{frame}[t,shrink=6]{Memory encryption / integrity / replay protection：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{11-memory-encryption-integrity-replay}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} Memory protection 这一节要把 confidentiality、integrity、freshness/replay、ownership/access-control 分开讲。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`riscv\_ap\_tee\_2024` 作为 AP-TEE/CoVE lifecycle auxiliary，不计入三篇主讲。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / sok}{Memory Encryption: A Survey of Existing Techniques}{E2 / Background substrate}
-\PrimaryCard{Primary 2 / system}{Bonsai Merkle Trees for memory integrity and freshness}{E1 / Peer-reviewed mechanism anchor}
-\PrimaryCard{Primary 3 / vendor}{AMD SEV-SNP industry memory-integrity evidence}{E4 / Industry evidence}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Henson 2014 survey 给出 memory encryption 和 secure memory taxonomy。
+  \item Bonsai Merkle Trees 是 peer-reviewed memory integrity/freshness mechanism anchor。
+  \item AMD vendor material 提供产业 encrypted-state/integrity-oriented evidence，但本地 PDF 与 SEV-SNP metadata 存在不一致，必须保守引用。
+  \item 本方向避免把 PMP/GPT/IOMMU 的 access control 写成 encryption/integrity。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item henson2014memory: sok；E2；local\_pdf\_verified
-  \item rogers2007bonsai: system；E1；local\_pdf\_verified
-  \item amd\_sev\_snp: vendor；E4；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{四个不能混写的概念}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{概念} & \textbf{解决什么} & \textbf{代表证据} \\
+\midrule
+confidentiality & off-chip 明文泄露 & memory encryption survey \\
+integrity & 篡改检测 & Bonsai Merkle Trees \\
+freshness/replay & 旧值重放 & counter/tree metadata \\
+ownership/access-control & 谁能访问 & CCA/PMP/IOMMU contrast \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向页把概念边界放在首位；AMD local PDF mismatch 在后续页保守处理。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{Memory Encryption: A Survey of Existing Techniques}
-{henson2014memory}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{综述 memory encryption 的威胁模型、技术路线和性能/安全权衡}
-{\begin{itemize}
-  \item 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：sok
-  \item 证据：E2 / Background substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{Memory Encryption: A Survey of Existing Techniques}
-{henson2014memory}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文}
-{\begin{itemize}
-  \item Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文
-  \item access control 与 encryption/integrity/replay 是不同问题
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Memory Encryption: A Survey of Existing Techniques}
-{henson2014memory}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encry。}
-{\begin{itemize}
-  \item 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot 的边界
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Off-chip memory confidentiality threat model
-  \item Memory authentication and integrity taxonomy
-  \item Counter/freshness/replay-protection tradeoff
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Memory Encryption: A Survey of Existing Techniques}
-{henson2014memory}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 证据来自既有论文、系统设计和攻击案例
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Memory Encryption: A Survey of Existing Techniques}
-{henson2014memory}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption}
-{最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。}
-{2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。}
-{可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。}
-
-\PaperSlide
-{内容摘要}
-{Bonsai Merkle Trees for memory integrity and freshness}
-{rogers2007bonsai}
-{E1 / Peer-reviewed mechanism anchor}
-{local\_pdf\_verified}
-{Bonsai Merkle Trees use counter/tree metadata to detect tamper and replay, anchoring memory freshness evidence.}
-{\begin{itemize}
-  \item Counter/tree metadata detects tamper and replay
-  \item Provides peer-reviewed evidence for memory integrity and freshness
-\end{itemize}}
-{Evidence position}
-{\begin{itemize}
-  \item slot: primary\_2
-  \item type: system
-  \item evidence: E1 / Peer-reviewed mechanism anchor
-  \item source: local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Bonsai Merkle Trees for memory integrity and freshness}
-{rogers2007bonsai}
-{E1 / Peer-reviewed mechanism anchor}
-{local\_pdf\_verified}
-{Encryption alone cannot detect stale or modified memory values returned by an untrusted memory system.}
-{\begin{itemize}
-  \item Encryption alone cannot detect stale or modified memory values
-  \item Freshness requires integrity trees, counters, or authenticated roots
-\end{itemize}}
-{Problem boundary}
-{\begin{itemize}
-  \item memory tamper
-  \item stale-data replay
-  \item OS/performance-friendly metadata
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Bonsai Merkle Trees for memory integrity and freshness}
-{rogers2007bonsai}
-{E1 / Peer-reviewed mechanism anchor}
-{local\_pdf\_verified}
-{Address-independent seed encryption and Bonsai Merkle Trees reduce secure-processor integrity-tree overhead.}
-{\begin{itemize}
-  \item Address-independent seed encryption reduces OS friction
-  \item Bonsai Merkle Trees authenticate counter metadata and root state
-\end{itemize}}
-{Mechanism view}
-{\begin{itemize}
-  \item AISE counter-mode seed
-  \item BMT over encryption counters
-  \item root MAC for replay/tamper detection
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Bonsai Merkle Trees for memory integrity and freshness}
-{rogers2007bonsai}
-{E1 / Peer-reviewed mechanism anchor}
-{local\_pdf\_verified}
-{MICRO 2007 peer-reviewed paper reports secure-processor simulation results and reduced memory-integrity overhead.}
-{\begin{itemize}
-  \item MICRO 2007 peer-reviewed secure-processor simulation
-  \item Historical performance numbers are lineage evidence, not direct CCA/SEV-SNP product comparison
-\end{itemize}}
-{Evidence strength}
-{\begin{itemize}
-  \item type: E1 peer-reviewed primary paper
-  \item maturity: peer-reviewed primary paper
-  \item PDF: local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Bonsai Merkle Trees for memory integrity and freshness}
-{rogers2007bonsai}
-{E1 / Peer-reviewed mechanism anchor}
-{local\_pdf\_verified}
-{Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.}
-{Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.}
-{Secure-processor lineage is not the same as a modern confidential-VM product; deployment claims still need SEV-SNP, TDX, CCA, or CoVE evidence.}
-{Useful for memory-controller integrity-tree design; productization depends on metadata storage, root protection, and performance budget.}
-
-\PaperSlide
-{内容摘要}
-{AMD SEV-SNP industry memory-integrity evidence}
-{amd\_sev\_snp}
-{E4 / Industry evidence}
-{local\_pdf\_verified}
-{SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-contro。}
-{\begin{itemize}
-  \item SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-controlled metadata 风险
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：vendor
-  \item 证据：E4 / Industry evidence
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{AMD SEV-SNP industry memory-integrity evidence}
-{amd\_sev\_snp}
-{E4 / Industry evidence}
-{local\_pdf\_verified}
-{早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和。}
-{\begin{itemize}
-  \item 早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和 malicious hypervisor 控制面风险
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{AMD SEV-SNP industry memory-integrity evidence}
-{amd\_sev\_snp}
-{E4 / Industry evidence}
-{local\_pdf\_verified}
-{引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted。}
-{\begin{itemize}
-  \item 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted VM lifecycle 结合
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Secure Nested Paging
-  \item Reverse Map Table / memory ownership metadata
-  \item Integrity-oriented VM isolation controls
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{AMD SEV-SNP industry memory-integrity evidence}
-{amd\_sev\_snp}
-{E4 / Industry evidence}
-{local\_pdf\_verified}
-{厂商技术材料，无独立学术实验}
-{\begin{itemize}
-  \item 厂商技术材料，无独立学术实验
-  \item 只能作为产业机制和部署 evidence
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E4 industry/vendor evidence
-  \item 成熟度：industry/vendor evidence
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{AMD SEV-SNP industry memory-integrity evidence}
-{amd\_sev\_snp}
-{E4 / Industry evidence}
-{local\_pdf\_verified}
-{展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的。}
-{展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。}
-{Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。}
-{具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。}
-
-\begin{frame}[t]{Memory encryption / integrity / replay protection：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{Memory Encryption: A Survey of Existing Techniques：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{henson2014memory}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Henson survey 的核心价值是把 memory encryption 放回运行时 DRAM、bus 和 memory controller threat model；无新实验。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item Memory Encryption: A Survey of Existing Techniques
-  \item Bonsai Merkle Trees for memory integrity and freshness
-  \item AMD SEV-SNP industry memory-integrity evidence
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出 full disk encryption 不能保护运行时 code/data。
+  \item 它整理硬件增强、OS 辅助、专用设备和 cryptographic memory controller 等路线。
+  \item 它把 encryption、authentication、attestation、secure boot 等概念放入 secure memory taxonomy。
+  \item 作为 2014 survey，它适合做概念边界，不覆盖 SEV-SNP、TDX、CCA、CoVE 等现代方案。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
-  \item Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.
-  \item 2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
-  \item Secure-processor lineage is not the same as a modern confidential-VM product; deployment claims still need SEV-SNP, TDX, CCA, or CoVE evidence.
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
-  \item Useful for memory-controller integrity-tree design; productization depends on metadata storage, root protection, and performance budget.
-  \item 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{survey taxonomy}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{路线} & \textbf{关注点} & \textbf{本报告用法} \\
+\midrule
+hardware enhancement & memory controller / bus path & 解释 off-chip threat \\
+OS-assisted & software-managed protection & 对比硬件 TCB \\
+cryptographic controller & inline encryption/auth & 连接 BMT/SEV/CCA \\
+secure boot/attestation & 启动和证据链 & 不混入 memory integrity \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；taxonomy 来自摘要、Table I 和 Figures 1-5。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Memory Encryption: A Survey of Existing Techniques：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{henson2014memory}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Memory encryption 的背景不是磁盘加密，而是程序运行时 DRAM、memory bus、DMA 和物理攻击面仍会暴露明文；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 1 显示 full disk encryption 仍留下运行时代码和数据风险。
+  \item off-chip memory 可被被动观察、主动篡改或重放旧值。
+  \item 仅加密只能隐藏内容，不能自动检测篡改或 stale data。
+  \item 这就是为什么 integrity tree、counter 和 root protection 需要单独讲。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{保护静态数据 vs 运行时内存}
+      \scriptsize \textbf{full disk encryption}\par
+disk ciphertext → boot/load → DRAM plaintext → CPU executes\par
+{\tiny\textcolor{Muted}{protects storage, not runtime memory}}\par\vspace{1.8mm}
+\textbf{secure memory}\par
+CPU/cache boundary → memory controller crypto → DRAM ciphertext/metadata → integrity root\par
+{\tiny\textcolor{Muted}{protects off-chip runtime path}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；路径按 Figure 1 和 memory-controller 模型重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Memory Encryption: A Survey of Existing Techniques：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{henson2014memory}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Henson survey 给出的实用框架是把 encryption latency、metadata storage、integrity root 和 replay defense 分开评估；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item counter-mode encryption 解决一次一密式访问效率，但需要 counter/nonce 管理。
+  \item authentication/integrity 需要 MAC、hash tree 或类似 metadata。
+  \item freshness/replay protection 需要受保护 root 和 counter state。
+  \item 这些设计都要权衡 storage cost、memory bandwidth 和 trusted boundary。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{secure memory design checklist}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{检查项} & \textbf{为什么单独看} \\
+\midrule
+encryption mode & 决定 confidentiality 和访问粒度 \\
+counter/nonce & 影响重复使用和 replay \\
+integrity metadata & 决定 tamper detection \\
+root protection & 决定 freshness chain \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；checklist 从 survey 的 counter-mode 和 technique comparison 归纳。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Memory Encryption: A Survey of Existing Techniques：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{henson2014memory}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Henson 2014 是 survey，无新实验；它汇总旧方案的代价范围，但不能替代现代 confidential VM 证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item survey 中提到 cache-line encryption/decryption cycles 常在 11 到 160 cycles 范围，80 cycles 很常见。
+  \item 这些是历史材料的汇总，不是本报告新测量。
+  \item 它可用来说明 secure memory design 的 cost dimensions。
+  \item SEV-SNP、TDX、CCA、CoVE 需要各自的一手 vendor/spec/system evidence。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{survey 证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可用} & \textbf{不可用} \\
+\midrule
+历史技术范围 & 现代产品结果 \\
+概念边界 & 具体机制正确性 \\
+设计代价维度 & CCA/SEV-SNP 细节 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；历史数字只作 survey background。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Memory Encryption: A Survey of Existing Techniques：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{henson2014memory}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Henson survey 适合防止概念混写，但时间截面早，必须和现代 VM evidence 配合；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是概念边界清楚，适合把 encryption/integrity/replay 拆开。
+  \item 不足是早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
+  \item 商业落地价值在 secure memory checklist。
+  \item 风险是单独引用会遗漏现代 ownership metadata、attestation 和 verifier policy。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 概念 taxonomy 清晰 \\
+短板 & 2014 时间截面早 \\
+落地价值 & secure memory design checklist \\
+使用规则 & 现代产品/规范另引证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；评价按 E2 survey 边界写入。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Bonsai Merkle Trees for memory integrity and freshness：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{rogers2007bonsai}{E1 / Peer-reviewed mechanism anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Bonsai Merkle Trees 的核心贡献是用 AISE + BMT 同时降低 OS 摩擦和 memory integrity/freshness metadata 成本。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文提出 Address Independent Seed Encryption，减少虚拟内存和 OS 操作的冲突。
+  \item Bonsai Merkle Tree 认证 encryption counter metadata，而不是对全部数据构建笨重树。
+  \item 它把 memory integrity 和 stale-data replay 问题放到 secure processor 架构中解决。
+  \item 这篇是本方向的 E1 mechanism anchor。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{AISE + BMT}
+      \scriptsize \begin{itemize}
+  \item 01. address-independent seed selects encryption input
+  \item 02. counter metadata records freshness
+  \item 03. BMT authenticates counters
+  \item 04. root kept in trusted boundary
+  \item 05. memory read checks integrity/freshness
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按摘要、Table 1 和 performance figures 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Bonsai Merkle Trees for memory integrity and freshness：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{rogers2007bonsai}{E1 / Peer-reviewed mechanism anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 加密只能隐藏内容，不能发现 untrusted memory 返回被篡改或过期的数据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item secure processor 假设 off-chip communication 可能被攻击。
+  \item counter-mode encryption 需要 freshness state，否则旧 ciphertext 可被 replay。
+  \item 传统 integrity tree metadata 可能带来存储和访问成本。
+  \item BMT 的目标是让 integrity/freshness 更 OS-friendly 和 performance-friendly。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{confidentiality 之外的问题}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{攻击} & \textbf{encryption only} & \textbf{BMT 类方案} \\
+\midrule
+passive read & 隐藏明文 & 同样支持 \\
+tamper & 可能无法检测 & integrity metadata \\
+replay & 旧值可能通过 & counter freshness \\
+OS remap & 地址相关种子冲突 & AISE 降低摩擦 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 introduction 和 Figure 1-Figure 3。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Bonsai Merkle Trees for memory integrity and freshness：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{rogers2007bonsai}{E1 / Peer-reviewed mechanism anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} BMT 的设计把完整性树压缩到 counter metadata 上，让数据加密和 freshness 认证解耦。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item AISE 使用 address-independent seed，缓解虚拟内存和 copy-on-write 等 OS 问题。
+  \item BMT 只认证 counter space，减少 integrity tree footprint。
+  \item trusted root 确保 counter tree 不能被 untrusted memory replay。
+  \item 这种结构成为后续 memory integrity/freshness 设计的重要参照。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{数据与 metadata 分离}
+      \scriptsize \textbf{data path}\par
+cache line → counter-mode encryption → off-chip memory → decrypt on read\par
+{\tiny\textcolor{Muted}{confidentiality}}\par\vspace{1.8mm}
+\textbf{metadata path}\par
+counter → BMT node → trusted root → verify on read\par
+{\tiny\textcolor{Muted}{integrity and freshness}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 路径按 AISE/BMT 设计描述重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Bonsai Merkle Trees for memory integrity and freshness：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{rogers2007bonsai}{E1 / Peer-reviewed mechanism anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Rogers 2007 报告 AISE+BMT 将 prior memory encryption/integrity verification overhead 从 12\% 降到 2\% average。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 摘要给出 12\% 到 2\% average overhead reduction。
+  \item Figure 7 比较 AISE 与其它方案的 performance overhead。
+  \item Table 1 给出 AISE 与其它 counter-mode encryption approaches 的 qualitative comparison。
+  \item 这些是 secure-processor simulation lineage evidence，不是现代 SEV/CCA 产品对比。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{BMT 关键数字}
+      \scriptsize \textbf{prior overhead}\hfill \textcolor{Accent}{\bfseries 12\%}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract baseline}}\par\vspace{1.4mm}
+\textbf{AISE+BMT overhead}\hfill \textcolor{Accent}{\bfseries 2\%}\par\textcolor{Accent}{\rule{0.10\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract result}}\par\vspace{1.4mm}
+\textbf{evidence type}\hfill \textcolor{Accent}{\bfseries MICRO 2007}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{peer-reviewed}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自摘要；只作为 secure-processor lineage evidence。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Bonsai Merkle Trees for memory integrity and freshness：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{rogers2007bonsai}{E1 / Peer-reviewed mechanism anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} BMT 是 memory integrity/freshness 的强机制锚点，但它不是现代 confidential VM 产品证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是清楚区分 encryption、integrity 和 freshness，并给出 peer-reviewed mechanism。
+  \item 不足是 2007 secure processor 设定不同于现代云 VM、CXL 或 device TEE。
+  \item 商业潜力在 memory controller integrity-tree 和 metadata design。
+  \item 落地风险在 metadata storage、trusted root、crash recovery 和 memory bandwidth budget。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & peer-reviewed integrity/freshness mechanism \\
+短板 & 历史 secure-processor setting \\
+落地价值 & memory-controller metadata design \\
+风险 & metadata/root/recovery/bandwidth \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价把 BMT 限定为机制锚点，不外推为产品证明。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{AMD SEV-SNP industry memory-integrity evidence：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{amd\_sev\_snp}{E4 / Industry evidence}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} AMD vendor 材料在本方向只作为产业 evidence；本地 PDF 首页显示 SEV-ES register-state 保护，因此不把它写成 SNP/RMP 机制细节证明。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item README 记录 source 指向 SEV-SNP strengthening VM isolation，但本地 PDF 首页标题是 Protecting VM Register State with SEV-ES。
+  \item 本地 PDF 说明 SEV-ES 在 VMEXIT 时加密并完整性保护 guest register state。
+  \item 它能作为 AMD encrypted VM 产业路线和 register-state integrity 证据。
+  \item 它不能单独证明 SEV-SNP secure nested paging 或 RMP 细节。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{AMD 本地证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可写} & \textbf{不能写} \\
+\midrule
+AMD vendor encrypted-state direction & peer-reviewed proof \\
+SEV-ES register-state protection & SNP/RMP detailed mechanism \\
+industry evidence role & complete platform security \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 本页显式记录 README/source 与本地 PDF title 的不一致，按 E4 保守引用。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{AMD SEV-SNP industry memory-integrity evidence：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{amd\_sev\_snp}{E4 / Industry evidence}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} AMD 本地 PDF 的背景问题是内存加密仍可能漏掉 VM register state，VMEXIT 时 hypervisor 可观察或篡改保存状态。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item PDF 指出 secrets 在使用时常驻 CPU registers。
+  \item VM stops running 时 register contents 会保存到 hypervisor memory。
+  \item 如果只启用基础 SEV memory encryption，hypervisor 仍可能读取或修改这些寄存器保存区。
+  \item SEV-ES 因此把 register state 的 confidentiality 和 integrity 加入保护目标。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{memory vs register state}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{基础风险} & \textbf{SEV-ES PDF 关注} \\
+\midrule
+guest memory & host 不应读明文 & SEV baseline \\
+CPU registers & VMEXIT 保存到 host-visible memory & SEV-ES encrypts state \\
+state integrity & host 可改 saved state & integrity-check value \\
+replay & 旧状态可能恢复 & resume check rejects tamper \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 背景按本地 PDF Security Goals 和 Technical Overview 重写。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{AMD SEV-SNP industry memory-integrity evidence：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{amd\_sev\_snp}{E4 / Industry evidence}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 本地 AMD PDF 的机制是 VMEXIT/VMRUN 时由硬件保存和恢复加密 register state，并用受保护 integrity-check value 检查篡改。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item VMRUN 进入 guest 时，硬件加载 guest register information。
+  \item VMEXIT 时，硬件自动保存 guest register state。
+  \item 保存区域使用 VM memory encryption key 加密，hypervisor 不知道该 key。
+  \item CPU 还计算 integrity-check value 并存入 CPU software 不可访问的 protected DRAM。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SEV-ES register-state flow}
+      \scriptsize \begin{itemize}
+  \item 01. guest running
+  \item 02. VMEXIT occurs
+  \item 03. hardware saves registers
+  \item 04. state encrypted with VM key
+  \item 05. integrity-check value stored protected
+  \item 06. VMRUN verifies before resume
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按本地 AMD PDF Technical Overview 重绘；不写 SNP/RMP 细节。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{AMD SEV-SNP industry memory-integrity evidence：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{amd\_sev\_snp}{E4 / Industry evidence}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} AMD 材料是 vendor whitepaper，没有独立学术实验；它只能作为产业机制说明。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item PDF 没有提供 peer-reviewed evaluation。
+  \item 它说明 SEV-ES register state 保护目标和技术流程。
+  \item README 标记为 E4 industry/vendor evidence。
+  \item 现代 SEV-SNP memory integrity 细节需要可靠的 SNP PDF 或官方可复核材料另行支撑。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{E4 vendor evidence}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可用} & \textbf{不可用} \\
+\midrule
+vendor mechanism description & peer-reviewed result \\
+register-state confidentiality/integrity & SNP RMP proof \\
+deployment direction & complete platform security \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 厂商技术材料，无独立学术实验；本页按 E4 使用。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{AMD SEV-SNP industry memory-integrity evidence：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{amd\_sev\_snp}{E4 / Industry evidence}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} AMD vendor evidence 展示产业界从 memory confidentiality 走向 state integrity，但当前本地证据不足以承担 SEV-SNP 细节证明。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是说明现代 encrypted VM 必须保护 register state 和 resume integrity。
+  \item 不足是 vendor whitepaper 不是 peer-reviewed proof，且本地 PDF 与 SNP metadata 不一致。
+  \item 商业落地价值在真实云 confidential VM 生态相关性。
+  \item 使用规则是只写本地 PDF 可复核的 SEV-ES state protection，以及 README 标记的 E4 边界。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 产业 confidential VM state-protection evidence \\
+短板 & vendor-only 且 local PDF mismatch \\
+落地价值 & 云 confidential VM 相关 \\
+使用边界 & 不写不可复核 SNP/RMP 细节 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价特意记录 evidence mismatch，避免用错本地 PDF。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Memory encryption / integrity / replay protection：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{11-memory-encryption-integrity-replay}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} Memory security 的 takeaway 是加密、完整性、freshness 和 ownership 是四个不同层；引用时必须按证据来源分开。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Henson survey 给 taxonomy，提醒 full disk encryption 不是 runtime memory security。
+  \item BMT 给 peer-reviewed integrity/freshness mechanism anchor。
+  \item AMD vendor material 给产业 encrypted-state evidence，但不能替代 peer-reviewed proof。
+  \item 后续 CCA/CoVE/I/O 章节谈 ownership/access control 时，不应自动写成 encryption 或 replay protection。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{方向总结}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{问题} & \textbf{主证据} & \textbf{后续使用规则} \\
+\midrule
+confidentiality taxonomy & Henson survey & 只作概念边界 \\
+integrity/freshness & BMT & 机制 anchor \\
+vendor deployment & AMD E4 & 只写可复核内容 \\
+ownership/access control & CCA/PMP/IOMMU contrast & 不混成加密 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结基于三类 evidence class 的分工。}}
 \end{frame}

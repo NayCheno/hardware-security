@@ -1,0 +1,440 @@
+direction: "Accelerator / DPU / SmartNIC confidential offload"
+story_version: 1
+slides:
+- slide_id: d14-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "Accelerator confidential offload 这一节讨论高性能计算从 CPU Realm 走向 GPU/DPU/DSA pool 时，TCB 和 data path 如何重划。"
+  narrative:
+  - "HETEE 用 rack-scale security controller 管理 heterogeneous accelerator TEE。"
+  - "CloudScale 讨论 cloud-scale heterogeneous devices，并提出分布式 local/global security structure。"
+  - "CAGE 把 Arm CCA 与 accelerator workflow 结合，提出 shadow task 等机制。"
+  - "三篇都是 E1 系统论文，但处理的 accelerator trust anchor 和部署粒度不同。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 14-accelerator-dpu-smartnic-offload."
+  - "HETEE p.1 abstract; CloudScale p.1 abstract; CAGE p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "confidential accelerator 演进"
+    data:
+      steps:
+      - label: "HETEE"
+        claim: "rack-scale heterogeneous TEE"
+        evidence: "security controller"
+      - label: "CloudScale"
+        claim: "cloud-scale DSA security"
+        evidence: "security coordinator"
+      - label: "CAGE"
+        claim: "Arm CCA accelerator workflow"
+        evidence: "shadow task"
+  source_note: "方向页按 system scope 区分 rack、cloud-scale 和 Arm CCA accelerator。"
+
+- slide_id: d14-01-hetee-summary
+  paper_key: zhu2020hetee
+  slide_type: summary
+  claim: "HETEE 的核心贡献是用独立 Security Controller 把 rack-scale heterogeneous accelerators 纳入 confidential computing。"
+  narrative:
+  - "论文指出大规模 confidential computing 受限于 GPU/FPGA/TPU 等高吞吐 accelerator 缺乏可扩展保护。"
+  - "HETEE 不要求修改 CPU/GPU chips，而是用 security controller 和资源池化组织可信执行。"
+  - "它支持 elastic resource allocation，使多个 accelerator 可服务一个 enclave-like task。"
+  - "它是 accelerator confidential computing 的 foundational systems paper。"
+  evidence_refs:
+  - "HETEE p.1 abstract: enabling rack-scale confidential computing using heterogeneous TEE."
+  - "HETEE Fig.1 and Fig.3: overview and Security Controller."
+  proof_object:
+    type: mechanism_flow
+    title: "HETEE rack-scale flow"
+    data:
+      stages:
+      - "tenant submits CDI task"
+      - "Security Controller manages keys/policy"
+      - "elastic accelerator resources allocated"
+      - "data encrypted across untrusted fabric"
+      - "accelerators execute protected workload"
+      - "results returned to tenant"
+  source_note: "流程按 Figure 1、Figure 3 和摘要重绘。"
+
+- slide_id: d14-02-hetee-background
+  paper_key: zhu2020hetee
+  slide_type: background
+  claim: "HETEE 的背景问题是 CPU TEE 无法承担计算密集型 workloads，而 GPU/FPGA 又通常没有同等可信边界。"
+  narrative:
+  - "AI training/inference 和 data-intensive computing 需要高吞吐 accelerators。"
+  - "把敏感数据留在 CPU enclave 会失去 accelerator 性能价值。"
+  - "直接把数据发给 accelerator 又会暴露给 host、fabric、device runtime。"
+  - "HETEE 选择在 rack 级引入 security controller，而不是等待每个 accelerator 原生 TEE。"
+  evidence_refs:
+  - "HETEE p.1 introduction: demand for privacy-preserving high-throughput accelerators."
+  - "HETEE Fig.2: elastic allocation of resources."
+  proof_object:
+    type: comparison_matrix
+    title: "CPU TEE 与 accelerator pool 的矛盾"
+    data:
+      columns: ["方案", "优势", "问题"]
+      rows:
+      - ["CPU-only TEE", "信任边界成熟", "无法吃满 accelerator"]
+      - ["plain accelerator", "性能高", "数据路径不可信"]
+      - ["HETEE", "rack-scale trusted offload", "新增 SC 和系统集成"]
+  source_note: "矩阵依据 introduction 和 Figure 2 的资源池化动机。"
+
+- slide_id: d14-03-hetee-solution
+  paper_key: zhu2020hetee
+  slide_type: solution
+  claim: "HETEE 的设计把 trusted control plane 收缩到 Security Controller，把重计算留给现有 accelerators。"
+  narrative:
+  - "SC 包含 RNG、KDF、MAC 等安全功能模块。"
+  - "资源隔离和密钥管理由 SC 统一协调。"
+  - "计算单元可弹性分配给 protected task。"
+  - "这种架构降低 chip-level 修改要求，但把 SC 变成关键 TCB。"
+  evidence_refs:
+  - "HETEE Fig.3: Security Controller with RNG, KDF and MAC modules."
+  - "HETEE Table I: major components of the Security Controller."
+  proof_object:
+    type: mechanism_flow
+    title: "Security Controller responsibilities"
+    data:
+      stages:
+      - "authenticate task"
+      - "derive keys"
+      - "assign accelerator resources"
+      - "isolate data path"
+      - "verify completion"
+  source_note: "流程按 Figure 3 和 Table I 重绘。"
+
+- slide_id: d14-04-hetee-experiments
+  paper_key: zhu2020hetee
+  slide_type: experiments
+  claim: "HETEE 报告 ResNet152 单 GPU inference 最大 throughput overhead 2.17%、training 0.95%，平均 latency overhead 分别为 34.51% 和 14.24%。"
+  narrative:
+  - "论文在真实硬件系统上运行 DNN training and inference tasks。"
+  - "摘要报告 inference 平均 throughput overhead 1.96%，latency overhead 34.51%。"
+  - "training 平均 throughput overhead 0.60%，latency overhead 14.24%。"
+  - "ResNet152 单 GPU 最大 throughput overhead 为 inference 2.17%、training 0.95%。"
+  evidence_refs:
+  - "HETEE p.1 abstract: 1.96%/0.60% throughput and 34.51%/14.24% latency overhead numbers."
+  - "HETEE Fig.7-Fig.8: throughput and latency overhead on single GPU with different batch sizes."
+  proof_object:
+    type: metric_bars
+    title: "HETEE key results"
+    data:
+      metrics:
+      - label: "inference throughput overhead"
+        value: "1.96%"
+        bar: 10
+        note: "abstract average"
+      - label: "training throughput overhead"
+        value: "0.60%"
+        bar: 3
+        note: "abstract average"
+      - label: "inference latency overhead"
+        value: "34.51%"
+        bar: 35
+        note: "abstract average"
+      - label: "training latency overhead"
+        value: "14.24%"
+        bar: 14
+        note: "abstract average"
+  source_note: "数字来自摘要和 Figure 7-Figure 8。"
+
+- slide_id: d14-05-hetee-evaluation
+  paper_key: zhu2020hetee
+  slide_type: evaluation
+  claim: "HETEE 的价值是证明 rack-scale confidential accelerator 可行，短板是 Security Controller 成为新集中 TCB。"
+  narrative:
+  - "优点是不要求改造所有 accelerator silicon，适合资源池化数据中心。"
+  - "不足是 SC 的正确性、可用性和侧信道边界会影响整个 rack。"
+  - "商业潜力在大模型训练、批量 inference 和 confidential analytics。"
+  - "落地风险在 accelerator diversity、scheduler integration、failure recovery 和 tenant isolation。"
+  evidence_refs:
+  - "HETEE Fig.1-Fig.3: rack-scale overview and Security Controller design."
+  - "HETEE Fig.7-Fig.8 and conclusion: performance and elastic resource discussion."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "rack-scale accelerator TEE without chip changes"]
+      - ["短板", "SC 是关键集中 TCB"]
+      - ["落地场景", "AI/analytics confidential acceleration"]
+      - ["风险", "scheduler/failure/device diversity"]
+  source_note: "评价结合架构、结果和系统部署约束。"
+
+- slide_id: d14-06-cloudscale-summary
+  paper_key: dhar2024cloudscale
+  slide_type: summary
+  claim: "CloudScale 的核心贡献是从单机 accelerator TEE 走向 heterogeneous devices at cloud-scale，并把 local security 与 global properties 分层。"
+  narrative:
+  - "论文关注 GPU、NPU、FPGA 等 domain-specific accelerators 在云中处理敏感数据和 proprietary models。"
+  - "它比较 cloud-scale heterogeneous TEE design choices。"
+  - "Security Coordinator 负责协调 distributed security properties。"
+  - "它把 accelerator TEE 从 rack/system 进一步推向 cloud-scale deployment。"
+  evidence_refs:
+  - "CloudScale p.1 abstract: confidential computing with heterogeneous devices at cloud-scale."
+  - "CloudScale Fig.2-Fig.3: cloud-scale heterogeneous TEE designs and Security Coordinator architecture."
+  proof_object:
+    type: mechanism_flow
+    title: "CloudScale security split"
+    data:
+      stages:
+      - "local device security"
+      - "Security Coordinator programs keys"
+      - "distributed job assigned"
+      - "heterogeneous devices execute"
+      - "global property enforced"
+  source_note: "流程按 Figure 2 和 Figure 3 重绘。"
+
+- slide_id: d14-07-cloudscale-background
+  paper_key: dhar2024cloudscale
+  slide_type: background
+  claim: "CloudScale 的背景是云 workload 越来越依赖 heterogeneous devices，但 CPU-centric TEE 无法覆盖分布式 accelerator pool。"
+  narrative:
+  - "AI inference/training、networking 和 storage offload 依赖 DSA。"
+  - "敏感数据和 proprietary models 会跨多个 devices。"
+  - "CPU enclave 无法自然证明每个 accelerator node 的 local security 和 global protocol property。"
+  - "CloudScale 因此从 distributed systems 角度重构 accelerator confidential computing。"
+  evidence_refs:
+  - "CloudScale p.1 abstract/introduction: workloads leverage DSAs and compute sensitive data/business secrets."
+  - "CloudScale Fig.2: five potential cloud-scale heterogeneous TEE designs."
+  proof_object:
+    type: comparison_matrix
+    title: "cloud-scale accelerator 难点"
+    data:
+      columns: ["难点", "为什么 CPU TEE 不够", "CloudScale 关注"]
+      rows:
+      - ["device heterogeneity", "GPU/NPU/FPGA 信任根不同", "设计空间比较"]
+      - ["distributed job", "单机 quote 不覆盖全局", "global properties"]
+      - ["data movement", "跨设备路径长", "security coordinator"]
+      - ["cloud operations", "资源池和调度复杂", "cloud-scale workflow"]
+  source_note: "矩阵依据 introduction 和 Figure 2。"
+
+- slide_id: d14-08-cloudscale-solution
+  paper_key: dhar2024cloudscale
+  slide_type: solution
+  claim: "CloudScale 的解决思路是先保证 local device security，再用 Security Coordinator 维护跨设备全局性质。"
+  narrative:
+  - "Fig.3 展示 Security Coordinator 架构和 non-TEE components。"
+  - "SC 为 job-specific secret key 编程到特定硬件表项。"
+  - "论文还合成并布局 SC chiplet 原型。"
+  - "这种方案将安全控制从每个 accelerator 内部抽象成可协调 control plane。"
+  evidence_refs:
+  - "CloudScale Fig.3: high-level architecture of the Security Coordinator."
+  - "CloudScale Fig.5: floor plan of synthesized Security Coordinator chiplet."
+  proof_object:
+    type: mechanism_flow
+    title: "Security Coordinator flow"
+    data:
+      stages:
+      - "job admitted"
+      - "SC derives/programs job key"
+      - "device-local protection enabled"
+      - "data path executes"
+      - "global property checked"
+  source_note: "流程按 Figure 3 和 Figure 5 重绘。"
+
+- slide_id: d14-09-cloudscale-experiments
+  paper_key: dhar2024cloudscale
+  slide_type: experiments
+  claim: "CloudScale 的评估覆盖 Security Coordinator chiplet 和三类 end-to-end workloads，关注 cloud-scale 组合代价。"
+  narrative:
+  - "Fig.5 展示 synthesized SC chiplet floor plan。"
+  - "Fig.6 展示 three end-to-end workload evaluations with SC。"
+  - "Fig.7 展示 end-to-end SC evaluations overhead。"
+  - "这些证据说明方案可落到硬件设计和 workload 评估，但仍是研究系统。"
+  evidence_refs:
+  - "CloudScale Fig.5: floor plan of synthesized Security Coordinator chiplet."
+  - "CloudScale Fig.6-Fig.7: end-to-end workload evaluations and overhead."
+  proof_object:
+    type: metric_bars
+    title: "CloudScale proof objects"
+    data:
+      metrics:
+      - label: "chiplet evidence"
+        value: "Fig.5"
+        bar: 65
+        note: "synthesized SC"
+      - label: "workload evaluations"
+        value: "3"
+        bar: 60
+        note: "Fig.6"
+      - label: "end-to-end overhead"
+        value: "Fig.7"
+        bar: 55
+        note: "SC evaluations"
+  source_note: "图号来自 paper captions；本页不引入未核对具体数值。"
+
+- slide_id: d14-10-cloudscale-evaluation
+  paper_key: dhar2024cloudscale
+  slide_type: evaluation
+  claim: "CloudScale 的价值是把 confidential accelerator 从单设备推进到云规模，短板是 control plane 和 device diversity 更复杂。"
+  narrative:
+  - "优点是正视 heterogeneous devices 和 distributed workload。"
+  - "不足是 SC chiplet、job key provisioning 和 global property enforcement 都需要工程生态。"
+  - "商业潜力在 cloud-scale AI/DSA confidential computing。"
+  - "落地风险在 hardware supply chain、multi-tenant scheduling、fault handling 和 verifier integration。"
+  evidence_refs:
+  - "CloudScale Fig.2-Fig.3: design choices and Security Coordinator."
+  - "CloudScale Fig.6-Fig.7: workload evaluation and overhead."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "cloud-scale heterogeneous device framing"]
+      - ["短板", "SC 和 global policy 集成复杂"]
+      - ["落地场景", "AI/DSA confidential cloud"]
+      - ["风险", "supply chain/scheduler/failure/verifier"]
+  source_note: "评价依据架构图和 end-to-end evaluation。"
+
+- slide_id: d14-11-cage-summary
+  paper_key: wang2026cage
+  slide_type: summary
+  claim: "CAGE 的核心贡献是把 Arm CCA Realm-style architecture 映射到 accelerator workflow，并用 shadow task 支撑 confidential accelerator computing。"
+  narrative:
+  - "论文面向 Arm CCA 中缺乏 confidential accelerator workload 支持的问题。"
+  - "它提出 shadow task mechanism，把 accelerator task 的敏感状态和 buffer 关系纳入保护。"
+  - "它还讨论 GPT synchronization optimization。"
+  - "这篇连接 04 的 CCA deployment 与 14 的 accelerator offload。"
+  evidence_refs:
+  - "CAGE p.1 abstract: building confidential accelerator computing environment for Arm CCA."
+  - "CAGE Fig.1-Fig.2: overview and shadow task mechanism."
+  proof_object:
+    type: mechanism_flow
+    title: "CAGE accelerator workflow"
+    data:
+      stages:
+      - "Realm submits accelerator task"
+      - "shadow task represents sensitive work"
+      - "GPT protects task buffers"
+      - "accelerator executes"
+      - "results return to Realm"
+  source_note: "流程按 Figure 1 和 Figure 2 重绘。"
+
+- slide_id: d14-12-cage-background
+  paper_key: wang2026cage
+  slide_type: background
+  claim: "CAGE 的背景问题是 Arm CCA 保护 Realm，但现有 hardware/firmware 并不直接支持 confidential accelerator workloads。"
+  narrative:
+  - "CCA 提供 Realm 隔离，但 accelerator tasks 通常需要 device memory、MMIO 和 task queue。"
+  - "现有研究可能 TCB 大、硬件不兼容或不适配 Arm CCA workflow。"
+  - "FPGA/GPU 等 accelerator 的 buffer-channel relation 需要与 GPT 权限同步。"
+  - "CAGE 因此把 accelerator workflow 重新映射到 CCA 机制。"
+  evidence_refs:
+  - "CAGE p.1 abstract: hardware and firmware supporting confidential accelerator workloads remain unavailable."
+  - "CAGE Fig.3-Fig.4: GPT configurations and GPT synchronization optimization."
+  proof_object:
+    type: comparison_matrix
+    title: "CCA accelerator gap"
+    data:
+      columns: ["对象", "CCA 基础支持", "CAGE 补充"]
+      rows:
+      - ["Realm memory", "GPT/Realm protection", "task buffer mapping"]
+      - ["accelerator task", "非原生对象", "shadow task"]
+      - ["GPT sync", "需要状态切换", "optimization"]
+      - ["FPGA/GPU workflow", "不自动可信", "workflow adaptation"]
+  source_note: "矩阵依据 CAGE 摘要和 Figure 3-Figure 4。"
+
+- slide_id: d14-13-cage-solution
+  paper_key: wang2026cage
+  slide_type: solution
+  claim: "CAGE 的 shadow task 把 accelerator work item 变成 CCA 可管理对象，配合 GPT 同步保护输入输出 buffer。"
+  narrative:
+  - "Figure 2 展示 shadow task mechanism 和两个 data buffer。"
+  - "Figure 3 展示 accelerator MMIO/GPT configuration。"
+  - "Figure 4 展示 GPT synchronization optimization。"
+  - "设计目标是在不完全重做 accelerator 的情况下，把 Realm protection 延伸到 task workflow。"
+  evidence_refs:
+  - "CAGE Fig.2: shadow task mechanism with input/output data buffers."
+  - "CAGE Fig.3-Fig.4: GPT configurations and synchronization optimization."
+  proof_object:
+    type: mechanism_flow
+    title: "shadow task lifecycle"
+    data:
+      stages:
+      - "Realm creates shadow task"
+      - "input/output buffers registered"
+      - "GPT permissions synchronized"
+      - "accelerator executes task"
+      - "permissions restored"
+      - "Realm consumes results"
+  source_note: "流程按 Figure 2-Figure 4 重绘。"
+
+- slide_id: d14-14-cage-experiments
+  paper_key: wang2026cage
+  slide_type: experiments
+  claim: "CAGE 用 FPGA benchmarks 和 GPT initialization optimization 展示可行性，Figure 8 报告六个 FPGA benchmarks 的 relative overhead。"
+  narrative:
+  - "Figure 7 展示 accelerator GPT initialization 在优化后的 performance improvement。"
+  - "Figure 8 展示 six FPGA benchmarks 的 relative overhead。"
+  - "Table II 给出 benchmark modifications 和评估设置线索。"
+  - "结果支撑 CCA accelerator workflow 可实现，但仍需真实 GPU/DPU 生态验证。"
+  evidence_refs:
+  - "CAGE Fig.7: performance improvement in Accelerator GPT initialization."
+  - "CAGE Fig.8 and Table II: relative overhead on six FPGA benchmarks and benchmark modifications."
+  proof_object:
+    type: metric_bars
+    title: "CAGE proof objects"
+    data:
+      metrics:
+      - label: "GPT init optimization"
+        value: "Fig.7"
+        bar: 70
+        note: "accelerator GPT initialization"
+      - label: "FPGA benchmark count"
+        value: "6"
+        bar: 60
+        note: "Fig.8"
+      - label: "benchmark mods"
+        value: "Table II"
+        bar: 50
+        note: "evaluation setup"
+  source_note: "图表来自 CAGE evaluation；不补写未核对数值。"
+
+- slide_id: d14-15-cage-evaluation
+  paper_key: wang2026cage
+  slide_type: evaluation
+  claim: "CAGE 的价值是把 Arm CCA 与 accelerator task workflow 直接相连，短板是设备生态和硬件支持仍是落地瓶颈。"
+  narrative:
+  - "优点是 shadow task 明确了 accelerator work item 的 CCA 映射。"
+  - "不足是 FPGA/GPU device diversity、driver/runtime 和 GPT sync 都会影响工程复杂度。"
+  - "商业潜力在 CCA 平台上的 confidential accelerator service。"
+  - "风险在 multi-tenant scheduling、device reset、DMA/interrupt/link security 与 verifier evidence。"
+  evidence_refs:
+  - "CAGE Fig.1-Fig.4: overview, shadow task and GPT synchronization."
+  - "CAGE Fig.7-Fig.8: GPT initialization improvement and benchmark overhead."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "Arm CCA accelerator workflow bridge"]
+      - ["短板", "device ecosystem and GPT sync complexity"]
+      - ["落地场景", "CCA confidential accelerator service"]
+      - ["风险", "DMA/interrupt/link/verifier 仍需组合"]
+  source_note: "评价限定在 CAGE 的 Arm CCA accelerator workflow。"
+
+- slide_id: d14-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "Accelerator offload 的 takeaway 是可信控制面可以在 rack、cloud-scale 或 CCA workflow 中出现，但 data path 和 device lifecycle 必须继续验证。"
+  narrative:
+  - "HETEE 走 rack-scale Security Controller 路线。"
+  - "CloudScale 走 heterogeneous cloud-scale Security Coordinator 路线。"
+  - "CAGE 走 Arm CCA shadow task workflow 路线。"
+  - "三者都不是完整 confidential I/O 规范，仍需要 SPDM/TDISP/IOMMU/IDE/interrupt 证据补齐。"
+  evidence_refs:
+  - "HETEE Fig.1-Fig.3; CloudScale Fig.2-Fig.7; CAGE Fig.1-Fig.8."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 14-accelerator-dpu-smartnic-offload."
+  proof_object:
+    type: comparison_matrix
+    title: "三种 trusted control plane"
+    data:
+      columns: ["系统", "控制面", "主要缺口"]
+      rows:
+      - ["HETEE", "Security Controller", "集中 TCB 和 rack ops"]
+      - ["CloudScale", "Security Coordinator", "global policy engineering"]
+      - ["CAGE", "CCA shadow task", "device ecosystem integration"]
+      - ["共同缺口", "device lifecycle", "SPDM/TDISP/IOMMU/IDE"]
+  source_note: "方向总结按 system architecture 而不是 accelerator 类型分类。"

@@ -391,6 +391,8 @@ def validate_direction(errors: list[str], path: Path) -> tuple[int, int]:
     data = load_yaml(path)
     story_path = path.with_name("story.yml")
     has_story = story_path.exists()
+    if not has_story:
+        fail(errors, path, "missing authored `story.yml`; legacy generated slides are no longer accepted")
     if not nonempty(data.get("direction")):
         fail(errors, path, "missing `direction`")
     if not nonempty(data.get("focus")):

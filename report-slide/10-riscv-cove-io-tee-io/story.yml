@@ -1,0 +1,423 @@
+direction: "RISC-V CoVE-IO / TEE-I/O"
+story_version: 1
+slides:
+- slide_id: d10-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "CoVE-IO/TEE-I/O 这一节把 RISC-V TVM 边界从 CPU/内存扩到 device、DMA、MMIO、interrupt 和 link。"
+  narrative:
+  - "sIOPMP 提供 peer-reviewed I/O protection mechanism，解决 TEE 场景下 malicious DMA 和 device scaling。"
+  - "CoVE-IO draft 把 SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 TDI/TDM/DSM 纳入 TVM trusted I/O lifecycle。"
+  - "RISC-V IOMMU 规范提供 ratified DMA translation substrate。"
+  - "三篇共同说明 CoVE-IO 不是单一 IOMMU 功能，而是 device lifecycle 和 data path 组合。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 10-riscv-cove-io-tee-io."
+  - "sIOPMP p.1 abstract; CoVE-IO spec p.1 version line; RISC-V IOMMU spec p.1."
+  proof_object:
+    type: comparison_matrix
+    title: "CoVE-IO 的三层证据"
+    data:
+      columns: ["层", "来源", "作用"]
+      rows:
+      - ["I/O access control", "sIOPMP", "scalable DMA protection"]
+      - ["trusted lifecycle", "CoVE-IO draft", "TDI/TDM/SPDM/TDISP composition"]
+      - ["translation substrate", "RISC-V IOMMU", "ratified DMA translation"]
+      - ["完整结论", "三者组合", "仍需 device implementation evidence"]
+  source_note: "方向页区分 mechanism paper、draft lifecycle spec 和 ratified substrate。"
+
+- slide_id: d10-01-siopmp-summary
+  paper_key: feng2024siopmp
+  slide_type: summary
+  claim: "sIOPMP 的核心贡献是把 RISC-V I/O protection 做成可扩展、可热插拔、适合 TEE 的 DMA 访问控制。"
+  narrative:
+  - "论文指出现有 TEE 常把 I/O isolation 当成二等问题，恶意 DMA 可绕过 CPU-side checks。"
+  - "传统 IOMMU 在 TEE 场景中可能引入大 TCB、flush 成本和 page-granularity 不匹配。"
+  - "sIOPMP 提出 multi-stage-tree checker、mountable entries、ID remapping 和 ownership interface。"
+  - "它是本方向的 E1 机制入口。"
+  evidence_refs:
+  - "sIOPMP p.1 abstract: scalable and efficient I/O protection for TEEs with negligible overhead and 20%-38% network improvement."
+  - "sIOPMP Fig.4-Fig.6: mountable IOPMP, remapping and microarchitecture."
+  proof_object:
+    type: mechanism_flow
+    title: "sIOPMP data path"
+    data:
+      stages:
+      - "device issues DMA"
+      - "ID remapping maps device to SID"
+      - "multi-stage-tree checker finds region"
+      - "packet masking handles partial access"
+      - "ownership interface updates policy"
+  source_note: "流程按 Figure 4-Figure 7 和 Figure 9 重绘。"
+
+- slide_id: d10-02-siopmp-background
+  paper_key: feng2024siopmp
+  slide_type: background
+  claim: "sIOPMP 的背景问题是 TEE 需要 small TCB 和 region-based I/O isolation，而通用 IOMMU 不总是合适。"
+  narrative:
+  - "CPU-side PMP 不能阻止 device 通过 DMA 访问 secure memory。"
+  - "IOMMU 可以做 DMA translation，但把复杂 IOMMU 放入 TCB 会增加信任面。"
+  - "IOMMU page-level isolation 与 TEE region-based policy 可能失配。"
+  - "TEE 还要支持热插拔、虚拟设备和大量 memory regions。"
+  evidence_refs:
+  - "sIOPMP p.1 introduction: TEEs often do not consider I/O isolation as first-class citizen."
+  - "sIOPMP Fig.1-Fig.2: original IOPMP configuration and system architecture."
+  proof_object:
+    type: comparison_matrix
+    title: "为什么不是直接用通用 IOMMU"
+    data:
+      columns: ["问题", "传统 IOMMU 风险", "sIOPMP 方向"]
+      rows:
+      - ["TCB", "复杂 translation logic 进入 trusted base", "小型 region checker"]
+      - ["粒度", "page-level 不适合所有 DMA", "region-based isolation"]
+      - ["设备规模", "设备热插拔和虚拟化复杂", "mountable entry"]
+      - ["性能", "flush and translation cost", "direct checker/masking"]
+  source_note: "矩阵依据 introduction、Figure 1-Figure 2 和 design motivation。"
+
+- slide_id: d10-03-siopmp-solution
+  paper_key: feng2024siopmp
+  slide_type: solution
+  claim: "sIOPMP 用 mountable IOPMP、ID remapping 和 ownership interface，把 I/O isolation 变成 TEE 可管理资源。"
+  narrative:
+  - "mountable IOPMP 支持 unlimited number of devices。"
+  - "ID remapping 通过 CAM table 记录 device ID 到 SID 的映射。"
+  - "microarchitecture 使用 multi-stage-tree checker 和 packet masking。"
+  - "ownership-based interface 让 TEE runtime 以资源所有权方式更新 I/O policy。"
+  evidence_refs:
+  - "sIOPMP Fig.4: Mountable IOPMP supports unlimited number of devices."
+  - "sIOPMP Fig.5-Fig.9: ID remapping, microarchitecture, packet masking and ownership-based interface."
+  proof_object:
+    type: mechanism_flow
+    title: "sIOPMP policy update"
+    data:
+      stages:
+      - "TEE assigns device ownership"
+      - "update ID-to-SID mapping"
+      - "mount region entries"
+      - "checker evaluates DMA"
+      - "violation masked or blocked"
+  source_note: "流程按 Figure 4-Figure 9 重绘。"
+
+- slide_id: d10-04-siopmp-experiments
+  paper_key: feng2024siopmp
+  slide_type: experiments
+  claim: "sIOPMP 报告对 benchmark 和 real-world workloads 仅有 negligible overhead，并可改善 20%-38% network I/O。"
+  narrative:
+  - "摘要报告 negligible performance overhead。"
+  - "摘要还报告 network I/O performance improvement 为 20% 到 38%。"
+  - "Figure 10/11 等评估 microarchitecture clock frequency 和 DMA burst latency。"
+  - "结果支撑 sIOPMP 作为 trusted I/O access-control substrate，但不证明完整 CoVE-IO lifecycle。"
+  evidence_refs:
+  - "sIOPMP p.1 abstract: negligible overhead and 20%-38% network improvement."
+  - "sIOPMP Fig.10-Fig.11: clock frequency and DMA burst latency evaluations."
+  proof_object:
+    type: metric_bars
+    title: "sIOPMP 关键结果"
+    data:
+      metrics:
+      - label: "reported overhead"
+        value: "negligible"
+        bar: 5
+        note: "abstract"
+      - label: "network improvement low"
+        value: "20%"
+        bar: 20
+        note: "abstract"
+      - label: "network improvement high"
+        value: "38%"
+        bar: 38
+        note: "abstract"
+      - label: "microarchitecture eval"
+        value: "Fig.10/11"
+        bar: 55
+        note: "clock and DMA burst"
+  source_note: "数字来自摘要；图号来自 evaluation。"
+
+- slide_id: d10-05-siopmp-evaluation
+  paper_key: feng2024siopmp
+  slide_type: evaluation
+  claim: "sIOPMP 很适合承担 RISC-V trusted I/O 的 access-control 证据，但它不处理 SPDM、TDISP 或 link security。"
+  narrative:
+  - "优点是针对 TEE small TCB 和 scalable device protection 设计。"
+  - "不足是关注 I/O memory access，不覆盖 device identity、measurement、secured session 或 TDI state。"
+  - "商业潜力在 RISC-V TEE 平台的 DMA protection hardware block。"
+  - "落地风险在与 ratified IOMMU、AIA、CoVE-IO draft 和真实 device feature 的组合。"
+  evidence_refs:
+  - "sIOPMP Fig.4-Fig.9: scalable checker, remapping and ownership interface."
+  - "CoVE-IO spec Section 7.3-7.6: SPDM, device connection, TDI verification and acceptance are separate lifecycle pieces."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "TEE-oriented DMA access control"]
+      - ["短板", "不覆盖 device identity/lifecycle/link"]
+      - ["落地场景", "RISC-V trusted I/O substrate"]
+      - ["组合需求", "CoVE-IO/IOMMU/AIA/SPDM/TDISP"]
+  source_note: "评价把 sIOPMP 定位为 access-control substrate。"
+
+- slide_id: d10-06-coveio-summary
+  paper_key: riscv_cove_io_2026
+  slide_type: summary
+  claim: "CoVE-IO draft 的核心贡献是把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU 和 trusted MSI；无新实验。"
+  narrative:
+  - "文档首页声明 Version v0.3.0, 2026-02-18，且仍在 development。"
+  - "它定义 Trusted Device Interface、Trusted Device Manager、Device Security Manager 等角色。"
+  - "它把 SPDM transport、secure SPDM session、device connection、TDI verification/acceptance 组织进 lifecycle。"
+  - "它是 E3 draft SOTA，不能写成 ratified standard。"
+  evidence_refs:
+  - "CoVE-IO spec p.1 version line: v0.3.0, 2026-02-18, document in development."
+  - "CoVE-IO spec Section 7.1-7.7: IOMMU assignment, SPDM transport, device connection, TDI verification and interface unbind."
+  proof_object:
+    type: mechanism_flow
+    title: "CoVE-IO lifecycle"
+    data:
+      stages:
+      - "IOMMU assignment"
+      - "secure SPDM session"
+      - "device connection"
+      - "TDI verification"
+      - "TDI acceptance"
+      - "interface unbind"
+  source_note: "无新实验；流程按 CoVE-IO Section 7 的章节组织重绘。"
+
+- slide_id: d10-07-coveio-background
+  paper_key: riscv_cove_io_2026
+  slide_type: background
+  claim: "TVM 使用真实设备时，CPU memory isolation 只解决一半问题，device identity 和 I/O data path 必须进入 TCB；无新实验。"
+  narrative:
+  - "TVM 需要确认 device interface 真实属于预期设备和安全状态。"
+  - "DMA/MMIO/interrupt/link 都可能被 host 或错误配置影响。"
+  - "CoVE-IO 引入 TDM 作为 TVM guest process 来执行 TDI verification、attestation 和 acceptance flows。"
+  - "这把 trusted I/O 从单纯 IOMMU 设置提升到完整 device lifecycle。"
+  evidence_refs:
+  - "CoVE-IO spec Section 7.6.2: TDI Verification and Acceptation."
+  - "CoVE-IO spec terminology around TDM: TDM verifies, attests and accepts CoVE-IO devices into a TVM TCB."
+  proof_object:
+    type: comparison_matrix
+    title: "TVM trusted I/O 的新增对象"
+    data:
+      columns: ["对象", "作用", "为什么 IOMMU 不够"]
+      rows:
+      - ["SPDM", "device identity and secured session", "IOMMU 不证明设备身份"]
+      - ["TDISP/TDI", "trusted interface lifecycle", "IOMMU 不定义 device state"]
+      - ["PCIe IDE", "link protection", "IOMMU 不保护链路"]
+      - ["trusted MSI", "interrupt binding", "IOMMU 不处理中断真实性"]
+  source_note: "无新实验；矩阵依据 CoVE-IO terminology 和 Section 7。"
+
+- slide_id: d10-08-coveio-solution
+  paper_key: riscv_cove_io_2026
+  slide_type: solution
+  claim: "CoVE-IO 的设计思路是把 device 接入 TVM 前的每一步都变成可验证状态转换；无新实验。"
+  narrative:
+  - "IOMMU assignment 把 device DMA translation 放到受控上下文。"
+  - "SPDM transport 与 secure SPDM session 建立 device evidence/control channel。"
+  - "TDI verification and acceptance 决定 device interface 是否进入 TVM TCB。"
+  - "unbind 和 no-firmware-update 等状态约束 device lifecycle。"
+  evidence_refs:
+  - "CoVE-IO spec Section 7.1.1: IOMMU Assignment."
+  - "CoVE-IO spec Section 7.3-7.7 and TDISP NO_FW_UPDATE entries: SPDM, TDI verification, acceptance and unbind."
+  proof_object:
+    type: mechanism_flow
+    title: "device enters TVM TCB"
+    data:
+      stages:
+      - "assign IOMMU context"
+      - "open SPDM transport"
+      - "establish secure session"
+      - "verify TDI"
+      - "accept into TVM TCB"
+      - "bind DMA/interrupt/link policy"
+  source_note: "无新实验；流程按 CoVE-IO Section 7 重绘，不添加 gated TDISP 细节。"
+
+- slide_id: d10-09-coveio-experiments
+  paper_key: riscv_cove_io_2026
+  slide_type: experiments
+  claim: "CoVE-IO 是 draft spec，无新实验；它支撑架构组合语义，不支撑成熟产品或量化结果。"
+  narrative:
+  - "文档首页明确写明仍在 development。"
+  - "它可以说明 RISC-V AP-TEE-IO task group 的 current draft architecture。"
+  - "TDISP/TDISP XT 的规范材料仍受公开性限制，本报告不推断 gated normative rules。"
+  - "系统结果要依赖 sIOPMP、ACAI、Devlore、TNIC 等原文。"
+  evidence_refs:
+  - "CoVE-IO spec p.1 version and development-status notice."
+  - "CoVE-IO spec Section 7: architecture and lifecycle sections."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "CoVE-IO draft 边界"
+    data:
+      columns: ["可写", "不可写"]
+      rows:
+      - ["trusted I/O lifecycle draft", "ratified status"]
+      - ["SPDM/TDISP role composition", "gated TDISP normative details"]
+      - ["IOMMU/AIA integration direction", "产品安全结果"]
+  source_note: "无新实验；保留 v0.3.0 draft-not-ratified。"
+
+- slide_id: d10-10-coveio-evaluation
+  paper_key: riscv_cove_io_2026
+  slide_type: evaluation
+  claim: "CoVE-IO 的价值是把 RISC-V trusted I/O 说完整，短板是 draft 成熟度和多个外部规范依赖；无新实验。"
+  narrative:
+  - "优点是把 IOMMU、SPDM、TDISP、IDE、trusted MSI 放进同一 TVM lifecycle。"
+  - "不足是 v0.3.0 draft，且 TDISP/TDISP XT 公开复核受限。"
+  - "商业落地价值在 future RISC-V TVM device assignment。"
+  - "风险在证书供应链、SPDM profiles、TDI state、IDE key、interrupt binding 和 revocation。"
+  evidence_refs:
+  - "CoVE-IO spec Section 7.1-7.7: trusted I/O lifecycle composition."
+  - "survey/evidence_ledger.md Boundary Records: CoVE-IO draft and TDISP member-gated boundary."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "RISC-V trusted I/O lifecycle 最完整公开 draft"]
+      - ["短板", "E3 draft + gated dependency"]
+      - ["落地价值", "TVM device assignment 方向"]
+      - ["风险", "SPDM/TDI/IDE/MSI/revocation 组合"]
+  source_note: "无新实验；评价按 draft 和 member-gated 边界保守写入。"
+
+- slide_id: d10-11-iommu-summary
+  paper_key: riscv_iommu_2023
+  slide_type: summary
+  claim: "RISC-V IOMMU 在本方向中是 CoVE-IO 的 DMA translation substrate，不是完整 trusted device 规范；无新实验。"
+  narrative:
+  - "IOMMU spec v1.0.1 已 ratified。"
+  - "它定义 device context、process context、DDT/PDT 和 MSI page table。"
+  - "CoVE-IO Section 7.1.1 明确需要 IOMMU assignment。"
+  - "但 IOMMU 只解决 address translation/protection，不解决 SPDM/TDISP lifecycle。"
+  evidence_refs:
+  - "RISC-V IOMMU spec p.1 version line: v1.0.1 ratified."
+  - "CoVE-IO spec Section 7.1.1: IOMMU Assignment."
+  proof_object:
+    type: comparison_matrix
+    title: "IOMMU 在 CoVE-IO 中的位置"
+    data:
+      columns: ["IOMMU 提供", "仍需 CoVE-IO 提供"]
+      rows:
+      - ["device DMA translation", "device identity"]
+      - ["context tables", "TDI verification"]
+      - ["MSI page table", "trusted MSI binding"]
+      - ["IOATC sync", "lifecycle policy"]
+  source_note: "无新实验；定位依据 IOMMU spec 和 CoVE-IO draft。"
+
+- slide_id: d10-12-iommu-background
+  paper_key: riscv_iommu_2023
+  slide_type: background
+  claim: "CoVE-IO 需要 IOMMU，是因为 TVM 的内存边界必须对 device DMA 同样成立；无新实验。"
+  narrative:
+  - "没有 IOMMU，device 可通过 DMA 绕过 CPU-side protection。"
+  - "IOMMU 让 device-visible address space 受 context table 控制。"
+  - "confidential setting 下，device context 必须与 TVM ownership 和 lifecycle 绑定。"
+  - "这解释了为什么 CoVE-IO 同时引用 IOMMU 和 TDISP/SPDM。"
+  evidence_refs:
+  - "RISC-V IOMMU spec Section 3.1.3.2: IO hypervisor guest address translation and protection."
+  - "CoVE-IO spec Section 7.1.1 and Section 7.6.2: IOMMU assignment and TDI verification."
+  proof_object:
+    type: path_compare
+    title: "DMA 保护与 trusted lifecycle"
+    data:
+      paths:
+      - label: "IOMMU only"
+        steps: ["device_id", "DDT/DC", "translation", "memory access"]
+        note: "solves address path"
+      - label: "CoVE-IO composition"
+        steps: ["SPDM evidence", "TDI verify", "IOMMU assign", "IDE/MSI policy"]
+        note: "adds trust lifecycle"
+  source_note: "无新实验；路径按 IOMMU spec 和 CoVE-IO Section 7 对齐。"
+
+- slide_id: d10-13-iommu-solution
+  paper_key: riscv_iommu_2023
+  slide_type: solution
+  claim: "在 CoVE-IO 组合里，IOMMU 的 DDT/PDT/MSI structures 应被视为 TDI acceptance 后的 enforcement substrate；无新实验。"
+  narrative:
+  - "DDT/DC 负责 device-level context。"
+  - "PDT/PC 负责 process-level context。"
+  - "MSI page table 连接 interrupt message 地址控制。"
+  - "CoVE-IO 需要在 TDI verified/accepted 之后把这些结构纳入 TVM policy。"
+  evidence_refs:
+  - "RISC-V IOMMU spec Section 3.1.3.1-3.1.3.6: translation control and MSI page table fields."
+  - "RISC-V IOMMU spec Section 7.3.1-7.3.3: DDT/PDT/MSI update rules."
+  proof_object:
+    type: mechanism_flow
+    title: "IOMMU enforcement after TDI acceptance"
+    data:
+      stages:
+      - "TDI verified"
+      - "TDI accepted into TVM"
+      - "device context configured"
+      - "process context bound"
+      - "MSI mapping set"
+      - "IOATC synchronized"
+  source_note: "无新实验；流程是 IOMMU objects 在 CoVE-IO lifecycle 中的保守映射。"
+
+- slide_id: d10-14-iommu-experiments
+  paper_key: riscv_iommu_2023
+  slide_type: experiments
+  claim: "IOMMU spec 无新实验；在本方向它只承担 ratified DMA substrate 证据。"
+  narrative:
+  - "IOMMU v1.0.1 是 ratified spec。"
+  - "它不提供 CoVE-IO device lifecycle 的系统结果。"
+  - "它不定义 SPDM/TDISP 或 PCIe IDE 规则。"
+  - "它的贡献是让 CoVE-IO 的 DMA enforcement 有标准 substrate。"
+  evidence_refs:
+  - "RISC-V IOMMU spec p.1 version and Section 3: ratified architecture and translation controls."
+  - "CoVE-IO spec Section 7.1.1: IOMMU assignment."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "本方向中的 IOMMU 边界"
+    data:
+      columns: ["可支撑", "不能支撑"]
+      rows:
+      - ["DMA translation substrate", "TDI state correctness"]
+      - ["MSI mapping object", "trusted interrupt policy"]
+      - ["ratified RISC-V spec", "CoVE-IO ratified status"]
+  source_note: "无新实验；只写 substrate claim。"
+
+- slide_id: d10-15-iommu-evaluation
+  paper_key: riscv_iommu_2023
+  slide_type: evaluation
+  claim: "IOMMU 的价值在于给 CoVE-IO 一个可标准化 enforcement point，但安全性取决于上层 lifecycle 如何配置它；无新实验。"
+  narrative:
+  - "优点是 ratified、结构清晰，适合做 DMA 保护底座。"
+  - "不足是单独 IOMMU 不知道 device 是否可信。"
+  - "商业落地价值在 RISC-V TVM passthrough 和 trusted device assignment。"
+  - "风险在错误配置、IOATC sync、MSI mapping 和 TDI acceptance 的绑定。"
+  evidence_refs:
+  - "RISC-V IOMMU spec Section 3 and Section 7: context structures and update synchronization."
+  - "CoVE-IO spec Section 7.6.2: TDI verification and acceptance must precede trusted use."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "ratified DMA enforcement substrate"]
+      - ["短板", "不判断 device trust"]
+      - ["落地价值", "TVM passthrough 基础"]
+      - ["风险", "configuration 与 lifecycle 绑定"]
+  source_note: "无新实验；评价限定在 CoVE-IO substrate 角色。"
+
+- slide_id: d10-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "CoVE-IO 的 takeaway 是 trusted I/O 必须同时有 access control、device lifecycle 和 ratified translation substrate。"
+  narrative:
+  - "sIOPMP 给出 TEE-oriented I/O access-control 系统证据。"
+  - "CoVE-IO draft 给出 RISC-V TVM trusted device lifecycle。"
+  - "RISC-V IOMMU 给出 DMA translation/protection 标准基底。"
+  - "完整安全还需要 13 的 SPDM/TDISP/TLS+RA endpoint evidence 和具体 device 系统论文。"
+  evidence_refs:
+  - "sIOPMP Fig.4-Fig.9; CoVE-IO Section 7.1-7.7; RISC-V IOMMU Section 3."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 10-riscv-cove-io-tee-io."
+  proof_object:
+    type: comparison_matrix
+    title: "CoVE-IO 组合边界"
+    data:
+      columns: ["组件", "本方向来源", "仍需补充"]
+      rows:
+      - ["DMA access control", "sIOPMP/IOMMU", "implementation correctness"]
+      - ["device lifecycle", "CoVE-IO draft", "TDISP public details"]
+      - ["interrupt", "IOMMU MSI + AIA", "trusted interrupt binding"]
+      - ["endpoint channel", "本方向不完整", "SPDM/TLS+RA"]
+  source_note: "方向总结把 E1 mechanism、E3 draft 和 E0 spec 分层。"

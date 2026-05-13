@@ -1,0 +1,417 @@
+direction: "Memory encryption / integrity / replay protection"
+story_version: 1
+slides:
+- slide_id: d11-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "Memory protection 这一节要把 confidentiality、integrity、freshness/replay、ownership/access-control 分开讲。"
+  narrative:
+  - "Henson 2014 survey 给出 memory encryption 和 secure memory taxonomy。"
+  - "Bonsai Merkle Trees 是 peer-reviewed memory integrity/freshness mechanism anchor。"
+  - "AMD vendor material 提供产业 encrypted-state/integrity-oriented evidence，但本地 PDF 与 SEV-SNP metadata 存在不一致，必须保守引用。"
+  - "本方向避免把 PMP/GPT/IOMMU 的 access control 写成 encryption/integrity。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 11-memory-encryption-integrity-replay."
+  - "Henson 2014 p.1 abstract; Rogers 2007 p.1 abstract; AMD README p.1 and local PDF p.1 title."
+  proof_object:
+    type: comparison_matrix
+    title: "四个不能混写的概念"
+    data:
+      columns: ["概念", "解决什么", "代表证据"]
+      rows:
+      - ["confidentiality", "off-chip 明文泄露", "memory encryption survey"]
+      - ["integrity", "篡改检测", "Bonsai Merkle Trees"]
+      - ["freshness/replay", "旧值重放", "counter/tree metadata"]
+      - ["ownership/access-control", "谁能访问", "CCA/PMP/IOMMU contrast"]
+  source_note: "方向页把概念边界放在首位；AMD local PDF mismatch 在后续页保守处理。"
+
+- slide_id: d11-01-henson-summary
+  paper_key: henson2014memory
+  slide_type: summary
+  claim: "Henson survey 的核心价值是把 memory encryption 放回运行时 DRAM、bus 和 memory controller threat model；无新实验。"
+  narrative:
+  - "论文指出 full disk encryption 不能保护运行时 code/data。"
+  - "它整理硬件增强、OS 辅助、专用设备和 cryptographic memory controller 等路线。"
+  - "它把 encryption、authentication、attestation、secure boot 等概念放入 secure memory taxonomy。"
+  - "作为 2014 survey，它适合做概念边界，不覆盖 SEV-SNP、TDX、CCA、CoVE 等现代方案。"
+  evidence_refs:
+  - "Henson 2014 p.1 abstract: memory encryption techniques and code/data confidentiality."
+  - "Henson 2014 Table I and Fig.1-Fig.5: summary of memory encryption techniques and hardware models."
+  proof_object:
+    type: comparison_matrix
+    title: "survey taxonomy"
+    data:
+      columns: ["路线", "关注点", "本报告用法"]
+      rows:
+      - ["hardware enhancement", "memory controller / bus path", "解释 off-chip threat"]
+      - ["OS-assisted", "software-managed protection", "对比硬件 TCB"]
+      - ["cryptographic controller", "inline encryption/auth", "连接 BMT/SEV/CCA"]
+      - ["secure boot/attestation", "启动和证据链", "不混入 memory integrity"]
+  source_note: "无新实验；taxonomy 来自摘要、Table I 和 Figures 1-5。"
+
+- slide_id: d11-02-henson-background
+  paper_key: henson2014memory
+  slide_type: background
+  claim: "Memory encryption 的背景不是磁盘加密，而是程序运行时 DRAM、memory bus、DMA 和物理攻击面仍会暴露明文；无新实验。"
+  narrative:
+  - "Figure 1 显示 full disk encryption 仍留下运行时代码和数据风险。"
+  - "off-chip memory 可被被动观察、主动篡改或重放旧值。"
+  - "仅加密只能隐藏内容，不能自动检测篡改或 stale data。"
+  - "这就是为什么 integrity tree、counter 和 root protection 需要单独讲。"
+  evidence_refs:
+  - "Henson 2014 Fig.1: system with full disk encryption but vulnerable code and data."
+  - "Henson 2014 Fig.3-Fig.5 and Table I: counter-mode encryption and memory encryption support models."
+  proof_object:
+    type: path_compare
+    title: "保护静态数据 vs 运行时内存"
+    data:
+      paths:
+      - label: "full disk encryption"
+        steps: ["disk ciphertext", "boot/load", "DRAM plaintext", "CPU executes"]
+        note: "protects storage, not runtime memory"
+      - label: "secure memory"
+        steps: ["CPU/cache boundary", "memory controller crypto", "DRAM ciphertext/metadata", "integrity root"]
+        note: "protects off-chip runtime path"
+  source_note: "无新实验；路径按 Figure 1 和 memory-controller 模型重绘。"
+
+- slide_id: d11-03-henson-solution
+  paper_key: henson2014memory
+  slide_type: solution
+  claim: "Henson survey 给出的实用框架是把 encryption latency、metadata storage、integrity root 和 replay defense 分开评估；无新实验。"
+  narrative:
+  - "counter-mode encryption 解决一次一密式访问效率，但需要 counter/nonce 管理。"
+  - "authentication/integrity 需要 MAC、hash tree 或类似 metadata。"
+  - "freshness/replay protection 需要受保护 root 和 counter state。"
+  - "这些设计都要权衡 storage cost、memory bandwidth 和 trusted boundary。"
+  evidence_refs:
+  - "Henson 2014 Fig.3: counter-mode encryption."
+  - "Henson 2014 Table I and Section 4-5: qualitative comparison and memory encryption support."
+  proof_object:
+    type: comparison_matrix
+    title: "secure memory design checklist"
+    data:
+      columns: ["检查项", "为什么单独看"]
+      rows:
+      - ["encryption mode", "决定 confidentiality 和访问粒度"]
+      - ["counter/nonce", "影响重复使用和 replay"]
+      - ["integrity metadata", "决定 tamper detection"]
+      - ["root protection", "决定 freshness chain"]
+  source_note: "无新实验；checklist 从 survey 的 counter-mode 和 technique comparison 归纳。"
+
+- slide_id: d11-04-henson-experiments
+  paper_key: henson2014memory
+  slide_type: experiments
+  claim: "Henson 2014 是 survey，无新实验；它汇总旧方案的代价范围，但不能替代现代 confidential VM 证据。"
+  narrative:
+  - "survey 中提到 cache-line encryption/decryption cycles 常在 11 到 160 cycles 范围，80 cycles 很常见。"
+  - "这些是历史材料的汇总，不是本报告新测量。"
+  - "它可用来说明 secure memory design 的 cost dimensions。"
+  - "SEV-SNP、TDX、CCA、CoVE 需要各自的一手 vendor/spec/system evidence。"
+  evidence_refs:
+  - "Henson 2014 conclusion discussion: encryption latencies range 11 to 160 cycles, often 80 cycles."
+  - "Henson 2014 Table I: summary of memory encryption techniques."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "survey 证据边界"
+    data:
+      columns: ["可用", "不可用"]
+      rows:
+      - ["历史技术范围", "现代产品结果"]
+      - ["概念边界", "具体机制正确性"]
+      - ["设计代价维度", "CCA/SEV-SNP 细节"]
+  source_note: "无新实验；历史数字只作 survey background。"
+
+- slide_id: d11-05-henson-evaluation
+  paper_key: henson2014memory
+  slide_type: evaluation
+  claim: "Henson survey 适合防止概念混写，但时间截面早，必须和现代 VM evidence 配合；无新实验。"
+  narrative:
+  - "优点是概念边界清楚，适合把 encryption/integrity/replay 拆开。"
+  - "不足是早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。"
+  - "商业落地价值在 secure memory checklist。"
+  - "风险是单独引用会遗漏现代 ownership metadata、attestation 和 verifier policy。"
+  evidence_refs:
+  - "Henson 2014 Table I and conclusion: technique comparison and cycle-cost range."
+  - "survey/evidence_ledger.md Boundary Records: modern CCA/SEV-SNP claims need current sources."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "概念 taxonomy 清晰"]
+      - ["短板", "2014 时间截面早"]
+      - ["落地价值", "secure memory design checklist"]
+      - ["使用规则", "现代产品/规范另引证据"]
+  source_note: "无新实验；评价按 E2 survey 边界写入。"
+
+- slide_id: d11-06-bmt-summary
+  paper_key: rogers2007bonsai
+  slide_type: summary
+  claim: "Bonsai Merkle Trees 的核心贡献是用 AISE + BMT 同时降低 OS 摩擦和 memory integrity/freshness metadata 成本。"
+  narrative:
+  - "论文提出 Address Independent Seed Encryption，减少虚拟内存和 OS 操作的冲突。"
+  - "Bonsai Merkle Tree 认证 encryption counter metadata，而不是对全部数据构建笨重树。"
+  - "它把 memory integrity 和 stale-data replay 问题放到 secure processor 架构中解决。"
+  - "这篇是本方向的 E1 mechanism anchor。"
+  evidence_refs:
+  - "Rogers 2007 p.1 abstract: AISE and Bonsai Merkle Trees reduce overhead from 12% to 2% on average."
+  - "Rogers 2007 Table 1 and Fig.7: qualitative comparison and performance overhead comparison."
+  proof_object:
+    type: mechanism_flow
+    title: "AISE + BMT"
+    data:
+      stages:
+      - "address-independent seed selects encryption input"
+      - "counter metadata records freshness"
+      - "BMT authenticates counters"
+      - "root kept in trusted boundary"
+      - "memory read checks integrity/freshness"
+  source_note: "流程按摘要、Table 1 和 performance figures 重绘。"
+
+- slide_id: d11-07-bmt-background
+  paper_key: rogers2007bonsai
+  slide_type: background
+  claim: "加密只能隐藏内容，不能发现 untrusted memory 返回被篡改或过期的数据。"
+  narrative:
+  - "secure processor 假设 off-chip communication 可能被攻击。"
+  - "counter-mode encryption 需要 freshness state，否则旧 ciphertext 可被 replay。"
+  - "传统 integrity tree metadata 可能带来存储和访问成本。"
+  - "BMT 的目标是让 integrity/freshness 更 OS-friendly 和 performance-friendly。"
+  evidence_refs:
+  - "Rogers 2007 p.1 introduction: off-chip memory attacks and excessive storage/performance overheads."
+  - "Rogers 2007 Fig.1-Fig.3: counter-mode encryption and virtual memory management issues."
+  proof_object:
+    type: comparison_matrix
+    title: "confidentiality 之外的问题"
+    data:
+      columns: ["攻击", "encryption only", "BMT 类方案"]
+      rows:
+      - ["passive read", "隐藏明文", "同样支持"]
+      - ["tamper", "可能无法检测", "integrity metadata"]
+      - ["replay", "旧值可能通过", "counter freshness"]
+      - ["OS remap", "地址相关种子冲突", "AISE 降低摩擦"]
+  source_note: "矩阵依据 introduction 和 Figure 1-Figure 3。"
+
+- slide_id: d11-08-bmt-solution
+  paper_key: rogers2007bonsai
+  slide_type: solution
+  claim: "BMT 的设计把完整性树压缩到 counter metadata 上，让数据加密和 freshness 认证解耦。"
+  narrative:
+  - "AISE 使用 address-independent seed，缓解虚拟内存和 copy-on-write 等 OS 问题。"
+  - "BMT 只认证 counter space，减少 integrity tree footprint。"
+  - "trusted root 确保 counter tree 不能被 untrusted memory replay。"
+  - "这种结构成为后续 memory integrity/freshness 设计的重要参照。"
+  evidence_refs:
+  - "Rogers 2007 Fig.3: organization of logical page identifiers."
+  - "Rogers 2007 Table 1 and design sections: AISE and BMT qualitative comparison."
+  proof_object:
+    type: path_compare
+    title: "数据与 metadata 分离"
+    data:
+      paths:
+      - label: "data path"
+        steps: ["cache line", "counter-mode encryption", "off-chip memory", "decrypt on read"]
+        note: "confidentiality"
+      - label: "metadata path"
+        steps: ["counter", "BMT node", "trusted root", "verify on read"]
+        note: "integrity and freshness"
+  source_note: "路径按 AISE/BMT 设计描述重绘。"
+
+- slide_id: d11-09-bmt-experiments
+  paper_key: rogers2007bonsai
+  slide_type: experiments
+  claim: "Rogers 2007 报告 AISE+BMT 将 prior memory encryption/integrity verification overhead 从 12% 降到 2% average。"
+  narrative:
+  - "摘要给出 12% 到 2% average overhead reduction。"
+  - "Figure 7 比较 AISE 与其它方案的 performance overhead。"
+  - "Table 1 给出 AISE 与其它 counter-mode encryption approaches 的 qualitative comparison。"
+  - "这些是 secure-processor simulation lineage evidence，不是现代 SEV/CCA 产品对比。"
+  evidence_refs:
+  - "Rogers 2007 p.1 abstract: overhead reduced from 12% to 2% on average."
+  - "Rogers 2007 Table 1 and Fig.7: qualitative and performance overhead comparison."
+  proof_object:
+    type: metric_bars
+    title: "BMT 关键数字"
+    data:
+      metrics:
+      - label: "prior overhead"
+        value: "12%"
+        bar: 60
+        note: "abstract baseline"
+      - label: "AISE+BMT overhead"
+        value: "2%"
+        bar: 10
+        note: "abstract result"
+      - label: "evidence type"
+        value: "MICRO 2007"
+        bar: 60
+        note: "peer-reviewed"
+  source_note: "数字来自摘要；只作为 secure-processor lineage evidence。"
+
+- slide_id: d11-10-bmt-evaluation
+  paper_key: rogers2007bonsai
+  slide_type: evaluation
+  claim: "BMT 是 memory integrity/freshness 的强机制锚点，但它不是现代 confidential VM 产品证据。"
+  narrative:
+  - "优点是清楚区分 encryption、integrity 和 freshness，并给出 peer-reviewed mechanism。"
+  - "不足是 2007 secure processor 设定不同于现代云 VM、CXL 或 device TEE。"
+  - "商业潜力在 memory controller integrity-tree 和 metadata design。"
+  - "落地风险在 metadata storage、trusted root、crash recovery 和 memory bandwidth budget。"
+  evidence_refs:
+  - "Rogers 2007 Table 1 and Fig.7: AISE/BMT comparison and overhead."
+  - "survey/evidence_ledger.md Boundary Records: modern vendor/spec sources needed for product claims."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "peer-reviewed integrity/freshness mechanism"]
+      - ["短板", "历史 secure-processor setting"]
+      - ["落地价值", "memory-controller metadata design"]
+      - ["风险", "metadata/root/recovery/bandwidth"]
+  source_note: "评价把 BMT 限定为机制锚点，不外推为产品证明。"
+
+- slide_id: d11-11-amd-summary
+  paper_key: amd_sev_snp
+  slide_type: summary
+  claim: "AMD vendor 材料在本方向只作为产业 evidence；本地 PDF 首页显示 SEV-ES register-state 保护，因此不把它写成 SNP/RMP 机制细节证明。"
+  narrative:
+  - "README 记录 source 指向 SEV-SNP strengthening VM isolation，但本地 PDF 首页标题是 Protecting VM Register State with SEV-ES。"
+  - "本地 PDF 说明 SEV-ES 在 VMEXIT 时加密并完整性保护 guest register state。"
+  - "它能作为 AMD encrypted VM 产业路线和 register-state integrity 证据。"
+  - "它不能单独证明 SEV-SNP secure nested paging 或 RMP 细节。"
+  evidence_refs:
+  - "AMD reference README p.1: SEV-SNP metadata and E4 industry evidence role."
+  - "AMD local PDF p.1-p.3: Protecting VM Register State with SEV-ES and security goals for register state."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "AMD 本地证据边界"
+    data:
+      columns: ["可写", "不能写"]
+      rows:
+      - ["AMD vendor encrypted-state direction", "peer-reviewed proof"]
+      - ["SEV-ES register-state protection", "SNP/RMP detailed mechanism"]
+      - ["industry evidence role", "complete platform security"]
+  source_note: "本页显式记录 README/source 与本地 PDF title 的不一致，按 E4 保守引用。"
+
+- slide_id: d11-12-amd-background
+  paper_key: amd_sev_snp
+  slide_type: background
+  claim: "AMD 本地 PDF 的背景问题是内存加密仍可能漏掉 VM register state，VMEXIT 时 hypervisor 可观察或篡改保存状态。"
+  narrative:
+  - "PDF 指出 secrets 在使用时常驻 CPU registers。"
+  - "VM stops running 时 register contents 会保存到 hypervisor memory。"
+  - "如果只启用基础 SEV memory encryption，hypervisor 仍可能读取或修改这些寄存器保存区。"
+  - "SEV-ES 因此把 register state 的 confidentiality 和 integrity 加入保护目标。"
+  evidence_refs:
+  - "AMD local PDF p.2-p.3: register contents saved to hypervisor memory during VMEXIT."
+  - "AMD local PDF p.3 Security Goals: protect guest VM register state from malicious hypervisor reads, writes and replay."
+  proof_object:
+    type: comparison_matrix
+    title: "memory vs register state"
+    data:
+      columns: ["对象", "基础风险", "SEV-ES PDF 关注"]
+      rows:
+      - ["guest memory", "host 不应读明文", "SEV baseline"]
+      - ["CPU registers", "VMEXIT 保存到 host-visible memory", "SEV-ES encrypts state"]
+      - ["state integrity", "host 可改 saved state", "integrity-check value"]
+      - ["replay", "旧状态可能恢复", "resume check rejects tamper"]
+  source_note: "背景按本地 PDF Security Goals 和 Technical Overview 重写。"
+
+- slide_id: d11-13-amd-solution
+  paper_key: amd_sev_snp
+  slide_type: solution
+  claim: "本地 AMD PDF 的机制是 VMEXIT/VMRUN 时由硬件保存和恢复加密 register state，并用受保护 integrity-check value 检查篡改。"
+  narrative:
+  - "VMRUN 进入 guest 时，硬件加载 guest register information。"
+  - "VMEXIT 时，硬件自动保存 guest register state。"
+  - "保存区域使用 VM memory encryption key 加密，hypervisor 不知道该 key。"
+  - "CPU 还计算 integrity-check value 并存入 CPU software 不可访问的 protected DRAM。"
+  evidence_refs:
+  - "AMD local PDF p.4-p.5 Technical Overview: Encrypted Register State."
+  - "AMD local PDF p.5: integrity-check value saved in protected DRAM and checked on VMRUN."
+  proof_object:
+    type: mechanism_flow
+    title: "SEV-ES register-state flow"
+    data:
+      stages:
+      - "guest running"
+      - "VMEXIT occurs"
+      - "hardware saves registers"
+      - "state encrypted with VM key"
+      - "integrity-check value stored protected"
+      - "VMRUN verifies before resume"
+  source_note: "流程按本地 AMD PDF Technical Overview 重绘；不写 SNP/RMP 细节。"
+
+- slide_id: d11-14-amd-experiments
+  paper_key: amd_sev_snp
+  slide_type: experiments
+  claim: "AMD 材料是 vendor whitepaper，没有独立学术实验；它只能作为产业机制说明。"
+  narrative:
+  - "PDF 没有提供 peer-reviewed evaluation。"
+  - "它说明 SEV-ES register state 保护目标和技术流程。"
+  - "README 标记为 E4 industry/vendor evidence。"
+  - "现代 SEV-SNP memory integrity 细节需要可靠的 SNP PDF 或官方可复核材料另行支撑。"
+  evidence_refs:
+  - "AMD reference README p.1: Evidence role is industry evidence and should not generalize to peer-reviewed mechanism proof."
+  - "AMD local PDF p.1-p.5: SEV-ES whitepaper technical overview."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "E4 vendor evidence"
+    data:
+      columns: ["可用", "不可用"]
+      rows:
+      - ["vendor mechanism description", "peer-reviewed result"]
+      - ["register-state confidentiality/integrity", "SNP RMP proof"]
+      - ["deployment direction", "complete platform security"]
+  source_note: "厂商技术材料，无独立学术实验；本页按 E4 使用。"
+
+- slide_id: d11-15-amd-evaluation
+  paper_key: amd_sev_snp
+  slide_type: evaluation
+  claim: "AMD vendor evidence 展示产业界从 memory confidentiality 走向 state integrity，但当前本地证据不足以承担 SEV-SNP 细节证明。"
+  narrative:
+  - "优点是说明现代 encrypted VM 必须保护 register state 和 resume integrity。"
+  - "不足是 vendor whitepaper 不是 peer-reviewed proof，且本地 PDF 与 SNP metadata 不一致。"
+  - "商业落地价值在真实云 confidential VM 生态相关性。"
+  - "使用规则是只写本地 PDF 可复核的 SEV-ES state protection，以及 README 标记的 E4 边界。"
+  evidence_refs:
+  - "AMD local PDF p.3-p.5: SEV-ES security goals and encrypted register state."
+  - "AMD reference README p.1: E4 industry evidence role and caution against generalization."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "产业 confidential VM state-protection evidence"]
+      - ["短板", "vendor-only 且 local PDF mismatch"]
+      - ["落地价值", "云 confidential VM 相关"]
+      - ["使用边界", "不写不可复核 SNP/RMP 细节"]
+  source_note: "评价特意记录 evidence mismatch，避免用错本地 PDF。"
+
+- slide_id: d11-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "Memory security 的 takeaway 是加密、完整性、freshness 和 ownership 是四个不同层；引用时必须按证据来源分开。"
+  narrative:
+  - "Henson survey 给 taxonomy，提醒 full disk encryption 不是 runtime memory security。"
+  - "BMT 给 peer-reviewed integrity/freshness mechanism anchor。"
+  - "AMD vendor material 给产业 encrypted-state evidence，但不能替代 peer-reviewed proof。"
+  - "后续 CCA/CoVE/I/O 章节谈 ownership/access control 时，不应自动写成 encryption 或 replay protection。"
+  evidence_refs:
+  - "Henson 2014 Fig.1/Table I; Rogers 2007 p.1/Table 1/Fig.7; AMD local PDF p.1-p.5."
+  - "survey/evidence_ledger.md Boundary Records, 11-memory-encryption-integrity-replay."
+  proof_object:
+    type: comparison_matrix
+    title: "方向总结"
+    data:
+      columns: ["问题", "主证据", "后续使用规则"]
+      rows:
+      - ["confidentiality taxonomy", "Henson survey", "只作概念边界"]
+      - ["integrity/freshness", "BMT", "机制 anchor"]
+      - ["vendor deployment", "AMD E4", "只写可复核内容"]
+      - ["ownership/access control", "CCA/PMP/IOMMU contrast", "不混成加密"]
+  source_note: "方向总结基于三类 evidence class 的分工。"

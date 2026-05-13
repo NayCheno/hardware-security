@@ -1,0 +1,408 @@
+direction: "RISC-V 基础安全 primitives"
+story_version: 1
+slides:
+- slide_id: d07-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "RISC-V primitives 这一节要把 ISA/平台基元和 TEE 系统本体分开：PMP、IOMMU、AIA 是 substrate，不是完整 TEE。"
+  narrative:
+  - "Privileged Architecture 定义 privilege levels、PMP、paging、trap 等 CPU-side substrate。"
+  - "RISC-V IOMMU 规范定义 device DMA translation/protection 和 MSI 相关结构。"
+  - "RISC-V AIA 规范定义 interrupt controller、IMSIC/APLIC 和 guest interrupt 支撑。"
+  - "三篇都是 E0 spec，支撑术语和接口语义，无新实验。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 07-riscv-primitives."
+  - "RISC-V privileged spec p.1 TOC; RISC-V IOMMU spec p.1 TOC; RISC-V AIA spec p.1 preface."
+  proof_object:
+    type: comparison_matrix
+    title: "三类 substrate"
+    data:
+      columns: ["规范", "保护对象", "服务后续章节"]
+      rows:
+      - ["Privileged ISA", "CPU privilege/PMP/page tables", "Keystone/Penglai/CoVE"]
+      - ["IOMMU", "DMA address translation", "CoVE-IO/TEE-I/O"]
+      - ["AIA", "interrupt delivery/virtualization", "trusted interrupt"]
+      - ["共同边界", "规范语义", "无新实验"]
+  source_note: "方向页只建立 substrate 分工；所有 primary 均为 spec evidence。"
+
+- slide_id: d07-01-priv-summary
+  paper_key: riscv_privileged
+  slide_type: summary
+  claim: "RISC-V Privileged Architecture 是 RISC-V TEE 的 CPU-side 基础，定义 privilege levels、PMP、paging 和 trap 语义；无新实验。"
+  narrative:
+  - "本地 PDF 是 20260120 official release。"
+  - "它定义 M/S/U 等 privilege levels 和 privileged software stack terminology。"
+  - "PMP/Smepmp 等章节为 enclave monitor、firmware 和 trusted runtime 提供访问控制 substrate。"
+  - "它是规范，不是 Keystone、Penglai 或 CoVE 的系统证据。"
+  evidence_refs:
+  - "RISC-V Privileged Architecture p.1 Table of Contents and version line: 20260120 Official Release."
+  - "RISC-V Privileged Architecture Section 1.2 and Section 3.7: privilege levels and Physical Memory Protection."
+  proof_object:
+    type: mechanism_flow
+    title: "CPU-side primitive stack"
+    data:
+      stages:
+      - "privilege levels"
+      - "trap and CSR control"
+      - "paging and address translation"
+      - "PMP region checks"
+      - "Smepmp enhancements"
+  source_note: "无新实验；流程按 privileged spec TOC 和 PMP/Smepmp 章节组织。"
+
+- slide_id: d07-02-priv-background
+  paper_key: riscv_privileged
+  slide_type: background
+  claim: "RISC-V TEE 研究从 PMP 起步，是因为开放 ISA 需要一个可由 machine-mode monitor 配置的硬件访问控制点；无新实验。"
+  narrative:
+  - "Keystone、Penglai 等系统都依赖 machine-mode monitor 和物理内存访问控制。"
+  - "PMP 提供按 physical address region 的权限约束。"
+  - "Smepmp 进一步增强 machine-mode memory access and execution prevention。"
+  - "这些基元只能提供 enforcement hook，TEE 还要自己定义 lifecycle、measurement 和 runtime。"
+  evidence_refs:
+  - "RISC-V Privileged Architecture Section 3.7: Physical Memory Protection."
+  - "RISC-V Privileged Architecture Section 6: Smepmp extension for PMP enhancements."
+  proof_object:
+    type: comparison_matrix
+    title: "primitive 与 TEE 的区别"
+    data:
+      columns: ["层", "提供", "不提供"]
+      rows:
+      - ["PMP", "region access permission", "enclave lifecycle"]
+      - ["Smepmp", "M-mode access control enhancement", "attestation policy"]
+      - ["paging", "virtual memory substrate", "trusted runtime"]
+      - ["trap/CSR", "privileged control", "device path security"]
+  source_note: "无新实验；矩阵按 spec 中 PMP/Smepmp 的角色限定。"
+
+- slide_id: d07-03-priv-solution
+  paper_key: riscv_privileged
+  slide_type: solution
+  claim: "在 RISC-V TEE 中，privileged ISA 的实用方式是把 monitor 放在更高权限，用 PMP/CSR 对低权限软件施加边界；无新实验。"
+  narrative:
+  - "M-mode 或更高可信 firmware 通常配置 PMP entries。"
+  - "S-mode OS 或 enclave runtime 在受限权限下运行。"
+  - "trap 和 CSR 提供 entry/exit/control transfer 机制。"
+  - "这种分层为 08 的 Keystone/Penglai/SPEAR-V 提供基础词汇。"
+  evidence_refs:
+  - "RISC-V Privileged Architecture Section 1.1-1.2: privileged software stack and privilege levels."
+  - "RISC-V Privileged Architecture Section 3.1-3.7: machine CSRs and PMP control."
+  proof_object:
+    type: mechanism_flow
+    title: "monitor-mediated protection"
+    data:
+      stages:
+      - "trusted monitor enters M-mode"
+      - "configures PMP/CSR state"
+      - "launches lower-privilege software"
+      - "handles trap/entry"
+      - "updates protection on lifecycle events"
+  source_note: "无新实验；流程是对 spec primitives 的 TEE 用法归纳。"
+
+- slide_id: d07-04-priv-experiments
+  paper_key: riscv_privileged
+  slide_type: experiments
+  claim: "Privileged Architecture 是 ISA 规范，无新实验；它定义接口和权限语义，不给具体 TEE 结果背书。"
+  narrative:
+  - "本页不写系统测评数据。"
+  - "spec 能支撑 PMP、Smepmp、privilege levels 等术语。"
+  - "Keystone/Penglai/SPEAR-V 的系统结果要读各自论文。"
+  - "CoVE/AP-TEE 的 TVM 语义要读对应 draft spec。"
+  evidence_refs:
+  - "RISC-V Privileged Architecture p.1 version and Table of Contents."
+  - "survey/evidence_ledger.md Section Evidence Classes: E0 specification supports interface and terminology claims."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "E0 spec 使用边界"
+    data:
+      columns: ["可写", "不可写"]
+      rows:
+      - ["privilege/PMP 术语", "某 TEE 系统结果"]
+      - ["CSR 和 trap 语义", "安全部署充分性"]
+      - ["official ISA status", "device I/O protection"]
+  source_note: "无新实验；本页只写规范语义。"
+
+- slide_id: d07-05-priv-evaluation
+  paper_key: riscv_privileged
+  slide_type: evaluation
+  claim: "Privileged ISA 是所有 RISC-V TEE 的共同地基，但地基不是建筑；无新实验。"
+  narrative:
+  - "优点是给 RISC-V TEE 提供开放、可组合的硬件控制面。"
+  - "不足是 spec 本身不规定完整 enclave/TVM lifecycle。"
+  - "商业落地价值在生态统一和可移植 monitor/runtime。"
+  - "风险是不同实现对 PMP、Smepmp、firmware 和 platform security 的组合差异很大。"
+  evidence_refs:
+  - "RISC-V Privileged Architecture Section 1, Section 3.7 and Section 6."
+  - "Boubakri 2025 README Section 8: RISC-V TEE systems differ in threat model."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "开放 ISA substrate"]
+      - ["短板", "不定义完整 TEE"]
+      - ["落地价值", "monitor/runtime 可移植基础"]
+      - ["风险", "平台组合差异决定最终安全"]
+  source_note: "无新实验；评价只针对 ISA substrate。"
+
+- slide_id: d07-06-iommu-summary
+  paper_key: riscv_iommu_2023
+  slide_type: summary
+  claim: "RISC-V IOMMU 规范给 CoVE-IO 和 TEE-I/O 提供 DMA address translation/protection substrate；无新实验。"
+  narrative:
+  - "本地 PDF 是 RISC-V IOMMU Architecture Specification v1.0.1 ratified。"
+  - "规范定义 device context、process context、DDT、PDT、IOATC 等对象。"
+  - "它还覆盖 MSI page table 和 address translation synchronization。"
+  - "它能支撑 DMA 隔离语义，但不等于完整 trusted device lifecycle。"
+  evidence_refs:
+  - "RISC-V IOMMU spec p.1 version line: v1.0.1, 2026-02-22, Ratified."
+  - "RISC-V IOMMU spec Section 3.1.3 and Section 7.3: translation control, MSI page table, DDT/PDT updates."
+  proof_object:
+    type: mechanism_flow
+    title: "IOMMU translation path"
+    data:
+      stages:
+      - "device_id selects DDT"
+      - "device context supplies translation control"
+      - "process_id selects PDT/PC"
+      - "IOMMU performs address translation"
+      - "IOATC caches and syncs translations"
+  source_note: "无新实验；流程按 IOMMU spec 对 DDT/PDT/IOATC 的定义重绘。"
+
+- slide_id: d07-07-iommu-background
+  paper_key: riscv_iommu_2023
+  slide_type: background
+  claim: "TEE 不能只保护 CPU access，因为 device DMA 可以绕过 CPU-side PMP/page-table 检查；无新实验。"
+  narrative:
+  - "设备通过 DMA 发起内存访问，路径不一定经过 CPU privilege enforcement。"
+  - "IOMMU 用 device context 和 translation structures 控制 device-visible address space。"
+  - "在 confidential VM 中，还需要把 device assignment 与 guest/host translation 分开。"
+  - "这为 CoVE-IO 中 IOMMU assignment 和 trusted DMA substrate 打基础。"
+  evidence_refs:
+  - "RISC-V IOMMU spec Section 1-3: IOMMU purpose and address translation controls."
+  - "RISC-V IOMMU spec Section 3.1.3.2: IO hypervisor guest address translation and protection."
+  proof_object:
+    type: path_compare
+    title: "CPU access vs device DMA"
+    data:
+      paths:
+      - label: "CPU access"
+        steps: ["hart", "privilege/page table", "PMP", "memory"]
+        note: "privileged ISA substrate"
+      - label: "device DMA"
+        steps: ["device", "IOMMU", "translation context", "memory"]
+        note: "needs IOMMU substrate"
+  source_note: "无新实验；路径按 privileged ISA 与 IOMMU spec 的分工重绘。"
+
+- slide_id: d07-08-iommu-solution
+  paper_key: riscv_iommu_2023
+  slide_type: solution
+  claim: "RISC-V IOMMU 的规范结构把 device、process、MSI 和 translation cache 明确化，方便后续 CoVE-IO 组合；无新实验。"
+  narrative:
+  - "Device Directory Table 以 device_id 找到 device context。"
+  - "Process Directory Table 以 process_id 找到 process context。"
+  - "MSI page table 支撑 message-signaled interrupt 相关映射。"
+  - "IOATC synchronization 让软件更新 translation structures 后能同步缓存状态。"
+  evidence_refs:
+  - "RISC-V IOMMU spec Section 3.1.3.5-3.1.3.6: MSI page table pointer and MSI address mask."
+  - "RISC-V IOMMU spec Section 7.3.1-7.3.3: changing DDT, PDT and MSI page table entries."
+  proof_object:
+    type: comparison_matrix
+    title: "IOMMU 关键对象"
+    data:
+      columns: ["对象", "作用", "TEE-I/O 含义"]
+      rows:
+      - ["DDT/DC", "device_id 到 device context", "device assignment 基础"]
+      - ["PDT/PC", "process_id 到 process context", "PASID/process isolation"]
+      - ["MSI page table", "中断消息地址控制", "trusted interrupt 连接点"]
+      - ["IOATC", "translation cache", "需要同步和失效协议"]
+  source_note: "无新实验；对象来自 IOMMU spec Section 3 和 Section 7。"
+
+- slide_id: d07-09-iommu-experiments
+  paper_key: riscv_iommu_2023
+  slide_type: experiments
+  claim: "RISC-V IOMMU 是 ratified spec，无新实验；它给出 DMA 语义，不给 CoVE-IO 完整安全结论。"
+  narrative:
+  - "规范可用于说明 DDT/PDT/MSI/IOATC 等接口对象。"
+  - "它不证明某个实现的设备隔离已经正确。"
+  - "它不覆盖 SPDM、TDISP、PCIe IDE 或 trusted device state。"
+  - "后续 10/13 章节需要把 IOMMU 与 CoVE-IO、SPDM 和 TDISP 组合起来。"
+  evidence_refs:
+  - "RISC-V IOMMU spec p.1 version and Section 3: ratified IOMMU architecture."
+  - "survey/evidence_ledger.md Section Evidence Classes: E0 supports specification/interface claims."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "IOMMU spec 边界"
+    data:
+      columns: ["可支撑", "不可支撑"]
+      rows:
+      - ["DMA translation/protection 语义", "device identity"]
+      - ["MSI mapping objects", "TDISP state"]
+      - ["IOATC synchronization", "完整 trusted I/O lifecycle"]
+  source_note: "无新实验；本页只写规范接口边界。"
+
+- slide_id: d07-10-iommu-evaluation
+  paper_key: riscv_iommu_2023
+  slide_type: evaluation
+  claim: "IOMMU 是 RISC-V confidential I/O 的必要 substrate，但不是充分条件；无新实验。"
+  narrative:
+  - "优点是把 DMA translation 和 device context 规范化。"
+  - "不足是缺少 device identity、measurement、secure session 和 TDI lifecycle。"
+  - "商业落地价值在标准化 RISC-V 设备隔离和虚拟化基础。"
+  - "风险在实现正确性、IOATC sync、ATS/PRI 等高级设备行为与 TEE policy 的组合。"
+  evidence_refs:
+  - "RISC-V IOMMU spec Section 3 and Section 7: contexts, translation and synchronization."
+  - "RISC-V CoVE-IO spec Section 7.1.1: IOMMU Assignment depends on IOMMU substrate."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "标准化 DMA translation substrate"]
+      - ["短板", "不包含 device trust lifecycle"]
+      - ["落地价值", "RISC-V virtualized I/O 基础"]
+      - ["风险", "cache sync 和高级 device feature 组合"]
+  source_note: "无新实验；评价只把 IOMMU 放在 CoVE-IO substrate 位置。"
+
+- slide_id: d07-11-aia-summary
+  paper_key: riscv_aia_2023
+  slide_type: summary
+  claim: "RISC-V AIA 规范定义 interrupt delivery 和 virtualization substrate，是 trusted interrupt 讨论的基础；无新实验。"
+  narrative:
+  - "本地 PDF 是 RISC-V Advanced Interrupt Architecture Version 1.0 revised 20250312。"
+  - "AIA 定义 IMSIC、APLIC、machine/supervisor/VS-level interrupts。"
+  - "它提供 guest interrupt file 和 virtual interrupt 支撑。"
+  - "它能支撑中断架构语义，但不等于 Devlore 或 CoVE-IO 的 trusted interrupt policy。"
+  evidence_refs:
+  - "RISC-V AIA spec p.1 Preface: Version 1.0 Revised 20250312."
+  - "RISC-V AIA spec Section 3-6: IMSIC, APLIC and interrupts for virtual machines."
+  proof_object:
+    type: mechanism_flow
+    title: "AIA interrupt substrate"
+    data:
+      stages:
+      - "device raises interrupt"
+      - "APLIC handles wired interrupt"
+      - "IMSIC handles MSI"
+      - "hart interrupt file records state"
+      - "VS-level delivery supports guest"
+  source_note: "无新实验；流程按 AIA spec IMSIC/APLIC/guest interrupt 章节重绘。"
+
+- slide_id: d07-12-aia-background
+  paper_key: riscv_aia_2023
+  slide_type: background
+  claim: "在 confidential VM 中，中断不仅是性能功能，也是控制流和设备事件真实性的一部分；无新实验。"
+  narrative:
+  - "设备中断会改变 guest OS 和 CVM 的执行路径。"
+  - "虚拟化需要把 physical interrupt 映射到 guest-visible interrupt。"
+  - "如果 host 能任意注入或重定向中断，confidential workload 的完整性会受影响。"
+  - "AIA 提供 RISC-V interrupt virtualization 基础，trusted policy 需要在其上构建。"
+  evidence_refs:
+  - "RISC-V AIA spec Section 6.1: VS-level external interrupts with a guest interrupt file."
+  - "RISC-V AIA spec Section 6.1.1: direct control of a device by a guest OS."
+  proof_object:
+    type: comparison_matrix
+    title: "中断为何进入安全边界"
+    data:
+      columns: ["对象", "普通虚拟化关注", "confidential 额外关注"]
+      rows:
+      - ["delivery", "正确送达 guest", "不能被 host 伪造"]
+      - ["priority", "调度和响应", "不能诱导错误控制流"]
+      - ["guest file", "虚拟化状态", "ownership 与迁移语义"]
+      - ["device control", "passthrough", "与 IOMMU/device trust 绑定"]
+  source_note: "无新实验；矩阵依据 AIA Section 6 的 guest interrupt 语义。"
+
+- slide_id: d07-13-aia-solution
+  paper_key: riscv_aia_2023
+  slide_type: solution
+  claim: "AIA 把 wired interrupt 和 MSI 路径分别规范化，使后续 trusted interrupt 可以明确绑定到 IMSIC/APLIC 状态；无新实验。"
+  narrative:
+  - "APLIC 处理 platform-level wired interrupt delivery。"
+  - "IMSIC 处理 incoming MSI，并提供 per-hart interrupt file。"
+  - "guest interrupt file 支持 VS-level external interrupts。"
+  - "trusted interrupt 机制可以在这些对象上定义 ownership、binding 和 migration policy。"
+  evidence_refs:
+  - "RISC-V AIA spec Section 3: Incoming MSI Controller IMSIC."
+  - "RISC-V AIA spec Section 4 and Section 6: APLIC and VS-level external interrupts."
+  proof_object:
+    type: comparison_matrix
+    title: "AIA 对象与可信策略入口"
+    data:
+      columns: ["对象", "规范作用", "可信策略入口"]
+      rows:
+      - ["IMSIC", "incoming MSI controller", "guest interrupt file ownership"]
+      - ["APLIC", "wired interrupt controller", "domain delivery policy"]
+      - ["VS-level interrupt", "guest virtualization", "CVM/TVM binding"]
+      - ["migration", "guest file relocation", "state transfer integrity"]
+  source_note: "无新实验；对象来自 AIA Section 3、4、6。"
+
+- slide_id: d07-14-aia-experiments
+  paper_key: riscv_aia_2023
+  slide_type: experiments
+  claim: "AIA 是 interrupt architecture spec，无新实验；它支撑语义，不支撑某个 trusted interrupt 系统结果。"
+  narrative:
+  - "规范定义 interrupt controller 和 virtualization objects。"
+  - "它不验证 Devlore 或 CoVE-IO 的安全策略。"
+  - "它不提供设备身份、DMA 或 link security。"
+  - "后续需要和 IOMMU/CoVE-IO/Devlore 一起解释 trusted device path。"
+  evidence_refs:
+  - "RISC-V AIA spec p.1 Preface and Section 3-6."
+  - "survey/evidence_ledger.md Section Evidence Classes: E0 specification evidence."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "AIA spec 边界"
+    data:
+      columns: ["可支撑", "不可支撑"]
+      rows:
+      - ["IMSIC/APLIC/VS interrupt 语义", "trusted interrupt policy 正确"]
+      - ["guest interrupt file 概念", "device identity"]
+      - ["virtualization substrate", "DMA/link 安全"]
+  source_note: "无新实验；只写规范语义。"
+
+- slide_id: d07-15-aia-evaluation
+  paper_key: riscv_aia_2023
+  slide_type: evaluation
+  claim: "AIA 是 RISC-V trusted interrupt 的必要底座，但完整安全仍取决于 ownership、IOMMU 和 device lifecycle；无新实验。"
+  narrative:
+  - "优点是把 interrupt virtualization 标准化，尤其是 IMSIC 和 guest interrupt file。"
+  - "不足是规范本身不定义 confidential VM 的 interrupt authenticity policy。"
+  - "商业落地价值在 RISC-V virtualization 和 passthrough device support。"
+  - "风险在迁移、direct device control 和 host-controlled interrupt routing 的组合。"
+  evidence_refs:
+  - "RISC-V AIA spec Section 6.1-6.1.2: guest interrupt file and migration topics."
+  - "Devlore Fig.2-Fig.4: trusted interrupt requires extra binding checks beyond substrate."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "interrupt virtualization substrate"]
+      - ["短板", "不定义 confidential policy"]
+      - ["落地价值", "RISC-V device passthrough 基础"]
+      - ["风险", "routing/migration/direct-control 组合"]
+  source_note: "无新实验；评价把 AIA 放在 substrate 层。"
+
+- slide_id: d07-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "RISC-V primitives 的 takeaway 是 CPU、DMA、interrupt 三条 substrate 都必须到位，TEE/CoVE/CoVE-IO 才有组合基础。"
+  narrative:
+  - "Privileged ISA 提供 CPU-side privilege、PMP 和 trap 控制。"
+  - "IOMMU 提供 device DMA translation/protection。"
+  - "AIA 提供 interrupt virtualization 和 guest interrupt substrate。"
+  - "三者都是 E0 规范，无新实验；完整系统安全要看 08-10 的系统和 draft spec。"
+  evidence_refs:
+  - "RISC-V Privileged Section 3.7; RISC-V IOMMU Section 3; RISC-V AIA Section 3-6."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 07-riscv-primitives."
+  proof_object:
+    type: comparison_matrix
+    title: "后续章节映射"
+    data:
+      columns: ["primitive", "后续系统", "注意边界"]
+      rows:
+      - ["PMP/Smepmp", "Keystone/Penglai/SPEAR-V", "不是 lifecycle"]
+      - ["IOMMU", "CoVE-IO", "不是 device identity"]
+      - ["AIA", "trusted interrupt", "不是 authenticity policy"]
+      - ["组合", "AP-TEE/CoVE/TEE-I/O", "需要额外 spec/system evidence"]
+  source_note: "方向总结只写 substrate mapping，不写实验结论。"

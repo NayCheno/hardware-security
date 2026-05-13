@@ -1,0 +1,435 @@
+direction: "Arm CCA I/O、DMA、accelerator、interrupt"
+story_version: 1
+slides:
+- slide_id: d05-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "CCA I/O 这节讨论 CPU Realm 之外的边界：DMA、MMIO、interrupt 和 accelerator workflow 都会把秘密带出 CPU 本地路径。"
+  narrative:
+  - "ACAI 关注 accelerator execution，把 CCA granule protection 扩到 PCIe/GPU/FPGA 访问路径。"
+  - "Devlore 关注 device interrupt protection，说明中断也会破坏 confidential VM 的完整性和控制流。"
+  - "Accelerator TEE SoK 提供分类坐标，帮助区分 Host-type、Acc.-type、Mix-type 和 data path 保护范围。"
+  - "三篇共同说明 CCA 基础 Realm 不自动等于 trusted I/O。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 05-arm-cca-io-accelerator-interrupt."
+  - "ACAI p.1 abstract; Devlore p.1 abstract; Accelerator TEE SoK p.1 abstract."
+  proof_object:
+    type: comparison_matrix
+    title: "CCA I/O 的三个子问题"
+    data:
+      columns: ["问题", "主证据", "边界"]
+      rows:
+      - ["accelerator data path", "ACAI", "E3 draft"]
+      - ["interrupt authenticity/order", "Devlore", "E3 draft"]
+      - ["accelerator TEE taxonomy", "SoK", "E2 classification"]
+      - ["完整 trusted I/O", "需要 CoVE-IO/SPDM/TDISP 等后续证据", "本节不单独证明"]
+  source_note: "方向页只建立问题拆分；ACAI/Devlore 均保留 draft-not-ratified 状态。"
+
+- slide_id: d05-01-acai-summary
+  paper_key: acai2023
+  slide_type: summary
+  claim: "ACAI 的核心贡献是让 CCA-enabled peripheral 直接安全访问 Realm memory，而不是让 VM 先把数据复制到非安全缓冲区。"
+  narrative:
+  - "论文指出 confidential VM 想使用 GPU/FPGA 时，传统做法常需要 extra copy 和 software encryption。"
+  - "ACAI 重新设计 CCA I/O path，使 accelerator 的 bus transaction 和 address translation 也接受 granule protection checks。"
+  - "它用 PCIe IDE keying、SMMU/GPT enforcement 和 realm/device lifecycle 组合保护 accelerator execution。"
+  - "它是早期 draft 系统，不是 Arm CCA 标准已完成的 trusted I/O 证明。"
+  evidence_refs:
+  - "ACAI p.1 abstract: protects accelerator execution with Arm CCA and extends granule protection checks to bus transactions."
+  - "ACAI Fig.1 and Table 1: access modes and copy/encryption-decryption operation comparison."
+  proof_object:
+    type: path_compare
+    title: "encrypted-copy path vs ACAI path"
+    data:
+      paths:
+      - label: "传统加密搬运"
+        steps: ["Realm encrypts buffer", "copy to shared memory", "device computes", "copy back", "Realm decrypts"]
+        note: "extra copies and software crypto"
+      - label: "ACAI"
+        steps: ["Realm grants device path", "GPC/SMMU checks", "IDE-protected PCIe path", "accelerator computes"]
+        note: "device transaction becomes checked path"
+  source_note: "路径重绘自 Figure 1、Table 1 和摘要。"
+
+- slide_id: d05-02-acai-background
+  paper_key: acai2023
+  slide_type: background
+  claim: "ACAI 的背景矛盾是 CCA 保护了 Realm memory，但 accelerator 访问通常发生在 CPU 核心之外。"
+  narrative:
+  - "CCA 的 granule protection checks 本来主要约束 CPU 和系统内存访问。"
+  - "GPU/FPGA 通过 MMIO、DMA、SMMU 和 PCIe 访问数据，路径上有 host、driver、Root Port 和 device state。"
+  - "如果只允许 shared memory + software encryption，安全上保守但性能和可用性差。"
+  - "因此 ACAI 试图把 CCA 的保护语义扩展到 accelerator transaction。"
+  evidence_refs:
+  - "ACAI p.1-p.2 introduction: CCA success and caveat that tenants cannot securely use accelerators."
+  - "ACAI Fig.2: GPC in Arm CCA and protected transaction context."
+  proof_object:
+    type: comparison_matrix
+    title: "accelerator 路径中的边界对象"
+    data:
+      columns: ["对象", "为什么危险", "ACAI 处理方向"]
+      rows:
+      - ["MMIO", "host 可配置 device interface", "限制可见寄存器和访问"]
+      - ["DMA", "device 可读写内存", "SMMU/GPT 联动检查"]
+      - ["PCIe link", "链路可被观察或篡改", "IDE key 保护"]
+      - ["driver/runtime", "software TCB 增大", "减少 copy path"]
+  source_note: "问题拆分依据 introduction、Figure 2 和 Figure 5。"
+
+- slide_id: d05-03-acai-solution
+  paper_key: acai2023
+  slide_type: solution
+  claim: "ACAI 的设计把 device lifecycle、GPT/SMMU 检查和 IDE link protection 组合成 accelerator execution 的可信路径。"
+  narrative:
+  - "Figure 5 展示 MMIO 和 DMA 在 ACAI 中如何经过 protection path。"
+  - "Table 2 总结 ACAI 引入的新接口和更新。"
+  - "Root Port 中的 IDE key 与 device access control 共同限制 accelerator 与 Realm 之间的数据流。"
+  - "它的安全性来自多组件组合，而不是某一个单独寄存器或 driver patch。"
+  evidence_refs:
+  - "ACAI Fig.5: MMIO and DMA in ACAI with IDE keys in Root Ports."
+  - "ACAI Table 2: new interfaces and updates introduced by ACAI."
+  proof_object:
+    type: mechanism_flow
+    title: "ACAI trusted accelerator flow"
+    data:
+      stages:
+      - "Realm 创建并声明 accelerator 需求"
+      - "host 发起 attach_dev 等管理请求"
+      - "RMM/firmware 检查 device lifecycle"
+      - "SMMU/GPT 约束 DMA"
+      - "PCIe IDE 保护 link"
+      - "accelerator 访问 Realm buffer"
+  source_note: "流程按 Figure 5 和 Table 2 重绘；保留 draft 证据边界。"
+
+- slide_id: d05-04-acai-experiments
+  paper_key: acai2023
+  slide_type: experiments
+  claim: "ACAI 报告 GPU 平均 43.5% 和 FPGA 平均 12.1% 额外代价，优化后相对原 ACAI 有 26.05% 和 3.1% speedup。"
+  narrative:
+  - "作者在 Arm public simulator 和开发板环境中评估 GPU 与 FPGA workloads。"
+  - "摘要报告 ACAI 在 GPU/FPGA 上分别带来 43.5% 和 12.1% average overhead。"
+  - "优化版本 ACAI OPT 相对 ACAI 在 GPU/FPGA 上分别有 26.05% 和 3.1% speedup。"
+  - "这些数字支撑 early design feasibility，但必须按 E3 draft 阅读。"
+  evidence_refs:
+  - "ACAI p.1 abstract: 43.5% GPU and 12.1% FPGA overhead."
+  - "ACAI Fig.7 and evaluation text: GPU benchmark overheads and ACAI OPT speedup numbers."
+  proof_object:
+    type: metric_bars
+    title: "ACAI reported results"
+    data:
+      metrics:
+      - label: "GPU overhead"
+        value: "43.5%"
+        bar: 44
+        note: "abstract"
+      - label: "FPGA overhead"
+        value: "12.1%"
+        bar: 12
+        note: "abstract"
+      - label: "GPU OPT speedup"
+        value: "26.05%"
+        bar: 26
+        note: "evaluation"
+      - label: "FPGA OPT speedup"
+        value: "3.1%"
+        bar: 3
+        note: "evaluation"
+  source_note: "数字来自摘要和 evaluation；本页不写成标准化 trusted I/O 结果。"
+
+- slide_id: d05-05-acai-evaluation
+  paper_key: acai2023
+  slide_type: evaluation
+  claim: "ACAI 的价值是把 CCA data path 推到 accelerator，但短板是 draft 成熟度、硬件依赖和完整 device identity/lifecycle 仍需补证据。"
+  narrative:
+  - "优点是明确指出 CCA CPU boundary 之外的 accelerator blind spot。"
+  - "不足是依赖模拟器、开发板和设计扩展，不能视为已部署标准。"
+  - "商业潜力在 GPU/FPGA confidential workload，尤其是 AI 和专用加速。"
+  - "落地风险包括 device attestation、IDE key management、driver compatibility 和 multi-tenant scheduling。"
+  evidence_refs:
+  - "ACAI Fig.5 and Table 2: trusted accelerator path and interfaces."
+  - "survey/evidence_ledger.md Boundary Records: draft/not ratified must remain explicit."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "把 Realm 数据路径延伸到 accelerator"]
+      - ["短板", "E3 draft，硬件/firmware 依赖强"]
+      - ["落地场景", "confidential GPU/FPGA workload"]
+      - ["不能承担", "完整 SPDM/TDISP/device lifecycle 证明"]
+  source_note: "评价结合 ACAI 范围和本报告 confidential I/O 证据边界。"
+
+- slide_id: d05-06-devlore-summary
+  paper_key: bertschi2026devlore
+  slide_type: summary
+  claim: "Devlore 的核心贡献是把 device interrupt 也纳入 confidential VM 边界，阻止 host 随意伪造或重放设备中断。"
+  narrative:
+  - "论文指出攻击者可注入 malicious interrupts，破坏 confidential VM 的机密性和完整性。"
+  - "Devlore 让 CVM 注册 device interrupts，并由 monitor/RMM 检查物理中断与虚拟中断的绑定。"
+  - "它关注的是 interrupt path，不是 DMA、MMIO 或 device identity 的全部问题。"
+  - "它是 2026 draft，适合作为最新 interrupt protection 方向证据。"
+  evidence_refs:
+  - "Devlore p.1 abstract: malicious interrupt injection can break confidentiality and integrity of confidential VMs."
+  - "Devlore Fig.2: interrupt isolation design."
+  proof_object:
+    type: path_compare
+    title: "未保护 interrupt vs Devlore"
+    data:
+      paths:
+      - label: "unprotected path"
+        steps: ["device event", "host/GIC config", "virtual interrupt", "CVM handles"]
+        note: "host can inject or misroute"
+      - label: "Devlore path"
+        steps: ["CVM registers interrupt", "monitor records physical IRQ", "RMM checks binding", "virtual IRQ delivered"]
+        note: "interrupt authenticity is mediated"
+  source_note: "路径重绘自 Figure 2 和摘要。"
+
+- slide_id: d05-07-devlore-background
+  paper_key: bertschi2026devlore
+  slide_type: background
+  claim: "中断是 CCA I/O 边界中容易被低估的一环，因为它不搬运数据，却能改变 CVM 控制流。"
+  narrative:
+  - "CVM 保护内存和 CPU state，但设备事件通过 interrupt controller 进入 execution path。"
+  - "host 或 hypervisor 如果能任意配置 virtual interrupt，就可能诱导 CVM 执行错误路径。"
+  - "传统 device passthrough 关注 DMA isolation，未必验证 interrupt authenticity 和 ordering。"
+  - "Devlore 因此把 interrupt lifecycle 作为独立保护对象。"
+  evidence_refs:
+  - "Devlore p.1 introduction: attacks via malicious interrupts against CVMs."
+  - "Devlore Fig.3-Fig.4: hypervisor GIC configuration flow and registered interrupt ordering."
+  proof_object:
+    type: comparison_matrix
+    title: "interrupt protection 关注点"
+    data:
+      columns: ["风险", "表现", "Devlore 方向"]
+      rows:
+      - ["forged interrupt", "host 注入不存在事件", "绑定物理和虚拟中断"]
+      - ["misconfiguration", "GIC/vGIC 配置被操纵", "monitor 记录和检查"]
+      - ["ordering issue", "事件顺序影响 handler", "维护 ordered physical list"]
+      - ["compatibility", "device driver 仍需工作", "评估 GPU/driver 场景"]
+  source_note: "矩阵依据 Figure 3、Figure 4 和 threat discussion。"
+
+- slide_id: d05-08-devlore-solution
+  paper_key: bertschi2026devlore
+  slide_type: solution
+  claim: "Devlore 的设计把中断注册、GIC 配置和虚拟中断注入拆成可检查步骤。"
+  narrative:
+  - "CVM 先注册可接受的 device interrupts。"
+  - "monitor/RMM 记录到达的 physical interrupts 并检查它们是否属于已注册集合。"
+  - "virtual interrupt 只有在与 physical interrupt 绑定后才交给 CVM。"
+  - "Table 1 总结了 Devlore 新增和复用的 device lifecycle API。"
+  evidence_refs:
+  - "Devlore Fig.2-Fig.4: design, GIC configuration flow, registered interrupt list."
+  - "Devlore Table 1: new and existing API for device lifecycle."
+  proof_object:
+    type: mechanism_flow
+    title: "Devlore interrupt flow"
+    data:
+      stages:
+      - "CVM registers device IRQ"
+      - "hypervisor config request"
+      - "monitor records physical IRQ"
+      - "RMM verifies binding"
+      - "virtual IRQ delivered to CVM"
+  source_note: "流程按 Figure 2-Figure 4 和 Table 1 重绘。"
+
+- slide_id: d05-09-devlore-experiments
+  paper_key: bertschi2026devlore
+  slide_type: experiments
+  claim: "Devlore 在典型 integrated GPU 应用中报告 0.06% overhead，并在 interrupt path breakdown 中定位主要检查成本。"
+  narrative:
+  - "论文在 Arm FVP 和 Arm board 上实现并评估 Devlore。"
+  - "摘要报告典型 integrated GPU applications 的 overhead 为 0.06%。"
+  - "Figure 7 展示 GPU interrupt flow breakdown，说明 checking virtual interrupts 是主要新增时间来源之一。"
+  - "Figure 9 用 glmark2 board case study 检查真实 GPU workload。"
+  evidence_refs:
+  - "Devlore p.1 abstract: 0.06% overhead for typical integrated GPU applications."
+  - "Devlore Fig.7-Fig.9: interrupt flow breakdown, stress test and glmark2 board case study."
+  proof_object:
+    type: metric_bars
+    title: "Devlore reported results"
+    data:
+      metrics:
+      - label: "typical GPU app overhead"
+        value: "0.06%"
+        bar: 3
+        note: "abstract"
+      - label: "interrupt path"
+        value: "Fig.7"
+        bar: 55
+        note: "flow breakdown"
+      - label: "stress test"
+        value: "Fig.8"
+        bar: 50
+        note: "sustained interrupt load"
+      - label: "board case"
+        value: "glmark2"
+        bar: 60
+        note: "Fig.9"
+  source_note: "数字和图号来自摘要与 evaluation；E3 draft 状态保留。"
+
+- slide_id: d05-10-devlore-evaluation
+  paper_key: bertschi2026devlore
+  slide_type: evaluation
+  claim: "Devlore 补上 CCA I/O 中的 interrupt 缺口，但它不解决设备身份、DMA 隔离或 data-path 加密。"
+  narrative:
+  - "优点是把中断 authenticity/order 从隐含假设变成显式机制。"
+  - "不足是范围集中在 interrupt path，不能替代 ACAI、CoVE-IO 或 SPDM/TDISP。"
+  - "商业潜力在 CVM 使用 integrated GPU、NIC 或 storage device 时减少 host interrupt 注入风险。"
+  - "落地风险包括 GIC/vGIC 兼容、device driver 修改和多设备并发场景。"
+  evidence_refs:
+  - "Devlore Fig.2-Fig.4: interrupt isolation and registration design."
+  - "Devlore Table 2 and Fig.9: driver compatibility and GPU case study."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "把 interrupt 作为独立可信边界"]
+      - ["短板", "不覆盖 DMA/MMIO/link/device identity 全部问题"]
+      - ["落地场景", "CVM 使用真实设备的 interrupt path"]
+      - ["风险", "GIC/vGIC 和 driver 兼容"]
+  source_note: "评价聚焦 Devlore 的 interrupt scope，不外推到完整 trusted I/O。"
+
+- slide_id: d05-11-soktee-summary
+  paper_key: sok-tee
+  slide_type: summary
+  claim: "Accelerator TEE SoK 在本方向的作用是给 ACAI 和 Devlore 提供 device/accelerator taxonomy；无新实验。"
+  narrative:
+  - "SoK 将 accelerator TEE 分为 Host-type、Acc.-type 和 Mix-type。"
+  - "它比较 access control、memory encryption workflow、runtime 和 attestation。"
+  - "ACAI 更接近 Host/CCA-mediated accelerator path，Devlore 则补 interrupt path。"
+  - "这篇只做分类支撑，不承担 ACAI/Devlore 的系统结果。"
+  evidence_refs:
+  - "Accelerator TEE SoK Fig.1: Host-type, Acc.-type and Mix-type accelerator TEE overview."
+  - "Accelerator TEE SoK Table III-Table IV: security solutions and access-control comparison."
+  proof_object:
+    type: comparison_matrix
+    title: "SoK 如何服务本方向"
+    data:
+      columns: ["分类轴", "对 ACAI/Devlore 的意义"]
+      rows:
+      - ["架构类型", "区分 host-mediated 与 device-root designs"]
+      - ["access control", "解释 DMA/MMIO 保护为何独立"]
+      - ["memory path", "说明 encryption/integrity 不等于 interrupt 保护"]
+      - ["attestation", "提示还需要 device identity 证据"]
+  source_note: "无新实验；本页按 SoK taxonomy 使用。"
+
+- slide_id: d05-12-soktee-background
+  paper_key: sok-tee
+  slide_type: background
+  claim: "accelerator confidential computing 的难点是保护对象跨越 host memory、device memory、command queue 和 result path；无新实验。"
+  narrative:
+  - "SoK 的 attack-vector 图说明 accelerator computing 中存在 host、driver、device memory 和 data movement 风险。"
+  - "CPU TEE 只覆盖其中一段路径。"
+  - "ACAI 关注 DMA/MMIO/data path，Devlore 关注 interrupt control path。"
+  - "因此本方向需要 taxonomy 来避免把所有 device security 问题混为一谈。"
+  evidence_refs:
+  - "Accelerator TEE SoK Fig.2: attack vectors of accelerator computing."
+  - "Accelerator TEE SoK Table II: design overview of accelerator TEE types."
+  proof_object:
+    type: path_compare
+    title: "accelerator workload 路径"
+    data:
+      paths:
+      - label: "data path"
+        steps: ["Realm memory", "DMA buffer", "accelerator memory", "result buffer"]
+        note: "ACAI 主要关注"
+      - label: "control path"
+        steps: ["command queue", "MMIO", "interrupt", "driver handler"]
+        note: "Devlore 补 interrupt"
+  source_note: "无新实验；路径按 SoK attack-vector 与本方向两篇系统论文对齐。"
+
+- slide_id: d05-13-soktee-solution
+  paper_key: sok-tee
+  slide_type: solution
+  claim: "用 SoK 的 checklist 看 CCA I/O，至少要逐项回答 identity、memory path、interrupt、runtime 和 attestation；无新实验。"
+  narrative:
+  - "SoK 的安全方案比较表可作为 device TEE checklist。"
+  - "ACAI 对 memory path 和 link protection 有早期设计。"
+  - "Devlore 对 interrupt authenticity 有早期设计。"
+  - "device identity、measurement、TDISP lifecycle 要在 10/13 章节继续补足。"
+  evidence_refs:
+  - "Accelerator TEE SoK Table III: security solutions comparison."
+  - "Accelerator TEE SoK Fig.3: memory encryption workflows."
+  proof_object:
+    type: comparison_matrix
+    title: "CCA I/O checklist"
+    data:
+      columns: ["检查项", "本方向证据", "仍需后续证据"]
+      rows:
+      - ["memory path", "ACAI", "CXL/PCIe IDE details"]
+      - ["interrupt", "Devlore", "AIA/GIC integration"]
+      - ["device identity", "SoK 提醒", "SPDM/TDISP"]
+      - ["attestation", "SoK 提醒", "RATS/TLS+RA/device evidence"]
+  source_note: "无新实验；checklist 由 SoK 表格和本报告方向分工生成。"
+
+- slide_id: d05-14-soktee-experiments
+  paper_key: sok-tee
+  slide_type: experiments
+  claim: "这篇 SoK 无新实验；它在本方向只做分类和覆盖检查。"
+  narrative:
+  - "它比较已有 accelerator TEE designs 的安全组件。"
+  - "它不提供 ACAI 或 Devlore 的量化结果。"
+  - "ACAI 的数字来自 ACAI 原文，Devlore 的数字来自 Devlore 原文。"
+  - "本页保留 E2 边界，避免把 survey 写成系统证据。"
+  evidence_refs:
+  - "Accelerator TEE SoK p.1 abstract and Table I: analyzed accelerator TEE designs."
+  - "survey/evidence_ledger.md Section Evidence Classes: E2 supports taxonomy and framing."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "本方向中的 SoK 用法"
+    data:
+      columns: ["使用", "不使用"]
+      rows:
+      - ["分类坐标", "ACAI 数字来源"]
+      - ["安全组件 coverage", "Devlore 数字来源"]
+      - ["后续证据 checklist", "device lifecycle 规范证明"]
+  source_note: "无新实验；只写 taxonomy evidence。"
+
+- slide_id: d05-15-soktee-evaluation
+  paper_key: sok-tee
+  slide_type: evaluation
+  claim: "SoK 对本方向的价值是防止 I/O 讨论漏项；它的限制是不能替代具体系统和规范；无新实验。"
+  narrative:
+  - "优点是把 accelerator TEE 的组件拆分清楚。"
+  - "不足是分类层级高，不能判断 ACAI/Devlore 哪个设计已成熟。"
+  - "商业落地上，它提醒 device path 需要硬件、firmware、driver、runtime 共同落地。"
+  - "本报告把它作为 guardrail，避免把单点机制写成完整 trusted I/O。"
+  evidence_refs:
+  - "Accelerator TEE SoK Table II-Table IV: architecture and security comparison."
+  - "survey/evidence_ledger.md Section Boundary Records: use survey evidence conservatively."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "提供 accelerator TEE coverage"]
+      - ["短板", "不能替代 ACAI/Devlore 原文"]
+      - ["落地启发", "device path 是跨层工程"]
+      - ["使用规则", "作为 checklist 而非结果证据"]
+  source_note: "无新实验；评价聚焦本方向内的辅助角色。"
+
+- slide_id: d05-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "CCA I/O 的核心 takeaway 是 data path 和 interrupt path 都要被建模，CPU Realm 边界本身不够。"
+  narrative:
+  - "ACAI 说明 accelerator DMA/MMIO/data path 需要 CCA-aware protection。"
+  - "Devlore 说明 interrupt authenticity/order 也是 confidential VM 的安全条件。"
+  - "Accelerator TEE SoK 说明 device TEE 还包含 identity、runtime、attestation 等更宽问题。"
+  - "完整 confidential I/O 需要和 CoVE-IO、SPDM、TDISP、IOMMU/AIA 等章节合并阅读。"
+  evidence_refs:
+  - "ACAI Fig.5; Devlore Fig.2-Fig.4; Accelerator TEE SoK Fig.1-Fig.3."
+  - "survey/evidence_ledger.md Slide Primary Ledger and Boundary Records."
+  proof_object:
+    type: comparison_matrix
+    title: "本方向不能混写的边界"
+    data:
+      columns: ["边界", "本方向证据", "后续补充"]
+      rows:
+      - ["DMA/MMIO", "ACAI", "IOMMU/CoVE-IO"]
+      - ["interrupt", "Devlore", "AIA/GIC integration"]
+      - ["device identity", "SoK 仅提示", "SPDM/TDISP"]
+      - ["endpoint channel", "本方向不覆盖", "TLS+RA"]
+  source_note: "方向总结把 draft 系统与 taxonomy evidence 分开。"

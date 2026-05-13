@@ -1,293 +1,773 @@
 \section{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
 
-\begin{frame}[t]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：方向开场}
-\DeckKicker{08-riscv-tee-lineage}
-\ClaimLine{从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。}
+\begin{frame}[t,shrink=6]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{08-riscv-tee-lineage}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} RISC-V TEE lineage 从 Keystone 的开放框架，发展到 Penglai 的可扩展内存保护，再到 SPEAR-V 的 tagged-memory primitive。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；不引入辅助材料，直接呈现 RISC-V enclave lineage。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{Keystone: 开源 RISC-V TEE 框架}{E1 / Foundational}
-\PrimaryCard{Primary 2 / system}{Penglai: scalable enclave memory protection}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{Primary 3 / system}{SPEAR-V: low-overhead RISC-V enclave primitive}{E1 / Peer-reviewed SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Keystone 以 PMP 和 modular runtime 为核心，强调 open framework 和可配置 TEE。
+  \item Penglai 解决 secure memory static allocation 和 scalable enclave 管理问题。
+  \item SPEAR-V 用 tag/metadata primitive 同时支持 sandboxing 与 enclaving。
+  \item 三篇都是 E1 system evidence，能支撑具体机制和结果，但 threat model 不同。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item lee2020keystone: system；E1；author\_hosted\_eurosys\_pdf\_verified
-  \item feng2021penglai: system；E1；local\_pdf\_verified
-  \item schrammel2023spearv: system；E1；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RISC-V enclave 演进}
+      \scriptsize \textcolor{Accent}{\bfseries Keystone}\par\textbf{open TEE framework}\par{\tiny\textcolor{Muted}{PMP + modular runtime}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries Penglai}\par\textbf{scalable enclave memory}\par{\tiny\textcolor{Muted}{GPT + MMT}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries SPEAR-V}\par\textbf{tagged memory primitive}\par{\tiny\textcolor{Muted}{sandbox + enclave}}\par\vspace{1.6mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向页只比较 RISC-V enclave 系统，不等同于后续 CoVE/AP-TEE confidential VM。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave}
-{\begin{itemize}
-  \item 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Foundational
-  \item 来源：author\_hosted\_eurosys\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{商业 TEE 难定制、难验证}
-{\begin{itemize}
-  \item 商业 TEE 难定制、难验证
-  \item RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架}
-{\begin{itemize}
-  \item 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item PMP-based enclave isolation
-  \item Security monitor and runtime abstraction
-  \item Open RISC-V TEE software/hardware co-design
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{论文报告 CoreMark/Beebs/RV8 等开销结果}
-{\begin{itemize}
-  \item 论文报告 CoreMark/Beebs/RV8 等开销结果
-  \item 具体数字以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：author\_hosted\_eurosys\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制}
-{RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。}
-{EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。}
-{开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。}
-
-\PaperSlide
-{内容摘要}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量。}
-{\begin{itemize}
-  \item 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存}
-{\begin{itemize}
-  \item 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化}
-{\begin{itemize}
-  \item 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Scalable enclave memory protection
-  \item Metadata management for enclave lifecycle
-  \item Serverless/microservice-oriented enclave scaling
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{OSDI 论文报告可支持大量 enclave 和较大安全内存}
-{\begin{itemize}
-  \item OSDI 论文报告可支持大量 enclave 和较大安全内存
-  \item 具体指标以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈}
-{系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。}
-{需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。}
-{适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。}
-
-\PaperSlide
-{内容摘要}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox。}
-{\begin{itemize}
-  \item 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive}
-{\begin{itemize}
-  \item RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotec。}
-{\begin{itemize}
-  \item 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Tag/metadata enclave primitive
-  \item Bidirectional sandbox and nested isolation
-  \item Low-overhead protected/unprotected transitions
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{AsiaCCS 论文报告 protected/unprotected 场景低开销}
-{\begin{itemize}
-  \item AsiaCCS 论文报告 protected/unprotected 场景低开销
-  \item 具体数值以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进}
-{机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。}
-{Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。}
-{若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。}
-
-\begin{frame}[t]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{lee2020keystone}{E1 / Foundational}{author\_hosted\_eurosys\_pdf\_verified}
+{\large\bfseries\color{Ink} Keystone 的核心贡献是把 RISC-V PMP 封装成开放、模块化、可配置的 TEE framework。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item Keystone: 开源 RISC-V TEE 框架
-  \item Penglai: scalable enclave memory protection
-  \item SPEAR-V: low-overhead RISC-V enclave primitive
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出现有 vendor-specific TEE 固化了 threat model 和设计取舍。
+  \item Keystone 提出 secure monitor、Eyrie runtime 和 enclave application 的模块化架构。
+  \item 它用 PMP 保护 enclave memory，并允许 runtime 根据场景定制。
+  \item 它是 RISC-V open-source TEE 的 foundational paper。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
-  \item 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
-  \item EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
-  \item 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
-  \item 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
-  \item 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Keystone architecture}
+      \scriptsize \begin{itemize}
+  \item 01. host app requests enclave
+  \item 02. secure monitor configures PMP
+  \item 03. Eyrie runtime boots
+  \item 04. enclave app runs
+  \item 05. edge calls cross boundary
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 机制图按 Figure 1 和 Figure 3 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{lee2020keystone}{E1 / Foundational}{author\_hosted\_eurosys\_pdf\_verified}
+{\large\bfseries\color{Ink} Keystone 的背景问题是商业 TEE 把一组固定取舍写死，研究者很难探索不同 TCB、runtime 和 memory model。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SGX、TrustZone、SEV 等系统各自绑定特定硬件和安全模型。
+  \item RISC-V 提供开放 ISA 和 PMP，使研究者可以在低层构建可定制 TEE。
+  \item 不同应用可能需要不同 runtime，例如 bare-metal、Linux-like 或 ML workload support。
+  \item Keystone 因此把 isolation mechanism 与 runtime policy 解耦。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Keystone 想解耦的对象}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{传统 TEE} & \textbf{Keystone} \\
+\midrule
+hardware root & vendor-specific & RISC-V PMP \\
+runtime & 固定生态 & Eyrie 可配置 \\
+memory model & 单一路线 & 多种 scenario \\
+research use & 难改 & open framework \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 对比依据 introduction 和 Figure 4-Figure 5。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{lee2020keystone}{E1 / Foundational}{author\_hosted\_eurosys\_pdf\_verified}
+{\large\bfseries\color{Ink} Keystone 的设计核心是 secure monitor 最小化硬件 enforcement，Eyrie runtime 承担可替换策略。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item secure monitor 管理 enclave lifecycle，并用 PMP 设置访问权限。
+  \item Eyrie runtime 在 enclave 内提供 page management、syscall proxy、edge call 等能力。
+  \item 可选组件让不同应用在 TCB 与功能之间做取舍。
+  \item 这套分层成为后续 RISC-V TEE 系统比较的基准。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Keystone TCB 分层}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{组件} & \textbf{职责} & \textbf{是否可定制} \\
+\midrule
+secure monitor & PMP/lifecycle/measurement & 核心 TCB \\
+Eyrie runtime & memory and syscall policy & 按场景裁剪 \\
+host OS & 资源管理 & 不可信 \\
+enclave app & 敏感 workload & 用户提供 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 表格依据 Figure 3、Table 3 和 Figure 6。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{lee2020keystone}{E1 / Foundational}{author\_hosted\_eurosys\_pdf\_verified}
+{\large\bfseries\color{Ink} Keystone 报告 CoreMark、Beebs、RV8 低于 1\% overhead，IOZone 约 40\%，说明 runtime 和 I/O 路径成本差异很大。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文在 RV8、IOZone、CoreMark、Beebs 等 workload 上评估。
+  \item 摘要报告 CoreMark、Beebs、RV8 的 overhead 小于 1\%。
+  \item IOZone overhead 约 40\%，提示文件和 I/O 路径比纯计算更敏感。
+  \item Figure 6 展示 enclave lifecycle operation breakdown。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Keystone 关键结果}
+      \scriptsize \textbf{CoreMark/Beebs/RV8}\hfill \textcolor{Accent}{\bfseries <1\%}\par\textcolor{Accent}{\rule{0.05\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{IOZone}\hfill \textcolor{Accent}{\bfseries 40\%}\par\textcolor{Accent}{\rule{0.40\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{lifecycle}\hfill \textcolor{Accent}{\bfseries Fig.6}\par\textcolor{Accent}{\rule{0.55\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{operation breakdown}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自摘要，图号来自 evaluation；不外推到 CoVE/TVM。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{lee2020keystone}{E1 / Foundational}{author\_hosted\_eurosys\_pdf\_verified}
+{\large\bfseries\color{Ink} Keystone 的价值是开放和模块化，短板是 PMP-based enclave 的资源和 I/O 能力仍有限。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是为 RISC-V TEE 研究提供可改、可测、可扩展的公共平台。
+  \item 不足是 PMP region、runtime complexity 和 I/O/file-system path 会限制复杂 workload。
+  \item 商业潜力在开放硬件生态、research testbed 和定制 embedded/cloud enclave。
+  \item 后续 Penglai/SPEAR-V 的改进都可以看作对 Keystone 类设计边界的推进。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & open modular TEE framework \\
+短板 & PMP/I/O/runtime 仍有边界 \\
+落地场景 & 研究平台和可定制 enclave \\
+后续演进 & Penglai scalable memory, SPEAR-V tags \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价结合 Keystone 设计目标和实验结果。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{feng2021penglai}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Penglai 的核心贡献是用 Guarded Page Table 和 Mountable Merkle Tree，把 RISC-V enclave 推向可扩展内存保护。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出现有 enclave 设计难满足 serverless 和 microservice 的 scalability。
+  \item Penglai 提出 GPT 以页粒度保护 secure/non-secure memory。
+  \item MMT 支持可扩展 integrity protection，降低固定 secure memory 区域限制。
+  \item 它是 Keystone 之后 RISC-V enclave OS 的重要系统。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Penglai 机制链}
+      \scriptsize \begin{itemize}
+  \item 01. enclave request
+  \item 02. GPT protects page tables
+  \item 03. secure pages allocated dynamically
+  \item 04. MMT tracks integrity
+  \item 05. shadow enclave reduces creation cost
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按摘要、Figure 5 和 Figure 7 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{feng2021penglai}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Penglai 的背景问题是 SGX/Keystone 类方案常受固定 secure memory、静态分配和 enclave creation 成本限制。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item serverless 和 microservice-like workload 需要大量短生命周期、弹性内存的 enclave。
+  \item 固定 enclave memory 或静态 Merkle tree 会限制资源利用率。
+  \item I/O 和云应用还需要更细的 page-level 管理。
+  \item Penglai 因此把 memory ownership 和 integrity metadata 设计为可扩展结构。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Penglai 针对的瓶颈}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{瓶颈} & \textbf{原因} & \textbf{Penglai 方向} \\
+\midrule
+secure memory fixed & 预留区域限制弹性 & page-level GPT \\
+creation cost & 初始化和测量昂贵 & shadow enclave \\
+integrity metadata & 静态树成本高 & MMT \\
+cloud workload & 高并发和短生命周期 & scalable enclave OS \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 introduction 和 Table 1。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{feng2021penglai}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Penglai 用 GPT 管访问、MMT 管完整性，把 secure memory 从固定池变成可动态管理的页。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item GPT 保护 page table pages，并支持 page-level secure/non-secure 切换。
+  \item MMT 通过 mountable subtree 降低 integrity tree 的 on-die 和 in-memory metadata。
+  \item shadow enclave 缓解 enclave creation 中 costly secure memory initialization。
+  \item 这套机制面向 cloud-scale enclave density。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{GPT + MMT}
+      \scriptsize \begin{itemize}
+  \item 01. monitor configures GPT
+  \item 02. secure pages mapped dynamically
+  \item 03. MMT subtree mounted
+  \item 04. memory access checked
+  \item 05. integrity metadata updated
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 5、Figure 7、Figure 9-Figure 10 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{feng2021penglai}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Penglai 报告 GPT 在 Redis SET 请求中约 5\% overhead，并显示 MMT 相比 SIT 可显著降低 integrity 代价。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 14 用 Redis benchmark suite 评估 GPT。
+  \item 论文文本报告 Guarded Page Table 在 SET requests 中只引入约 5\% overhead。
+  \item Figure 12 比较 integrity protection schemes，其中 SIT 可带来 118\% overhead。
+  \item 这些结果支撑 scalable memory protection 的动机。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Penglai 关键数字}
+      \scriptsize \textbf{GPT on Redis SET}\hfill \textcolor{Accent}{\bfseries about 5\%}\par\textcolor{Accent}{\rule{0.05\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.14 text}}\par\vspace{1.4mm}
+\textbf{SIT integrity overhead}\hfill \textcolor{Accent}{\bfseries 118\%}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.12}}\par\vspace{1.4mm}
+\textbf{mechanism anchor}\hfill \textcolor{Accent}{\bfseries GPT+MMT}\par\textcolor{Accent}{\rule{0.65\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{design evidence}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自 Figure 12 和 Figure 14 附近文本。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{feng2021penglai}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Penglai 的价值是解决 RISC-V enclave memory scalability，但它仍是 enclave OS 路线，不是 CoVE TVM 规范。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 secure memory 从固定区域推进到动态页级管理。
+  \item 不足是机制复杂度和 integrity metadata management 增加了 trusted stack 负担。
+  \item 商业潜力在 serverless、microservice 和多 enclave 云场景。
+  \item 边界是它不处理完整 confidential VM lifecycle 或 trusted I/O。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & scalable page-level enclave memory \\
+短板 & metadata 和 OS 复杂度增加 \\
+落地场景 & serverless/microservice enclaves \\
+边界 & 不是 TVM/CoVE 或 trusted I/O \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价基于 Penglai 的 GPT/MMT 设计和 conclusion。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{schrammel2023spearv}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SPEAR-V 的核心贡献是用 tagged memory primitive 同时支持 host-to-enclave 和 enclave-to-host 的双向隔离。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出现有 enclave 架构可能性能高、灵活性低或难以抵抗 controlled-channel 类问题。
+  \item SPEAR-V 用 memory tag fields 存储在 TLB/page-table walk 相关路径中。
+  \item 它支持 sandboxing and enclaving based on the same hardware primitive。
+  \item 这使它成为 RISC-V TEE lineage 中从 PMP region 到 metadata/tagging 的代表。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SPEAR-V tagged protection}
+      \scriptsize \begin{itemize}
+  \item 01. SM assigns enclave ID
+  \item 02. memory pages get tags
+  \item 03. TLB stores tag fields
+  \item 04. page-table walk checks tags
+  \item 05. sandbox/enclave access enforced
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 1-Figure 4 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{schrammel2023spearv}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SPEAR-V 的背景是 PMP/region-based 方案对嵌套、共享内存和双向隔离不够灵活。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SGX 类 enclave 主要保护 enclave from host，不一定保护 host from malicious enclave。
+  \item PMP region 数量和粒度会限制复杂 memory sharing。
+  \item 嵌套 enclave、shared memory 和低 overhead 是更通用 TEE primitive 的需求。
+  \item SPEAR-V 因此把 tag 放到 memory translation 路径。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{region vs tag}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{维度} & \textbf{region/PMP} & \textbf{SPEAR-V tag} \\
+\midrule
+粒度 & region-based & page/tag metadata \\
+双向隔离 & 需要额外策略 & same primitive supports sandbox/enclave \\
+嵌套 & 不自然 & 设计目标之一 \\
+共享内存 & region management 复杂 & tag-aware mapping \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 对比依据 introduction 和 Figure 2-Figure 4。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{schrammel2023spearv}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SPEAR-V 把 enclave ID/tag 放进 memory translation metadata，让不可信 OS 仍管理 mapping 但不能越权访问。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SM 给 enclave page 打 tag，并保留特殊 enclave ID 给 SM 自身。
+  \item TLB entry 存储 memory tag fields。
+  \item page table walk 时检查 tag，OS 管 mapping 但访问受硬件约束。
+  \item 这种设计把资源管理和访问 enforcement 分开。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{tag-aware translation}
+      \scriptsize \begin{itemize}
+  \item 01. SM creates enclave context
+  \item 02. tag pages with enclave ID
+  \item 03. OS maintains page tables
+  \item 04. TLB stores tag metadata
+  \item 05. hardware rejects wrong tag
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 机制图按 Figure 2-Figure 4 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{schrammel2023spearv}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SPEAR-V 报告硬件面积增加约 1.01\% LUT 和 0.72\% Flip-Flops，并用 Embench/LMBench 评估 tag 代价。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 6 展示 Embench benchmarks 在 64/128-bit memory tagging 下的 relative runtime overhead。
+  \item Table 1 给出不同 tag size 下 memory bandwidth。
+  \item 论文报告 enclave design 使用 68907 LUTs 增加 1.01\%，50864 Flip-Flops 增加 0.72\%。
+  \item 这些结果说明 tag-based primitive 代价较低，但仍需结合 workload 类型阅读。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SPEAR-V 关键结果}
+      \scriptsize \textbf{LUT increase}\hfill \textcolor{Accent}{\bfseries 1.01\%}\par\textcolor{Accent}{\rule{0.05\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{evaluation text}}\par\vspace{1.4mm}
+\textbf{Flip-Flop increase}\hfill \textcolor{Accent}{\bfseries 0.72\%}\par\textcolor{Accent}{\rule{0.04\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{evaluation text}}\par\vspace{1.4mm}
+\textbf{runtime eval}\hfill \textcolor{Accent}{\bfseries Embench}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.6}}\par\vspace{1.4mm}
+\textbf{bandwidth eval}\hfill \textcolor{Accent}{\bfseries LMBench}\par\textcolor{Accent}{\rule{0.55\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Table 1}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字和图表来自 SPEAR-V evaluation；不外推到 CoVE TVM。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{schrammel2023spearv}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SPEAR-V 的价值是把 RISC-V TEE primitive 从 PMP region 推到 tag metadata，但它需要硬件改动和软件栈适配。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是同一 primitive 同时支持 sandboxing 和 enclaving，设计灵活。
+  \item 不足是 tag-aware translation、TLB 和 page-table walk 改动需要硬件生态支持。
+  \item 商业潜力在需要双向隔离、嵌套或低代价 compartment 的 RISC-V 平台。
+  \item 边界是它仍不是 confidential VM 或 device trusted I/O 规范。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & tag primitive 支持双向隔离 \\
+短板 & 需要硬件和 OS/runtime 配合 \\
+落地场景 & 嵌套和细粒度 compartment \\
+边界 & 不是 CoVE/AP-TEE/TEE-I/O \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价结合设计图、面积数据和 conclusion。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{08-riscv-tee-lineage}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} RISC-V enclave lineage 的 takeaway 是保护粒度从 PMP framework 到 scalable memory，再到 tag metadata，但还没进入 TVM 标准语义。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Keystone 建立开放、模块化 RISC-V TEE framework。
+  \item Penglai 解决 secure memory scalability 和 integrity metadata。
+  \item SPEAR-V 探索更通用的 tagged-memory isolation primitive。
+  \item 下一节 CoVE/AP-TEE 会把抽象从 enclave 推到 confidential VM。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{lineage 对照}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{系统} & \textbf{核心 primitive} & \textbf{主要边界} \\
+\midrule
+Keystone & PMP + modular runtime & I/O 和 memory scalability \\
+Penglai & GPT + MMT & 复杂 metadata/OS 管理 \\
+SPEAR-V & tagged memory & 需要硬件生态支持 \\
+CoVE/AP-TEE & TVM lifecycle & 下一方向讨论 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结把三篇 E1 system evidence 与后续 TVM 规范分开。}}
 \end{frame}

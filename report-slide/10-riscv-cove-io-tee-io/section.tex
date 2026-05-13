@@ -1,295 +1,795 @@
 \section{RISC-V CoVE-IO / TEE-I/O}
 
-\begin{frame}[t]{RISC-V CoVE-IO / TEE-I/O：方向开场}
-\DeckKicker{10-riscv-cove-io-tee-io}
-\ClaimLine{把设备身份、DMA/MMIO、interrupt、link security 与 I/O translation 放到同一边界。}
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO / TEE-I/O：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{10-riscv-cove-io-tee-io}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} CoVE-IO/TEE-I/O 这一节把 RISC-V TVM 边界从 CPU/内存扩到 device、DMA、MMIO、interrupt 和 link。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`riscv\_aia\_2023` 作为 trusted interrupt auxiliary，不计入三篇主讲。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{sIOPMP: scalable I/O protection for TEE}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{Primary 2 / spec}{RISC-V CoVE-IO 规范草案}{E3 / Draft-not-ratified}
-\PrimaryCard{Primary 3 / spec}{RISC-V IOMMU 支撑 CoVE-IO}{E0 / Spec-standard SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item sIOPMP 提供 peer-reviewed I/O protection mechanism，解决 TEE 场景下 malicious DMA 和 device scaling。
+  \item CoVE-IO draft 把 SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 TDI/TDM/DSM 纳入 TVM trusted I/O lifecycle。
+  \item RISC-V IOMMU 规范提供 ratified DMA translation substrate。
+  \item 三篇共同说明 CoVE-IO 不是单一 IOMMU 功能，而是 device lifecycle 和 data path 组合。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item feng2024siopmp: system；E1；local\_pdf\_verified
-  \item riscv\_cove\_io\_2026: spec；E3；local\_pdf\_verified
-  \item riscv\_iommu\_2023: spec；E0；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CoVE-IO 的三层证据}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{层} & \textbf{来源} & \textbf{作用} \\
+\midrule
+I/O access control & sIOPMP & scalable DMA protection \\
+trusted lifecycle & CoVE-IO draft & TDI/TDM/SPDM/TDISP composition \\
+translation substrate & RISC-V IOMMU & ratified DMA translation \\
+完整结论 & 三者组合 & 仍需 device implementation evidence \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向页区分 mechanism paper、draft lifecycle spec 和 ratified substrate。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{sIOPMP: scalable I/O protection for TEE}
-{feng2024siopmp}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{提出面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checkin。}
-{\begin{itemize}
-  \item 提出面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checking 可扩展性
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{sIOPMP: scalable I/O protection for TEE}
-{feng2024siopmp}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口}
-{\begin{itemize}
-  \item DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口
-  \item 只保护 CPU 页表或 PMP 不足以覆盖设备侧访问
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{sIOPMP: scalable I/O protection for TEE}
-{feng2024siopmp}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{设计 scalable I/O protection metadata/checking 机制，提高设备访问控制效率并支撑更大规模 I/O pro。}
-{\begin{itemize}
-  \item 设计 scalable I/O protection metadata/checking 机制，提高设备访问控制效率并支撑更大规模 I/O protection
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Scalable I/O protection metadata
-  \item Device access-control checking path
-  \item TEE-oriented DMA isolation substrate
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{sIOPMP: scalable I/O protection for TEE}
-{feng2024siopmp}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{ASPLOS 论文给出吞吐和开销评估}
-{\begin{itemize}
-  \item ASPLOS 论文给出吞吐和开销评估
-  \item 具体数值以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{sIOPMP: scalable I/O protection for TEE}
-{feng2024siopmp}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{RISC-V I/O protection 的 peer-reviewed SOTA，可作为 CoVE-IO access-control 前置材料}
-{RISC-V I/O protection 的 peer-reviewed SOTA，可作为 CoVE-IO access-control 前置材料。}
-{主要解决 access control，不覆盖完整 device identity、TDISP、link security 或 trusted interrupt path。}
-{对高性能设备直通有价值；风险在硬件改造、IOMMU/IOPMP 组合和平台可观测性。}
-
-\PaperSlide
-{内容摘要}
-{RISC-V CoVE-IO 规范草案}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{定义 RISC-V CoVE-IO confidential I/O 架构，把 TVM 设备使用扩展到 device identity、DMA/M。}
-{\begin{itemize}
-  \item 定义 RISC-V CoVE-IO confidential I/O 架构，把 TVM 设备使用扩展到 device identity、DMA/MMIO、interrupt 和 link security
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E3 / Draft-not-ratified
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V CoVE-IO 规范草案}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{TVM 使用真实设备时，安全边界必须覆盖设备身份、DMA/MMIO、interrupt delivery、link protection 和管理。}
-{\begin{itemize}
-  \item TVM 使用真实设备时，安全边界必须覆盖设备身份、DMA/MMIO、interrupt delivery、link protection 和管理 control plane
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V CoVE-IO 规范草案}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{用 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合描述 draft confidential。}
-{\begin{itemize}
-  \item 用 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合描述 draft confidential I/O lifecycle
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item TDI/TDM/DSM device-domain vocabulary
-  \item SPDM/TDISP and PCIe IDE linkage
-  \item Trusted MSI and interrupt-path concepts
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V CoVE-IO 规范草案}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item draft/not-ratified，不能写成 ratified standard 或 production CoVE-IO stack
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 draft/preprint, not ratified
-  \item 成熟度：draft/preprint, not ratified
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V CoVE-IO 规范草案}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{当前最重要的 RISC-V confidential I/O 规范入口}
-{当前最重要的 RISC-V confidential I/O 规范入口。}
-{v0.3.0 draft 仍可能变化，不证明任一硬件或 OS 实现成熟。}
-{对 RISC-V confidential accelerator/NIC 生态关键；风险在 SPDM/TDISP/IDE 与平台 ABI 收敛。}
-
-\PaperSlide
-{内容摘要}
-{RISC-V IOMMU 支撑 CoVE-IO}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{IOMMU 支撑设备 DMA translation/protection，是 CoVE-IO 设备侧地址访问控制的标准底座}
-{\begin{itemize}
-  \item IOMMU 支撑设备 DMA translation/protection，是 CoVE-IO 设备侧地址访问控制的标准底座
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V IOMMU 支撑 CoVE-IO}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{CoVE-IO 不能只靠 PMP 或 CPU page table}
-{\begin{itemize}
-  \item CoVE-IO 不能只靠 PMP 或 CPU page table
-  \item 设备侧 DMA 需要独立的 translation/protection 语义
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V IOMMU 支撑 CoVE-IO}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{IOMMU 控制设备可访问地址空间}
-{\begin{itemize}
-  \item IOMMU 控制设备可访问地址空间
-  \item `riscv\_aia\_2023` 作为 trusted MSI/interrupt delivery 辅助材料
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Device DMA translation/protection
-  \item I/O page-table permission semantics
-  \item Integration point with CoVE-IO trusted device lifecycle
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V IOMMU 支撑 CoVE-IO}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 只支撑公开 I/O translation/protection 语义，不证明完整 confidential I/O
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V IOMMU 支撑 CoVE-IO}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点}
-{CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点。}
-{IOMMU 不是单独的 confidential I/O 方案，也不覆盖 device identity、SPDM/TDISP 或 link security。}
-{适合服务器设备直通与多租户 DMA 管控；风险在配置完整性、固件测量和 verifier 可见性。}
-
-\begin{frame}[t]{RISC-V CoVE-IO / TEE-I/O：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{sIOPMP: scalable I/O protection for TEE：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{feng2024siopmp}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} sIOPMP 的核心贡献是把 RISC-V I/O protection 做成可扩展、可热插拔、适合 TEE 的 DMA 访问控制。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item sIOPMP: scalable I/O protection for TEE
-  \item RISC-V CoVE-IO 规范草案
-  \item RISC-V IOMMU 支撑 CoVE-IO
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出现有 TEE 常把 I/O isolation 当成二等问题，恶意 DMA 可绕过 CPU-side checks。
+  \item 传统 IOMMU 在 TEE 场景中可能引入大 TCB、flush 成本和 page-granularity 不匹配。
+  \item sIOPMP 提出 multi-stage-tree checker、mountable entries、ID remapping 和 ownership interface。
+  \item 它是本方向的 E1 机制入口。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item RISC-V I/O protection 的 peer-reviewed SOTA，可作为 CoVE-IO access-control 前置材料。
-  \item 当前最重要的 RISC-V confidential I/O 规范入口。
-  \item 主要解决 access control，不覆盖完整 device identity、TDISP、link security 或 trusted interrupt path。
-  \item v0.3.0 draft 仍可能变化，不证明任一硬件或 OS 实现成熟。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 对高性能设备直通有价值；风险在硬件改造、IOMMU/IOPMP 组合和平台可观测性。
-  \item 对 RISC-V confidential accelerator/NIC 生态关键；风险在 SPDM/TDISP/IDE 与平台 ABI 收敛。
-  \item 适合服务器设备直通与多租户 DMA 管控；风险在配置完整性、固件测量和 verifier 可见性。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{sIOPMP data path}
+      \scriptsize \begin{itemize}
+  \item 01. device issues DMA
+  \item 02. ID remapping maps device to SID
+  \item 03. multi-stage-tree checker finds region
+  \item 04. packet masking handles partial access
+  \item 05. ownership interface updates policy
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 4-Figure 7 和 Figure 9 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{sIOPMP: scalable I/O protection for TEE：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{feng2024siopmp}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} sIOPMP 的背景问题是 TEE 需要 small TCB 和 region-based I/O isolation，而通用 IOMMU 不总是合适。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item CPU-side PMP 不能阻止 device 通过 DMA 访问 secure memory。
+  \item IOMMU 可以做 DMA translation，但把复杂 IOMMU 放入 TCB 会增加信任面。
+  \item IOMMU page-level isolation 与 TEE region-based policy 可能失配。
+  \item TEE 还要支持热插拔、虚拟设备和大量 memory regions。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{为什么不是直接用通用 IOMMU}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{问题} & \textbf{传统 IOMMU 风险} & \textbf{sIOPMP 方向} \\
+\midrule
+TCB & 复杂 translation logic 进入 trusted base & 小型 region checker \\
+粒度 & page-level 不适合所有 DMA & region-based isolation \\
+设备规模 & 设备热插拔和虚拟化复杂 & mountable entry \\
+性能 & flush and translation cost & direct checker/masking \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 introduction、Figure 1-Figure 2 和 design motivation。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{sIOPMP: scalable I/O protection for TEE：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{feng2024siopmp}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} sIOPMP 用 mountable IOPMP、ID remapping 和 ownership interface，把 I/O isolation 变成 TEE 可管理资源。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item mountable IOPMP 支持 unlimited number of devices。
+  \item ID remapping 通过 CAM table 记录 device ID 到 SID 的映射。
+  \item microarchitecture 使用 multi-stage-tree checker 和 packet masking。
+  \item ownership-based interface 让 TEE runtime 以资源所有权方式更新 I/O policy。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{sIOPMP policy update}
+      \scriptsize \begin{itemize}
+  \item 01. TEE assigns device ownership
+  \item 02. update ID-to-SID mapping
+  \item 03. mount region entries
+  \item 04. checker evaluates DMA
+  \item 05. violation masked or blocked
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 4-Figure 9 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{sIOPMP: scalable I/O protection for TEE：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{feng2024siopmp}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} sIOPMP 报告对 benchmark 和 real-world workloads 仅有 negligible overhead，并可改善 20\%-38\% network I/O。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 摘要报告 negligible performance overhead。
+  \item 摘要还报告 network I/O performance improvement 为 20\% 到 38\%。
+  \item Figure 10/11 等评估 microarchitecture clock frequency 和 DMA burst latency。
+  \item 结果支撑 sIOPMP 作为 trusted I/O access-control substrate，但不证明完整 CoVE-IO lifecycle。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{sIOPMP 关键结果}
+      \scriptsize \textbf{reported overhead}\hfill \textcolor{Accent}{\bfseries negligible}\par\textcolor{Accent}{\rule{0.05\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{network improvement low}\hfill \textcolor{Accent}{\bfseries 20\%}\par\textcolor{Accent}{\rule{0.20\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{network improvement high}\hfill \textcolor{Accent}{\bfseries 38\%}\par\textcolor{Accent}{\rule{0.38\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{microarchitecture eval}\hfill \textcolor{Accent}{\bfseries Fig.10/11}\par\textcolor{Accent}{\rule{0.55\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{clock and DMA burst}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自摘要；图号来自 evaluation。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{sIOPMP: scalable I/O protection for TEE：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{feng2024siopmp}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} sIOPMP 很适合承担 RISC-V trusted I/O 的 access-control 证据，但它不处理 SPDM、TDISP 或 link security。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是针对 TEE small TCB 和 scalable device protection 设计。
+  \item 不足是关注 I/O memory access，不覆盖 device identity、measurement、secured session 或 TDI state。
+  \item 商业潜力在 RISC-V TEE 平台的 DMA protection hardware block。
+  \item 落地风险在与 ratified IOMMU、AIA、CoVE-IO draft 和真实 device feature 的组合。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & TEE-oriented DMA access control \\
+短板 & 不覆盖 device identity/lifecycle/link \\
+落地场景 & RISC-V trusted I/O substrate \\
+组合需求 & CoVE-IO/IOMMU/AIA/SPDM/TDISP \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价把 sIOPMP 定位为 access-control substrate。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO 规范草案：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{riscv\_cove\_io\_2026}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CoVE-IO draft 的核心贡献是把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU 和 trusted MSI；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 文档首页声明 Version v0.3.0, 2026-02-18，且仍在 development。
+  \item 它定义 Trusted Device Interface、Trusted Device Manager、Device Security Manager 等角色。
+  \item 它把 SPDM transport、secure SPDM session、device connection、TDI verification/acceptance 组织进 lifecycle。
+  \item 它是 E3 draft SOTA，不能写成 ratified standard。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CoVE-IO lifecycle}
+      \scriptsize \begin{itemize}
+  \item 01. IOMMU assignment
+  \item 02. secure SPDM session
+  \item 03. device connection
+  \item 04. TDI verification
+  \item 05. TDI acceptance
+  \item 06. interface unbind
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；流程按 CoVE-IO Section 7 的章节组织重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO 规范草案：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{riscv\_cove\_io\_2026}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TVM 使用真实设备时，CPU memory isolation 只解决一半问题，device identity 和 I/O data path 必须进入 TCB；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item TVM 需要确认 device interface 真实属于预期设备和安全状态。
+  \item DMA/MMIO/interrupt/link 都可能被 host 或错误配置影响。
+  \item CoVE-IO 引入 TDM 作为 TVM guest process 来执行 TDI verification、attestation 和 acceptance flows。
+  \item 这把 trusted I/O 从单纯 IOMMU 设置提升到完整 device lifecycle。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{TVM trusted I/O 的新增对象}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{作用} & \textbf{为什么 IOMMU 不够} \\
+\midrule
+SPDM & device identity and secured session & IOMMU 不证明设备身份 \\
+TDISP/TDI & trusted interface lifecycle & IOMMU 不定义 device state \\
+PCIe IDE & link protection & IOMMU 不保护链路 \\
+trusted MSI & interrupt binding & IOMMU 不处理中断真实性 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；矩阵依据 CoVE-IO terminology 和 Section 7。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO 规范草案：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{riscv\_cove\_io\_2026}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CoVE-IO 的设计思路是把 device 接入 TVM 前的每一步都变成可验证状态转换；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item IOMMU assignment 把 device DMA translation 放到受控上下文。
+  \item SPDM transport 与 secure SPDM session 建立 device evidence/control channel。
+  \item TDI verification and acceptance 决定 device interface 是否进入 TVM TCB。
+  \item unbind 和 no-firmware-update 等状态约束 device lifecycle。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{device enters TVM TCB}
+      \scriptsize \begin{itemize}
+  \item 01. assign IOMMU context
+  \item 02. open SPDM transport
+  \item 03. establish secure session
+  \item 04. verify TDI
+  \item 05. accept into TVM TCB
+  \item 06. bind DMA/interrupt/link policy
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；流程按 CoVE-IO Section 7 重绘，不添加 gated TDISP 细节。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO 规范草案：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{riscv\_cove\_io\_2026}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CoVE-IO 是 draft spec，无新实验；它支撑架构组合语义，不支撑成熟产品或量化结果。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 文档首页明确写明仍在 development。
+  \item 它可以说明 RISC-V AP-TEE-IO task group 的 current draft architecture。
+  \item TDISP/TDISP XT 的规范材料仍受公开性限制，本报告不推断 gated normative rules。
+  \item 系统结果要依赖 sIOPMP、ACAI、Devlore、TNIC 等原文。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CoVE-IO draft 边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可写} & \textbf{不可写} \\
+\midrule
+trusted I/O lifecycle draft & ratified status \\
+SPDM/TDISP role composition & gated TDISP normative details \\
+IOMMU/AIA integration direction & 产品安全结果 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；保留 v0.3.0 draft-not-ratified。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO 规范草案：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{riscv\_cove\_io\_2026}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CoVE-IO 的价值是把 RISC-V trusted I/O 说完整，短板是 draft 成熟度和多个外部规范依赖；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 IOMMU、SPDM、TDISP、IDE、trusted MSI 放进同一 TVM lifecycle。
+  \item 不足是 v0.3.0 draft，且 TDISP/TDISP XT 公开复核受限。
+  \item 商业落地价值在 future RISC-V TVM device assignment。
+  \item 风险在证书供应链、SPDM profiles、TDI state、IDE key、interrupt binding 和 revocation。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & RISC-V trusted I/O lifecycle 最完整公开 draft \\
+短板 & E3 draft + gated dependency \\
+落地价值 & TVM device assignment 方向 \\
+风险 & SPDM/TDI/IDE/MSI/revocation 组合 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；评价按 draft 和 member-gated 边界保守写入。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU 支撑 CoVE-IO：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{riscv\_iommu\_2023}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RISC-V IOMMU 在本方向中是 CoVE-IO 的 DMA translation substrate，不是完整 trusted device 规范；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item IOMMU spec v1.0.1 已 ratified。
+  \item 它定义 device context、process context、DDT/PDT 和 MSI page table。
+  \item CoVE-IO Section 7.1.1 明确需要 IOMMU assignment。
+  \item 但 IOMMU 只解决 address translation/protection，不解决 SPDM/TDISP lifecycle。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{IOMMU 在 CoVE-IO 中的位置}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{IOMMU 提供} & \textbf{仍需 CoVE-IO 提供} \\
+\midrule
+device DMA translation & device identity \\
+context tables & TDI verification \\
+MSI page table & trusted MSI binding \\
+IOATC sync & lifecycle policy \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；定位依据 IOMMU spec 和 CoVE-IO draft。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU 支撑 CoVE-IO：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{riscv\_iommu\_2023}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CoVE-IO 需要 IOMMU，是因为 TVM 的内存边界必须对 device DMA 同样成立；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 没有 IOMMU，device 可通过 DMA 绕过 CPU-side protection。
+  \item IOMMU 让 device-visible address space 受 context table 控制。
+  \item confidential setting 下，device context 必须与 TVM ownership 和 lifecycle 绑定。
+  \item 这解释了为什么 CoVE-IO 同时引用 IOMMU 和 TDISP/SPDM。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{DMA 保护与 trusted lifecycle}
+      \scriptsize \textbf{IOMMU only}\par
+device\_id → DDT/DC → translation → memory access\par
+{\tiny\textcolor{Muted}{solves address path}}\par\vspace{1.8mm}
+\textbf{CoVE-IO composition}\par
+SPDM evidence → TDI verify → IOMMU assign → IDE/MSI policy\par
+{\tiny\textcolor{Muted}{adds trust lifecycle}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；路径按 IOMMU spec 和 CoVE-IO Section 7 对齐。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU 支撑 CoVE-IO：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{riscv\_iommu\_2023}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 在 CoVE-IO 组合里，IOMMU 的 DDT/PDT/MSI structures 应被视为 TDI acceptance 后的 enforcement substrate；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item DDT/DC 负责 device-level context。
+  \item PDT/PC 负责 process-level context。
+  \item MSI page table 连接 interrupt message 地址控制。
+  \item CoVE-IO 需要在 TDI verified/accepted 之后把这些结构纳入 TVM policy。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{IOMMU enforcement after TDI acceptance}
+      \scriptsize \begin{itemize}
+  \item 01. TDI verified
+  \item 02. TDI accepted into TVM
+  \item 03. device context configured
+  \item 04. process context bound
+  \item 05. MSI mapping set
+  \item 06. IOATC synchronized
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；流程是 IOMMU objects 在 CoVE-IO lifecycle 中的保守映射。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU 支撑 CoVE-IO：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{riscv\_iommu\_2023}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} IOMMU spec 无新实验；在本方向它只承担 ratified DMA substrate 证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item IOMMU v1.0.1 是 ratified spec。
+  \item 它不提供 CoVE-IO device lifecycle 的系统结果。
+  \item 它不定义 SPDM/TDISP 或 PCIe IDE 规则。
+  \item 它的贡献是让 CoVE-IO 的 DMA enforcement 有标准 substrate。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向中的 IOMMU 边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可支撑} & \textbf{不能支撑} \\
+\midrule
+DMA translation substrate & TDI state correctness \\
+MSI mapping object & trusted interrupt policy \\
+ratified RISC-V spec & CoVE-IO ratified status \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；只写 substrate claim。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU 支撑 CoVE-IO：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{riscv\_iommu\_2023}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} IOMMU 的价值在于给 CoVE-IO 一个可标准化 enforcement point，但安全性取决于上层 lifecycle 如何配置它；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是 ratified、结构清晰，适合做 DMA 保护底座。
+  \item 不足是单独 IOMMU 不知道 device 是否可信。
+  \item 商业落地价值在 RISC-V TVM passthrough 和 trusted device assignment。
+  \item 风险在错误配置、IOATC sync、MSI mapping 和 TDI acceptance 的绑定。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & ratified DMA enforcement substrate \\
+短板 & 不判断 device trust \\
+落地价值 & TVM passthrough 基础 \\
+风险 & configuration 与 lifecycle 绑定 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；评价限定在 CoVE-IO substrate 角色。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE-IO / TEE-I/O：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{10-riscv-cove-io-tee-io}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} CoVE-IO 的 takeaway 是 trusted I/O 必须同时有 access control、device lifecycle 和 ratified translation substrate。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item sIOPMP 给出 TEE-oriented I/O access-control 系统证据。
+  \item CoVE-IO draft 给出 RISC-V TVM trusted device lifecycle。
+  \item RISC-V IOMMU 给出 DMA translation/protection 标准基底。
+  \item 完整安全还需要 13 的 SPDM/TDISP/TLS+RA endpoint evidence 和具体 device 系统论文。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CoVE-IO 组合边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{组件} & \textbf{本方向来源} & \textbf{仍需补充} \\
+\midrule
+DMA access control & sIOPMP/IOMMU & implementation correctness \\
+device lifecycle & CoVE-IO draft & TDISP public details \\
+interrupt & IOMMU MSI + AIA & trusted interrupt binding \\
+endpoint channel & 本方向不完整 & SPDM/TLS+RA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结把 E1 mechanism、E3 draft 和 E0 spec 分层。}}
 \end{frame}

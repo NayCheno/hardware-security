@@ -1,294 +1,789 @@
 \section{Arm CCA I/O、DMA、accelerator、interrupt}
 
-\begin{frame}[t]{Arm CCA I/O、DMA、accelerator、interrupt：方向开场}
-\DeckKicker{05-arm-cca-io-accelerator-interrupt}
-\ClaimLine{把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。}
+\begin{frame}[t,shrink=6]{Arm CCA I/O、DMA、accelerator、interrupt：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{05-arm-cca-io-accelerator-interrupt}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} CCA I/O 这节讨论 CPU Realm 之外的边界：DMA、MMIO、interrupt 和 accelerator workflow 都会把秘密带出 CPU 本地路径。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；ACAI 和 Devlore 均保持 draft/not-ratified 状态，`sok-tee` 只作为 accelerator TEE taxonomy。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{ACAI: CCA accelerator execution}{E3 / Draft-not-ratified}
-\PrimaryCard{Primary 2 / system}{Devlore: device interrupt protection}{E3 / Draft-not-ratified}
-\PrimaryCard{Primary 3 / sok}{Accelerator TEE SoK for CCA I/O}{E2 / Background substrate}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item ACAI 关注 accelerator execution，把 CCA granule protection 扩到 PCIe/GPU/FPGA 访问路径。
+  \item Devlore 关注 device interrupt protection，说明中断也会破坏 confidential VM 的完整性和控制流。
+  \item Accelerator TEE SoK 提供分类坐标，帮助区分 Host-type、Acc.-type、Mix-type 和 data path 保护范围。
+  \item 三篇共同说明 CCA 基础 Realm 不自动等于 trusted I/O。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item acai2023: system；E3；local\_pdf\_verified
-  \item bertschi2026devlore: system；E3；local\_pdf\_verified
-  \item sok-tee: sok；E2；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CCA I/O 的三个子问题}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{问题} & \textbf{主证据} & \textbf{边界} \\
+\midrule
+accelerator data path & ACAI & E3 draft \\
+interrupt authenticity/order & Devlore & E3 draft \\
+accelerator TEE taxonomy & SoK & E2 classification \\
+完整 trusted I/O & 需要 CoVE-IO/SPDM/TDISP 等后续证据 & 本节不单独证明 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向页只建立问题拆分；ACAI/Devlore 均保留 draft-not-ratified 状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{ACAI: CCA accelerator execution}
-{acai2023}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认。}
-{\begin{itemize}
-  \item 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认继承机密性
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E3 / Draft-not-ratified
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{ACAI: CCA accelerator execution}
-{acai2023}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器}
-{\begin{itemize}
-  \item Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器
-  \item 如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{ACAI: CCA accelerator execution}
-{acai2023}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation。}
-{\begin{itemize}
-  \item 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item CCA-aware accelerator execution path
-  \item Protected DMA and command/data movement
-  \item Driver/runtime TCB boundary for offload
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{ACAI: CCA accelerator execution}
-{acai2023}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{arXiv 系统论文提供原型/设计评估}
-{\begin{itemize}
-  \item arXiv 系统论文提供原型/设计评估
-  \item draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果，不写成标准或生产事实
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 draft/preprint, not ratified
-  \item 成熟度：draft/preprint, not ratified
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{ACAI: CCA accelerator execution}
-{acai2023}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点}
-{把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。}
-{预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。}
-{可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。}
-
-\PaperSlide
-{内容摘要}
-{Devlore: device interrupt protection}
-{bertschi2026devlore}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机。}
-{\begin{itemize}
-  \item 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机密计算边界
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：system
-  \item 证据：E3 / Draft-not-ratified
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Devlore: device interrupt protection}
-{bertschi2026devlore}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidentia。}
-{\begin{itemize}
-  \item 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Devlore: device interrupt protection}
-{bertschi2026devlore}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只。}
-{\begin{itemize}
-  \item 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只是外围控制面问题
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Confidential-device interrupt ownership
-  \item Interrupt delivery mediation
-  \item VM/device lifecycle coupling
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Devlore: device interrupt protection}
-{bertschi2026devlore}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据}
-{\begin{itemize}
-  \item 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据
-  \item 本 deck 只写机制方向和证据状态，不写未复核数字或成熟部署结论
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 draft/preprint, not ratified
-  \item 成熟度：draft/preprint, not ratified
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Devlore: device interrupt protection}
-{bertschi2026devlore}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA}
-{明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。}
-{Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。}
-{对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。}
-
-\PaperSlide
-{内容摘要}
-{Accelerator TEE SoK for CCA I/O}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、r。}
-{\begin{itemize}
-  \item 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：sok
-  \item 证据：E2 / Background substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Accelerator TEE SoK for CCA I/O}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{设备 TEE 机制比 CPU TEE 更分散}
-{\begin{itemize}
-  \item 设备 TEE 机制比 CPU TEE 更分散
-  \item 不同 accelerator 的队列、固件、驱动和本地 root 差异很大
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Accelerator TEE SoK for CCA I/O}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的。}
-{\begin{itemize}
-  \item 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的背景基底
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Accelerator/device TEE design taxonomy
-  \item Device identity and attestation vocabulary
-  \item Memory, queue, runtime and driver TCB dimensions
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Accelerator TEE SoK for CCA I/O}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item primary mechanism claim 必须回引原始论文、规范或平台文档
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Accelerator TEE SoK for CCA I/O}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事}
-{能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。}
-{不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。}
-{有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。}
-
-\begin{frame}[t]{Arm CCA I/O、DMA、accelerator、interrupt：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{acai2023}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ACAI 的核心贡献是让 CCA-enabled peripheral 直接安全访问 Realm memory，而不是让 VM 先把数据复制到非安全缓冲区。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item ACAI: CCA accelerator execution
-  \item Devlore: device interrupt protection
-  \item Accelerator TEE SoK for CCA I/O
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出 confidential VM 想使用 GPU/FPGA 时，传统做法常需要 extra copy 和 software encryption。
+  \item ACAI 重新设计 CCA I/O path，使 accelerator 的 bus transaction 和 address translation 也接受 granule protection checks。
+  \item 它用 PCIe IDE keying、SMMU/GPT enforcement 和 realm/device lifecycle 组合保护 accelerator execution。
+  \item 它是早期 draft 系统，不是 Arm CCA 标准已完成的 trusted I/O 证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
-  \item 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
-  \item 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
-  \item Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
-  \item 对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
-  \item 有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{encrypted-copy path vs ACAI path}
+      \scriptsize \textbf{传统加密搬运}\par
+Realm encrypts buffer → copy to shared memory → device computes → copy back → Realm decrypts\par
+{\tiny\textcolor{Muted}{extra copies and software crypto}}\par\vspace{1.8mm}
+\textbf{ACAI}\par
+Realm grants device path → GPC/SMMU checks → IDE-protected PCIe path → accelerator computes\par
+{\tiny\textcolor{Muted}{device transaction becomes checked path}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 路径重绘自 Figure 1、Table 1 和摘要。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{acai2023}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ACAI 的背景矛盾是 CCA 保护了 Realm memory，但 accelerator 访问通常发生在 CPU 核心之外。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item CCA 的 granule protection checks 本来主要约束 CPU 和系统内存访问。
+  \item GPU/FPGA 通过 MMIO、DMA、SMMU 和 PCIe 访问数据，路径上有 host、driver、Root Port 和 device state。
+  \item 如果只允许 shared memory + software encryption，安全上保守但性能和可用性差。
+  \item 因此 ACAI 试图把 CCA 的保护语义扩展到 accelerator transaction。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{accelerator 路径中的边界对象}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{为什么危险} & \textbf{ACAI 处理方向} \\
+\midrule
+MMIO & host 可配置 device interface & 限制可见寄存器和访问 \\
+DMA & device 可读写内存 & SMMU/GPT 联动检查 \\
+PCIe link & 链路可被观察或篡改 & IDE key 保护 \\
+driver/runtime & software TCB 增大 & 减少 copy path \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 问题拆分依据 introduction、Figure 2 和 Figure 5。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{acai2023}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ACAI 的设计把 device lifecycle、GPT/SMMU 检查和 IDE link protection 组合成 accelerator execution 的可信路径。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 5 展示 MMIO 和 DMA 在 ACAI 中如何经过 protection path。
+  \item Table 2 总结 ACAI 引入的新接口和更新。
+  \item Root Port 中的 IDE key 与 device access control 共同限制 accelerator 与 Realm 之间的数据流。
+  \item 它的安全性来自多组件组合，而不是某一个单独寄存器或 driver patch。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{ACAI trusted accelerator flow}
+      \scriptsize \begin{itemize}
+  \item 01. Realm 创建并声明 accelerator 需求
+  \item 02. host 发起 attach\_dev 等管理请求
+  \item 03. RMM/firmware 检查 device lifecycle
+  \item 04. SMMU/GPT 约束 DMA
+  \item 05. PCIe IDE 保护 link
+  \item 06. accelerator 访问 Realm buffer
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 5 和 Table 2 重绘；保留 draft 证据边界。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{acai2023}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ACAI 报告 GPU 平均 43.5\% 和 FPGA 平均 12.1\% 额外代价，优化后相对原 ACAI 有 26.05\% 和 3.1\% speedup。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 作者在 Arm public simulator 和开发板环境中评估 GPU 与 FPGA workloads。
+  \item 摘要报告 ACAI 在 GPU/FPGA 上分别带来 43.5\% 和 12.1\% average overhead。
+  \item 优化版本 ACAI OPT 相对 ACAI 在 GPU/FPGA 上分别有 26.05\% 和 3.1\% speedup。
+  \item 这些数字支撑 early design feasibility，但必须按 E3 draft 阅读。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{ACAI reported results}
+      \scriptsize \textbf{GPU overhead}\hfill \textcolor{Accent}{\bfseries 43.5\%}\par\textcolor{Accent}{\rule{0.44\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{FPGA overhead}\hfill \textcolor{Accent}{\bfseries 12.1\%}\par\textcolor{Accent}{\rule{0.12\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{GPU OPT speedup}\hfill \textcolor{Accent}{\bfseries 26.05\%}\par\textcolor{Accent}{\rule{0.26\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{evaluation}}\par\vspace{1.4mm}
+\textbf{FPGA OPT speedup}\hfill \textcolor{Accent}{\bfseries 3.1\%}\par\textcolor{Accent}{\rule{0.04\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{evaluation}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自摘要和 evaluation；本页不写成标准化 trusted I/O 结果。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{acai2023}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ACAI 的价值是把 CCA data path 推到 accelerator，但短板是 draft 成熟度、硬件依赖和完整 device identity/lifecycle 仍需补证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是明确指出 CCA CPU boundary 之外的 accelerator blind spot。
+  \item 不足是依赖模拟器、开发板和设计扩展，不能视为已部署标准。
+  \item 商业潜力在 GPU/FPGA confidential workload，尤其是 AI 和专用加速。
+  \item 落地风险包括 device attestation、IDE key management、driver compatibility 和 multi-tenant scheduling。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 把 Realm 数据路径延伸到 accelerator \\
+短板 & E3 draft，硬件/firmware 依赖强 \\
+落地场景 & confidential GPU/FPGA workload \\
+不能承担 & 完整 SPDM/TDISP/device lifecycle 证明 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价结合 ACAI 范围和本报告 confidential I/O 证据边界。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Devlore: device interrupt protection：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{bertschi2026devlore}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Devlore 的核心贡献是把 device interrupt 也纳入 confidential VM 边界，阻止 host 随意伪造或重放设备中断。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出攻击者可注入 malicious interrupts，破坏 confidential VM 的机密性和完整性。
+  \item Devlore 让 CVM 注册 device interrupts，并由 monitor/RMM 检查物理中断与虚拟中断的绑定。
+  \item 它关注的是 interrupt path，不是 DMA、MMIO 或 device identity 的全部问题。
+  \item 它是 2026 draft，适合作为最新 interrupt protection 方向证据。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{未保护 interrupt vs Devlore}
+      \scriptsize \textbf{unprotected path}\par
+device event → host/GIC config → virtual interrupt → CVM handles\par
+{\tiny\textcolor{Muted}{host can inject or misroute}}\par\vspace{1.8mm}
+\textbf{Devlore path}\par
+CVM registers interrupt → monitor records physical IRQ → RMM checks binding → virtual IRQ delivered\par
+{\tiny\textcolor{Muted}{interrupt authenticity is mediated}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 路径重绘自 Figure 2 和摘要。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Devlore: device interrupt protection：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{bertschi2026devlore}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 中断是 CCA I/O 边界中容易被低估的一环，因为它不搬运数据，却能改变 CVM 控制流。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item CVM 保护内存和 CPU state，但设备事件通过 interrupt controller 进入 execution path。
+  \item host 或 hypervisor 如果能任意配置 virtual interrupt，就可能诱导 CVM 执行错误路径。
+  \item 传统 device passthrough 关注 DMA isolation，未必验证 interrupt authenticity 和 ordering。
+  \item Devlore 因此把 interrupt lifecycle 作为独立保护对象。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{interrupt protection 关注点}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{风险} & \textbf{表现} & \textbf{Devlore 方向} \\
+\midrule
+forged interrupt & host 注入不存在事件 & 绑定物理和虚拟中断 \\
+misconfiguration & GIC/vGIC 配置被操纵 & monitor 记录和检查 \\
+ordering issue & 事件顺序影响 handler & 维护 ordered physical list \\
+compatibility & device driver 仍需工作 & 评估 GPU/driver 场景 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 Figure 3、Figure 4 和 threat discussion。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Devlore: device interrupt protection：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{bertschi2026devlore}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Devlore 的设计把中断注册、GIC 配置和虚拟中断注入拆成可检查步骤。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item CVM 先注册可接受的 device interrupts。
+  \item monitor/RMM 记录到达的 physical interrupts 并检查它们是否属于已注册集合。
+  \item virtual interrupt 只有在与 physical interrupt 绑定后才交给 CVM。
+  \item Table 1 总结了 Devlore 新增和复用的 device lifecycle API。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Devlore interrupt flow}
+      \scriptsize \begin{itemize}
+  \item 01. CVM registers device IRQ
+  \item 02. hypervisor config request
+  \item 03. monitor records physical IRQ
+  \item 04. RMM verifies binding
+  \item 05. virtual IRQ delivered to CVM
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 2-Figure 4 和 Table 1 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Devlore: device interrupt protection：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{bertschi2026devlore}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Devlore 在典型 integrated GPU 应用中报告 0.06\% overhead，并在 interrupt path breakdown 中定位主要检查成本。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文在 Arm FVP 和 Arm board 上实现并评估 Devlore。
+  \item 摘要报告典型 integrated GPU applications 的 overhead 为 0.06\%。
+  \item Figure 7 展示 GPU interrupt flow breakdown，说明 checking virtual interrupts 是主要新增时间来源之一。
+  \item Figure 9 用 glmark2 board case study 检查真实 GPU workload。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Devlore reported results}
+      \scriptsize \textbf{typical GPU app overhead}\hfill \textcolor{Accent}{\bfseries 0.06\%}\par\textcolor{Accent}{\rule{0.04\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{interrupt path}\hfill \textcolor{Accent}{\bfseries Fig.7}\par\textcolor{Accent}{\rule{0.55\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{flow breakdown}}\par\vspace{1.4mm}
+\textbf{stress test}\hfill \textcolor{Accent}{\bfseries Fig.8}\par\textcolor{Accent}{\rule{0.50\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{sustained interrupt load}}\par\vspace{1.4mm}
+\textbf{board case}\hfill \textcolor{Accent}{\bfseries glmark2}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.9}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字和图号来自摘要与 evaluation；E3 draft 状态保留。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Devlore: device interrupt protection：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{bertschi2026devlore}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Devlore 补上 CCA I/O 中的 interrupt 缺口，但它不解决设备身份、DMA 隔离或 data-path 加密。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把中断 authenticity/order 从隐含假设变成显式机制。
+  \item 不足是范围集中在 interrupt path，不能替代 ACAI、CoVE-IO 或 SPDM/TDISP。
+  \item 商业潜力在 CVM 使用 integrated GPU、NIC 或 storage device 时减少 host interrupt 注入风险。
+  \item 落地风险包括 GIC/vGIC 兼容、device driver 修改和多设备并发场景。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 把 interrupt 作为独立可信边界 \\
+短板 & 不覆盖 DMA/MMIO/link/device identity 全部问题 \\
+落地场景 & CVM 使用真实设备的 interrupt path \\
+风险 & GIC/vGIC 和 driver 兼容 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价聚焦 Devlore 的 interrupt scope，不外推到完整 trusted I/O。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Accelerator TEE SoK 在本方向的作用是给 ACAI 和 Devlore 提供 device/accelerator taxonomy；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SoK 将 accelerator TEE 分为 Host-type、Acc.-type 和 Mix-type。
+  \item 它比较 access control、memory encryption workflow、runtime 和 attestation。
+  \item ACAI 更接近 Host/CCA-mediated accelerator path，Devlore 则补 interrupt path。
+  \item 这篇只做分类支撑，不承担 ACAI/Devlore 的系统结果。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SoK 如何服务本方向}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{分类轴} & \textbf{对 ACAI/Devlore 的意义} \\
+\midrule
+架构类型 & 区分 host-mediated 与 device-root designs \\
+access control & 解释 DMA/MMIO 保护为何独立 \\
+memory path & 说明 encryption/integrity 不等于 interrupt 保护 \\
+attestation & 提示还需要 device identity 证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；本页按 SoK taxonomy 使用。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} accelerator confidential computing 的难点是保护对象跨越 host memory、device memory、command queue 和 result path；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SoK 的 attack-vector 图说明 accelerator computing 中存在 host、driver、device memory 和 data movement 风险。
+  \item CPU TEE 只覆盖其中一段路径。
+  \item ACAI 关注 DMA/MMIO/data path，Devlore 关注 interrupt control path。
+  \item 因此本方向需要 taxonomy 来避免把所有 device security 问题混为一谈。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{accelerator workload 路径}
+      \scriptsize \textbf{data path}\par
+Realm memory → DMA buffer → accelerator memory → result buffer\par
+{\tiny\textcolor{Muted}{ACAI 主要关注}}\par\vspace{1.8mm}
+\textbf{control path}\par
+command queue → MMIO → interrupt → driver handler\par
+{\tiny\textcolor{Muted}{Devlore 补 interrupt}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；路径按 SoK attack-vector 与本方向两篇系统论文对齐。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 用 SoK 的 checklist 看 CCA I/O，至少要逐项回答 identity、memory path、interrupt、runtime 和 attestation；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SoK 的安全方案比较表可作为 device TEE checklist。
+  \item ACAI 对 memory path 和 link protection 有早期设计。
+  \item Devlore 对 interrupt authenticity 有早期设计。
+  \item device identity、measurement、TDISP lifecycle 要在 10/13 章节继续补足。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CCA I/O checklist}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{检查项} & \textbf{本方向证据} & \textbf{仍需后续证据} \\
+\midrule
+memory path & ACAI & CXL/PCIe IDE details \\
+interrupt & Devlore & AIA/GIC integration \\
+device identity & SoK 提醒 & SPDM/TDISP \\
+attestation & SoK 提醒 & RATS/TLS+RA/device evidence \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；checklist 由 SoK 表格和本报告方向分工生成。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇 SoK 无新实验；它在本方向只做分类和覆盖检查。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 它比较已有 accelerator TEE designs 的安全组件。
+  \item 它不提供 ACAI 或 Devlore 的量化结果。
+  \item ACAI 的数字来自 ACAI 原文，Devlore 的数字来自 Devlore 原文。
+  \item 本页保留 E2 边界，避免把 survey 写成系统证据。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向中的 SoK 用法}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{使用} & \textbf{不使用} \\
+\midrule
+分类坐标 & ACAI 数字来源 \\
+安全组件 coverage & Devlore 数字来源 \\
+后续证据 checklist & device lifecycle 规范证明 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；只写 taxonomy evidence。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SoK 对本方向的价值是防止 I/O 讨论漏项；它的限制是不能替代具体系统和规范；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 accelerator TEE 的组件拆分清楚。
+  \item 不足是分类层级高，不能判断 ACAI/Devlore 哪个设计已成熟。
+  \item 商业落地上，它提醒 device path 需要硬件、firmware、driver、runtime 共同落地。
+  \item 本报告把它作为 guardrail，避免把单点机制写成完整 trusted I/O。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 提供 accelerator TEE coverage \\
+短板 & 不能替代 ACAI/Devlore 原文 \\
+落地启发 & device path 是跨层工程 \\
+使用规则 & 作为 checklist 而非结果证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；评价聚焦本方向内的辅助角色。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA I/O、DMA、accelerator、interrupt：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{05-arm-cca-io-accelerator-interrupt}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} CCA I/O 的核心 takeaway 是 data path 和 interrupt path 都要被建模，CPU Realm 边界本身不够。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item ACAI 说明 accelerator DMA/MMIO/data path 需要 CCA-aware protection。
+  \item Devlore 说明 interrupt authenticity/order 也是 confidential VM 的安全条件。
+  \item Accelerator TEE SoK 说明 device TEE 还包含 identity、runtime、attestation 等更宽问题。
+  \item 完整 confidential I/O 需要和 CoVE-IO、SPDM、TDISP、IOMMU/AIA 等章节合并阅读。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向不能混写的边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{边界} & \textbf{本方向证据} & \textbf{后续补充} \\
+\midrule
+DMA/MMIO & ACAI & IOMMU/CoVE-IO \\
+interrupt & Devlore & AIA/GIC integration \\
+device identity & SoK 仅提示 & SPDM/TDISP \\
+endpoint channel & 本方向不覆盖 & TLS+RA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结把 draft 系统与 taxonomy evidence 分开。}}
 \end{frame}

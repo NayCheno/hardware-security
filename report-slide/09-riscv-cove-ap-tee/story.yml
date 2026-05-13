@@ -1,0 +1,417 @@
+direction: "RISC-V CoVE / AP-TEE confidential VM"
+story_version: 1
+slides:
+- slide_id: d09-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "CoVE/AP-TEE 这一节把 RISC-V 从 enclave framework 推进到 confidential VM lifecycle。"
+  narrative:
+  - "Sahita 2023 CoVE 是早期 reference architecture，提出 RISC-V 上面向 virtualized workloads 的 confidential VM 框架。"
+  - "AP-TEE draft 是当前标准化路径中的 TVM/TSM 规范入口，但仍是 draft。"
+  - "Boubakri 2025 survey 用来把 CoVE/AP-TEE 放回 RISC-V TEE lineage。"
+  - "本方向要区分 pre-CoVE enclave、TVM lifecycle 和后续 CoVE-IO。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 09-riscv-cove-ap-tee."
+  - "CoVE p.1 abstract; AP-TEE spec p.1 version line; Boubakri 2025 p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "RISC-V confidential VM 证据链"
+    data:
+      steps:
+      - label: "CoVE 2023"
+        claim: "reference architecture"
+        evidence: "E3 preprint/proposal"
+      - label: "AP-TEE 2024"
+        claim: "TVM/TSM draft semantics"
+        evidence: "E3 draft spec"
+      - label: "RISC-V TEE survey"
+        claim: "lineage cross-check"
+        evidence: "E2 survey"
+  source_note: "方向页严格保留 CoVE/AP-TEE draft status。"
+
+- slide_id: d09-01-cove-summary
+  paper_key: sahita2023cove
+  slide_type: summary
+  claim: "CoVE 的核心贡献是把 RISC-V confidential computing 定义成 TVM + TSM + host 的三方结构。"
+  narrative:
+  - "论文描述 RISC-V 平台上面向 rich OS virtualized workloads 的 confidential VM framework。"
+  - "host 仍负责资源管理，但不能直接访问 TVM 私有状态。"
+  - "TSM/firmware 负责创建、运行、测量和隔离 TVM。"
+  - "它是 CoVE/AP-TEE 标准化前的关键 architecture proposal。"
+  evidence_refs:
+  - "CoVE p.1 abstract: first application-class processor architecture framework for Confidential VMs on RISC-V."
+  - "CoVE Fig.1 and Table 1: RISC-V CoVE reference architecture and privilege levels."
+  proof_object:
+    type: mechanism_flow
+    title: "CoVE reference architecture"
+    data:
+      stages:
+      - "host/VMM manages resources"
+      - "TSM mediates confidential operations"
+      - "TVM owns confidential memory"
+      - "SBI/ABI requests cross boundary"
+      - "measurement supports attestation"
+  source_note: "机制图按 Figure 1、Table 1 和摘要重绘。"
+
+- slide_id: d09-02-cove-background
+  paper_key: sahita2023cove
+  slide_type: background
+  claim: "CoVE 的背景问题是传统 RISC-V privilege model 默认 machine-mode firmware 可信，但云场景要把 host/VMM 排除出 tenant TCB。"
+  narrative:
+  - "RISC-V machine mode 权限最高，平台 firmware 通常天然可信。"
+  - "多租户云平台中，host OS、VMM 和平台管理软件都可能不被 tenant 信任。"
+  - "enclave framework 保护进程或应用，不能直接表达完整 VM lifecycle。"
+  - "CoVE 因此把 RISC-V TEE 问题推进到 TVM 抽象。"
+  evidence_refs:
+  - "CoVE p.1 introduction: multi-tenant platforms and privileged software components."
+  - "CoVE Table 1: RISC-V privilege levels and trust positioning."
+  proof_object:
+    type: comparison_matrix
+    title: "enclave 与 TVM 的差异"
+    data:
+      columns: ["维度", "pre-CoVE enclave", "CoVE TVM"]
+      rows:
+      - ["保护对象", "应用/进程 enclave", "完整 guest VM"]
+      - ["管理者", "secure monitor", "TSM + host split"]
+      - ["内存状态", "enclave pages", "confidential TVM memory"]
+      - ["证据", "enclave measurement", "TVM measurement/report"]
+  source_note: "对比依据 CoVE introduction 与 Table 1。"
+
+- slide_id: d09-03-cove-solution
+  paper_key: sahita2023cove
+  slide_type: solution
+  claim: "CoVE 的解决方案是让 TSM 成为 TVM lifecycle 的 gatekeeper，并通过 SBI/ABI 暴露受控管理接口。"
+  narrative:
+  - "host 请求创建 TVM、添加 pages 和 vCPUs，但关键状态转换由 TSM 检查。"
+  - "TVM 内部通过 guest ABI 请求受信服务。"
+  - "confidential memory 与普通 memory 的转换成为 lifecycle 核心。"
+  - "这种结构与 Arm CCA/RMM 在理念上可对照，但具体接口不同。"
+  evidence_refs:
+  - "CoVE Fig.1: reference architecture with TSM, host and TVM."
+  - "CoVE conclusion: framework for scalable Confidential VMs on RISC-V platforms."
+  proof_object:
+    type: path_compare
+    title: "host path vs TVM path"
+    data:
+      paths:
+      - label: "host management"
+        steps: ["VMM request", "TSM check", "TVM resource update", "run TVM"]
+        note: "host manages but is mediated"
+      - label: "TVM service"
+        steps: ["guest request", "confidential ABI", "TSM service", "attestation/memory response"]
+        note: "tenant path avoids trusting host"
+  source_note: "接口路径按 Figure 1 和 CoVE lifecycle 叙事重绘。"
+
+- slide_id: d09-04-cove-experiments
+  paper_key: sahita2023cove
+  slide_type: experiments
+  claim: "CoVE 2023 主要提供 architecture proposal；它的证据适合讲 TVM model，不适合写成 ratified implementation。"
+  narrative:
+  - "论文篇幅短，重点是 reference architecture 和 future work。"
+  - "它说明 RISC-V 如何支持 Confidential VMs on rich OS workloads。"
+  - "它没有提供完整产品级实现或标准成熟度证据。"
+  - "因此本报告把它标为 E3 public preprint/proposal。"
+  evidence_refs:
+  - "CoVE p.1 abstract and Fig.1: reference architecture evidence."
+  - "CoVE conclusion and Future Work: framework described, future standardization implied."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "CoVE 2023 证据读法"
+    data:
+      columns: ["可支撑", "不能支撑"]
+      rows:
+      - ["TVM/TSM reference architecture", "ratified standard"]
+      - ["RISC-V confidential VM direction", "完整产品部署"]
+      - ["与 CCA 概念对照", "CoVE-IO device path"]
+  source_note: "按 E3 proposal 使用，避免成熟度过写。"
+
+- slide_id: d09-05-cove-evaluation
+  paper_key: sahita2023cove
+  slide_type: evaluation
+  claim: "CoVE 的价值是给 RISC-V confidential VM 定义入口；短板是早期 proposal 还没有完整规范闭环。"
+  narrative:
+  - "优点是把 RISC-V TEE 从 enclave 叙事转向 TVM。"
+  - "不足是许多 ABI、measurement、memory lifecycle 和 I/O 细节需要后续 AP-TEE/CoVE-IO draft。"
+  - "商业潜力在开放 RISC-V 云 confidential computing。"
+  - "落地风险在 spec maturity、firmware TCB、platform profile 和 vendor interoperability。"
+  evidence_refs:
+  - "CoVE Fig.1 and conclusion: reference architecture and future work."
+  - "AP-TEE spec p.1 version line: document under development, expect potential changes."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "RISC-V confidential VM 入口"]
+      - ["短板", "E3 proposal，规范细节仍在演进"]
+      - ["落地场景", "RISC-V cloud TVM"]
+      - ["后续依赖", "AP-TEE/CoVE-IO/IOMMU/AIA"]
+  source_note: "评价结合 CoVE proposal 和 AP-TEE draft status。"
+
+- slide_id: d09-06-aptee-summary
+  paper_key: riscv_ap_tee_2024
+  slide_type: summary
+  claim: "AP-TEE draft 是 RISC-V TVM 语义的当前规范入口，定义 TSM、TVM、measurement 和 confidential memory；无新实验。"
+  narrative:
+  - "本地 PDF 标注 Version 0.7, 8/2024，且声明文档仍在 development。"
+  - "目录包含 TVM security requirements、TSM initialization/operation、TVM attestation and measurements。"
+  - "规范还讨论 non-confidential memory 与 confidential memory 的转换。"
+  - "它是 E3 draft，不是 ratified official standard。"
+  evidence_refs:
+  - "AP-TEE spec p.1 version line: Version 0.7, 8/2024, document under development."
+  - "AP-TEE spec Section 4.4, Section 5.3-5.6, Section 6: TVM requirements, TSM, attestation and measurements."
+  proof_object:
+    type: mechanism_flow
+    title: "AP-TEE TVM lifecycle"
+    data:
+      stages:
+      - "TSM initialization"
+      - "TVM creation"
+      - "confidential memory definition"
+      - "measurement update"
+      - "TVM execution"
+      - "attestation response"
+  source_note: "无新实验；流程按 AP-TEE draft TOC 和章节标题重绘。"
+
+- slide_id: d09-07-aptee-background
+  paper_key: riscv_ap_tee_2024
+  slide_type: background
+  claim: "AP-TEE 要把 CoVE proposal 中的 TVM 概念转成规范化 lifecycle，否则不同实现难以互操作；无新实验。"
+  narrative:
+  - "CoVE 2023 给出 reference architecture，但标准化需要定义 TVM security requirements。"
+  - "TSM 的 operation、isolation 和 TVM execution 需要清晰接口。"
+  - "measurement 与 attestation 需要规范化，verifier 才能理解 TVM evidence。"
+  - "confidential memory region 的定义和转换是 TVM lifecycle 的核心。"
+  evidence_refs:
+  - "AP-TEE spec Section 4.4: TVM Security Requirements to address threat model."
+  - "AP-TEE spec Section 5.3-5.6 and Section 6.1-6.2: TSM, TVM execution, measurements and attestation."
+  proof_object:
+    type: comparison_matrix
+    title: "proposal 到 draft 的补齐点"
+    data:
+      columns: ["对象", "CoVE proposal", "AP-TEE draft"]
+      rows:
+      - ["TVM", "参考架构", "security requirements"]
+      - ["TSM", "核心角色", "initialization/operation/isolation"]
+      - ["memory", "confidential concept", "regions and conversion"]
+      - ["evidence", "measurement idea", "attestation sections"]
+  source_note: "无新实验；对比来自 CoVE proposal 与 AP-TEE draft 章节。"
+
+- slide_id: d09-08-aptee-solution
+  paper_key: riscv_ap_tee_2024
+  slide_type: solution
+  claim: "AP-TEE 的规范结构把 TVM 的创建、内存转换、测量和运行分成可审核状态；无新实验。"
+  narrative:
+  - "TSM 是 TVM lifecycle 的管理和隔离组件。"
+  - "confidential memory conversion 把普通内存纳入 TVM 保护边界。"
+  - "measurements 记录 TCB elements 和 TVM 初始状态。"
+  - "attestation 把 measurement 暴露给 verifier 和 relying party。"
+  evidence_refs:
+  - "AP-TEE spec Section 5.3-5.6: TSM initialization, operation, isolation and TVM execution."
+  - "AP-TEE spec Section 6.1-6.2 and memory conversion sections around p.68: measurements, attestation and confidential memory conversion."
+  proof_object:
+    type: mechanism_flow
+    title: "TVM state flow"
+    data:
+      stages:
+      - "host requests TVM create"
+      - "TSM validates operation"
+      - "memory converted to confidential"
+      - "measurement extended"
+      - "TVM executes"
+      - "attestation consumed by verifier"
+  source_note: "无新实验；流程按 draft section headings 组织，不补写未明确状态机细节。"
+
+- slide_id: d09-09-aptee-experiments
+  paper_key: riscv_ap_tee_2024
+  slide_type: experiments
+  claim: "AP-TEE 是 draft spec，无新实验；它支撑 TVM/TSM 语义，不支撑量化结果或成熟产品结论。"
+  narrative:
+  - "文档首页明确写着 under development and expect potential changes。"
+  - "它可以支撑 terminology、lifecycle 和 interface-level claim。"
+  - "它不能支撑 RISC-V TVM 已经量产或所有实现互操作。"
+  - "后续 CoVE-IO 还要补设备路径和 I/O lifecycle。"
+  evidence_refs:
+  - "AP-TEE spec p.1 version line and development-status notice."
+  - "AP-TEE spec Section 5-6: TVM lifecycle, measurements and attestation."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "AP-TEE draft 边界"
+    data:
+      columns: ["可写", "不可写"]
+      rows:
+      - ["TVM/TSM draft 语义", "ratified standard"]
+      - ["measurement/attestation 章节", "产品部署充分性"]
+      - ["confidential memory lifecycle", "trusted I/O 完整安全"]
+  source_note: "无新实验；本页保留 E3 draft-not-ratified。"
+
+- slide_id: d09-10-aptee-evaluation
+  paper_key: riscv_ap_tee_2024
+  slide_type: evaluation
+  claim: "AP-TEE 的强项是把 TVM lifecycle 规范化，短板是 draft 成熟度和 I/O 边界仍未闭合；无新实验。"
+  narrative:
+  - "优点是比 CoVE proposal 更系统地定义 TSM/TVM/memory/measurement。"
+  - "不足是 v0.7 draft，未来可能变化。"
+  - "商业落地价值在为 RISC-V confidential VM 生态提供共同 ABI 方向。"
+  - "风险在 verifier profile、firmware 实现、memory conversion edge cases 和 I/O 扩展衔接。"
+  evidence_refs:
+  - "AP-TEE spec Section 4.4-6.2: TVM requirements, TSM and attestation."
+  - "CoVE-IO spec p.1 and Section 7: I/O extension remains a separate draft."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "TVM/TSM lifecycle 更完整"]
+      - ["短板", "E3 draft，状态未定"]
+      - ["落地价值", "RISC-V confidential VM ABI 方向"]
+      - ["仍需补", "CoVE-IO/device/IOMMU/AIA"]
+  source_note: "无新实验；评价不把 draft 写成 ratified。"
+
+- slide_id: d09-11-boubakri-summary
+  paper_key: boubakri2025riscvtee
+  slide_type: summary
+  claim: "Boubakri survey 在本方向的作用是把 CoVE/AP-TEE 放回 RISC-V TEE 发展谱系；无新实验。"
+  narrative:
+  - "survey 覆盖 RISC-V secure enclave 与 TEE 的代表系统。"
+  - "它可帮助区分 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE 的抽象层差异。"
+  - "它不替代 CoVE paper 或 AP-TEE draft 的规范内容。"
+  - "在本方向，它主要做 cross-check 和 taxonomy guardrail。"
+  evidence_refs:
+  - "Boubakri 2025 p.1 abstract: survey of RISC-V secure enclaves and trusted execution environments."
+  - "Boubakri 2025 README Section 3: primitive -> architecture -> monitor/runtime -> representative system."
+  proof_object:
+    type: comparison_matrix
+    title: "survey 在本方向的作用"
+    data:
+      columns: ["对象", "survey 能做", "survey 不能做"]
+      rows:
+      - ["Keystone/Penglai", "放入 lineage", "替代原文机制"]
+      - ["CoVE/AP-TEE", "标出 TVM 转向", "替代 draft spec"]
+      - ["CoVE-IO", "提示后续扩展", "定义 trusted I/O"]
+  source_note: "无新实验；本页只用 survey 做谱系校验。"
+
+- slide_id: d09-12-boubakri-background
+  paper_key: boubakri2025riscvtee
+  slide_type: background
+  claim: "RISC-V TEE 谱系容易被混写，是因为 enclave、trusted monitor、TVM 和 TEE-I/O 都借用相近术语；无新实验。"
+  narrative:
+  - "survey 整理多个 RISC-V TEE 路线，显示术语随系统抽象演变。"
+  - "Keystone/Penglai 主要是 enclave framework。"
+  - "CoVE/AP-TEE 面向 confidential VM。"
+  - "CoVE-IO 再把设备和 I/O path 纳入 TVM TCB。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 2: RISC-V secure enclaves and TEE development routes."
+  - "Boubakri 2025 README Section 9: links to Keystone, Penglai, SPEAR-V, CoVE, AP-TEE and CoVE-IO."
+  proof_object:
+    type: evolution_timeline
+    title: "术语演进"
+    data:
+      steps:
+      - label: "enclave"
+        claim: "app/process-level protected execution"
+        evidence: "Keystone/Penglai"
+      - label: "TVM"
+        claim: "guest VM-level confidential execution"
+        evidence: "CoVE/AP-TEE"
+      - label: "TEE-I/O"
+        claim: "device path included"
+        evidence: "CoVE-IO"
+  source_note: "无新实验；谱系按 survey README review 和本报告 evidence ledger。"
+
+- slide_id: d09-13-boubakri-solution
+  paper_key: boubakri2025riscvtee
+  slide_type: solution
+  claim: "在本方向使用 survey 的正确方式，是把 CoVE/AP-TEE 的 claim 限定在 TVM 层，不回填到早期 enclave 系统；无新实验。"
+  narrative:
+  - "survey 提供系统目录和层级关系。"
+  - "CoVE/AP-TEE 的 TVM lifecycle 应引用 CoVE paper 和 AP-TEE draft。"
+  - "Keystone/Penglai/SPEAR-V 的机制仍引用 08 的系统论文。"
+  - "CoVE-IO 的 device path 留给 10/13 章节。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 3: survey path and mechanism-claim caution."
+  - "survey/evidence_ledger.md Boundary Records: survey mechanisms must cite original papers/specs."
+  proof_object:
+    type: comparison_matrix
+    title: "引用路由"
+    data:
+      columns: ["claim", "引用来源"]
+      rows:
+      - ["RISC-V TEE lineage", "Boubakri survey"]
+      - ["PMP/GPT/tag mechanisms", "Keystone/Penglai/SPEAR-V"]
+      - ["TVM lifecycle", "CoVE/AP-TEE"]
+      - ["trusted I/O", "CoVE-IO/IOMMU/AIA/SPDM"]
+  source_note: "无新实验；本页给后续引用路由，不写新机制。"
+
+- slide_id: d09-14-boubakri-experiments
+  paper_key: boubakri2025riscvtee
+  slide_type: experiments
+  claim: "这篇 survey 无新实验；它在本方向只帮助检查 coverage 和层级。"
+  narrative:
+  - "它不提供 CoVE/AP-TEE 的状态机结果。"
+  - "它不提供 Keystone/Penglai/SPEAR-V 的量化数据来源替代。"
+  - "它可以帮助确认本报告没有把 enclave 和 TVM 混写。"
+  - "因此本页保留 E2 survey 边界。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 6: Survey 无新实验."
+  - "survey/evidence_ledger.md Section Evidence Classes: E2 supports taxonomy/background."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "本方向中的 E2 用法"
+    data:
+      columns: ["可用", "不可用"]
+      rows:
+      - ["lineage coverage", "TVM 状态机细节"]
+      - ["术语层级", "系统测评数据"]
+      - ["引用路由", "draft maturity 结论替代"]
+  source_note: "无新实验；只写 coverage 和 taxonomy claim。"
+
+- slide_id: d09-15-boubakri-evaluation
+  paper_key: boubakri2025riscvtee
+  slide_type: evaluation
+  claim: "Boubakri survey 对 CoVE/AP-TEE 的价值是防止断代，限制是不能代替 draft spec；无新实验。"
+  narrative:
+  - "优点是把 CoVE/AP-TEE 放在较新的 RISC-V TEE 综述中。"
+  - "不足是 survey 对 draft spec 的细节和状态会滞后。"
+  - "商业落地上，它提示 RISC-V confidential computing 仍在从研究到规范过渡。"
+  - "本报告用它校准主线，但不让它承担机制页。"
+  evidence_refs:
+  - "Boubakri 2025 README Section 8: survey limitations and draft-status risk."
+  - "AP-TEE spec p.1: under-development draft status."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "RISC-V TEE lineage 新入口"]
+      - ["短板", "不能替代 AP-TEE draft"]
+      - ["落地启发", "研究到规范仍在过渡"]
+      - ["使用规则", "cross-check only"]
+  source_note: "无新实验；评价保留 survey 和 draft 的证据分工。"
+
+- slide_id: d09-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "CoVE/AP-TEE 的 takeaway 是 RISC-V TEE 已从 enclave 进入 TVM lifecycle，但 I/O 和设备边界还要另起一层。"
+  narrative:
+  - "CoVE 2023 给 RISC-V confidential VM 定义 reference architecture。"
+  - "AP-TEE draft 把 TVM/TSM/memory/measurement 规范化，但仍是 E3。"
+  - "Boubakri survey 校准 RISC-V TEE lineage，避免混淆 enclave 与 TVM。"
+  - "下一方向 CoVE-IO 会把 device/DMA/MMIO/interrupt 纳入 TVM data path。"
+  evidence_refs:
+  - "CoVE Fig.1; AP-TEE Section 5-6; Boubakri 2025 README Section 3."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 09-riscv-cove-ap-tee."
+  proof_object:
+    type: comparison_matrix
+    title: "TVM 边界总结"
+    data:
+      columns: ["层", "本方向说明", "后续补充"]
+      rows:
+      - ["CPU/Memory", "TVM/TSM lifecycle", "IOMMU/AIA substrate"]
+      - ["Evidence", "measurement/attestation", "RATS/TLS+RA profiles"]
+      - ["Device", "本方向未闭合", "CoVE-IO/SPDM/TDISP"]
+      - ["Maturity", "E3 draft", "ratification 需后续跟踪"]
+  source_note: "方向总结按 proposal、draft spec 和 survey 三类证据分工写入。"

@@ -1,0 +1,415 @@
+direction: "Attestation、boot、lifecycle"
+story_version: 1
+slides:
+- slide_id: d06-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "Attestation 这一节要区分早期 memory attestation、现代 RATS 角色模型和 verified RA co-design。"
+  narrative:
+  - "SWATT 是软件 attestation 的早期代表，强调 verifier 如何检测 embedded device memory 被改。"
+  - "RATS RFC 9334 给出现代远程证明的概念角色：attester、verifier、relying party、endorser。"
+  - "VRASED 把 RA 变成硬件/软件 co-design，并对关键安全性质做形式化验证。"
+  - "三篇共同形成从 checksum challenge 到标准角色模型再到 verified design 的演进链。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 06-attestation-boot-lifecycle."
+  - "SWATT p.1 abstract; RFC 9334 p.1; VRASED p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "RA 证据演进"
+    data:
+      steps:
+      - label: "SWATT 2004"
+        claim: "software memory attestation"
+        evidence: "checksum challenge"
+      - label: "RFC 9334"
+        claim: "RATS architecture"
+        evidence: "attester/verifier roles"
+      - label: "VRASED 2019"
+        claim: "verified HW/SW RA"
+        evidence: "verified co-design"
+  source_note: "本页建立 attestation 主线，不把 boot、launch、runtime evidence 混成同一概念。"
+
+- slide_id: d06-01-swatt-summary
+  paper_key: seshadri2004swatt
+  slide_type: summary
+  claim: "SWATT 的核心贡献是不用专用安全硬件，也尝试让 verifier 判断 embedded device 当前内存是否被篡改。"
+  narrative:
+  - "论文面向 embedded devices，假设攻击者可能修改软件或配置。"
+  - "verifier 发送 challenge，device 运行精心设计的 checksum procedure。"
+  - "安全直觉是攻击者若要隐藏改动，就需要额外模拟或搬运内存，从而导致时间差。"
+  - "它是远程软件 attestation 的历史起点，但 threat model 很强依赖时序和硬件假设。"
+  evidence_refs:
+  - "SWATT p.1 abstract: attest current memory contents of embedded devices."
+  - "SWATT Fig.1 and Fig.3: memory verification attack and verification procedure pseudocode."
+  proof_object:
+    type: mechanism_flow
+    title: "SWATT challenge flow"
+    data:
+      stages:
+      - "verifier 发送 nonce/challenge"
+      - "device 执行 checksum procedure"
+      - "伪随机遍历 memory"
+      - "返回 checksum 和 timing"
+      - "verifier 判断是否异常"
+  source_note: "流程按 Figure 1、Figure 3 和摘要重绘。"
+
+- slide_id: d06-02-swatt-background
+  paper_key: seshadri2004swatt
+  slide_type: background
+  claim: "SWATT 的背景是低成本 embedded device 无法普遍加入 TPM/secure hardware，但仍需要远程完整性检查。"
+  narrative:
+  - "作者设想未来大量 embedded devices 被网络连接并处理隐私和安全相关任务。"
+  - "硬件成本对嵌入式设备敏感，少量成本增加也会在规模部署中放大。"
+  - "verifier 无法直接读取远端设备内存，只能通过挑战应答间接判断。"
+  - "这推动了 software-only attestation 的研究，但也埋下对 timing assumption 的依赖。"
+  evidence_refs:
+  - "SWATT p.1 introduction: embedded devices, cost concern, remote verifier cannot directly inspect memory."
+  - "SWATT Fig.1: attacker replaces verification code and hides memory changes."
+  proof_object:
+    type: comparison_matrix
+    title: "软件 attestation 的前提"
+    data:
+      columns: ["前提", "SWATT 使用方式", "风险"]
+      rows:
+      - ["低成本设备", "不要求专用安全硬件", "硬件假设强"]
+      - ["远程 verifier", "challenge-response", "网络 timing noise"]
+      - ["攻击者改内存", "checksum 覆盖 memory", "模拟攻击要靠时间差检测"]
+      - ["固定程序", "优化 assembly", "可移植性受限"]
+  source_note: "矩阵依据 introduction 和 Figure 1 的攻击模型。"
+
+- slide_id: d06-03-swatt-solution
+  paper_key: seshadri2004swatt
+  slide_type: solution
+  claim: "SWATT 的方案设计围绕一个目标：让恶意设备既返回正确 checksum 又不超时变得困难。"
+  narrative:
+  - "checksum procedure 使用伪随机 memory traversal，减少攻击者提前准备的空间。"
+  - "实现强调 tight loop 和硬件特定时序，让额外分支或模拟内存访问可被 verifier 观察。"
+  - "RC4 PRG 用于生成 memory access sequence。"
+  - "这种机制适合讲 RA 思想起源，但今天不能直接套到复杂 TEE 或云服务器。"
+  evidence_refs:
+  - "SWATT Fig.3-Fig.4: verification procedure pseudocode and assembly code."
+  - "SWATT Section 3: pseudorandom memory traversal and timing-based detection."
+  proof_object:
+    type: mechanism_flow
+    title: "checksum 约束逻辑"
+    data:
+      stages:
+      - "nonce 初始化 PRG"
+      - "生成伪随机地址"
+      - "读取 memory word"
+      - "更新 checksum state"
+      - "返回结果和时间"
+  source_note: "流程按 Figure 3、Figure 4 和 checksum procedure 描述重绘。"
+
+- slide_id: d06-04-swatt-experiments
+  paper_key: seshadri2004swatt
+  slide_type: experiments
+  claim: "SWATT 的实验证据关注 timing detectability：攻击者插入额外检查或模拟内存，会让 verification procedure 运行时间变长。"
+  narrative:
+  - "论文用 memory verification attack 展示攻击者如何替换验证代码并隐藏旧代码。"
+  - "作者强调优化后的 verification body 使额外 if statement 或内存模拟产生可观察时间差。"
+  - "实验结论依赖 verifier 对 expected execution time 的掌握。"
+  - "这类证据适合低成本 embedded setting，不应外推到 modern cloud attestation。"
+  evidence_refs:
+  - "SWATT Fig.1: memory verification attack."
+  - "SWATT Fig.3-Fig.4 and evaluation discussion: checksum procedure and timing effect of added instructions."
+  proof_object:
+    type: comparison_matrix
+    title: "SWATT 证据读法"
+    data:
+      columns: ["观察", "含义"]
+      rows:
+      - ["正确 checksum", "内存可能未被改或攻击者成功模拟"]
+      - ["运行时间正常", "攻击者没有明显额外工作"]
+      - ["运行时间变长", "可能存在隐藏/模拟行为"]
+      - ["硬件改变", "SWATT threat model 可能失效"]
+  source_note: "证据读法依据 Figure 1 和 verification timing 讨论。"
+
+- slide_id: d06-05-swatt-evaluation
+  paper_key: seshadri2004swatt
+  slide_type: evaluation
+  claim: "SWATT 的历史价值很高，但今天它更多是 RA 思想起点，而不是现代 TEE attestation 的充分方案。"
+  narrative:
+  - "优点是提出了在无专用安全硬件下做远程完整性检查的清晰问题。"
+  - "不足是依赖 timing、硬件不可修改和简单 embedded setting。"
+  - "商业落地潜力在低成本设备完整性检测，但对现代云 TEE 不够。"
+  - "后续 RATS 和 VRASED 分别补上标准角色模型和硬件辅助验证。"
+  evidence_refs:
+  - "SWATT p.1 abstract and Section 3: software-only memory attestation design."
+  - "VRASED p.1 abstract: verified hardware/software co-design addresses stronger RA properties."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "RA 问题设定清楚"]
+      - ["短板", "timing 和硬件假设强"]
+      - ["落地场景", "低成本 embedded integrity check"]
+      - ["后续演进", "RATS 角色模型和 VRASED verified design"]
+  source_note: "评价把 SWATT 放在 RA 历史起点，不外推到云 TEE。"
+
+- slide_id: d06-06-rats-summary
+  paper_key: rats_rfc
+  slide_type: summary
+  claim: "RATS RFC 9334 的贡献是统一远程证明角色和证据流，而不是提出某个 TEE 的新实现；无新实验。"
+  narrative:
+  - "RFC 9334 定义 Remote ATtestation procedureS architecture。"
+  - "它把 attester、verifier、relying party、endorser 等角色拆开。"
+  - "它还讨论 evidence、attestation result、endorsement 和 appraisal policy。"
+  - "这使后续 CCA/CoVE/SPDM/TLS+RA 都能放进同一 evidence chain 语言。"
+  evidence_refs:
+  - "RFC 9334 p.1 metadata: Remote ATtestation procedureS Architecture, January 2023."
+  - "RFC 9334 Section 3-5: architectural roles, evidence, appraisal and attestation result."
+  proof_object:
+    type: mechanism_flow
+    title: "RATS evidence flow"
+    data:
+      stages:
+      - "Attester 生成 Evidence"
+      - "Verifier 取 Endorsement"
+      - "Verifier 执行 appraisal policy"
+      - "输出 Attestation Result"
+      - "Relying Party 做授权决策"
+  source_note: "无新实验；流程按 RFC 9334 的 architecture roles 重绘。"
+
+- slide_id: d06-07-rats-background
+  paper_key: rats_rfc
+  slide_type: background
+  claim: "没有 RATS 这样的角色模型，attestation 很容易被误写成单个 quote 或单次 challenge。"
+  narrative:
+  - "现代 confidential computing 的 evidence chain 包含硬件根、firmware、measurement、verifier policy 和 relying-party action。"
+  - "不同 TEE 的 quote/report 格式不同，但都需要解释谁生成、谁验证、谁依赖结果。"
+  - "RATS 把这些角色标准化，方便跨 Arm CCA、RISC-V CoVE、device attestation 和 TLS+RA 比较。"
+  - "它强调架构语义，不给某个硬件平台背书。"
+  evidence_refs:
+  - "RFC 9334 Section 1-3: motivation and RATS architectural model."
+  - "RFC 9334 Section 4: roles and conceptual messages."
+  proof_object:
+    type: comparison_matrix
+    title: "quote 之外的角色"
+    data:
+      columns: ["角色", "职责", "本报告对应"]
+      rows:
+      - ["Attester", "产生 evidence", "Realm/TVM/device endpoint"]
+      - ["Verifier", "验证 evidence", "云 verifier 或 tenant service"]
+      - ["Endorser", "发布 endorsement", "vendor/root authority"]
+      - ["Relying Party", "根据 result 决策", "key release / service admission"]
+  source_note: "无新实验；角色表依据 RFC 9334 Section 3-4。"
+
+- slide_id: d06-08-rats-solution
+  paper_key: rats_rfc
+  slide_type: solution
+  claim: "RATS 的方案价值是把证据、背书、策略和结果拆开，让 attestation 可以组合进 boot、lifecycle 和 channel binding。"
+  narrative:
+  - "Evidence 是 attester 对自身状态的声明，不等于最终授权。"
+  - "Endorsement 给 verifier 提供制造商或平台根的参考信息。"
+  - "Verifier 根据 appraisal policy 产出 attestation result。"
+  - "Relying party 再把结果用于 key release、connection admission 或 workload placement。"
+  evidence_refs:
+  - "RFC 9334 Section 5: evidence, attestation result, endorsements and appraisal policy."
+  - "RFC 9334 Section 6: conceptual messages and topological patterns."
+  proof_object:
+    type: mechanism_flow
+    title: "从 evidence 到决策"
+    data:
+      stages:
+      - "collect measurements"
+      - "produce evidence"
+      - "fetch endorsements"
+      - "appraise evidence"
+      - "emit result"
+      - "authorize action"
+  source_note: "无新实验；流程重绘自 RFC 9334 evidence/appraisal 模型。"
+
+- slide_id: d06-09-rats-experiments
+  paper_key: rats_rfc
+  slide_type: experiments
+  claim: "RFC 9334 是架构规范，无新实验；它证明的是术语和角色语义，不证明某个证明链部署可靠。"
+  narrative:
+  - "RFC 9334 是 Informational RFC，不是系统论文。"
+  - "它提供跨平台 attestation 的 reference architecture。"
+  - "它不提供某个 TEE 的量化结果或安全性实证。"
+  - "本报告用它统一语言，再用 SWATT/VRASED/TLS+RA 等材料补具体系统证据。"
+  evidence_refs:
+  - "RFC 9334 p.1 metadata: Category Informational, Published January 2023."
+  - "RFC 9334 Section 3-5: architecture and evidence model."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "RFC 9334 证据边界"
+    data:
+      columns: ["可证明", "不能证明"]
+      rows:
+      - ["角色和消息语义", "某平台部署安全"]
+      - ["evidence/result 区分", "具体 quote 格式正确"]
+      - ["架构拓扑", "verifier policy 充分"]
+  source_note: "无新实验；本页只写 E0 architecture evidence。"
+
+- slide_id: d06-10-rats-evaluation
+  paper_key: rats_rfc
+  slide_type: evaluation
+  claim: "RATS 的强项是概念分层，短板是它不替任何平台做安全保证；无新实验。"
+  narrative:
+  - "优点是把 attestation evidence chain 的角色和术语固定下来。"
+  - "不足是没有规定某个 TEE 的具体 measurement schema 或 verifier policy。"
+  - "商业落地价值在跨供应商 attestation service、key release 和 compliance workflow。"
+  - "风险在 endorsement supply chain、policy drift 和 relying party 对 result 的误用。"
+  evidence_refs:
+  - "RFC 9334 Section 3-6: architecture roles and interaction models."
+  - "survey/evidence_ledger.md Section Evidence Classes: E0 supports normative/interface framing."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "统一 evidence chain 语言"]
+      - ["短板", "不定义具体平台安全结果"]
+      - ["落地价值", "verifier/key-release/service admission"]
+      - ["风险", "endorsement 和 policy 管理"]
+  source_note: "无新实验；评价只针对架构规范角色。"
+
+- slide_id: d06-11-vrased-summary
+  paper_key: nunes2019vrased
+  slide_type: summary
+  claim: "VRASED 的核心贡献是把远程证明做成 verified hardware/software co-design，明确保护 attestation key 和原子执行。"
+  narrative:
+  - "论文提出 VRASED，用硬件模块和软件 attestation routine 共同保证 RA 属性。"
+  - "硬件模块控制 secret key 访问，并保证 SW-Att 的安全和原子执行。"
+  - "软件部分使用 HACL* HMAC-SHA256，并与形式化验证框架结合。"
+  - "它比 SWATT 更接近现代可信根思路，但仍面向较小设备环境。"
+  evidence_refs:
+  - "VRASED p.1 abstract: verified hardware/software co-design for remote attestation."
+  - "VRASED Section 4-5: HW-Mod, SW-Att and HACL* HMAC-SHA256 implementation."
+  proof_object:
+    type: mechanism_flow
+    title: "VRASED co-design"
+    data:
+      stages:
+      - "verifier 发送 challenge"
+      - "HW-Mod 保护 key"
+      - "SW-Att 原子读取 memory"
+      - "HMAC 生成 attestation token"
+      - "verifier 检查响应"
+  source_note: "流程按 VRASED 摘要和 HW-Mod/SW-Att 设计章节重绘。"
+
+- slide_id: d06-12-vrased-background
+  paper_key: nunes2019vrased
+  slide_type: background
+  claim: "VRASED 的背景问题是 RA 不能只靠一段软件，key secrecy、atomicity 和 control-flow 都必须被硬件约束。"
+  narrative:
+  - "SWATT 类方法依赖 timing 和软件约束，难以覆盖更强攻击者。"
+  - "TPM 等方案可提供硬件根，但可能不适合所有低端设备或形式化证明目标。"
+  - "RA 安全性需要保证 attestation key 不泄露、证明代码不可被中断或篡改、测量范围明确。"
+  - "VRASED 因此把最小硬件模块和 verified software routine 组合起来。"
+  evidence_refs:
+  - "VRASED p.1-p.2 introduction: RA security requirements and limitations of prior approaches."
+  - "VRASED Section 3: adversary model and security properties."
+  proof_object:
+    type: comparison_matrix
+    title: "RA 必要性质"
+    data:
+      columns: ["性质", "为什么需要", "VRASED 做法"]
+      rows:
+      - ["key secrecy", "攻击者不能伪造 token", "HW-Mod 约束 key access"]
+      - ["atomicity", "测量过程不能被插入", "硬件控制 SW-Att execution"]
+      - ["memory coverage", "证明当前 memory", "SW-Att 遍历范围"]
+      - ["formal assurance", "实现不能只靠经验", "model checking / verified components"]
+  source_note: "矩阵依据 VRASED threat model 和 security properties。"
+
+- slide_id: d06-13-vrased-solution
+  paper_key: nunes2019vrased
+  slide_type: solution
+  claim: "VRASED 的设计把小硬件 TCB 放在 key 和 execution control 上，把复杂 hash/HMAC 留给可验证软件。"
+  narrative:
+  - "HW-Mod 负责保证 Prv 的访问控制和 SW-Att 的安全执行。"
+  - "SW-Att 负责读取 memory 并调用 verified HMAC-SHA256。"
+  - "硬件和软件分别验证，再组合成端到端 RA security argument。"
+  - "这种拆分说明 RA 的 TCB 不必很大，但必须覆盖正确位置。"
+  evidence_refs:
+  - "VRASED Section 4: hardware/software architecture and SW-Att."
+  - "VRASED Section 6: verification complexity and security proof structure."
+  proof_object:
+    type: path_compare
+    title: "TCB 分工"
+    data:
+      paths:
+      - label: "HW-Mod"
+        steps: ["protect key", "control entry", "enforce atomicity", "reset-sensitive state"]
+        note: "small hardware TCB"
+      - label: "SW-Att"
+        steps: ["read memory", "compute HMAC", "return token", "verified crypto"]
+        note: "verified software routine"
+  source_note: "分工按 VRASED Section 4 和 Section 6 重绘。"
+
+- slide_id: d06-14-vrased-experiments
+  paper_key: nunes2019vrased
+  slide_type: experiments
+  claim: "VRASED 的实证重点是硬件/软件实现代价和验证复杂度，证明 verified RA co-design 可以落到小型平台。"
+  narrative:
+  - "论文实现并评估 HW-Mod 与 SW-Att 的组合。"
+  - "它报告 HACL* verified HMAC-SHA256 作为软件密码组件。"
+  - "它比较硬件资源、Verilog code 和 verification complexity。"
+  - "结果支撑 verified RA 可实现，但不等同于云 TEE launch attestation。"
+  evidence_refs:
+  - "VRASED Section 5-6: implementation, verification complexity and performance discussion."
+  - "VRASED p.1 abstract: verified hardware/software co-design and demonstrated performance."
+  proof_object:
+    type: comparison_matrix
+    title: "VRASED 结果读法"
+    data:
+      columns: ["证据", "含义"]
+      rows:
+      - ["HW-Mod 实现", "关键访问控制可放入小硬件"]
+      - ["SW-Att + HACL*", "密码 routine 可验证"]
+      - ["verification complexity", "安全属性不是口头声明"]
+      - ["embedded target", "不直接代表云 TEE"]
+  source_note: "结果按 Section 5-6 概括，未外推到 CCA/CoVE。"
+
+- slide_id: d06-15-vrased-evaluation
+  paper_key: nunes2019vrased
+  slide_type: evaluation
+  claim: "VRASED 的强项是可信根最小化和形式化保证；短板是适用场景比云 confidential VM 更窄。"
+  narrative:
+  - "优点是把 RA security properties 明确分配给硬件和软件。"
+  - "不足是它主要面向 embedded RA，不处理复杂 VM launch、device evidence 或 verifier policy。"
+  - "商业潜力在 MCU/IoT 和低端设备的强完整性证明。"
+  - "对本报告的启发是：attestation 不是 quote 格式，而是 key、measurement、atomicity 和 verifier policy 的组合。"
+  evidence_refs:
+  - "VRASED Section 3-6: security properties, architecture and verification."
+  - "RFC 9334 Section 5: evidence appraisal and attestation result roles."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "verified HW/SW RA co-design"]
+      - ["短板", "不覆盖云 VM/device endpoint 全部链条"]
+      - ["落地场景", "embedded/IoT attestation"]
+      - ["启发", "RA 需要 key、measurement、atomicity、policy 同时成立"]
+  source_note: "评价连接 VRASED 的 verified design 与 RATS 的 architecture roles。"
+
+- slide_id: d06-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "Attestation 主线从 SWATT 的 checksum challenge，发展到 RATS 的角色模型，再到 VRASED 的 verified可信根。"
+  narrative:
+  - "SWATT 说明 RA 的原始问题是远程判断当前设备状态。"
+  - "RATS 说明现代系统必须拆分 attester、verifier、endorser 和 relying party。"
+  - "VRASED 说明关键安全性质需要硬件和软件共同保证。"
+  - "后续 CCA/CoVE/SPDM/TLS+RA 都应放到 evidence chain，而不是只看单个 quote。"
+  evidence_refs:
+  - "SWATT Fig.3; RFC 9334 Section 3-5; VRASED Section 4-6."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 06-attestation-boot-lifecycle."
+  proof_object:
+    type: comparison_matrix
+    title: "三篇材料的分工"
+    data:
+      columns: ["来源", "核心作用", "不能承担"]
+      rows:
+      - ["SWATT", "RA 问题起点", "现代云 TEE 方案"]
+      - ["RATS", "角色和 evidence chain", "平台安全背书"]
+      - ["VRASED", "verified HW/SW RA", "device/VM 全生命周期"]
+      - ["后续章节", "把 evidence chain 接到 CCA/CoVE/I/O", "不混写 boot 和 runtime"]
+  source_note: "方向总结按三篇材料的历史、标准和 verified design 分工组织。"

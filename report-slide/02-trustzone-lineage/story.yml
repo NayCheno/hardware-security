@@ -1,0 +1,413 @@
+direction: "Arm TrustZone TEE 与漏洞谱系"
+story_version: 1
+slides:
+- slide_id: d02-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "TrustZone 这一节要把它作为 CCA 前史和边界对比，而不是把 TrustZone 的安全假设延伸到 Realm。"
+  narrative:
+  - "Arm TrustZone 白皮书给出 Secure World / Normal World 的早期产业语义，是 E4 foundational evidence。"
+  - "Pinto 2019 survey 系统整理 TrustZone-assisted TEE 的架构、软件栈和生态。"
+  - "Cerdeira 2020 SoK 用公开漏洞反过来说明 TEE software stack 的攻击面。"
+  - "三篇共同说明 TrustZone 是重要前史，但 CCA/RME/RMM 引入的是不同的隔离和管理模型。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 02-trustzone-lineage."
+  - "Arm TrustZone whitepaper p.1; Pinto 2019 p.1 abstract; Cerdeira 2020 p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "TrustZone 叙事链"
+    data:
+      steps:
+      - label: "Vendor foundation"
+        claim: "Secure/Normal World"
+        evidence: "Arm whitepaper"
+      - label: "System survey"
+        claim: "TEE OS and apps"
+        evidence: "Pinto 2019"
+      - label: "Vulnerability SoK"
+        claim: "commercial TEE attack surface"
+        evidence: "Cerdeira 2020"
+  source_note: "本页只定位 TrustZone 前史；不把 TrustZone threat model 写成 CCA threat model。"
+
+- slide_id: d02-01-armtz-summary
+  paper_key: arm_trustzone_whitepaper
+  slide_type: summary
+  claim: "Arm TrustZone 白皮书的核心是把 SoC 分成 Secure World 和 Normal World，并用硬件属性约束访问。"
+  narrative:
+  - "白皮书面向系统构建者，说明如何用 TrustZone 构建 secure system。"
+  - "它强调不是只有 CPU mode，而是 system-wide security：CPU、memory、interrupt、peripheral 都要看 secure attribute。"
+  - "这为后续 TEE OS、trusted apps 和 secure monitor 生态奠定语义。"
+  - "但它是 E4 vendor evidence，不是 peer-reviewed 安全性证明。"
+  evidence_refs:
+  - "Arm TrustZone whitepaper p.1 title and overview: Building a Secure System using TrustZone Technology."
+  - "Arm TrustZone whitepaper Section 2-3: system-wide secure and normal world model."
+  proof_object:
+    type: mechanism_flow
+    title: "TrustZone 基本边界"
+    data:
+      stages:
+      - "CPU 切换 secure state"
+      - "memory controller 标记 secure access"
+      - "interrupt controller 区分 secure interrupt"
+      - "peripheral 暴露 secure/non-secure 属性"
+      - "secure monitor 管理 world switch"
+  source_note: "机制图按白皮书的 Secure World/Normal World 系统安全叙事重绘。"
+
+- slide_id: d02-02-armtz-background
+  paper_key: arm_trustzone_whitepaper
+  slide_type: background
+  claim: "TrustZone 的背景问题是移动和嵌入式设备需要把小型可信软件栈从通用 OS 中隔离出来。"
+  narrative:
+  - "早期设备需要保护密钥、DRM、支付、secure boot 和设备管理功能。"
+  - "通用 OS 代码量大、可扩展性强，也更容易被攻击，因此需要一个硬件支持的隔离世界。"
+  - "TrustZone 的设计目标是让 secure services 与 rich OS 并存，而不是替代整个 OS。"
+  - "这解释了为什么 TrustZone TCB 往往包含 secure OS、trusted app 和 vendor services。"
+  evidence_refs:
+  - "Arm TrustZone whitepaper p.1-p.4: secure system construction goals."
+  - "Pinto 2019 p.1 abstract: TrustZone as SoC and CPU system-wide security solution."
+  proof_object:
+    type: comparison_matrix
+    title: "为什么需要 Secure World"
+    data:
+      columns: ["对象", "TrustZone 处理方式", "边界风险"]
+      rows:
+      - ["密钥/凭据", "放入 Secure World service", "secure service 自身成为 TCB"]
+      - ["设备功能", "secure peripheral 或 secure interrupt", "配置错误会暴露外设"]
+      - ["rich OS", "Normal World 继续运行", "world switch 接口成为攻击面"]
+  source_note: "背景结合 TrustZone 白皮书目标和 Pinto survey 对 TrustZone 生态的概括。"
+
+- slide_id: d02-03-armtz-solution
+  paper_key: arm_trustzone_whitepaper
+  slide_type: solution
+  claim: "TrustZone 的解决方案是安全状态传播，而不是为每个应用创建独立硬件 enclave。"
+  narrative:
+  - "处理器、总线和外设通过 secure/non-secure 属性区分访问。"
+  - "secure monitor 负责 world switch，Normal World 通过 SMC 等接口请求 secure service。"
+  - "内存和外设访问控制通常由 SoC 级组件完成。"
+  - "这也是它与后续 Realm/TVM 的关键区别：TrustZone 更像双世界模型，不是多租户 confidential VM 模型。"
+  evidence_refs:
+  - "Arm TrustZone whitepaper Section 3-5: secure state, monitor, memory and peripheral access."
+  - "Pinto 2019 Fig. architecture discussion: TrustZone-assisted TEE software stack."
+  proof_object:
+    type: path_compare
+    title: "两种隔离抽象"
+    data:
+      paths:
+      - label: "TrustZone"
+        steps: ["Secure World", "Normal World", "secure monitor", "secure services"]
+        note: "双世界隔离，常用于平台服务"
+      - label: "CCA/CoVE"
+        steps: ["Realm/TVM", "untrusted host", "RMM/TSM", "per-VM lifecycle"]
+        note: "面向多租户 confidential workload"
+  source_note: "对比基于 TrustZone 白皮书机制和本报告 CCA/CoVE taxonomy。"
+
+- slide_id: d02-04-armtz-experiments
+  paper_key: arm_trustzone_whitepaper
+  slide_type: experiments
+  claim: "白皮书不是实验论文；它提供产业机制说明，而不是可复现实验结果。"
+  narrative:
+  - "证据等级是 E4 industry/vendor evidence。"
+  - "它适合说明 Arm 对 TrustZone 的官方设计意图和系统组件。"
+  - "它不能证明某个 commercial TEE OS 的漏洞状况或安全性。"
+  - "因此漏洞与生态问题要交给 Pinto survey 和 Cerdeira SoK 来讲。"
+  evidence_refs:
+  - "Arm TrustZone whitepaper p.1 and source metadata: vendor whitepaper."
+  - "survey/evidence_ledger.md Evidence Classes: E4 supports product/design background only."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "E4 白皮书证据边界"
+    data:
+      columns: ["可支撑", "不可支撑"]
+      rows:
+      - ["官方设计语义", "peer-reviewed 安全证明"]
+      - ["Secure/Normal World 术语", "商业 TEE 漏洞覆盖"]
+      - ["系统构建思路", "CCA/RME 机制结论"]
+  source_note: "本页按 E4 evidence boundary 写，不添加实验或安全证明。"
+
+- slide_id: d02-05-armtz-evaluation
+  paper_key: arm_trustzone_whitepaper
+  slide_type: evaluation
+  claim: "TrustZone 白皮书是理解 Arm TEE 生态的起点，但不能作为现代 confidential computing 的充分证据。"
+  narrative:
+  - "优点是清楚定义了 Arm 早期 system-wide security 模型。"
+  - "不足是 vendor 白皮书不会系统评估攻击面和实现漏洞。"
+  - "商业落地上，TrustZone 已经支撑移动支付、DRM、key store 等长期生态。"
+  - "但在云多租户场景中，需要 CCA/RME/RMM 这类更细的 workload isolation。"
+  evidence_refs:
+  - "Arm TrustZone whitepaper Section 1-5: secure system construction."
+  - "Cerdeira 2020 p.1 abstract: commercial TrustZone-assisted TEEs have known vulnerabilities."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "官方语义清晰，生态影响大"]
+      - ["短板", "不是漏洞或实证安全研究"]
+      - ["落地", "移动和嵌入式 secure services 成熟"]
+      - ["边界", "不能替代 CCA/Realm 多租户模型"]
+  source_note: "评价结合 whitepaper 定位和漏洞 SoK 对商业 TEE 的反证。"
+
+- slide_id: d02-06-pinto-summary
+  paper_key: pinto2019trustzone
+  slide_type: summary
+  claim: "Pinto 2019 survey 把 TrustZone 从硬件特性扩展成完整 TEE 软件栈和应用生态。"
+  narrative:
+  - "论文综述 TrustZone-assisted TEEs，强调它是 SoC and CPU system-wide security solution。"
+  - "它覆盖 secure monitor、trusted OS、trusted applications、communication 和开发生态。"
+  - "这篇适合说明为什么 TrustZone 在移动和 IoT 中广泛使用。"
+  - "作为 E2 survey，它主要支撑背景和生态结构，不替代漏洞或机制一手证据。"
+  evidence_refs:
+  - "Pinto 2019 p.1 abstract: comprehensive survey of Arm TrustZone."
+  - "Pinto 2019 Section 2-4: TrustZone architecture and TEE software stack."
+  proof_object:
+    type: mechanism_flow
+    title: "TrustZone-assisted TEE 栈"
+    data:
+      stages:
+      - "hardware secure state"
+      - "secure monitor"
+      - "trusted OS"
+      - "trusted applications"
+      - "normal-world client"
+      - "TEE communication API"
+  source_note: "TEE 栈按 Pinto 2019 survey 的 architecture/software-stack 叙事重绘。"
+
+- slide_id: d02-07-pinto-background
+  paper_key: pinto2019trustzone
+  slide_type: background
+  claim: "TrustZone 的复杂性来自生态，而不只来自硬件开关：真正的 TCB 往往在 secure OS 和 TA 中膨胀。"
+  narrative:
+  - "硬件只提供 secure/non-secure 基础，实际安全依赖 trusted OS、TA、drivers 和 IPC 接口。"
+  - "应用开发者通常通过 TEE client API 与 secure app 交互。"
+  - "商业实现会引入厂商服务、更新链、密钥管理和设备定制。"
+  - "这使 TrustZone 很适合做 CCA 前史：它说明硬件隔离如果缺少 lifecycle 和 TCB 管理，仍会暴露复杂攻击面。"
+  evidence_refs:
+  - "Pinto 2019 p.1-p.3 introduction: TrustZone ecosystem and TEE usage."
+  - "Pinto 2019 Section 4: TEE software architecture and trusted applications."
+  proof_object:
+    type: comparison_matrix
+    title: "硬件特性与实际 TCB"
+    data:
+      columns: ["层", "作用", "风险"]
+      rows:
+      - ["TrustZone hardware", "secure state 和访问属性", "配置错误"]
+      - ["secure monitor", "world switch", "接口攻击面"]
+      - ["trusted OS", "TA lifecycle 和服务", "代码量和权限集中"]
+      - ["trusted app", "具体业务逻辑", "漏洞直接影响秘密"]
+  source_note: "矩阵依据 Pinto 2019 对 TrustZone-assisted TEE 栈的综述。"
+
+- slide_id: d02-08-pinto-solution
+  paper_key: pinto2019trustzone
+  slide_type: solution
+  claim: "Pinto survey 的有效输出是把 TrustZone 生态拆成硬件、OS、API、应用和用例，而不是给出单点方案。"
+  narrative:
+  - "它用 survey 方式梳理从硬件支持到软件框架的层次。"
+  - "它覆盖 TEE 应用领域，例如 mobile security、IoT、secure services。"
+  - "它也指出 TrustZone 被不同 vendor 组合成多种 TEE implementation。"
+  - "本报告用它帮助读者理解 TrustZone 为什么既是基础，又不是现代 CCA 的等价物。"
+  evidence_refs:
+  - "Pinto 2019 Section 2-6: architecture, software, applications, ecosystem."
+  - "Pinto 2019 p.1 abstract: system-wide security solution and new generation of connected devices."
+  proof_object:
+    type: mechanism_flow
+    title: "survey 拆解路径"
+    data:
+      stages:
+      - "hardware architecture"
+      - "secure monitor and OS"
+      - "communication API"
+      - "trusted applications"
+      - "deployment use cases"
+  source_note: "流程按 Pinto survey 的章节组织抽象。"
+
+- slide_id: d02-09-pinto-experiments
+  paper_key: pinto2019trustzone
+  slide_type: experiments
+  claim: "Pinto 2019 是 survey，无新实验；它适合讲 TrustZone 生态，不适合承担漏洞统计或量化结果结论。"
+  narrative:
+  - "它整理已有 TrustZone 技术和应用。"
+  - "它没有实现新的 secure OS 或独立测评。"
+  - "如果要写漏洞类别，应使用 Cerdeira 2020 SoK。"
+  - "如果要写 Arm CCA 机制，应使用 CCA/RMM 原始论文或规范。"
+  evidence_refs:
+  - "Pinto 2019 p.1 abstract and survey scope."
+  - "survey/evidence_ledger.md Evidence Classes: E2 supports taxonomy/background."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "survey 证据边界"
+    data:
+      columns: ["可用作", "不可用作"]
+      rows:
+      - ["TrustZone 生态背景", "漏洞数据源"]
+      - ["软件栈说明", "新机制证明"]
+      - ["用例整理", "CCA/RME 结论"]
+  source_note: "无新实验；本页只写 E2 background claim。"
+
+- slide_id: d02-10-pinto-evaluation
+  paper_key: pinto2019trustzone
+  slide_type: evaluation
+  claim: "Pinto survey 的强项是完整，弱点是安全评价不够尖锐；无新实验。"
+  narrative:
+  - "它适合把 TrustZone-assisted TEE 的硬件和软件层次讲清楚。"
+  - "它对漏洞和商业实现细节的批判深度不如专门漏洞 SoK。"
+  - "商业落地上，它能解释为什么 TrustZone 生态深，但也为什么迁移到 CCA 不是简单替换 API。"
+  - "在本报告中，它承担桥梁作用：从 vendor whitepaper 走向 vulnerability evidence。"
+  evidence_refs:
+  - "Pinto 2019 Section 2-7: architecture, implementations, applications."
+  - "Cerdeira 2020 Section III-IV: vulnerability and architectural flaw analysis."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "TrustZone 硬件到软件栈覆盖完整"]
+      - ["短板", "漏洞与实证安全不是主贡献"]
+      - ["落地价值", "解释移动/嵌入式 TEE 生态"]
+      - ["报告位置", "连接 whitepaper 与漏洞 SoK"]
+  source_note: "评价基于 Pinto survey 定位，并与 Cerdeira SoK 互补。"
+
+- slide_id: d02-11-cerdeira-summary
+  paper_key: cerdeira2020trustzone
+  slide_type: summary
+  claim: "Cerdeira 2020 SoK 的关键贡献是用公开漏洞说明 TrustZone-assisted TEE 的实际攻击面。"
+  narrative:
+  - "论文系统研究 commercial TrustZone-assisted TEEs 的公开漏洞。"
+  - "它把零散安全报告整理成漏洞 taxonomy，并分析架构性缺陷。"
+  - "这说明问题往往不在 TrustZone 硬件概念本身，而在 TEE OS、TA、driver、IPC、update 等实现层。"
+  - "在本报告中，它为 TrustZone 前史提供负面证据和边界提醒。"
+  evidence_refs:
+  - "Cerdeira 2020 p.1 abstract: systematic study of publicly disclosed vulnerabilities in commercial TrustZone-assisted TEEs."
+  - "Cerdeira 2020 Table I-Table VIII and Fig.2: vulnerability taxonomy and TEE architecture."
+  proof_object:
+    type: comparison_matrix
+    title: "漏洞 SoK 的贡献"
+    data:
+      columns: ["贡献", "汇报意义"]
+      rows:
+      - ["公开漏洞整理", "说明商业 TEE 不是黑盒安全"]
+      - ["架构缺陷分析", "定位 secure OS/TA/IPC 风险"]
+      - ["taxonomy", "把攻击面转化为可讲分类"]
+      - ["边界提醒", "不能把 TrustZone 等同于完整机密计算"]
+  source_note: "依据摘要、Figure 2 和漏洞分类表重写。"
+
+- slide_id: d02-12-cerdeira-background
+  paper_key: cerdeira2020trustzone
+  slide_type: background
+  claim: "TrustZone-assisted TEE 被广泛部署后，安全问题从硬件隔离转移到商业软件栈和接口治理。"
+  narrative:
+  - "移动设备大量依赖 TrustZone TEE 保护 DRM、keystore、payment 等敏感服务。"
+  - "安全报告分散，且有些漏洞信息不完整，导致研究者很难判断共性问题。"
+  - "公开漏洞显示，攻击者常通过 normal-world client、TEE driver、TA 接口或 trusted OS bug 进入安全边界。"
+  - "这解释了为什么后续 CCA/RMM 章节必须关心 lifecycle、ownership 和小 TCB。"
+  evidence_refs:
+  - "Cerdeira 2020 p.1 introduction: widespread commercial TrustZone-assisted TEEs and scattered vulnerabilities."
+  - "Cerdeira 2020 Fig.2: architecture of studied TEE systems and NW/SW communication."
+  proof_object:
+    type: path_compare
+    title: "漏洞进入路径"
+    data:
+      paths:
+      - label: "设计理想"
+        steps: ["Normal World request", "secure monitor", "trusted OS", "trusted app"]
+        note: "受控接口进入 Secure World"
+      - label: "现实风险"
+        steps: ["client bug", "driver/ioctl", "IPC parser", "TA/OS vulnerability"]
+        note: "接口和软件栈扩大攻击面"
+  source_note: "路径按 Cerdeira Figure 2 和漏洞研究背景重绘。"
+
+- slide_id: d02-13-cerdeira-solution
+  paper_key: cerdeira2020trustzone
+  slide_type: solution
+  claim: "这篇 SoK 的方法是把漏洞从案例变成分类，并反推出 TrustZone TEE 的架构性风险。"
+  narrative:
+  - "作者收集公开披露漏洞并清理、分类、验证信息来源。"
+  - "分类结果覆盖 trusted applications、trusted OS、communication interfaces 和配置/更新问题。"
+  - "论文还分析现代 OS 视角下的 architectural flaws。"
+  - "这对本报告的用法是：把 TrustZone 作为前车之鉴，而非把漏洞细节作为本报告主线。"
+  evidence_refs:
+  - "Cerdeira 2020 Section III: systematic study of known vulnerabilities."
+  - "Cerdeira 2020 Section IV and Table IV-Table VIII: architectural flaws and vulnerability classes."
+  proof_object:
+    type: mechanism_flow
+    title: "SoK 分析流程"
+    data:
+      stages:
+      - "收集公开漏洞"
+      - "清洗和确认信息"
+      - "按组件和根因分类"
+      - "分析架构性缺陷"
+      - "给出防御启发"
+  source_note: "流程按 Cerdeira 2020 Section III-IV 概括。"
+
+- slide_id: d02-14-cerdeira-experiments
+  paper_key: cerdeira2020trustzone
+  slide_type: experiments
+  claim: "这篇是漏洞 SoK，无新实验；证据来自公开漏洞语料和系统化分类。"
+  narrative:
+  - "它不提出新 TEE，也不做性能评测。"
+  - "它的证据强度来自对公开漏洞的系统整理和架构分析。"
+  - "它能支撑攻击面和缺陷类别结论。"
+  - "它不能直接评价 CCA/RME/RMM 是否解决这些问题。"
+  evidence_refs:
+  - "Cerdeira 2020 p.1 abstract: systematic study of publicly disclosed vulnerabilities."
+  - "Cerdeira 2020 Table I-Table VIII: vulnerability categories and evidence tables."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "漏洞 SoK 边界"
+    data:
+      columns: ["能说明", "不能说明"]
+      rows:
+      - ["TrustZone TEE 实际攻击面", "新防御机制有效"]
+      - ["漏洞类型和组件位置", "CCA 自动免疫"]
+      - ["商业实现风险", "某厂商当前产品状态"]
+  source_note: "无新实验；本页把漏洞语料作为 E2 SoK evidence 使用。"
+
+- slide_id: d02-15-cerdeira-evaluation
+  paper_key: cerdeira2020trustzone
+  slide_type: evaluation
+  claim: "Cerdeira SoK 最有价值的地方，是迫使我们把 TEE 安全从硬件隔离推进到接口、生命周期和实现治理；无新实验。"
+  narrative:
+  - "优点是把散乱漏洞报告转成可复用 taxonomy。"
+  - "不足是公开漏洞样本天然不完整，无法代表所有商业 TEE 的真实缺陷分布。"
+  - "商业落地意义在于提醒 secure app ecosystem、firmware update 和 vendor review 也是安全边界。"
+  - "对 CCA/CoVE 的启发是：更强硬件隔离仍需要小 TCB、清晰 ABI 和可验证 lifecycle。"
+  evidence_refs:
+  - "Cerdeira 2020 Section III-IV: vulnerability study and architectural flaw analysis."
+  - "survey/evidence_ledger.md Boundary Records: attack-only material is boundary context unless tied to defense taxonomy."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "漏洞 taxonomy 可复用"]
+      - ["短板", "公开漏洞样本不完整"]
+      - ["落地价值", "提醒 TEE 生态治理重要"]
+      - ["后续启发", "CCA/CoVE 仍需 lifecycle 和 ABI 约束"]
+  source_note: "评价聚焦 TrustZone 前史边界，不把漏洞 SoK 扩展成 CCA 安全结论。"
+
+- slide_id: d02-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "TrustZone 给了 Arm TEE 生态的起点，漏洞 SoK 则说明为什么 CCA 必须重新定义更清晰的 workload 边界。"
+  narrative:
+  - "白皮书说明 Secure/Normal World 的官方语义。"
+  - "Pinto survey 说明 TrustZone-assisted TEE 发展成完整软件生态。"
+  - "Cerdeira SoK 说明真实攻击面主要来自软件栈、接口和商业实现。"
+  - "因此后续 Arm CCA 章节要强调 Realm、RMM、granule ownership 和 lifecycle，而不是复用 TrustZone 假设。"
+  evidence_refs:
+  - "Arm TrustZone whitepaper Section 2-5; Pinto 2019 p.1; Cerdeira 2020 p.1."
+  - "survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes."
+  proof_object:
+    type: comparison_matrix
+    title: "从 TrustZone 到 CCA 的边界变化"
+    data:
+      columns: ["维度", "TrustZone", "CCA/Realm 方向"]
+      rows:
+      - ["隔离抽象", "Secure/Normal World", "per-workload Realm"]
+      - ["管理实体", "secure monitor/TEE OS", "RMM/root firmware"]
+      - ["主要风险", "TEE OS/TA/IPC", "lifecycle/ownership/I/O"]
+      - ["本报告用法", "前史和反例", "现代主线"]
+  source_note: "方向总结来自三篇材料的互补关系和 CCA 主线边界。"

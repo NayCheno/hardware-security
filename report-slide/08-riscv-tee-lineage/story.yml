@@ -1,0 +1,439 @@
+direction: "RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V"
+story_version: 1
+slides:
+- slide_id: d08-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "RISC-V TEE lineage 从 Keystone 的开放框架，发展到 Penglai 的可扩展内存保护，再到 SPEAR-V 的 tagged-memory primitive。"
+  narrative:
+  - "Keystone 以 PMP 和 modular runtime 为核心，强调 open framework 和可配置 TEE。"
+  - "Penglai 解决 secure memory static allocation 和 scalable enclave 管理问题。"
+  - "SPEAR-V 用 tag/metadata primitive 同时支持 sandboxing 与 enclaving。"
+  - "三篇都是 E1 system evidence，能支撑具体机制和结果，但 threat model 不同。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 08-riscv-tee-lineage."
+  - "Keystone p.1 abstract; Penglai p.1 abstract; SPEAR-V p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "RISC-V enclave 演进"
+    data:
+      steps:
+      - label: "Keystone"
+        claim: "open TEE framework"
+        evidence: "PMP + modular runtime"
+      - label: "Penglai"
+        claim: "scalable enclave memory"
+        evidence: "GPT + MMT"
+      - label: "SPEAR-V"
+        claim: "tagged memory primitive"
+        evidence: "sandbox + enclave"
+  source_note: "方向页只比较 RISC-V enclave 系统，不等同于后续 CoVE/AP-TEE confidential VM。"
+
+- slide_id: d08-01-keystone-summary
+  paper_key: lee2020keystone
+  slide_type: summary
+  claim: "Keystone 的核心贡献是把 RISC-V PMP 封装成开放、模块化、可配置的 TEE framework。"
+  narrative:
+  - "论文指出现有 vendor-specific TEE 固化了 threat model 和设计取舍。"
+  - "Keystone 提出 secure monitor、Eyrie runtime 和 enclave application 的模块化架构。"
+  - "它用 PMP 保护 enclave memory，并允许 runtime 根据场景定制。"
+  - "它是 RISC-V open-source TEE 的 foundational paper。"
+  evidence_refs:
+  - "Keystone p.1 abstract: first open framework for architecting TEEs on RISC-V."
+  - "Keystone Fig.1 and Fig.3: system overview and PMP usage."
+  proof_object:
+    type: mechanism_flow
+    title: "Keystone architecture"
+    data:
+      stages:
+      - "host app requests enclave"
+      - "secure monitor configures PMP"
+      - "Eyrie runtime boots"
+      - "enclave app runs"
+      - "edge calls cross boundary"
+  source_note: "机制图按 Figure 1 和 Figure 3 重绘。"
+
+- slide_id: d08-02-keystone-background
+  paper_key: lee2020keystone
+  slide_type: background
+  claim: "Keystone 的背景问题是商业 TEE 把一组固定取舍写死，研究者很难探索不同 TCB、runtime 和 memory model。"
+  narrative:
+  - "SGX、TrustZone、SEV 等系统各自绑定特定硬件和安全模型。"
+  - "RISC-V 提供开放 ISA 和 PMP，使研究者可以在低层构建可定制 TEE。"
+  - "不同应用可能需要不同 runtime，例如 bare-metal、Linux-like 或 ML workload support。"
+  - "Keystone 因此把 isolation mechanism 与 runtime policy 解耦。"
+  evidence_refs:
+  - "Keystone p.1-p.2 introduction: vendor-specific TEEs fix design tradeoffs."
+  - "Keystone Fig.4-Fig.5: memory management designs and memory model for TEE scenarios."
+  proof_object:
+    type: comparison_matrix
+    title: "Keystone 想解耦的对象"
+    data:
+      columns: ["对象", "传统 TEE", "Keystone"]
+      rows:
+      - ["hardware root", "vendor-specific", "RISC-V PMP"]
+      - ["runtime", "固定生态", "Eyrie 可配置"]
+      - ["memory model", "单一路线", "多种 scenario"]
+      - ["research use", "难改", "open framework"]
+  source_note: "对比依据 introduction 和 Figure 4-Figure 5。"
+
+- slide_id: d08-03-keystone-solution
+  paper_key: lee2020keystone
+  slide_type: solution
+  claim: "Keystone 的设计核心是 secure monitor 最小化硬件 enforcement，Eyrie runtime 承担可替换策略。"
+  narrative:
+  - "secure monitor 管理 enclave lifecycle，并用 PMP 设置访问权限。"
+  - "Eyrie runtime 在 enclave 内提供 page management、syscall proxy、edge call 等能力。"
+  - "可选组件让不同应用在 TCB 与功能之间做取舍。"
+  - "这套分层成为后续 RISC-V TEE 系统比较的基准。"
+  evidence_refs:
+  - "Keystone Fig.3: RISC-V PMP for flexible dynamic protections."
+  - "Keystone Table 3 and Fig.6: TCB breakdown and enclave lifecycle operations."
+  proof_object:
+    type: comparison_matrix
+    title: "Keystone TCB 分层"
+    data:
+      columns: ["组件", "职责", "是否可定制"]
+      rows:
+      - ["secure monitor", "PMP/lifecycle/measurement", "核心 TCB"]
+      - ["Eyrie runtime", "memory and syscall policy", "按场景裁剪"]
+      - ["host OS", "资源管理", "不可信"]
+      - ["enclave app", "敏感 workload", "用户提供"]
+  source_note: "表格依据 Figure 3、Table 3 和 Figure 6。"
+
+- slide_id: d08-04-keystone-experiments
+  paper_key: lee2020keystone
+  slide_type: experiments
+  claim: "Keystone 报告 CoreMark、Beebs、RV8 低于 1% overhead，IOZone 约 40%，说明 runtime 和 I/O 路径成本差异很大。"
+  narrative:
+  - "论文在 RV8、IOZone、CoreMark、Beebs 等 workload 上评估。"
+  - "摘要报告 CoreMark、Beebs、RV8 的 overhead 小于 1%。"
+  - "IOZone overhead 约 40%，提示文件和 I/O 路径比纯计算更敏感。"
+  - "Figure 6 展示 enclave lifecycle operation breakdown。"
+  evidence_refs:
+  - "Keystone p.1 abstract: <1% overhead for CoreMark, Beebs, RV8 and 40% for IOZone."
+  - "Keystone Fig.6-Fig.8 and Table 4: lifecycle breakdown and RV8/full-execution comparisons."
+  proof_object:
+    type: metric_bars
+    title: "Keystone 关键结果"
+    data:
+      metrics:
+      - label: "CoreMark/Beebs/RV8"
+        value: "<1%"
+        bar: 5
+        note: "abstract"
+      - label: "IOZone"
+        value: "40%"
+        bar: 40
+        note: "abstract"
+      - label: "lifecycle"
+        value: "Fig.6"
+        bar: 55
+        note: "operation breakdown"
+  source_note: "数字来自摘要，图号来自 evaluation；不外推到 CoVE/TVM。"
+
+- slide_id: d08-05-keystone-evaluation
+  paper_key: lee2020keystone
+  slide_type: evaluation
+  claim: "Keystone 的价值是开放和模块化，短板是 PMP-based enclave 的资源和 I/O 能力仍有限。"
+  narrative:
+  - "优点是为 RISC-V TEE 研究提供可改、可测、可扩展的公共平台。"
+  - "不足是 PMP region、runtime complexity 和 I/O/file-system path 会限制复杂 workload。"
+  - "商业潜力在开放硬件生态、research testbed 和定制 embedded/cloud enclave。"
+  - "后续 Penglai/SPEAR-V 的改进都可以看作对 Keystone 类设计边界的推进。"
+  evidence_refs:
+  - "Keystone Fig.3-Fig.6: PMP usage, memory models and lifecycle."
+  - "Keystone p.1 abstract and conclusion: open framework and performance results."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "open modular TEE framework"]
+      - ["短板", "PMP/I/O/runtime 仍有边界"]
+      - ["落地场景", "研究平台和可定制 enclave"]
+      - ["后续演进", "Penglai scalable memory, SPEAR-V tags"]
+  source_note: "评价结合 Keystone 设计目标和实验结果。"
+
+- slide_id: d08-06-penglai-summary
+  paper_key: feng2021penglai
+  slide_type: summary
+  claim: "Penglai 的核心贡献是用 Guarded Page Table 和 Mountable Merkle Tree，把 RISC-V enclave 推向可扩展内存保护。"
+  narrative:
+  - "论文指出现有 enclave 设计难满足 serverless 和 microservice 的 scalability。"
+  - "Penglai 提出 GPT 以页粒度保护 secure/non-secure memory。"
+  - "MMT 支持可扩展 integrity protection，降低固定 secure memory 区域限制。"
+  - "它是 Keystone 之后 RISC-V enclave OS 的重要系统。"
+  evidence_refs:
+  - "Penglai p.1 abstract: scalable memory protection for cloud enclave scenarios."
+  - "Penglai Fig.5 and Fig.7: MMT and overall architecture/hardware modification."
+  proof_object:
+    type: mechanism_flow
+    title: "Penglai 机制链"
+    data:
+      stages:
+      - "enclave request"
+      - "GPT protects page tables"
+      - "secure pages allocated dynamically"
+      - "MMT tracks integrity"
+      - "shadow enclave reduces creation cost"
+  source_note: "流程按摘要、Figure 5 和 Figure 7 重绘。"
+
+- slide_id: d08-07-penglai-background
+  paper_key: feng2021penglai
+  slide_type: background
+  claim: "Penglai 的背景问题是 SGX/Keystone 类方案常受固定 secure memory、静态分配和 enclave creation 成本限制。"
+  narrative:
+  - "serverless 和 microservice-like workload 需要大量短生命周期、弹性内存的 enclave。"
+  - "固定 enclave memory 或静态 Merkle tree 会限制资源利用率。"
+  - "I/O 和云应用还需要更细的 page-level 管理。"
+  - "Penglai 因此把 memory ownership 和 integrity metadata 设计为可扩展结构。"
+  evidence_refs:
+  - "Penglai p.1-p.2 introduction: scalability demanded by serverless and microservice scenarios."
+  - "Penglai Table 1: comparison on enclave systems and memory granularity."
+  proof_object:
+    type: comparison_matrix
+    title: "Penglai 针对的瓶颈"
+    data:
+      columns: ["瓶颈", "原因", "Penglai 方向"]
+      rows:
+      - ["secure memory fixed", "预留区域限制弹性", "page-level GPT"]
+      - ["creation cost", "初始化和测量昂贵", "shadow enclave"]
+      - ["integrity metadata", "静态树成本高", "MMT"]
+      - ["cloud workload", "高并发和短生命周期", "scalable enclave OS"]
+  source_note: "矩阵依据 introduction 和 Table 1。"
+
+- slide_id: d08-08-penglai-solution
+  paper_key: feng2021penglai
+  slide_type: solution
+  claim: "Penglai 用 GPT 管访问、MMT 管完整性，把 secure memory 从固定池变成可动态管理的页。"
+  narrative:
+  - "GPT 保护 page table pages，并支持 page-level secure/non-secure 切换。"
+  - "MMT 通过 mountable subtree 降低 integrity tree 的 on-die 和 in-memory metadata。"
+  - "shadow enclave 缓解 enclave creation 中 costly secure memory initialization。"
+  - "这套机制面向 cloud-scale enclave density。"
+  evidence_refs:
+  - "Penglai Fig.5: comparison between static Merkle tree and MMT."
+  - "Penglai Fig.7 and Fig.9-Fig.10: architecture, GPT mmap and memory access performance."
+  proof_object:
+    type: mechanism_flow
+    title: "GPT + MMT"
+    data:
+      stages:
+      - "monitor configures GPT"
+      - "secure pages mapped dynamically"
+      - "MMT subtree mounted"
+      - "memory access checked"
+      - "integrity metadata updated"
+  source_note: "流程按 Figure 5、Figure 7、Figure 9-Figure 10 重绘。"
+
+- slide_id: d08-09-penglai-experiments
+  paper_key: feng2021penglai
+  slide_type: experiments
+  claim: "Penglai 报告 GPT 在 Redis SET 请求中约 5% overhead，并显示 MMT 相比 SIT 可显著降低 integrity 代价。"
+  narrative:
+  - "Figure 14 用 Redis benchmark suite 评估 GPT。"
+  - "论文文本报告 Guarded Page Table 在 SET requests 中只引入约 5% overhead。"
+  - "Figure 12 比较 integrity protection schemes，其中 SIT 可带来 118% overhead。"
+  - "这些结果支撑 scalable memory protection 的动机。"
+  evidence_refs:
+  - "Penglai Fig.12: SPECCPU with integrity protection overhead and SIT incurs 118% overhead."
+  - "Penglai Fig.14: Redis benchmark suite and GPT about 5% overhead in SET requests."
+  proof_object:
+    type: metric_bars
+    title: "Penglai 关键数字"
+    data:
+      metrics:
+      - label: "GPT on Redis SET"
+        value: "about 5%"
+        bar: 5
+        note: "Fig.14 text"
+      - label: "SIT integrity overhead"
+        value: "118%"
+        bar: 100
+        note: "Fig.12"
+      - label: "mechanism anchor"
+        value: "GPT+MMT"
+        bar: 65
+        note: "design evidence"
+  source_note: "数字来自 Figure 12 和 Figure 14 附近文本。"
+
+- slide_id: d08-10-penglai-evaluation
+  paper_key: feng2021penglai
+  slide_type: evaluation
+  claim: "Penglai 的价值是解决 RISC-V enclave memory scalability，但它仍是 enclave OS 路线，不是 CoVE TVM 规范。"
+  narrative:
+  - "优点是把 secure memory 从固定区域推进到动态页级管理。"
+  - "不足是机制复杂度和 integrity metadata management 增加了 trusted stack 负担。"
+  - "商业潜力在 serverless、microservice 和多 enclave 云场景。"
+  - "边界是它不处理完整 confidential VM lifecycle 或 trusted I/O。"
+  evidence_refs:
+  - "Penglai Fig.5-Fig.7: MMT and architecture."
+  - "Penglai conclusion: GPT and MMT benefits and limitations."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "scalable page-level enclave memory"]
+      - ["短板", "metadata 和 OS 复杂度增加"]
+      - ["落地场景", "serverless/microservice enclaves"]
+      - ["边界", "不是 TVM/CoVE 或 trusted I/O"]
+  source_note: "评价基于 Penglai 的 GPT/MMT 设计和 conclusion。"
+
+- slide_id: d08-11-spearv-summary
+  paper_key: schrammel2023spearv
+  slide_type: summary
+  claim: "SPEAR-V 的核心贡献是用 tagged memory primitive 同时支持 host-to-enclave 和 enclave-to-host 的双向隔离。"
+  narrative:
+  - "论文指出现有 enclave 架构可能性能高、灵活性低或难以抵抗 controlled-channel 类问题。"
+  - "SPEAR-V 用 memory tag fields 存储在 TLB/page-table walk 相关路径中。"
+  - "它支持 sandboxing and enclaving based on the same hardware primitive。"
+  - "这使它成为 RISC-V TEE lineage 中从 PMP region 到 metadata/tagging 的代表。"
+  evidence_refs:
+  - "SPEAR-V p.1 abstract: secure and practical enclave architecture for RISC-V."
+  - "SPEAR-V Fig.1-Fig.4: design overview, page tagging and memory translation."
+  proof_object:
+    type: mechanism_flow
+    title: "SPEAR-V tagged protection"
+    data:
+      stages:
+      - "SM assigns enclave ID"
+      - "memory pages get tags"
+      - "TLB stores tag fields"
+      - "page-table walk checks tags"
+      - "sandbox/enclave access enforced"
+  source_note: "流程按 Figure 1-Figure 4 重绘。"
+
+- slide_id: d08-12-spearv-background
+  paper_key: schrammel2023spearv
+  slide_type: background
+  claim: "SPEAR-V 的背景是 PMP/region-based 方案对嵌套、共享内存和双向隔离不够灵活。"
+  narrative:
+  - "SGX 类 enclave 主要保护 enclave from host，不一定保护 host from malicious enclave。"
+  - "PMP region 数量和粒度会限制复杂 memory sharing。"
+  - "嵌套 enclave、shared memory 和低 overhead 是更通用 TEE primitive 的需求。"
+  - "SPEAR-V 因此把 tag 放到 memory translation 路径。"
+  evidence_refs:
+  - "SPEAR-V p.1-p.2 introduction: limitations of existing enclave architectures."
+  - "SPEAR-V Fig.2-Fig.4: enclave page tagging and memory translation with tagged memory."
+  proof_object:
+    type: comparison_matrix
+    title: "region vs tag"
+    data:
+      columns: ["维度", "region/PMP", "SPEAR-V tag"]
+      rows:
+      - ["粒度", "region-based", "page/tag metadata"]
+      - ["双向隔离", "需要额外策略", "same primitive supports sandbox/enclave"]
+      - ["嵌套", "不自然", "设计目标之一"]
+      - ["共享内存", "region management 复杂", "tag-aware mapping"]
+  source_note: "对比依据 introduction 和 Figure 2-Figure 4。"
+
+- slide_id: d08-13-spearv-solution
+  paper_key: schrammel2023spearv
+  slide_type: solution
+  claim: "SPEAR-V 把 enclave ID/tag 放进 memory translation metadata，让不可信 OS 仍管理 mapping 但不能越权访问。"
+  narrative:
+  - "SM 给 enclave page 打 tag，并保留特殊 enclave ID 给 SM 自身。"
+  - "TLB entry 存储 memory tag fields。"
+  - "page table walk 时检查 tag，OS 管 mapping 但访问受硬件约束。"
+  - "这种设计把资源管理和访问 enforcement 分开。"
+  evidence_refs:
+  - "SPEAR-V Fig.2: tagging enclave page and special SM enclave ID."
+  - "SPEAR-V Fig.3-Fig.4: tag fields in TLB and page table walk within enclave."
+  proof_object:
+    type: mechanism_flow
+    title: "tag-aware translation"
+    data:
+      stages:
+      - "SM creates enclave context"
+      - "tag pages with enclave ID"
+      - "OS maintains page tables"
+      - "TLB stores tag metadata"
+      - "hardware rejects wrong tag"
+  source_note: "机制图按 Figure 2-Figure 4 重绘。"
+
+- slide_id: d08-14-spearv-experiments
+  paper_key: schrammel2023spearv
+  slide_type: experiments
+  claim: "SPEAR-V 报告硬件面积增加约 1.01% LUT 和 0.72% Flip-Flops，并用 Embench/LMBench 评估 tag 代价。"
+  narrative:
+  - "Figure 6 展示 Embench benchmarks 在 64/128-bit memory tagging 下的 relative runtime overhead。"
+  - "Table 1 给出不同 tag size 下 memory bandwidth。"
+  - "论文报告 enclave design 使用 68907 LUTs 增加 1.01%，50864 Flip-Flops 增加 0.72%。"
+  - "这些结果说明 tag-based primitive 代价较低，但仍需结合 workload 类型阅读。"
+  evidence_refs:
+  - "SPEAR-V Fig.6: relative runtime overhead of Embench benchmarks with memory tagging."
+  - "SPEAR-V Table 1 and evaluation text: memory bandwidth and 1.01% LUT / 0.72% Flip-Flop area numbers."
+  proof_object:
+    type: metric_bars
+    title: "SPEAR-V 关键结果"
+    data:
+      metrics:
+      - label: "LUT increase"
+        value: "1.01%"
+        bar: 5
+        note: "evaluation text"
+      - label: "Flip-Flop increase"
+        value: "0.72%"
+        bar: 4
+        note: "evaluation text"
+      - label: "runtime eval"
+        value: "Embench"
+        bar: 60
+        note: "Fig.6"
+      - label: "bandwidth eval"
+        value: "LMBench"
+        bar: 55
+        note: "Table 1"
+  source_note: "数字和图表来自 SPEAR-V evaluation；不外推到 CoVE TVM。"
+
+- slide_id: d08-15-spearv-evaluation
+  paper_key: schrammel2023spearv
+  slide_type: evaluation
+  claim: "SPEAR-V 的价值是把 RISC-V TEE primitive 从 PMP region 推到 tag metadata，但它需要硬件改动和软件栈适配。"
+  narrative:
+  - "优点是同一 primitive 同时支持 sandboxing 和 enclaving，设计灵活。"
+  - "不足是 tag-aware translation、TLB 和 page-table walk 改动需要硬件生态支持。"
+  - "商业潜力在需要双向隔离、嵌套或低代价 compartment 的 RISC-V 平台。"
+  - "边界是它仍不是 confidential VM 或 device trusted I/O 规范。"
+  evidence_refs:
+  - "SPEAR-V Fig.1-Fig.4: design overview and tagged memory translation."
+  - "SPEAR-V conclusion: fast and flexible RISC-V architecture for sandboxing and enclaving."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "tag primitive 支持双向隔离"]
+      - ["短板", "需要硬件和 OS/runtime 配合"]
+      - ["落地场景", "嵌套和细粒度 compartment"]
+      - ["边界", "不是 CoVE/AP-TEE/TEE-I/O"]
+  source_note: "评价结合设计图、面积数据和 conclusion。"
+
+- slide_id: d08-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "RISC-V enclave lineage 的 takeaway 是保护粒度从 PMP framework 到 scalable memory，再到 tag metadata，但还没进入 TVM 标准语义。"
+  narrative:
+  - "Keystone 建立开放、模块化 RISC-V TEE framework。"
+  - "Penglai 解决 secure memory scalability 和 integrity metadata。"
+  - "SPEAR-V 探索更通用的 tagged-memory isolation primitive。"
+  - "下一节 CoVE/AP-TEE 会把抽象从 enclave 推到 confidential VM。"
+  evidence_refs:
+  - "Keystone Fig.3; Penglai Fig.5-Fig.7; SPEAR-V Fig.1-Fig.4."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 08-riscv-tee-lineage."
+  proof_object:
+    type: comparison_matrix
+    title: "lineage 对照"
+    data:
+      columns: ["系统", "核心 primitive", "主要边界"]
+      rows:
+      - ["Keystone", "PMP + modular runtime", "I/O 和 memory scalability"]
+      - ["Penglai", "GPT + MMT", "复杂 metadata/OS 管理"]
+      - ["SPEAR-V", "tagged memory", "需要硬件生态支持"]
+      - ["CoVE/AP-TEE", "TVM lifecycle", "下一方向讨论"]
+  source_note: "方向总结把三篇 E1 system evidence 与后续 TVM 规范分开。"

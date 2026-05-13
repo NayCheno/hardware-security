@@ -1,0 +1,424 @@
+direction: "Confidential I/O protocol、trusted device interface、network endpoint"
+story_version: 1
+slides:
+- slide_id: d13-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "Confidential I/O endpoint 这一节把 device identity、trusted interface lifecycle 和 application channel binding 分开。"
+  narrative:
+  - "SPDM 规范提供 device identity、measurement、certificate、challenge 和 secured session 的控制平面。"
+  - "CoVE-IO draft 说明 RISC-V TVM 如何组合 SPDM/TDISP/IOMMU/IDE/trusted MSI。"
+  - "TLS+RA 系统论文补上 application TLS channel 与 TEE attestation 的绑定问题。"
+  - "三篇共同说明 device control plane、TDI lifecycle 和 endpoint channel 是三层不同证据。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 13-confidential-io-protocol-device-endpoint."
+  - "SPDM spec p.1; CoVE-IO spec p.1; TLS+RA p.1 abstract."
+  proof_object:
+    type: comparison_matrix
+    title: "三层 endpoint evidence"
+    data:
+      columns: ["层", "来源", "解决的问题"]
+      rows:
+      - ["device evidence", "SPDM", "identity/measurement/session"]
+      - ["trusted interface lifecycle", "CoVE-IO", "TDI verify/accept/bind"]
+      - ["application endpoint", "TLS+RA", "channel termination in TEE"]
+      - ["完整路径", "组合使用", "不能用单层替代全部"]
+  source_note: "方向页区分 protocol、device lifecycle 和 application channel binding。"
+
+- slide_id: d13-01-spdm-summary
+  paper_key: dmtf_spdm_2025
+  slide_type: summary
+  claim: "SPDM 1.4 的核心作用是为设备提供 identity、measurement、challenge 和 secured session 控制平面；无新实验。"
+  narrative:
+  - "DSP0274 定义 Security Protocol and Data Model。"
+  - "它通过 GET_VERSION、GET_CAPABILITIES、GET_DIGESTS、GET_CERTIFICATE、CHALLENGE、GET_MEASUREMENTS 等消息组织 device evidence。"
+  - "KEY_EXCHANGE 等流程建立 secured session。"
+  - "SPDM 能证明 device/control-plane evidence，不证明 device 内部 isolation 或 DMA policy。"
+  evidence_refs:
+  - "SPDM spec p.1: DSP0274 Version 1.4.0 metadata."
+  - "SPDM spec Section 10.2, 10.10, 10.12 and 10.17: GET_VERSION, CHALLENGE, GET_MEASUREMENTS, KEY_EXCHANGE."
+  proof_object:
+    type: mechanism_flow
+    title: "SPDM control-plane flow"
+    data:
+      stages:
+      - "GET_VERSION"
+      - "GET_CAPABILITIES"
+      - "GET_DIGESTS/CERTIFICATE"
+      - "CHALLENGE"
+      - "GET_MEASUREMENTS"
+      - "KEY_EXCHANGE/session"
+  source_note: "无新实验；流程按 SPDM Section 10 message order 抽象。"
+
+- slide_id: d13-02-spdm-background
+  paper_key: dmtf_spdm_2025
+  slide_type: background
+  claim: "Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID 或 VF 配置；无新实验。"
+  narrative:
+  - "host 可能控制设备枚举、配置空间、VF assignment 和 driver state。"
+  - "tenant/verifier 需要设备证书链、measurement 和 challenge-response 来判断设备身份和状态。"
+  - "SPDM 提供 requester/responder 模型，用于获取和验证这些 evidence。"
+  - "但 device evidence 仍要与 IOMMU、TDISP、IDE 和 workload policy 绑定。"
+  evidence_refs:
+  - "SPDM spec Section 10.10: CHALLENGE request and CHALLENGE_AUTH response messages."
+  - "SPDM spec Section 10.12: GET_MEASUREMENTS request and MEASUREMENTS response messages."
+  proof_object:
+    type: comparison_matrix
+    title: "host view vs device evidence"
+    data:
+      columns: ["信息", "host 枚举", "SPDM evidence"]
+      rows:
+      - ["device identity", "requester ID/VF", "certificate and digest"]
+      - ["device state", "driver-reported config", "measurement blocks"]
+      - ["freshness", "host claim", "challenge transcript"]
+      - ["secure control", "plain config path", "secured session"]
+  source_note: "无新实验；对比依据 SPDM challenge/measurement/certificate 消息。"
+
+- slide_id: d13-03-spdm-solution
+  paper_key: dmtf_spdm_2025
+  slide_type: solution
+  claim: "SPDM 把设备信任建立成 transcript-bound protocol，而不是一次性读取设备 ID；无新实验。"
+  narrative:
+  - "GET_CERTIFICATE 和 digest 消息提供证书链和 slot 状态。"
+  - "CHALLENGE_AUTH 把随机 challenge、证书和签名绑定到 transcript。"
+  - "GET_MEASUREMENTS 返回 measurement blocks 和 summary hash。"
+  - "KEY_EXCHANGE/FINISH 建立后续 secured control messages。"
+  evidence_refs:
+  - "SPDM spec Section 10.8-10.12: GET_DIGESTS, GET_CERTIFICATE, CHALLENGE and GET_MEASUREMENTS."
+  - "SPDM spec Section 10.17: KEY_EXCHANGE request and KEY_EXCHANGE_RSP response messages."
+  proof_object:
+    type: mechanism_flow
+    title: "SPDM evidence binding"
+    data:
+      stages:
+      - "negotiate version/capabilities"
+      - "retrieve certificate chain"
+      - "challenge responder"
+      - "request measurements"
+      - "derive session keys"
+      - "protect later messages"
+  source_note: "无新实验；流程按 SPDM Section 10 消息族重绘。"
+
+- slide_id: d13-04-spdm-experiments
+  paper_key: dmtf_spdm_2025
+  slide_type: experiments
+  claim: "SPDM 是 official specification，无新实验；它证明协议语义，不证明 device data path 已安全。"
+  narrative:
+  - "SPDM 定义 requester/responder 消息、字段和 transcript rules。"
+  - "它不验证某个 device firmware 的正确性。"
+  - "它不配置 DMA、IOMMU、IDE 或 TDI state。"
+  - "因此需要与 CoVE-IO/TDISP/IOMMU/IDE 组合。"
+  evidence_refs:
+  - "SPDM spec p.1 and Section 10: specification metadata and message definitions."
+  - "survey/evidence_ledger.md Section Evidence Classes: E0 specification evidence."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "SPDM 证据边界"
+    data:
+      columns: ["可证明", "不能证明"]
+      rows:
+      - ["device evidence protocol", "device internal isolation"]
+      - ["certificate/measurement/challenge semantics", "DMA/MMIO policy"]
+      - ["secured session messages", "TDI lifecycle accepted"]
+  source_note: "无新实验；本页限定 SPDM 为 device evidence control plane。"
+
+- slide_id: d13-05-spdm-evaluation
+  paper_key: dmtf_spdm_2025
+  slide_type: evaluation
+  claim: "SPDM 是 confidential I/O 的共同底座，但单独成功的 SPDM session 不能证明 trusted I/O 完成；无新实验。"
+  narrative:
+  - "优点是 first-party standard，覆盖 identity、measurement 和 secured session。"
+  - "不足是它不定义 TDI acceptance、IOMMU ownership、IDE link 或 application channel binding。"
+  - "商业落地价值在 fleet-scale device attestation 和 firmware evidence。"
+  - "风险在证书供应链、measurement schema、firmware update policy 和 verifier profile。"
+  evidence_refs:
+  - "SPDM spec Section 10.10-10.17: challenge, measurements and key exchange."
+  - "CoVE-IO spec Section 7.3-7.7: SPDM is composed with TDI lifecycle."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "device evidence standard foundation"]
+      - ["短板", "不覆盖完整 TDI/IOMMU/IDE/channel"]
+      - ["落地价值", "fleet device attestation"]
+      - ["风险", "cert/measurement/update/policy"]
+  source_note: "无新实验；评价把 SPDM 放在 control-plane foundation。"
+
+- slide_id: d13-06-coveio-summary
+  paper_key: riscv_cove_io_2026
+  slide_type: summary
+  claim: "CoVE-IO 在本方向的作用是把 SPDM evidence 放进 TDI/TDM/DSM lifecycle；无新实验。"
+  narrative:
+  - "CoVE-IO v0.3.0 仍在 development。"
+  - "它定义 TDM 负责验证、证明并接受 CoVE-IO devices 到 TVM TCB。"
+  - "它把 secure SPDM session、device connection、TDI verification/acceptance 放入统一流程。"
+  - "它桥接 device evidence 与 TVM trusted I/O lifecycle。"
+  evidence_refs:
+  - "CoVE-IO spec p.1 version line: v0.3.0, document in development."
+  - "CoVE-IO spec Section 7.3-7.6.2: SPDM transport, secure SPDM session, device connection and TDI verification."
+  proof_object:
+    type: mechanism_flow
+    title: "SPDM 到 TDI acceptance"
+    data:
+      stages:
+      - "open SPDM transport"
+      - "establish secure SPDM session"
+      - "connect device"
+      - "verify TDI"
+      - "accept into TVM TCB"
+      - "bind DMA/link/interrupt policy"
+  source_note: "无新实验；流程按 CoVE-IO Section 7 重绘。"
+
+- slide_id: d13-07-coveio-background
+  paper_key: riscv_cove_io_2026
+  slide_type: background
+  claim: "SPDM 解决 device evidence，但 confidential VM 还要知道哪个 device interface 被分配、何时进入可信状态；无新实验。"
+  narrative:
+  - "设备可以有多个 functions、interfaces 或 virtual functions。"
+  - "host 可能控制 assignment 和 reset/update lifecycle。"
+  - "TDI/TDISP 关注 trusted device interface 的状态转换。"
+  - "CoVE-IO 因此把 SPDM evidence 与 TDI acceptance 绑定。"
+  evidence_refs:
+  - "CoVE-IO spec Section 7.6.2: TDI Verification and Acceptation."
+  - "CoVE-IO spec Section 7.7: Interface Unbind."
+  proof_object:
+    type: comparison_matrix
+    title: "device evidence 与 interface lifecycle"
+    data:
+      columns: ["问题", "SPDM", "CoVE-IO/TDI"]
+      rows:
+      - ["设备是谁", "certificate/measurement", "使用 SPDM evidence"]
+      - ["接口是否给 TVM", "不单独定义", "TDI verification/acceptance"]
+      - ["何时退出", "session 可关闭", "interface unbind"]
+      - ["链路/中断", "不单独完成", "IDE/MSI/IOMMU composition"]
+  source_note: "无新实验；对比依据 CoVE-IO Section 7.6-7.7。"
+
+- slide_id: d13-08-coveio-solution
+  paper_key: riscv_cove_io_2026
+  slide_type: solution
+  claim: "CoVE-IO 的解决思路是把 device interface 当作 TVM TCB 扩展对象，而不是普通 passthrough resource；无新实验。"
+  narrative:
+  - "TDM 作为 TVM guest process 执行 verification 和 acceptance flows。"
+  - "DSM/TDI/TDM 分工让 device manager、device interface 和 security manager 有明确职责。"
+  - "IOMMU/IDE/trusted MSI 提供 data path enforcement。"
+  - "SPDM/TDISP 提供 evidence 和 state transition 控制。"
+  evidence_refs:
+  - "CoVE-IO spec terminology section around TDM/TDI/DSM definitions."
+  - "CoVE-IO spec Section 7.1-7.7: IOMMU, SPDM, device connection, TDI verification and unbind."
+  proof_object:
+    type: comparison_matrix
+    title: "CoVE-IO 角色分工"
+    data:
+      columns: ["角色", "职责"]
+      rows:
+      - ["TDI", "trusted device interface assigned to TVM"]
+      - ["TDM", "verifies, attests and accepts devices"]
+      - ["DSM", "device security management side"]
+      - ["TVM", "consumes trusted device path"]
+  source_note: "无新实验；角色表按 CoVE-IO terminology 和 Section 7。"
+
+- slide_id: d13-09-coveio-experiments
+  paper_key: riscv_cove_io_2026
+  slide_type: experiments
+  claim: "CoVE-IO 是 draft spec，无新实验；它支撑 lifecycle 组合语义，不支撑成熟产品结论。"
+  narrative:
+  - "v0.3.0 明确处于 development。"
+  - "它可用于说明 CoVE-IO 如何组合 SPDM、TDISP、IOMMU、IDE 和 trusted MSI。"
+  - "TDISP/TDISP XT 公开复核受限，不能补写 gated details。"
+  - "系统评估要引用 sIOPMP、ACAI、TNIC 等具体论文。"
+  evidence_refs:
+  - "CoVE-IO spec p.1 development-status notice."
+  - "CoVE-IO spec Section 7.1-7.7: lifecycle composition."
+  proof_object:
+    type: evidence_gap_matrix
+    title: "draft 边界"
+    data:
+      columns: ["可写", "不可写"]
+      rows:
+      - ["RISC-V trusted I/O draft architecture", "ratified status"]
+      - ["SPDM/TDISP composition", "member-gated normative details"]
+      - ["TDI lifecycle role", "product deployment result"]
+  source_note: "无新实验；保留 E3 draft-not-ratified。"
+
+- slide_id: d13-10-coveio-evaluation
+  paper_key: riscv_cove_io_2026
+  slide_type: evaluation
+  claim: "CoVE-IO 的价值是把 device evidence 接到 TVM lifecycle；弱点是 draft 状态和外部规范依赖；无新实验。"
+  narrative:
+  - "优点是把 SPDM、TDISP、IOMMU、IDE、trusted MSI 放入同一可信设备流程。"
+  - "不足是 v0.3.0 draft，且 TDISP 公开材料受限。"
+  - "商业落地价值在 RISC-V TVM device assignment。"
+  - "风险在 certificate provisioning、measurement profile、TDI state、IDE key 和 revocation。"
+  evidence_refs:
+  - "CoVE-IO spec Section 7.1-7.7: trusted I/O lifecycle."
+  - "survey/evidence_ledger.md Boundary Records: CoVE-IO draft and TDISP member-gated boundary."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "device evidence 到 TVM lifecycle 的桥"]
+      - ["短板", "draft + external dependencies"]
+      - ["落地场景", "TVM trusted device assignment"]
+      - ["风险", "cert/measurement/TDI/IDE/revocation"]
+  source_note: "无新实验；评价按 E3 draft 使用。"
+
+- slide_id: d13-11-tlsra-summary
+  paper_key: weinhold2025tlsra
+  slide_type: summary
+  claim: "TLS+RA 的核心贡献是把 application secure channel 与 TEE attestation 绑定，保证 TLS 终止点确实在被证明的 TEE 内。"
+  narrative:
+  - "论文指出 TLS 提供成熟 secure channel，但需要扩展以支持 remote attestation。"
+  - "TLS+RA 保持 deployment independence 和 failure independence，同时把 attestation report 与 TLS handshake 双向绑定。"
+  - "它关注 application endpoint/channel binding，不解决 SPDM/TDISP device lifecycle。"
+  - "它补上 confidential I/O endpoint 叙事中的 application channel 层。"
+  evidence_refs:
+  - "TLS+RA p.1 abstract: integrates remote attestation into TLS and guarantees channel termination inside the TEE."
+  - "TLS+RA Fig.3: double linking of TLS+RA handshake."
+  proof_object:
+    type: mechanism_flow
+    title: "TLS+RA binding flow"
+    data:
+      stages:
+      - "TLS ClientHello carries attestation nonce"
+      - "TEE produces attestation report"
+      - "TLS transcript signed by TLS key"
+      - "attestation report binds endpoint"
+      - "verifier checks both links"
+      - "TLS channel established"
+  source_note: "流程按 Figure 3 和摘要重绘。"
+
+- slide_id: d13-12-tlsra-background
+  paper_key: weinhold2025tlsra
+  slide_type: background
+  claim: "只把 attestation report 和 TLS certificate 分开验证，会留下 relay 或 channel-termination ambiguity。"
+  narrative:
+  - "remote attestation 能证明某个 TEE state，但不自动证明 TLS channel 在该 TEE 内终止。"
+  - "TLS 能证明 channel peer 拥有证书私钥，但不自动证明 peer 的 TEE state。"
+  - "简单串联两者可能被中间实体 relay 或错绑。"
+  - "TLS+RA 因此要求 channel transcript 和 attestation evidence 双向绑定。"
+  evidence_refs:
+  - "TLS+RA Fig.1: relay attack when combining TLS and attestation."
+  - "TLS+RA Section 2-3 and Table 1: deployment/failure independence and related work comparison."
+  proof_object:
+    type: path_compare
+    title: "separate checks vs bound channel"
+    data:
+      paths:
+      - label: "separate TLS + RA"
+        steps: ["verify TLS cert", "verify attestation report", "assume same endpoint"]
+        note: "relay ambiguity remains"
+      - label: "TLS+RA"
+        steps: ["nonce in TLS", "report over transcript", "TLS key signs transcript", "double link checked"]
+        note: "channel and TEE state bound"
+  source_note: "路径按 Figure 1 和 Figure 3 重绘。"
+
+- slide_id: d13-13-tlsra-solution
+  paper_key: weinhold2025tlsra
+  slide_type: solution
+  claim: "TLS+RA 的设计是 double linking：TLS private key 绑定 transcript，attestation key 绑定同一 handshake context。"
+  narrative:
+  - "TLS side 保持标准 TLS 安全属性和 failure behavior。"
+  - "RA side 使用 nonce 和 report 把 TEE state 放入 handshake context。"
+  - "两条签名链使用不同 key，但来自同一 message log。"
+  - "这样可以做到 TEE-agnostic，并支持 client-side 或 mutual attestation 扩展。"
+  evidence_refs:
+  - "TLS+RA Fig.3: Double linking of TLS+RA handshake."
+  - "TLS+RA Section 5-6: protocol and implementation description."
+  proof_object:
+    type: mechanism_flow
+    title: "double linking"
+    data:
+      stages:
+      - "TLS transcript accumulates messages"
+      - "TLS key signs transcript"
+      - "attestation nonce enters report"
+      - "TEE report signs measurement/context"
+      - "verifier checks symmetry"
+  source_note: "机制图按 Figure 3 和 Section 5 重绘。"
+
+- slide_id: d13-14-tlsra-experiments
+  paper_key: weinhold2025tlsra
+  slide_type: experiments
+  claim: "TLS+RA 的实验关注 handshake latency 和 channel throughput，证明绑定机制可以集成到 TLS 栈而不改变 device lifecycle。"
+  narrative:
+  - "Figure 4 比较 TLS+RA 与 standard TLS 的 handshake latency。"
+  - "Figure 5 继续分析包含 network latency 的 handshake duration。"
+  - "Figure 6 比较 TLS+RA 与 standard TLS 的 channel throughput。"
+  - "这些实验支撑 endpoint channel binding，不支撑 SPDM/TDISP/DMA 保护。"
+  evidence_refs:
+  - "TLS+RA Fig.4-Fig.6: handshake latency and channel throughput evaluations."
+  - "TLS+RA p.1 abstract: protocol supports channel termination inside TEE."
+  proof_object:
+    type: metric_bars
+    title: "TLS+RA proof objects"
+    data:
+      metrics:
+      - label: "handshake latency"
+        value: "Fig.4"
+        bar: 55
+        note: "standard TLS comparison"
+      - label: "network latency included"
+        value: "Fig.5"
+        bar: 50
+        note: "handshake duration"
+      - label: "channel throughput"
+        value: "Fig.6"
+        bar: 60
+        note: "post-handshake channel"
+      - label: "evidence class"
+        value: "E1"
+        bar: 70
+        note: "peer-reviewed ATC 2025"
+  source_note: "图号来自 evaluation；本页不把 TLS+RA 写成 device protocol。"
+
+- slide_id: d13-15-tlsra-evaluation
+  paper_key: weinhold2025tlsra
+  slide_type: evaluation
+  claim: "TLS+RA 是 endpoint/channel-binding 的强证据，但它不解决 device assignment、TDISP state、IDE link 或 IOMMU policy。"
+  narrative:
+  - "优点是问题切得准，直接解决 TLS channel 与 TEE state 错绑。"
+  - "不足是范围在 application channel，无法替代 device lifecycle。"
+  - "商业潜力在 confidential service onboarding、key release 和 attested API endpoint。"
+  - "落地风险在 certificate profiles、verifier UX、attestation freshness 和 failure handling。"
+  evidence_refs:
+  - "TLS+RA Fig.1 and Fig.3: relay risk and double-link protocol."
+  - "TLS+RA Fig.4-Fig.6: latency and throughput evaluation."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "TEE endpoint 与 TLS channel 绑定"]
+      - ["短板", "不覆盖 device lifecycle"]
+      - ["落地场景", "key release / confidential API"]
+      - ["风险", "cert/evidence profile/freshness/UX"]
+  source_note: "评价限定在 endpoint channel-binding 证据。"
+
+- slide_id: d13-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "本方向的 takeaway 是 SPDM 证明设备，CoVE-IO 接入设备接口，TLS+RA 绑定应用通道，三者不可互相替代。"
+  narrative:
+  - "SPDM 是 device evidence control plane。"
+  - "CoVE-IO 是 TVM trusted device lifecycle draft。"
+  - "TLS+RA 是 application endpoint channel-binding system。"
+  - "完整 confidential I/O 要把这三层与 IOMMU/AIA/IDE 和具体 device implementation 合并。"
+  evidence_refs:
+  - "SPDM Section 10; CoVE-IO Section 7; TLS+RA Fig.1-Fig.6."
+  - "survey/evidence_ledger.md Boundary Records for direction 13."
+  proof_object:
+    type: comparison_matrix
+    title: "三层不可替代"
+    data:
+      columns: ["层", "证明什么", "不能证明"]
+      rows:
+      - ["SPDM", "device identity/measurement", "TDI accepted"]
+      - ["CoVE-IO", "trusted interface lifecycle", "application channel endpoint"]
+      - ["TLS+RA", "TEE-bound TLS channel", "DMA/MMIO/device state"]
+      - ["组合", "end-to-end evidence chain", "仍需 verifier policy"]
+  source_note: "方向总结按三篇 primary 的证据边界组织。"

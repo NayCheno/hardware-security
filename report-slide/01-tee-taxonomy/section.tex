@@ -1,295 +1,789 @@
 \section{硬件辅助 TEE taxonomy}
 
-\begin{frame}[t]{硬件辅助 TEE taxonomy：方向开场}
-\DeckKicker{01-tee-taxonomy}
-\ClaimLine{用 SoK/Survey 固定 design space，避免把 SGX、SEV、TrustZone、CCA、CoVE 和 accelerator TEE 混成产品罗列。}
+\begin{frame}[t,shrink=6]{硬件辅助 TEE taxonomy：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{01-tee-taxonomy}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} TEE taxonomy 这一节要先拆设计轴，而不是把 SGX、TrustZone、CCA、CoVE 和 accelerator TEE 排成产品清单。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；survey/SoK 只作为 taxonomy 和术语入口，不替代一手机制证据。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / sok}{TEE design choices and pitfalls taxonomy}{E2 / Peer-reviewed taxonomy anchor}
-\PrimaryCard{Primary 2 / sok}{RISC-V secure enclave 与 TEE 谱系 survey}{E2 survey / Background substrate}
-\PrimaryCard{Primary 3 / sok}{Accelerator TEE 设计空间}{E2 / Background substrate}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Li 2024 SoK 从 server-side TEE 的 trust relationship、resource management、attestation 和 I/O 设计选择入手，适合做总分类入口。
+  \item Boubakri 2025 RISC-V survey 把 Keystone、Penglai、SPEAR-V、CoVE、AP-TEE 串成 RISC-V 纵向谱系。
+  \item Accelerator TEE SoK 补上 GPU、NPU、DPU、SmartNIC 等非 CPU 计算路径，避免 taxonomy 只围绕 CPU enclave。
+  \item 三篇都是 E2 survey/SoK，能支撑分类和边界，不能替代原始论文或规范的机制 claim。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item li2024sokteechoices: sok；E2；local\_pdf\_verified
-  \item boubakri2025riscvtee: sok；E2；local\_pdf\_verified
-  \item sok-tee: sok；E2；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{taxonomy 的三层证据}
+      \scriptsize \textcolor{Accent}{\bfseries TEE design choices}\par\textbf{抽象 trust boundary 与设计取舍}\par{\tiny\textcolor{Muted}{Li 2024 SoK}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries RISC-V lineage}\par\textbf{开放 ISA 下 enclave 到 TVM 的谱系}\par{\tiny\textcolor{Muted}{Boubakri 2025 survey}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries Accelerator TEE}\par\textbf{device/accelerator TCB 与 data path}\par{\tiny\textcolor{Muted}{Accelerator TEE SoK}}\par\vspace{1.6mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 本页只建立分类入口；survey 证据不直接承担具体机制和性能结论。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{TEE design choices and pitfalls taxonomy}
-{li2024sokteechoices}
-{E2 / Peer-reviewed taxonomy anchor}
-{local\_pdf\_verified}
-{Peer-reviewed SoK for TEE design choices, pitfalls, runtime lifecycle, and cross-platform taxonomy.}
-{\begin{itemize}
-  \item Peer-reviewed SoK for TEE design choices and pitfalls
-  \item Connects runtime lifecycle and cross-platform taxonomy
-\end{itemize}}
-{Evidence position}
-{\begin{itemize}
-  \item slot: primary\_1
-  \item type: sok
-  \item evidence: E2 / Peer-reviewed taxonomy anchor
-  \item source: local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{TEE design choices and pitfalls taxonomy}
-{li2024sokteechoices}
-{E2 / Peer-reviewed taxonomy anchor}
-{local\_pdf\_verified}
-{TEE taxonomy should not be organized only by product name; each platform makes different launch, runtime, storage, I/O, and attestation choices.}
-{\begin{itemize}
-  \item TEE taxonomy should not be organized only by product name
-  \item Launch, runtime, storage, I/O, and attestation choices differ across platforms
-\end{itemize}}
-{Problem boundary}
-{\begin{itemize}
-  \item protected object
-  \item management boundary
-  \item method gap
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{TEE design choices and pitfalls taxonomy}
-{li2024sokteechoices}
-{E2 / Peer-reviewed taxonomy anchor}
-{local\_pdf\_verified}
-{Use design-choice and pitfall taxonomy to connect SGX, SEV, TDX, CCA, CoVE, and RISC-V enclave lineage.}
-{\begin{itemize}
-  \item Use design-choice and pitfall taxonomy
-  \item Connect SGX, SEV, TDX, CCA, CoVE, and RISC-V enclave lineage
-\end{itemize}}
-{Mechanism view}
-{\begin{itemize}
-  \item launch/admission choices
-  \item runtime isolation and lifecycle
-  \item attestation, storage, I/O and verifier policy
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{TEE design choices and pitfalls taxonomy}
-{li2024sokteechoices}
-{E2 / Peer-reviewed taxonomy anchor}
-{local\_pdf\_verified}
-{SoK/survey with no new experiments (无新实验); supports taxonomy, coverage, and design-choice framing only.}
-{\begin{itemize}
-  \item SoK/survey with no new experiments (无新实验)
-  \item Mechanism claims still need original papers or specifications
-\end{itemize}}
-{Evidence strength}
-{\begin{itemize}
-  \item type: E2 peer-reviewed survey/SoK
-  \item maturity: peer-reviewed survey/SoK
-  \item PDF: local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{TEE design choices and pitfalls taxonomy}
-{li2024sokteechoices}
-{E2 / Peer-reviewed taxonomy anchor}
-{local\_pdf\_verified}
-{Best used as the peer-reviewed taxonomy anchor for the whole deck.}
-{Best used as the peer-reviewed taxonomy anchor for the whole deck.}
-{As a SoK, it does not replace platform papers, official specifications, or production evidence.}
-{Useful as a platform design checklist; deployment still depends on implementation and verifier policy.}
-
-\PaperSlide
-{内容摘要}
-{RISC-V secure enclave 与 TEE 谱系 survey}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{梳理 RISC-V secure enclave 与 TEE 研究谱系}
-{\begin{itemize}
-  \item 梳理 RISC-V secure enclave 与 TEE 研究谱系
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：sok
-  \item 证据：E2 survey / Background substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V secure enclave 与 TEE 谱系 survey}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{RISC-V TEE 从 PMP monitor 到 confidential VM 的发展分散在论文、草案和原型中，容易产生谱系断裂}
-{\begin{itemize}
-  \item RISC-V TEE 从 PMP monitor 到 confidential VM 的发展分散在论文、草案和原型中，容易产生谱系断裂
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V secure enclave 与 TEE 谱系 survey}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{按 RISC-V TEE 设计点组织 Keystone、Penglai、SPEAR-V、CoVE 等工作，作为 taxonomy bridge}
-{\begin{itemize}
-  \item 按 RISC-V TEE 设计点组织 Keystone、Penglai、SPEAR-V、CoVE 等工作，作为 taxonomy bridge
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item PMP/enclave lineage
-  \item CoVE/AP-TEE confidential VM lineage
-  \item RISC-V open hardware/software co-design
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V secure enclave 与 TEE 谱系 survey}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item MDPI HTML 与本地 PDF 已核验，但仍只写 taxonomy 辅助，不写强机制或性能 claim
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V secure enclave 与 TEE 谱系 survey}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{能把 RISC-V 小方向和顶层 taxonomy 接起来}
-{能把 RISC-V 小方向和顶层 taxonomy 接起来。}
-{机制细节必须回到 Keystone/Penglai/SPEAR-V/AP-TEE/CoVE-IO 原始材料。}
-{适合辅助平台选型；落地依赖 RISC-V 草案成熟度和厂商实现。}
-
-\PaperSlide
-{内容摘要}
-{Accelerator TEE 设计空间}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{系统化分析 accelerator TEE 设计}
-{\begin{itemize}
-  \item 系统化分析 accelerator TEE 设计
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：sok
-  \item 证据：E2 / Background substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Accelerator TEE 设计空间}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{Confidential workload 依赖 GPU/NPU/DPU/SmartNIC 后，CPU TEE 边界无法单独覆盖数据路径}
-{\begin{itemize}
-  \item Confidential workload 依赖 GPU/NPU/DPU/SmartNIC 后，CPU TEE 边界无法单独覆盖数据路径
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Accelerator TEE 设计空间}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{把 accelerator TEE 拆成设备身份、内存/总线保护、runtime TCB、调度、attestation 等维度}
-{\begin{itemize}
-  \item 把 accelerator TEE 拆成设备身份、内存/总线保护、runtime TCB、调度、attestation 等维度
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item device identity and attestation
-  \item protected device memory and queue state
-  \item runtime/driver TCB and scheduling boundary
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Accelerator TEE 设计空间}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 只能支撑 accelerator/device TEE taxonomy
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Accelerator TEE 设计空间}
-{sok-tee}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{能把 I/O、accelerator、SmartNIC 小方向纳入同一比较框架}
-{能把 I/O、accelerator、SmartNIC 小方向纳入同一比较框架。}
-{不能替代 CCA、CoVE-IO、SPDM/TDISP 或具体 GPU/DPU 系统的一手证据。}
-{可转化为 DPU/GPU 安全产品评估清单；落地依赖设备 RoT 与标准接口。}
-
-\begin{frame}[t]{硬件辅助 TEE taxonomy：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{TEE design choices and pitfalls taxonomy：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{li2024sokteechoices}{E2 / Peer-reviewed taxonomy anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Li 2024 SoK 的价值在于把 server-side TEE 拆成设计选择和 pitfall，而不是再列一遍商业 TEE 名单。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item TEE design choices and pitfalls taxonomy
-  \item RISC-V secure enclave 与 TEE 谱系 survey
-  \item Accelerator TEE 设计空间
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文把 TEE 放在 cloud remote execution 场景下讨论，核心问题是用户、CSP、硬件厂商和 attestation service 之间如何分配信任。
+  \item 它关注 design choices 的安全后果，例如谁管理资源、谁验证 evidence、哪些组件进入 TCB。
+  \item 这篇适合作为本报告总 taxonomy anchor，因为它能解释不同 TEE 为什么不可直接横向比较。
+  \item 在本 deck 中，它承担分类框架，不承担某个 TEE 机制已经安全的证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item Best used as the peer-reviewed taxonomy anchor for the whole deck.
-  \item 能把 RISC-V 小方向和顶层 taxonomy 接起来。
-  \item As a SoK, it does not replace platform papers, official specifications, or production evidence.
-  \item 机制细节必须回到 Keystone/Penglai/SPEAR-V/AP-TEE/CoVE-IO 原始材料。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item Useful as a platform design checklist; deployment still depends on implementation and verifier policy.
-  \item 适合辅助平台选型；落地依赖 RISC-V 草案成熟度和厂商实现。
-  \item 可转化为 DPU/GPU 安全产品评估清单；落地依赖设备 RoT 与标准接口。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SoK 贡献位置}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{本页判断} \\
+\midrule
+研究对象 & server-side TEE 的 trust relationship 与 design choices \\
+可支撑 & taxonomy、pitfall、跨系统比较 \\
+不可支撑 & 单个系统的机制正确性或性能数字 \\
+汇报用途 & 作为后续 Arm/RISC-V/device TEE 的公共坐标系 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 依据 Li 2024 SoK 摘要、Figure 1 和 introduction 的设计选择叙事重写。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TEE design choices and pitfalls taxonomy：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{li2024sokteechoices}{E2 / Peer-reviewed taxonomy anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TEE taxonomy 需要先回答“谁被排除在信任边界外”，否则后续所有隔离机制都会被误读。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 云 TEE 的承诺是让用户把敏感 workload 放到不完全可信的 server-side platform 上执行。
+  \item 但不同系统把 CSP、host OS、hypervisor、firmware、attestation service 和 device driver 放在不同信任位置。
+  \item 如果不显式写 trust relationship，同一个词 enclave、realm、TVM 在不同系统中会指向不同安全边界。
+  \item 因此本节用 SoK 的分类轴先约束后续章节的比较语言。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{taxonomy 先问的三个问题}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{问题} & \textbf{为什么重要} & \textbf{后续章节用法} \\
+\midrule
+谁管理资源 & 资源管理者可能观察或影响 workload & 区分 host、monitor、RMM、TSM \\
+谁给 evidence & attestation service 可能进入用户信任链 & 区分 quote、report、measurement \\
+谁在 data path & I/O 和 device driver 可能绕过 CPU enclave & 连接 accelerator 与 confidential I/O \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 问题拆分来自 SoK 对 trust relationship、attestation 和 resource management 设计轴的归纳。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TEE design choices and pitfalls taxonomy：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{li2024sokteechoices}{E2 / Peer-reviewed taxonomy anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇 SoK 的方法是把 TEE 设计拆成可比较的轴，再讨论每个轴的安全 pitfall。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 它不是提出新 TEE，而是把已有设计放到统一框架中比较。
+  \item 分类轴覆盖 computation trust relationship、TEE lifecycle、attestation、memory/resource management 和 I/O 相关设计。
+  \item pitfall 分析提醒读者不要把硬件隔离自动等同于端到端安全。
+  \item 这正好服务于本报告的写法：每个方向都要写证据边界，而不是只写系统名。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SoK 分析路径}
+      \scriptsize \begin{itemize}
+  \item 01. 定义 server-side TEE 场景
+  \item 02. 拆 trust relationship
+  \item 03. 归纳 design choices
+  \item 04. 映射安全 pitfall
+  \item 05. 给出未来研究方向
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Li 2024 SoK 的引言和章节组织重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TEE design choices and pitfalls taxonomy：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{li2024sokteechoices}{E2 / Peer-reviewed taxonomy anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇是 SoK，无新实验；它的证据强度来自系统化分类，而不是测评或机制实现。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文贡献是整理和评估 TEE design choices，对应 E2 taxonomy evidence。
+  \item 它可以用来说明某类系统设计会引入什么信任假设，但不能替代原始论文的实现或量化证据。
+  \item 当后续页提到 CCA、CoVE、accelerator TEE 的机制时，必须回引对应原始论文或规范。
+  \item 本报告因此把它放在 taxonomy slot，不把它写成 SOTA 系统。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{E2 证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{能证明} & \textbf{不能证明} \\
+\midrule
+设计轴和术语边界 & 某个 TEE 机制正确 \\
+pitfall 分类 & 某个系统性能优劣 \\
+跨系统比较框架 & 产品部署安全性 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；本页按照 evidence ledger 的 E2 使用规则限定 claim。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TEE design choices and pitfalls taxonomy：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{li2024sokteechoices}{E2 / Peer-reviewed taxonomy anchor}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇 SoK 最适合做总入口，但它的弱点是抽象层高，落到 CCA/CoVE/I/O 时必须补一手证据；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 trust relationship 和 design choice 写成可比较对象，能防止后续章节变成产品堆叠。
+  \item 不足是 survey 级总结会压平各系统 threat model 的细节。
+  \item 商业落地意义在于帮助读者判断不同 TEE 方案的可部署前提，例如谁运营 verifier、谁控制 firmware update。
+  \item 汇报时要把它作为地图，而不是把地图当成系统证据。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 设计轴清楚，适合做报告坐标系 \\
+短板 & 不能替代原始机制和性能证据 \\
+落地价值 & 帮助评估 TEE 方案的信任链和运维前提 \\
+使用规则 & 只作 taxonomy anchor，机制 claim 回到原文 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价结合 SoK 定位和本仓库 E2 evidence boundary。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V secure enclave 与 TEE 谱系 survey：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{boubakri2025riscvtee}{E2 survey / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Boubakri 2025 的作用是把 RISC-V TEE 从 PMP enclave 谱系延伸到 CoVE/AP-TEE，而不是提供新机制。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文综述 RISC-V secure enclaves 与 TEEs，覆盖 Sanctum、Keystone、Penglai、SPEAR-V、CoVE 等路线。
+  \item 它适合连接 08 的 RISC-V enclave lineage 与 09 的 CoVE/AP-TEE confidential VM。
+  \item 由于它是 survey，具体 PMP、IOMMU、TVM、attestation 机制都要回到原始 paper/spec。
+  \item 在 taxonomy 章节中，它补上 CPU TEE 之外的 RISC-V 纵向演进轴。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RISC-V TEE 谱系}
+      \scriptsize \textcolor{Accent}{\bfseries PMP enclave}\par\textbf{Keystone 等开放框架}\par{\tiny\textcolor{Muted}{survey taxonomy}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries scalable enclave}\par\textbf{Penglai/SPEAR-V 等机制扩展}\par{\tiny\textcolor{Muted}{survey lineage}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries confidential VM}\par\textbf{CoVE/AP-TEE 走向 TVM}\par{\tiny\textcolor{Muted}{survey cross-check}}\par\vspace{1.6mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 谱系图依据 Boubakri 2025 摘要和本地 README review 的 lineage 归纳。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V secure enclave 与 TEE 谱系 survey：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{boubakri2025riscvtee}{E2 survey / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RISC-V 的开放性带来的是设计分叉，不是天然安全；taxonomy 必须区分 enclave、monitor 和 confidential VM。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item RISC-V TEE 研究从 PMP 隔离起步，但后续系统引入不同的 monitor、tagging、memory ownership 和 virtual machine 抽象。
+  \item 同样叫 secure enclave 的系统，TCB、内存管理、I/O 边界和 attestation 模型可能完全不同。
+  \item CoVE/AP-TEE 又把问题从进程/应用 enclave 推向 TVM lifecycle。
+  \item 这就是为什么本报告不能用一个 RISC-V TEE 标签覆盖所有系统。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RISC-V TEE 必须拆开的层级}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{层级} & \textbf{核心对象} & \textbf{风险} \\
+\midrule
+ISA primitive & PMP/ePMP/IOMMU/AIA & 只给 building blocks \\
+enclave framework & runtime/monitor/app enclave & TCB 与资源管理不同 \\
+confidential VM & TVM/TSM/lifecycle & 更接近 CCA/TDX 语义 \\
+I/O extension & device/DMA/interrupt & 需要独立 trusted I/O 证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 层级拆分来自 Boubakri 2025 对 RISC-V TEE 路线的 survey 归纳。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V secure enclave 与 TEE 谱系 survey：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{boubakri2025riscvtee}{E2 survey / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇 survey 给出的有效用法，是用 lineage 表校准每个 RISC-V 系统处在什么抽象层。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 它把原始系统按 primitive、architecture、monitor/runtime、memory/I/O/attestation support 和 representative system 串起来。
+  \item 对于 Keystone、Penglai、SPEAR-V，后续应该分别读原文中的 PMP、GPT/MMT、tagged memory。
+  \item 对于 CoVE/AP-TEE，后续应该读 spec 中的 TVM、TSM、measurement 和 memory conversion。
+  \item 所以本页的解决方案不是采用 survey 结论，而是把 survey 变成阅读路线图。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{阅读路线}
+      \scriptsize \begin{itemize}
+  \item 01. 先定 primitive
+  \item 02. 再看 enclave/TVM 抽象
+  \item 03. 核对 trusted monitor
+  \item 04. 检查 memory/I/O support
+  \item 05. 回到原始论文或规范
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程来自本地 README review 对 survey 方法的概括。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V secure enclave 与 TEE 谱系 survey：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{boubakri2025riscvtee}{E2 survey / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇是 survey，无新实验；它能帮我们补 coverage，但不能给 Keystone、Penglai、CoVE 的机制结果背书。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文没有提出新系统或新 formal model。
+  \item 它汇总已有系统和规范，适合做 coverage matrix。
+  \item 如果需要写运行代价、安全属性或 ABI/state machine，必须改引对应原始 paper/spec。
+  \item 本报告在 08/09 章节会把它作为 lineage cross-check，而不是主机制证据。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{coverage 与 claim 的边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可用作} & \textbf{不可用作} \\
+\midrule
+RISC-V TEE coverage 清单 & PMP/GPT/TVM 机制证明 \\
+系统谱系对照 & 某系统测评数据来源 \\
+术语归类 & draft spec 成熟度判断替代品 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；证据边界按 README review 和 evidence ledger 写入。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V secure enclave 与 TEE 谱系 survey：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{boubakri2025riscvtee}{E2 survey / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 它是 RISC-V 线索的好目录，但需要和原文配套使用；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是时间新，能覆盖 Keystone 后的 CoVE/AP-TEE 等材料。
+  \item 不足是不同系统的 threat model 与成熟度被 survey 语言压缩。
+  \item 商业化角度，它提醒 RISC-V confidential computing 还处在从研究系统到规范化的过渡期。
+  \item 使用时要明确区分 published system、draft spec 和 survey summary。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 更新的 RISC-V TEE lineage 和 coverage \\
+短板 & 机制细节必须回到原始材料 \\
+落地判断 & 规范化路线仍在演进 \\
+汇报位置 & taxonomy 和 cross-check，不做机制 primary \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价基于本地 README review，不添加 survey 未证明的机制结论。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE 设计空间：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Accelerator TEE SoK 把 taxonomy 从 CPU enclave 扩展到 GPU、DPU、NPU、SmartNIC 的计算和数据路径。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出 accelerator TEE 已成为敏感高性能计算的重要方向，但现有研究往往绑定特定 CPU 或 accelerator。
+  \item 它把 accelerator TEE 分成 Host-type、Acc.-type 和 Mix-type 等架构模式。
+  \item 它还比较了 access control、memory encryption、runtime、attestation 等安全方案。
+  \item 在本报告中，它是 05、14、15 的共同 taxonomy anchor。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{accelerator TEE 三类架构}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{类别} & \textbf{可信边界} & \textbf{典型风险} \\
+\midrule
+Host-type & host TEE 管 accelerator workflow & device path 仍需保护 \\
+Acc.-type & accelerator 内部有可信根 & 硬件改造和生态成本高 \\
+Mix-type & host/device 共同承担 TCB & 边界组合复杂 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 架构分类来自 Figure 1 和 Table II；本页不复用原图。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE 设计空间：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 只保护 CPU 内存并不能保护 accelerator workload，因为敏感数据会进入 DMA、device memory 和 accelerator runtime。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item AI、图计算、网络和存储卸载会把秘密模型、输入数据和中间结果送到 accelerator。
+  \item 传统 CPU TEE 的安全边界经常止于 CPU package 或 VM memory，不覆盖 device-local state。
+  \item Accelerator TEE 的难点是 device identity、command queue、DMA buffer、memory encryption 和 attestation 要一起考虑。
+  \item 这为后续 Arm CCA I/O、DPU/SmartNIC 和 confidential storage 章节提供问题边界。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CPU TEE vs accelerator TEE}
+      \scriptsize \textbf{CPU-centric TEE}\par
+CPU memory → enclave/realm → host untrusted\par
+{\tiny\textcolor{Muted}{主要保护 CPU 执行和内存}}\par\vspace{1.8mm}
+\textbf{Accelerator TEE}\par
+DMA buffer → device runtime → device memory → result path\par
+{\tiny\textcolor{Muted}{必须覆盖跨设备 data path}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 问题路径依据 SoK 的 attack-vector 图和 architecture overview 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE 设计空间：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇 SoK 的可用成果是一个分层 checklist，用来检查 accelerator TEE 是否只保护了入口，还是覆盖了完整 data path。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Table I 给出被分析的 accelerator TEE 范围，Table III/IV 比较安全方案和 access control 偏好。
+  \item Figure 3 把 memory encryption workflow 作为重要维度，而不是只看 enclave 创建。
+  \item 对本报告来说，最有用的是把 device identity、access control、memory path、runtime 和 attestation 拆开讲。
+  \item 这样可以避免把任意 GPU enclave 或 SmartNIC offload 都写成同一类 confidential I/O。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{accelerator TEE checklist}
+      \scriptsize \begin{itemize}
+  \item 01. device identity
+  \item 02. command/runtime isolation
+  \item 03. DMA and memory access control
+  \item 04. memory encryption/integrity
+  \item 05. attestation and lifecycle
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: checklist 综合 Table I、Table III、Table IV 和 Figure 3。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE 设计空间：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 这篇是 SoK，无新实验；它能比较方案类别，但不能替代 HETEE、CloudScale、CAGE、TNIC 等原文结果。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文主要贡献是分析现有 accelerator TEE designs。
+  \item 它可以说明不同系统覆盖哪些安全环节。
+  \item 它不能直接证明某个 GPU/DPU/NIC 系统的性能数据或部署成熟度。
+  \item 后续涉及具体结果时，必须回到相应系统论文。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SoK 证据使用规则}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可用} & \textbf{不可用} \\
+\midrule
+设计空间分类 & 具体系统性能结论 \\
+安全方案覆盖比较 & device TCB 正确性证明 \\
+后续章节索引 & 商业可部署性背书 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；本页只写 E2 taxonomy claim。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Accelerator TEE 设计空间：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{sok-tee}{E2 / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Accelerator TEE SoK 的价值是补齐非 CPU data path；局限是它仍需要和每个系统的一手证据配合；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 accelerator TEE 的架构模式和安全组件拆得清楚。
+  \item 不足是不同 accelerator 的硬件能力差异很大，survey 分类很难覆盖实现细节。
+  \item 商业落地上，它揭示 GPU/DPU/SmartNIC TEE 需要硬件、驱动、firmware、cloud scheduler 同时配合。
+  \item 本报告把它用作 taxonomy anchor，并在 14/15 用一手系统论文补机制和结果。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 覆盖 GPU/NPU/DPU/SmartNIC 等非 CPU TEE \\
+短板 & 不能代替系统论文的机制和结果 \\
+落地价值 & 指出硬件、runtime、attestation 必须协同 \\
+汇报位置 & 连接 taxonomy 与 I/O/offload 章节 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价依据 SoK 的分类表和本报告 evidence boundary。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{硬件辅助 TEE taxonomy：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{01-tee-taxonomy}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} 本方向的 takeaway 是先按 trust boundary、ISA lineage、device data path 建坐标，再进入具体 Arm/RISC-V/I/O 机制。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Li 2024 SoK 给出通用 TEE design-choice 坐标。
+  \item Boubakri 2025 survey 给出 RISC-V TEE 的纵向谱系。
+  \item Accelerator TEE SoK 把非 CPU 计算和 device-local data path 纳入 taxonomy。
+  \item 三个 E2 来源共同约束术语，但后续机制 claim 必须来自 E0/E1/E3 原始材料。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{后续章节如何使用 taxonomy}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{后续章节} & \textbf{使用方式} \\
+\midrule
+Arm CCA & 用 trust boundary 区分 Realm/RMM/host \\
+RISC-V CoVE & 用 lineage 区分 enclave 与 TVM \\
+Confidential I/O & 用 device data path 拆 DMA/MMIO/interrupt \\
+Accelerator/NIC & 用 accelerator checklist 查 TCB 与 data path \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结来自三篇 SoK 的互补关系和 evidence ledger 的 E2 限制。}}
 \end{frame}

@@ -1,291 +1,771 @@
 \section{SmartNIC / trusted NIC / secure storage data path}
 
-\begin{frame}[t]{SmartNIC / trusted NIC / secure storage data path：方向开场}
-\DeckKicker{15-smartnic-trusted-nic-storage}
-\ClaimLine{把 NIC-local root、secure offload、resource management 与 confidential storage 分开写。}
+\begin{frame}[t,shrink=6]{SmartNIC / trusted NIC / secure storage data path：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{15-smartnic-trusted-nic-storage}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} SmartNIC/trusted NIC/storage 这一节讨论 network/storage data path 的可信根如何从 CPU 移到 NIC 或 NVMe-oF path。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`nvidia\_bluefield\_operation\_2025` 与 `khalilov2024osmosis` 作为辅助材料，不计入三篇主讲。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{S-NIC: SmartNIC function isolation}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{Primary 2 / system}{TNIC: trusted NIC architecture}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{Primary 3 / system}{Hazel: secure disaggregated storage data path}{E3 / Draft-not-ratified}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item S-NIC 关注 SmartNIC 上多租户 network function 的 isolation。
+  \item TNIC 把 formally verified root of trust 放到 NIC hardware，用于 trustworthy distributed systems。
+  \item Hazel 把 confidential storage 的 confidentiality、integrity、freshness 组合到 disaggregated NVMe-oF data path。
+  \item 三篇共同说明 NIC/storage 不是普通 I/O 设备，而是可能承载安全控制面的 endpoint。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item zhou2024snic: system；E1；local\_pdf\_verified
-  \item giantsidi2025tnic: system；E1；local\_pdf\_verified
-  \item chrapek2026hazel: system；E3；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{NIC/storage trust 递进}
+      \scriptsize \textcolor{Accent}{\bfseries S-NIC}\par\textbf{SmartNIC function isolation}\par{\tiny\textcolor{Muted}{EuroSys 2024}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries TNIC}\par\textbf{trusted NIC root}\par{\tiny\textcolor{Muted}{ASPLOS 2025}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries Hazel}\par\textbf{secure disaggregated storage}\par{\tiny\textcolor{Muted}{2026 draft}}\par\vspace{1.6mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向页按 data path endpoint 的可信化程度组织。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{S-NIC: SmartNIC function isolation}
-{zhou2024snic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions}
-{\begin{itemize}
-  \item S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{S-NIC: SmartNIC function isolation}
-{zhou2024snic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户。}
-{\begin{itemize}
-  \item SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户函数可能泄漏或篡改 state
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{S-NIC: SmartNIC function isolation}
-{zhou2024snic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{用 memory denylist、locked TLB、cache partitioning、accelerator virtualizatio。}
-{\begin{itemize}
-  \item 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Virtual SmartNIC launch/destroy lifecycle
-  \item Memory denylist, locked TLB, and DMA isolation
-  \item Cache partitioning, accelerator virtualization, and bus arbitration
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{S-NIC: SmartNIC function isolation}
-{zhou2024snic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{论文报告硬件面积约 +8.89\%，功耗约 +11.45\%，function throughput worst-case 下降小于 1.7\%}
-{\begin{itemize}
-  \item 论文报告硬件面积约 +8.89\%，功耗约 +11.45\%，function throughput worst-case 下降小于 1.7\%
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{S-NIC: SmartNIC function isolation}
-{zhou2024snic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline}
-{为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。}
-{没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。}
-{可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attestation 绑定。}
-
-\PaperSlide
-{内容摘要}
-{TNIC: trusted NIC architecture}
-{giantsidi2025tnic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable aut。}
-{\begin{itemize}
-  \item TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{TNIC: trusted NIC architecture}
-{giantsidi2025tnic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate}
-{\begin{itemize}
-  \item CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{TNIC: trusted NIC architecture}
-{giantsidi2025tnic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议}
-{\begin{itemize}
-  \item 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议
-  \item 用 Tamarin 验证核心性质
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item NIC-level silicon root-of-trust
-  \item Transferable authentication and non-equivocation
-  \item Tamarin-verified protocol core and kernel-bypass stack
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{TNIC: trusted NIC architecture}
-{giantsidi2025tnic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验。}
-{\begin{itemize}
-  \item 论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验证核心性质
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{TNIC: trusted NIC architecture}
-{giantsidi2025tnic}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据}
-{为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据。}
-{不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。}
-{可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。}
-
-\PaperSlide
-{内容摘要}
-{Hazel: secure disaggregated storage data path}
-{chrapek2026hazel}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 fres。}
-{\begin{itemize}
-  \item Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：system
-  \item 证据：E3 / Draft-not-ratified
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Hazel: secure disaggregated storage data path}
-{chrapek2026hazel}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 r。}
-{\begin{itemize}
-  \item confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Hazel: secure disaggregated storage data path}
-{chrapek2026hazel}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual c。}
-{\begin{itemize}
-  \item counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Counter leasing and KBS/TEE-assisted control path
-  \item NVMe metadata plus Hazel Merkle Tree freshness
-  \item BlueField-3 crypto offload for NVMe-oF data path
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Hazel: secure disaggregated storage data path}
-{chrapek2026hazel}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1\%-2\% overhead，IO500 平均约 6.。}
-{\begin{itemize}
-  \item arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1\%-2\% overhead，IO500 平均约 6.3\%，YCSB p99 latency 平均约 2.2\%
-  \item 小随机 freshness I/O 是弱点
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 draft/preprint, not ratified
-  \item 成熟度：draft/preprint, not ratified
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Hazel: secure disaggregated storage data path}
-{chrapek2026hazel}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一。}
-{把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。}
-{仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。}
-{接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。}
-
-\begin{frame}[t]{SmartNIC / trusted NIC / secure storage data path：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{S-NIC: SmartNIC function isolation：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{zhou2024snic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} S-NIC 的核心贡献是为 cloud SmartNIC 上的多租户 network functions 提供硬件辅助隔离。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item S-NIC: SmartNIC function isolation
-  \item TNIC: trusted NIC architecture
-  \item Hazel: secure disaggregated storage data path
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出现代 SmartNIC 对不同 tenants 的 network functions 隔离不足。
+  \item SmartNIC 上的 management OS 也可能威胁 network function state。
+  \item S-NIC 引入 locked-down TLB entries 等机制保护 function memory 和 packet path。
+  \item 它是 cloud SmartNIC isolation 的 foundational systems evidence。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。
-  \item 为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据。
-  \item 没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。
-  \item 不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attestation 绑定。
-  \item 可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。
-  \item 接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{S-NIC isolation flow}
+      \scriptsize \begin{itemize}
+  \item 01. tenant launches network function
+  \item 02. S-NIC OS configures protected context
+  \item 03. locked-down TLB protects memory
+  \item 04. packet path remains isolated
+  \item 05. management OS access constrained
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 1 和 Figure 2 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{S-NIC: SmartNIC function isolation：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{zhou2024snic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} S-NIC 的背景问题是 SmartNIC 已经运行租户代码，但隔离模型还停留在传统 NIC 或 host virtualization 思路。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SmartNIC 运行 DPI、firewall、load balancing 等 network functions。
+  \item 这些 functions 共享 on-NIC CPU、DRAM、accelerators 和 management OS。
+  \item 论文展示 commodity SmartNIC 可让 function 泄露或篡改彼此 state，并造成 shared hardware DoS。
+  \item 因此需要 NIC-local isolation，而不是只依赖 host VM isolation。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SmartNIC attack surface}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{风险} & \textbf{S-NIC 方向} \\
+\midrule
+network function state & tenant 间泄露或篡改 & memory isolation \\
+packet buffers & cross-function corruption & protected packet path \\
+management OS & 高权限访问租户 NF & OS access constrained \\
+accelerators & shared resource DoS & resource-aware isolation \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据摘要、introduction 和 Figure 4。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{S-NIC: SmartNIC function isolation：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{zhou2024snic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} S-NIC 的设计把 network function launch、memory mapping 和 packet processing 都纳入 NIC-local protection。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 2 展示 S-NIC high-level architecture。
+  \item locked-down TLB entries 保护租户 function 的内存映射。
+  \item host-visible management APIs 被重新设计，以减少 management OS 对租户 state 的直接访问。
+  \item Use cases 覆盖 vDPI、multi-tenant isolation 和 service chaining。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{S-NIC launch and protect}
+      \scriptsize \begin{itemize}
+  \item 01. nf\_launch invoked
+  \item 02. protected memory mapped
+  \item 03. locked TLB entries installed
+  \item 04. packets processed by NF
+  \item 05. management API constrained
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 2、Table 1 和 Figure 4 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{S-NIC: SmartNIC function isolation：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{zhou2024snic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} S-NIC 的评估包括 attack demonstrations、hardware cost estimates 和 use-case performance，显示 isolation cost 可控。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文先 empirically demonstrates commodity SmartNIC weak isolation。
+  \item Table 4 估计 virtual TLB bank hardware costs。
+  \item 文本报告某些 hardware-cost configuration 中估计 cost 增加最高约 8.37\%。
+  \item Use cases 展示 S-NIC 可支持实际 network functions。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{S-NIC proof objects}
+      \scriptsize \textbf{estimated cost upper example}\hfill \textcolor{Accent}{\bfseries 8.37\%}\par\textcolor{Accent}{\rule{0.08\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Table 4 discussion}}\par\vspace{1.4mm}
+\textbf{attack evidence}\hfill \textcolor{Accent}{\bfseries empirical}\par\textcolor{Accent}{\rule{0.70\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{contributions}}\par\vspace{1.4mm}
+\textbf{use cases}\hfill \textcolor{Accent}{\bfseries Fig.4}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{sample deployments}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自 Table 4 附近文本；作为硬件成本估计，不是通用产品成本。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{S-NIC: SmartNIC function isolation：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{zhou2024snic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} S-NIC 的价值是把 SmartNIC 视为多租户计算平台，短板是它保护 function isolation，不等于完整 trusted NIC root。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是问题真实，直接展示 commodity SmartNIC isolation gap。
+  \item 不足是重点在 function isolation，而不是 attested NIC root 或 distributed protocol semantics。
+  \item 商业潜力在 cloud NFV、service mesh offload 和 DPU/SmartNIC tenant isolation。
+  \item 落地风险在 NIC vendor integration、management OS updates、accelerator sharing 和 observability。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & SmartNIC tenant function isolation \\
+短板 & 不等同于 attested trusted NIC \\
+落地场景 & NFV/DPU/SmartNIC cloud isolation \\
+风险 & vendor integration and management OS \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价把 S-NIC 限定为 function isolation 系统。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TNIC: trusted NIC architecture：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{giantsidi2025tnic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TNIC 的核心贡献是把最小 formally verified root of trust 放到 NIC hardware，服务高性能 trustworthy distributed systems。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文提出 trusted NIC architecture，用 NIC-level silicon RoT 支持 Byzantine/untrusted cloud environments。
+  \item 设计目标包括 host CPU-agnostic security、minimal verifiable TCB 和 high performance。
+  \item TNIC 提供 attested append-only / non-equivocation 类网络安全基元。
+  \item 它比 S-NIC 更进一步，把 NIC 从隔离平台变成协议可信根。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{TNIC trust path}
+      \scriptsize \begin{itemize}
+  \item 01. host submits network operation
+  \item 02. TNIC attestation kernel checks state
+  \item 03. 100Gb MAC data path transmits
+  \item 04. attested message generated
+  \item 05. remote peer verifies NIC-backed property
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 2-Figure 4 和摘要重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TNIC: trusted NIC architecture：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{giantsidi2025tnic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TNIC 的背景是分布式系统需要低延迟和高吞吐，但 CPU TEE 的异构性和 TCB 代价很难支撑每个网络操作。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item BFT、storage、replication、peer review 等系统需要节点行为可验证。
+  \item 在 heterogeneous cloud 中，CPU TEE 可能有不同 security guarantee 和 programming model。
+  \item 把每个网络操作都放进 CPU TEE 会损害 latency 和 throughput。
+  \item TNIC 因此把可信根放到网络接口，贴近 data path。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CPU TEE vs NIC RoT}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{维度} & \textbf{CPU TEE} & \textbf{TNIC} \\
+\midrule
+位置 & CPU package & network interface \\
+data path & 可能绕路 & 贴近 packet path \\
+TCB & TEE runtime + app & minimal NIC kernel \\
+分布式属性 & 软件协议处理 & hardware-backed message property \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 对比依据 introduction 和 Figure 2。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TNIC: trusted NIC architecture：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{giantsidi2025tnic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TNIC 的设计用 attestation kernel、request/response handlers 和 counters，在 NIC 上生成可验证网络行为。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 2 展示 TNIC hardware architecture，包括 100Gb MAC 和 attestation kernel。
+  \item Figure 3 展示 remote attestation protocol。
+  \item Table 1 给出 TNIC programming APIs。
+  \item 核心 property 包括 non-equivocation 和 transferability。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{TNIC operation}
+      \scriptsize \begin{itemize}
+  \item 01. application invokes TNIC API
+  \item 02. request decoder extracts metadata
+  \item 03. attestation kernel checks counters/state
+  \item 04. message signed/attested
+  \item 05. receiver verifies property
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 2、Figure 3 和 Table 1 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TNIC: trusted NIC architecture：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{giantsidi2025tnic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TNIC 报告相比 CPU TEE software approach 低 3x-5x latency，并在 trusted distributed systems 中最高提升 6x throughput。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 摘要报告 TNIC latency 比 software-based CPU TEE approach 低 3x-5x。
+  \item 摘要报告 TNIC 对 trusted distributed systems throughput 最高提升 6x。
+  \item Figure 5-Figure 7 展示 Attest latency 和 breakdown。
+  \item 这些结果说明 NIC-local RoT 对网络路径有性能价值。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{TNIC key results}
+      \scriptsize \textbf{latency reduction low}\hfill \textcolor{Accent}{\bfseries 3x}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{latency reduction high}\hfill \textcolor{Accent}{\bfseries 5x}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{throughput improvement}\hfill \textcolor{Accent}{\bfseries up to 6x}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{abstract}}\par\vspace{1.4mm}
+\textbf{attest breakdown}\hfill \textcolor{Accent}{\bfseries Fig.5-7}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{latency evidence}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 数字来自摘要，图号来自 evaluation。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TNIC: trusted NIC architecture：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{giantsidi2025tnic}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} TNIC 的价值是把 trusted distributed systems 的可信根放到网络接口，短板是需要 NIC silicon 和形式化硬件生态支持。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是低 latency、高 throughput，并减少 CPU TEE 依赖。
+  \item 不足是需要专用 NIC architecture、formal verification 和 API adoption。
+  \item 商业潜力在 BFT storage、replication、consensus 和 cloud control-plane services。
+  \item 落地风险在 NIC vendor adoption、firmware lifecycle、key provisioning 和 failure recovery。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & NIC-local formally verified RoT \\
+短板 & requires new NIC architecture \\
+落地场景 & BFT/storage/replication/control-plane \\
+风险 & vendor/key/firmware/failure lifecycle \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价结合 TNIC architecture 和 performance claims。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Hazel: secure disaggregated storage data path：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{chrapek2026hazel}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Hazel 的核心贡献是把 NVMe-oF disaggregated storage 的 confidentiality、integrity 和 freshness 放进 confidential computing threat model。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文指出 NVMe-oF 在 HPC 和数据中心广泛使用，但现有 local encryption/integrity 方案难以适配 disaggregated path。
+  \item Hazel 设计 control path 和 data path，支持 counter leasing、metadata 和 HMT。
+  \item 它关注 storage data path，不是 general NIC attestation。
+  \item 它是 E3 draft SOTA，必须保留成熟度边界。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Hazel storage path}
+      \scriptsize \begin{itemize}
+  \item 01. cluster manager schedules TEE
+  \item 02. control path leases counters
+  \item 03. NVMe-oF request issued
+  \item 04. data path applies crypto/integrity
+  \item 05. HMT manages metadata
+  \item 06. storage result returned
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 3-Figure 5 重绘；E3 draft 状态显式保留。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Hazel: secure disaggregated storage data path：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{chrapek2026hazel}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Hazel 的背景问题是本地 dm-crypt/dm-integrity 思路搬到 NVMe-oF 后，会遇到 metadata、CPU 和 freshness 扩展性瓶颈。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item disaggregated storage 把 host TEE、network fabric 和 JBOF SSDs 连接起来。
+  \item local encryption/integrity stack 可能导致 throughput 降低和 CPU usage 上升。
+  \item freshness 需要 counter/metadata 管理，分布式存储路径更难。
+  \item Hazel 因此同时设计 control path 和 optimized data path。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{local storage protection 到 NVMe-oF 的失配}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{问题} & \textbf{local path} & \textbf{disaggregated path} \\
+\midrule
+confidentiality & dm-crypt works locally & network/storage path extends boundary \\
+integrity & metadata local & side metadata must travel/manage \\
+freshness & local counters easier & distributed counter leasing \\
+performance & CPU path acceptable & NVMe-oF throughput sensitive \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 Figure 1-Figure 2 和 introduction。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Hazel: secure disaggregated storage data path：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{chrapek2026hazel}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Hazel 的解决方案是把控制路径的可信调度、数据路径的 sector layout 和 HMT metadata 组合起来。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 3 展示 Hazel control path，从 cluster manager scheduling TEE 开始。
+  \item Figure 4 展示 data path、security encapsulation 和 SSD sector layout。
+  \item Figure 5 介绍 HMT design。
+  \item counter leasing 用于在分布式路径中管理 freshness。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Hazel design pieces}
+      \scriptsize \begin{itemize}
+  \item 01. control path provisions TEE
+  \item 02. counter lease acquired
+  \item 03. sector metadata prepared
+  \item 04. data encrypted/authenticated
+  \item 05. HMT updates metadata
+  \item 06. freshness checked on access
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 3-Figure 5 和 contributions 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Hazel: secure disaggregated storage data path：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{chrapek2026hazel}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Hazel 的评估覆盖 read/write patterns、HMT throughput/latency 和 freshness metadata pollution，是 storage data path 证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Figure 6/7 展示 HMT throughput 和 median/P95 latency。
+  \item Figure 8 展示不同 read patterns 下 Hazel performance。
+  \item Figure 9 展示 freshness performance 随 metadata cache pollution 的变化。
+  \item Figure 10 展示 write patterns 下的 Hazel performance。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Hazel proof objects}
+      \scriptsize \textbf{HMT throughput}\hfill \textcolor{Accent}{\bfseries Fig.6}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{metadata tree}}\par\vspace{1.4mm}
+\textbf{HMT P95 latency}\hfill \textcolor{Accent}{\bfseries Fig.7}\par\textcolor{Accent}{\rule{0.55\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{latency evidence}}\par\vspace{1.4mm}
+\textbf{read patterns}\hfill \textcolor{Accent}{\bfseries Fig.8}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{data path}}\par\vspace{1.4mm}
+\textbf{write patterns}\hfill \textcolor{Accent}{\bfseries Fig.10}\par\textcolor{Accent}{\rule{0.60\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{data path}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 图号来自 Hazel evaluation；不补写未核对具体数值。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Hazel: secure disaggregated storage data path：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{chrapek2026hazel}{E3 / Draft-not-ratified}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Hazel 的价值是把 confidential storage 从本地磁盘扩到 disaggregated NVMe-oF，短板是 draft 成熟度和存储生态集成。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是同时处理 confidentiality、integrity 和 freshness，而非只加密数据。
+  \item 不足是 E3 draft，且依赖 NVMe metadata、TEE scheduling、counter leasing 和 storage stack 修改。
+  \item 商业潜力在 HPC/cloud disaggregated storage 和 confidential data lake。
+  \item 风险在 crash consistency、metadata recovery、multi-tenant key management 和 JBOF vendor support。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & NVMe-oF confidentiality/integrity/freshness \\
+短板 & E3 draft and storage-stack integration \\
+落地场景 & HPC/cloud disaggregated storage \\
+风险 & crash recovery/key/vendor support \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价保留 Hazel draft status，不写成成熟产品。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SmartNIC / trusted NIC / secure storage data path：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{15-smartnic-trusted-nic-storage}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} SmartNIC/NIC/storage 的 takeaway 是 data-path endpoint 本身会变成可信计算平台，必须分别看 isolation、RoT 和 freshness。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item S-NIC 解决 SmartNIC 上 tenant network function isolation。
+  \item TNIC 把 verified trust root 放进 NIC hardware。
+  \item Hazel 把 confidential storage 的 freshness/integrity 带到 NVMe-oF data path。
+  \item 三者共同说明 device endpoint 不只是被动外设，而是需要独立证据的计算和安全边界。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三类 endpoint trust}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{系统} & \textbf{可信对象} & \textbf{主要边界} \\
+\midrule
+S-NIC & SmartNIC network function isolation & 不是 attested NIC root \\
+TNIC & NIC hardware RoT & 需要 new NIC architecture \\
+Hazel & storage freshness/integrity path & E3 draft and storage integration \\
+共同问题 & device endpoint evidence & 需要和 SPDM/TDISP/verifier policy 组合 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结按 endpoint trust 类型分类。}}
 \end{frame}

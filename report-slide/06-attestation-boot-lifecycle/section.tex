@@ -1,293 +1,793 @@
 \section{Attestation、boot、lifecycle}
 
-\begin{frame}[t]{Attestation、boot、lifecycle：方向开场}
-\DeckKicker{06-attestation-boot-lifecycle}
-\ClaimLine{区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。}
+\begin{frame}[t,shrink=6]{Attestation、boot、lifecycle：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{06-attestation-boot-lifecycle}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} Attestation 这一节要区分早期 memory attestation、现代 RATS 角色模型和 verified RA co-design。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`rats\_rfc` 主讲 attestation architecture，`eat\_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{SWATT: 软件 attestation 早期代表}{E1 / Foundational}
-\PrimaryCard{Primary 2 / spec}{RATS 架构}{E0 / Spec-standard SOTA}
-\PrimaryCard{Primary 3 / system}{VRASED verified RA co-design}{E1 / Peer-reviewed SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SWATT 是软件 attestation 的早期代表，强调 verifier 如何检测 embedded device memory 被改。
+  \item RATS RFC 9334 给出现代远程证明的概念角色：attester、verifier、relying party、endorser。
+  \item VRASED 把 RA 变成硬件/软件 co-design，并对关键安全性质做形式化验证。
+  \item 三篇共同形成从 checksum challenge 到标准角色模型再到 verified design 的演进链。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item seshadri2004swatt: system；E1；local\_pdf\_verified
-  \item rats\_rfc: spec；E0；local\_pdf\_verified
-  \item nunes2019vrased: system；E1；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RA 证据演进}
+      \scriptsize \textcolor{Accent}{\bfseries SWATT 2004}\par\textbf{software memory attestation}\par{\tiny\textcolor{Muted}{checksum challenge}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries RFC 9334}\par\textbf{RATS architecture}\par{\tiny\textcolor{Muted}{attester/verifier roles}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries VRASED 2019}\par\textbf{verified HW/SW RA}\par{\tiny\textcolor{Muted}{verified co-design}}\par\vspace{1.6mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 本页建立 attestation 主线，不把 boot、launch、runtime evidence 混成同一概念。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容}
-{\begin{itemize}
-  \item 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Foundational
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态}
-{\begin{itemize}
-  \item 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum}
-{\begin{itemize}
-  \item 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Software-only remote attestation
-  \item Timing-sensitive memory checksum
-  \item Verifier/prover challenge-response model
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{论文在嵌入式节点场景评估}
-{\begin{itemize}
-  \item 论文在嵌入式节点场景评估
-  \item 安全性强依赖 timing、硬件和网络假设
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因}
-{历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。}
-{面对现代强对手和复杂 SoC/TEE 时适用性有限。}
-{现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。}
-
-\PaperSlide
-{内容摘要}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{定义 attester、verifier、relying party、evidence、endorsements、reference values。}
-{\begin{itemize}
-  \item 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。}
-{\begin{itemize}
-  \item 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{RATS 规范化 evidence 生成、传递、评估角色与拓扑}
-{\begin{itemize}
-  \item RATS 规范化 evidence 生成、传递、评估角色与拓扑
-  \item `eat\_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Attester/verifier/relying-party roles
-  \item Evidence, endorsements, reference values and appraisal policy
-  \item Attestation results and freshness vocabulary
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{是跨平台 attestation 术语和 verifier policy 的权威基线}
-{是跨平台 attestation 术语和 verifier policy 的权威基线。}
-{不证明任一平台测量链充分，也不定义完整 token claim encoding。}
-{标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。}
-
-\PaperSlide
-{内容摘要}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。}
-{\begin{itemize}
-  \item 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明}
-{\begin{itemize}
-  \item RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性}
-{\begin{itemize}
-  \item 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Hardware/software RA root co-design
-  \item Formal verification of security sub-properties
-  \item MSP430/Basys3 FPGA implementation
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{USENIX Security 2019 peer-reviewed paper}
-{\begin{itemize}
-  \item USENIX Security 2019 peer-reviewed paper
-  \item reports prototype and verification evidence for simple embedded devices.
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{证据强，结合形式化验证、硬件/软件 co-design 和真实原型}
-{证据强，结合形式化验证、硬件/软件 co-design 和真实原型。}
-{目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。}
-{适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。}
-
-\begin{frame}[t]{Attestation、boot、lifecycle：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{seshadri2004swatt}{E1 / Foundational}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SWATT 的核心贡献是不用专用安全硬件，也尝试让 verifier 判断 embedded device 当前内存是否被篡改。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item SWATT: 软件 attestation 早期代表
-  \item RATS 架构
-  \item VRASED verified RA co-design
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文面向 embedded devices，假设攻击者可能修改软件或配置。
+  \item verifier 发送 challenge，device 运行精心设计的 checksum procedure。
+  \item 安全直觉是攻击者若要隐藏改动，就需要额外模拟或搬运内存，从而导致时间差。
+  \item 它是远程软件 attestation 的历史起点，但 threat model 很强依赖时序和硬件假设。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
-  \item 是跨平台 attestation 术语和 verifier policy 的权威基线。
-  \item 面对现代强对手和复杂 SoC/TEE 时适用性有限。
-  \item 不证明任一平台测量链充分，也不定义完整 token claim encoding。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
-  \item 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
-  \item 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SWATT challenge flow}
+      \scriptsize \begin{itemize}
+  \item 01. verifier 发送 nonce/challenge
+  \item 02. device 执行 checksum procedure
+  \item 03. 伪随机遍历 memory
+  \item 04. 返回 checksum 和 timing
+  \item 05. verifier 判断是否异常
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 1、Figure 3 和摘要重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{seshadri2004swatt}{E1 / Foundational}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SWATT 的背景是低成本 embedded device 无法普遍加入 TPM/secure hardware，但仍需要远程完整性检查。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 作者设想未来大量 embedded devices 被网络连接并处理隐私和安全相关任务。
+  \item 硬件成本对嵌入式设备敏感，少量成本增加也会在规模部署中放大。
+  \item verifier 无法直接读取远端设备内存，只能通过挑战应答间接判断。
+  \item 这推动了 software-only attestation 的研究，但也埋下对 timing assumption 的依赖。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{软件 attestation 的前提}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{前提} & \textbf{SWATT 使用方式} & \textbf{风险} \\
+\midrule
+低成本设备 & 不要求专用安全硬件 & 硬件假设强 \\
+远程 verifier & challenge-response & 网络 timing noise \\
+攻击者改内存 & checksum 覆盖 memory & 模拟攻击要靠时间差检测 \\
+固定程序 & 优化 assembly & 可移植性受限 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 introduction 和 Figure 1 的攻击模型。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{seshadri2004swatt}{E1 / Foundational}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SWATT 的方案设计围绕一个目标：让恶意设备既返回正确 checksum 又不超时变得困难。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item checksum procedure 使用伪随机 memory traversal，减少攻击者提前准备的空间。
+  \item 实现强调 tight loop 和硬件特定时序，让额外分支或模拟内存访问可被 verifier 观察。
+  \item RC4 PRG 用于生成 memory access sequence。
+  \item 这种机制适合讲 RA 思想起源，但今天不能直接套到复杂 TEE 或云服务器。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{checksum 约束逻辑}
+      \scriptsize \begin{itemize}
+  \item 01. nonce 初始化 PRG
+  \item 02. 生成伪随机地址
+  \item 03. 读取 memory word
+  \item 04. 更新 checksum state
+  \item 05. 返回结果和时间
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 Figure 3、Figure 4 和 checksum procedure 描述重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{seshadri2004swatt}{E1 / Foundational}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SWATT 的实验证据关注 timing detectability：攻击者插入额外检查或模拟内存，会让 verification procedure 运行时间变长。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文用 memory verification attack 展示攻击者如何替换验证代码并隐藏旧代码。
+  \item 作者强调优化后的 verification body 使额外 if statement 或内存模拟产生可观察时间差。
+  \item 实验结论依赖 verifier 对 expected execution time 的掌握。
+  \item 这类证据适合低成本 embedded setting，不应外推到 modern cloud attestation。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{SWATT 证据读法}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{观察} & \textbf{含义} \\
+\midrule
+正确 checksum & 内存可能未被改或攻击者成功模拟 \\
+运行时间正常 & 攻击者没有明显额外工作 \\
+运行时间变长 & 可能存在隐藏/模拟行为 \\
+硬件改变 & SWATT threat model 可能失效 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 证据读法依据 Figure 1 和 verification timing 讨论。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{seshadri2004swatt}{E1 / Foundational}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} SWATT 的历史价值很高，但今天它更多是 RA 思想起点，而不是现代 TEE attestation 的充分方案。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是提出了在无专用安全硬件下做远程完整性检查的清晰问题。
+  \item 不足是依赖 timing、硬件不可修改和简单 embedded setting。
+  \item 商业落地潜力在低成本设备完整性检测，但对现代云 TEE 不够。
+  \item 后续 RATS 和 VRASED 分别补上标准角色模型和硬件辅助验证。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & RA 问题设定清楚 \\
+短板 & timing 和硬件假设强 \\
+落地场景 & 低成本 embedded integrity check \\
+后续演进 & RATS 角色模型和 VRASED verified design \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价把 SWATT 放在 RA 历史起点，不外推到云 TEE。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{rats\_rfc}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RATS RFC 9334 的贡献是统一远程证明角色和证据流，而不是提出某个 TEE 的新实现；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item RFC 9334 定义 Remote ATtestation procedureS architecture。
+  \item 它把 attester、verifier、relying party、endorser 等角色拆开。
+  \item 它还讨论 evidence、attestation result、endorsement 和 appraisal policy。
+  \item 这使后续 CCA/CoVE/SPDM/TLS+RA 都能放进同一 evidence chain 语言。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RATS evidence flow}
+      \scriptsize \begin{itemize}
+  \item 01. Attester 生成 Evidence
+  \item 02. Verifier 取 Endorsement
+  \item 03. Verifier 执行 appraisal policy
+  \item 04. 输出 Attestation Result
+  \item 05. Relying Party 做授权决策
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；流程按 RFC 9334 的 architecture roles 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{rats\_rfc}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 没有 RATS 这样的角色模型，attestation 很容易被误写成单个 quote 或单次 challenge。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 现代 confidential computing 的 evidence chain 包含硬件根、firmware、measurement、verifier policy 和 relying-party action。
+  \item 不同 TEE 的 quote/report 格式不同，但都需要解释谁生成、谁验证、谁依赖结果。
+  \item RATS 把这些角色标准化，方便跨 Arm CCA、RISC-V CoVE、device attestation 和 TLS+RA 比较。
+  \item 它强调架构语义，不给某个硬件平台背书。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{quote 之外的角色}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{角色} & \textbf{职责} & \textbf{本报告对应} \\
+\midrule
+Attester & 产生 evidence & Realm/TVM/device endpoint \\
+Verifier & 验证 evidence & 云 verifier 或 tenant service \\
+Endorser & 发布 endorsement & vendor/root authority \\
+Relying Party & 根据 result 决策 & key release / service admission \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；角色表依据 RFC 9334 Section 3-4。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{rats\_rfc}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RATS 的方案价值是把证据、背书、策略和结果拆开，让 attestation 可以组合进 boot、lifecycle 和 channel binding。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item Evidence 是 attester 对自身状态的声明，不等于最终授权。
+  \item Endorsement 给 verifier 提供制造商或平台根的参考信息。
+  \item Verifier 根据 appraisal policy 产出 attestation result。
+  \item Relying party 再把结果用于 key release、connection admission 或 workload placement。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{从 evidence 到决策}
+      \scriptsize \begin{itemize}
+  \item 01. collect measurements
+  \item 02. produce evidence
+  \item 03. fetch endorsements
+  \item 04. appraise evidence
+  \item 05. emit result
+  \item 06. authorize action
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；流程重绘自 RFC 9334 evidence/appraisal 模型。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{rats\_rfc}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RFC 9334 是架构规范，无新实验；它证明的是术语和角色语义，不证明某个证明链部署可靠。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item RFC 9334 是 Informational RFC，不是系统论文。
+  \item 它提供跨平台 attestation 的 reference architecture。
+  \item 它不提供某个 TEE 的量化结果或安全性实证。
+  \item 本报告用它统一语言，再用 SWATT/VRASED/TLS+RA 等材料补具体系统证据。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RFC 9334 证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{可证明} & \textbf{不能证明} \\
+\midrule
+角色和消息语义 & 某平台部署安全 \\
+evidence/result 区分 & 具体 quote 格式正确 \\
+架构拓扑 & verifier policy 充分 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；本页只写 E0 architecture evidence。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{rats\_rfc}{E0 / Spec-standard SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RATS 的强项是概念分层，短板是它不替任何平台做安全保证；无新实验。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 attestation evidence chain 的角色和术语固定下来。
+  \item 不足是没有规定某个 TEE 的具体 measurement schema 或 verifier policy。
+  \item 商业落地价值在跨供应商 attestation service、key release 和 compliance workflow。
+  \item 风险在 endorsement supply chain、policy drift 和 relying party 对 result 的误用。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & 统一 evidence chain 语言 \\
+短板 & 不定义具体平台安全结果 \\
+落地价值 & verifier/key-release/service admission \\
+风险 & endorsement 和 policy 管理 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 无新实验；评价只针对架构规范角色。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{nunes2019vrased}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} VRASED 的核心贡献是把远程证明做成 verified hardware/software co-design，明确保护 attestation key 和原子执行。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文提出 VRASED，用硬件模块和软件 attestation routine 共同保证 RA 属性。
+  \item 硬件模块控制 secret key 访问，并保证 SW-Att 的安全和原子执行。
+  \item 软件部分使用 HACL* HMAC-SHA256，并与形式化验证框架结合。
+  \item 它比 SWATT 更接近现代可信根思路，但仍面向较小设备环境。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{VRASED co-design}
+      \scriptsize \begin{itemize}
+  \item 01. verifier 发送 challenge
+  \item 02. HW-Mod 保护 key
+  \item 03. SW-Att 原子读取 memory
+  \item 04. HMAC 生成 attestation token
+  \item 05. verifier 检查响应
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 流程按 VRASED 摘要和 HW-Mod/SW-Att 设计章节重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{nunes2019vrased}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} VRASED 的背景问题是 RA 不能只靠一段软件，key secrecy、atomicity 和 control-flow 都必须被硬件约束。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SWATT 类方法依赖 timing 和软件约束，难以覆盖更强攻击者。
+  \item TPM 等方案可提供硬件根，但可能不适合所有低端设备或形式化证明目标。
+  \item RA 安全性需要保证 attestation key 不泄露、证明代码不可被中断或篡改、测量范围明确。
+  \item VRASED 因此把最小硬件模块和 verified software routine 组合起来。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RA 必要性质}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{性质} & \textbf{为什么需要} & \textbf{VRASED 做法} \\
+\midrule
+key secrecy & 攻击者不能伪造 token & HW-Mod 约束 key access \\
+atomicity & 测量过程不能被插入 & 硬件控制 SW-Att execution \\
+memory coverage & 证明当前 memory & SW-Att 遍历范围 \\
+formal assurance & 实现不能只靠经验 & model checking / verified components \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 VRASED threat model 和 security properties。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{nunes2019vrased}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} VRASED 的设计把小硬件 TCB 放在 key 和 execution control 上，把复杂 hash/HMAC 留给可验证软件。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item HW-Mod 负责保证 Prv 的访问控制和 SW-Att 的安全执行。
+  \item SW-Att 负责读取 memory 并调用 verified HMAC-SHA256。
+  \item 硬件和软件分别验证，再组合成端到端 RA security argument。
+  \item 这种拆分说明 RA 的 TCB 不必很大，但必须覆盖正确位置。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{TCB 分工}
+      \scriptsize \textbf{HW-Mod}\par
+protect key → control entry → enforce atomicity → reset-sensitive state\par
+{\tiny\textcolor{Muted}{small hardware TCB}}\par\vspace{1.8mm}
+\textbf{SW-Att}\par
+read memory → compute HMAC → return token → verified crypto\par
+{\tiny\textcolor{Muted}{verified software routine}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 分工按 VRASED Section 4 和 Section 6 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{nunes2019vrased}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} VRASED 的实证重点是硬件/软件实现代价和验证复杂度，证明 verified RA co-design 可以落到小型平台。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文实现并评估 HW-Mod 与 SW-Att 的组合。
+  \item 它报告 HACL* verified HMAC-SHA256 作为软件密码组件。
+  \item 它比较硬件资源、Verilog code 和 verification complexity。
+  \item 结果支撑 verified RA 可实现，但不等同于云 TEE launch attestation。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{VRASED 结果读法}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{证据} & \textbf{含义} \\
+\midrule
+HW-Mod 实现 & 关键访问控制可放入小硬件 \\
+SW-Att + HACL* & 密码 routine 可验证 \\
+verification complexity & 安全属性不是口头声明 \\
+embedded target & 不直接代表云 TEE \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 结果按 Section 5-6 概括，未外推到 CCA/CoVE。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{nunes2019vrased}{E1 / Peer-reviewed SOTA}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} VRASED 的强项是可信根最小化和形式化保证；短板是适用场景比云 confidential VM 更窄。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点是把 RA security properties 明确分配给硬件和软件。
+  \item 不足是它主要面向 embedded RA，不处理复杂 VM launch、device evidence 或 verifier policy。
+  \item 商业潜力在 MCU/IoT 和低端设备的强完整性证明。
+  \item 对本报告的启发是：attestation 不是 quote 格式，而是 key、measurement、atomicity 和 verifier policy 的组合。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & verified HW/SW RA co-design \\
+短板 & 不覆盖云 VM/device endpoint 全部链条 \\
+落地场景 & embedded/IoT attestation \\
+启发 & RA 需要 key、measurement、atomicity、policy 同时成立 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价连接 VRASED 的 verified design 与 RATS 的 architecture roles。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Attestation、boot、lifecycle：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{06-attestation-boot-lifecycle}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} Attestation 主线从 SWATT 的 checksum challenge，发展到 RATS 的角色模型，再到 VRASED 的 verified可信根。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item SWATT 说明 RA 的原始问题是远程判断当前设备状态。
+  \item RATS 说明现代系统必须拆分 attester、verifier、endorser 和 relying party。
+  \item VRASED 说明关键安全性质需要硬件和软件共同保证。
+  \item 后续 CCA/CoVE/SPDM/TLS+RA 都应放到 evidence chain，而不是只看单个 quote。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{来源} & \textbf{核心作用} & \textbf{不能承担} \\
+\midrule
+SWATT & RA 问题起点 & 现代云 TEE 方案 \\
+RATS & 角色和 evidence chain & 平台安全背书 \\
+VRASED & verified HW/SW RA & device/VM 全生命周期 \\
+后续章节 & 把 evidence chain 接到 CCA/CoVE/I/O & 不混写 boot 和 runtime \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 方向总结按三篇材料的历史、标准和 verified design 分工组织。}}
 \end{frame}

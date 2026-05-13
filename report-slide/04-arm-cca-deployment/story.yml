@@ -1,0 +1,437 @@
+direction: "Arm CCA 细粒度隔离与部署模型"
+story_version: 1
+slides:
+- slide_id: d04-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "CCA deployment 这节讨论的是 Realm 抽象如何下沉到用户态、容器和进程内隔离，而不是重复 CCA 基础机制。"
+  narrative:
+  - "Shelter 把 CCA/RME 用到 Normal world user-space isolation，重点是 multi-GPT 和 minimal TCB。"
+  - "RContainer 把 CCA primitive 改造成 container isolation，解决云原生部署中的轻量隔离问题。"
+  - "NanoZone 把粒度进一步推到 CVM 内部安全域和 session-key isolation，但它是 E3 draft。"
+  - "三篇共同说明 CCA 不只服务 VM 级 Realm，也会被重新组合成更细粒度的 deployment model。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 04-arm-cca-deployment."
+  - "Shelter p.1 abstract; RContainer p.1 abstract; NanoZone p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "CCA deployment 粒度演进"
+    data:
+      steps:
+      - label: "Shelter"
+        claim: "user-space isolation"
+        evidence: "multi-GPT, <15% workload overhead"
+      - label: "RContainer"
+        claim: "container isolation"
+        evidence: "mixed-pagetable, lifecycle evaluation"
+      - label: "NanoZone"
+        claim: "intra-CVM domains"
+        evidence: "draft, 20% overhead and 95% throughput claim"
+  source_note: "方向页只建立粒度演进；NanoZone draft 状态保持显式。"
+
+- slide_id: d04-01-shelter-summary
+  paper_key: zhang2023shelter
+  slide_type: summary
+  claim: "Shelter 的核心贡献是用 Arm CCA/RME 的 GPT 能力，为 Normal world 用户态应用构造更小 TCB 的隔离区。"
+  narrative:
+  - "论文观察到许多 TrustZone/TEE 方案把 trusted OS 或 hypervisor 放进 TCB，而 CCA 的 Root world 提供了新的隔离机会。"
+  - "Shelter 引入 Monitor 和 multi-GPT，让 user-space application 在 Normal world 中获得硬件辅助隔离。"
+  - "它不是创建传统 Realm VM，而是把 CCA primitive 重组为用户态隔离机制。"
+  - "这使它成为 CCA deployment 章节的第一篇主讲系统。"
+  evidence_refs:
+  - "Shelter p.1 abstract: extends Arm CCA with isolation in user space and minimal TCB."
+  - "Shelter Fig.2: overview of Shelter and Monitor; Fig.3: multi-GPT design."
+  proof_object:
+    type: mechanism_flow
+    title: "Shelter 机制路径"
+    data:
+      stages:
+      - "应用请求 Shelter"
+      - "Monitor 管理隔离生命周期"
+      - "multi-GPT 切换访问权限"
+      - "Root world enforcement"
+      - "Normal world 应用隔离运行"
+  source_note: "机制图按 Figure 2 和 Figure 3 重绘。"
+
+- slide_id: d04-02-shelter-background
+  paper_key: zhang2023shelter
+  slide_type: background
+  claim: "Shelter 的背景问题是很多应用只需要保护用户态秘密，却被迫承担 VM/TEE OS 级别的 TCB 和部署成本。"
+  narrative:
+  - "TrustZone 能隔离 secure services，但 third-party application 难以直接获得细粒度保护。"
+  - "CCA 原生 Realm 更面向 VM 级 confidential computing，不自然等同于用户态小隔离区。"
+  - "如果把完整 OS 或 hypervisor 纳入 TCB，会削弱小型 trusted computing base 的目标。"
+  - "Shelter 因此选择利用 RME/GPT，把隔离粒度下沉到用户态。"
+  evidence_refs:
+  - "Shelter p.1 introduction: TrustZone limitations and need for user-space isolation."
+  - "Shelter Table 1: physical address access permissions on Arm CCA."
+  proof_object:
+    type: comparison_matrix
+    title: "部署粒度问题"
+    data:
+      columns: ["方案", "优势", "成本"]
+      rows:
+      - ["TrustZone TA", "成熟 secure service 模型", "生态封闭且 TCB 复杂"]
+      - ["Realm VM", "强 VM 隔离", "粒度偏粗"]
+      - ["Shelter", "用户态细粒度隔离", "需要新 Monitor/GPT 管理"]
+  source_note: "矩阵依据 Shelter introduction 和 Table 1 的 CCA permission 背景。"
+
+- slide_id: d04-03-shelter-solution
+  paper_key: zhang2023shelter
+  slide_type: solution
+  claim: "Shelter 的设计关键是 multi-GPT：用多个 GPT 视图控制同一物理内存在不同上下文中的可见性。"
+  narrative:
+  - "Monitor 在 Root world 管理 Shelter 生命周期，并协调 Normal world OS、SPM 和 RMM 的边界。"
+  - "multi-GPT 让 Shelter memory 在不同执行阶段拥有不同访问属性。"
+  - "shadow GPT construction 降低 GPT 构造成本。"
+  - "这种做法把 CCA 的 granule 权限从 VM 级抽象转成应用级隔离工具。"
+  evidence_refs:
+  - "Shelter Fig.2: system overview and Monitor position."
+  - "Shelter Fig.3 and Table 2: multi-GPT design and GPI encoding."
+  proof_object:
+    type: mechanism_flow
+    title: "multi-GPT 生命周期"
+    data:
+      stages:
+      - "分配 Shelter memory"
+      - "构造 Shelter GPT"
+      - "切换访问权限"
+      - "进入隔离执行"
+      - "退出并清理 memory/cache"
+  source_note: "流程按 Figure 3、Table 2 和 lifecycle 描述重绘。"
+
+- slide_id: d04-04-shelter-experiments
+  paper_key: zhang2023shelter
+  slide_type: experiments
+  claim: "Shelter 的结果显示 real-world workload modest overhead 小于 15%，shadow GPT 平均降低 77.5% GPT construction overhead。"
+  narrative:
+  - "摘要报告 real-world workloads 上 modest performance overhead 小于 15%。"
+  - "Table 5/6 分解 Shelter lifecycle operation costs。"
+  - "Figure 5 显示 shadow GPT construction 能平均降低 77.5% GPT construction overhead。"
+  - "这些结果支撑用户态隔离可行性，但不证明 container 或 accelerator 场景。"
+  evidence_refs:
+  - "Shelter p.1 abstract: modest performance overhead <15% on real-world workloads."
+  - "Shelter Table 5-Table 6 and Fig.5: operation breakdown and 77.5% GPT construction overhead reduction."
+  proof_object:
+    type: metric_bars
+    title: "Shelter 关键数字"
+    data:
+      metrics:
+      - label: "real-world workload overhead"
+        value: "<15%"
+        bar: 15
+        note: "abstract"
+      - label: "GPT construction reduction"
+        value: "77.5%"
+        bar: 78
+        note: "Fig.5"
+      - label: "evidence class"
+        value: "E1"
+        bar: 55
+        note: "peer-reviewed system paper"
+  source_note: "数字来自摘要和 Figure 5；未外推到其它 deployment 模型。"
+
+- slide_id: d04-05-shelter-evaluation
+  paper_key: zhang2023shelter
+  slide_type: evaluation
+  claim: "Shelter 证明 CCA primitive 可被重组为用户态隔离，但它的部署边界仍依赖 Monitor、GPT 管理和应用改造。"
+  narrative:
+  - "优点是把 CCA 的硬件隔离能力引入更细粒度应用场景。"
+  - "不足是需要新增 Monitor 和 lifecycle 管理，且不是原生 Realm VM 模型。"
+  - "商业潜力在移动/边缘设备上的敏感用户态组件保护。"
+  - "落地风险包括 ABI 稳定性、内存回收、cache 清理和与现有 OS 安全模型的整合。"
+  evidence_refs:
+  - "Shelter Fig.2-Fig.3: Monitor and multi-GPT design."
+  - "Shelter conclusion: CCA/RME-based user-space isolation with minimal TCB."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "把 CCA/RME 用到用户态隔离"]
+      - ["短板", "新增 Monitor 和 GPT lifecycle 复杂度"]
+      - ["落地场景", "敏感应用、移动/边缘 secure component"]
+      - ["不能承担", "container/accelerator/I/O 安全结论"]
+  source_note: "评价结合设计图、实验数字和论文 conclusion。"
+
+- slide_id: d04-06-rcontainer-summary
+  paper_key: zhou2025rcontainer
+  slide_type: summary
+  claim: "RContainer 的核心是把 CCA 硬件 primitive 改造成 container isolation，而不是把容器简单塞进一个 VM。"
+  narrative:
+  - "论文面向云原生容器的弱隔离问题。"
+  - "它扩展 Arm CCA hardware primitives，为 containers 提供来自不可信 OS 的保护和 container 间强隔离。"
+  - "设计包括 mixed-pagetable、container security monitor 和 lightweight runtime support。"
+  - "它比 Shelter 更靠近云部署场景，是 CCA containerization 的主证据。"
+  evidence_refs:
+  - "RContainer p.1 abstract: secure container architecture through extending ARM CCA hardware primitives."
+  - "RContainer Fig.1: architecture; Fig.2: mixed-pagetable."
+  proof_object:
+    type: mechanism_flow
+    title: "RContainer 架构路径"
+    data:
+      stages:
+      - "container launch"
+      - "security monitor setup"
+      - "mixed-pagetable isolation"
+      - "protected container execution"
+      - "lifecycle cleanup"
+  source_note: "机制图按 Figure 1 和 Figure 2 重绘。"
+
+- slide_id: d04-07-rcontainer-background
+  paper_key: zhou2025rcontainer
+  slide_type: background
+  claim: "容器的问题不是性能，而是弱隔离；虚拟机能补安全但会破坏容器轻量化目标。"
+  narrative:
+  - "容器因部署快和资源利用率高而广泛用于云平台。"
+  - "但容器共享 host kernel，隔离强度弱于 VM。"
+  - "把容器放进完整 VM 能增强隔离，却引入 heavyweight virtualization 和更高运行成本。"
+  - "RContainer 试图用 CCA primitive 让容器保持轻量，同时从 untrusted OS 中隔离。"
+  evidence_refs:
+  - "RContainer p.1 abstract and introduction: container weak isolation and virtualization tradeoff."
+  - "RContainer Section II: background and threat model for secure containers."
+  proof_object:
+    type: comparison_matrix
+    title: "container isolation tradeoff"
+    data:
+      columns: ["方案", "强项", "短板"]
+      rows:
+      - ["Native container", "轻量、高密度", "共享 kernel 隔离弱"]
+      - ["Container in VM", "隔离强", "启动和资源成本高"]
+      - ["RContainer", "CCA-backed container isolation", "需要硬件/monitor 支持"]
+  source_note: "矩阵依据摘要和 introduction 对容器隔离问题的设定。"
+
+- slide_id: d04-08-rcontainer-solution
+  paper_key: zhou2025rcontainer
+  slide_type: solution
+  claim: "RContainer 的关键机制是 mixed-pagetable 和少量 privileged monitor 支持，把容器内存从 host kernel 中隔出来。"
+  narrative:
+  - "Fig.1 展示 RContainer architecture，将 container security monitor 放入关键路径。"
+  - "Fig.2 的 mixed-pagetable 解决容器地址空间和保护属性的组合问题。"
+  - "论文还向 ATF 增加少量 SMC calls 来支持 GPT 切换和批量 GPI 设置。"
+  - "它的设计目标是强隔离、低 TCB 和容器生态兼容之间取平衡。"
+  evidence_refs:
+  - "RContainer Fig.1-Fig.2: architecture and mixed-pagetable."
+  - "RContainer conclusion and implementation discussion: SMC_GPT_SET_GPTBR_EL3 and SMC_GPT_SET_GPI_BATCH."
+  proof_object:
+    type: mechanism_flow
+    title: "RContainer 保护流程"
+    data:
+      stages:
+      - "runtime 创建 protected container"
+      - "monitor 配置 GPT/pagetable"
+      - "mixed-pagetable 映射 container memory"
+      - "OS 只能管理非敏感部分"
+      - "container lifecycle 受控结束"
+  source_note: "流程按 Figure 1、Figure 2 和 conclusion 中的 SMC/GPT 描述重绘。"
+
+- slide_id: d04-09-rcontainer-experiments
+  paper_key: zhou2025rcontainer
+  slide_type: experiments
+  claim: "RContainer 的评估覆盖 Lmbench、web/db/network workloads 和 lifecycle cost，并报告 runtime support 只占约 2.7% code。"
+  narrative:
+  - "Figure 4 使用 Lmbench microbenchmark 衡量基础操作。"
+  - "Figure 5 覆盖 Apache、Nginx、Hackbench、Memcached、MySQL、Netperf 等 workload。"
+  - "Figure 7 展示 lifecycle cost 与 Native Docker 的对比。"
+  - "Table VII 显示 runtime support code 约 2.7%，用于支撑低 TCB 论点。"
+  evidence_refs:
+  - "RContainer Fig.4-Fig.7: Lmbench, workload performance and lifecycle cost."
+  - "RContainer Table VII: runtime support code is 2.7% of code."
+  proof_object:
+    type: metric_bars
+    title: "RContainer 证据对象"
+    data:
+      metrics:
+      - label: "runtime support code"
+        value: "2.7%"
+        bar: 27
+        note: "Table VII"
+      - label: "microbenchmark coverage"
+        value: "Lmbench"
+        bar: 60
+        note: "Fig.4"
+      - label: "workload coverage"
+        value: "6 classes"
+        bar: 70
+        note: "Fig.5"
+      - label: "lifecycle comparison"
+        value: "Docker baseline"
+        bar: 55
+        note: "Fig.7"
+  source_note: "图表按 Figure 4-Figure 7 与 Table VII 归纳；未复制原图。"
+
+- slide_id: d04-10-rcontainer-evaluation
+  paper_key: zhou2025rcontainer
+  slide_type: evaluation
+  claim: "RContainer 的价值在于把 CCA 推向云原生形态，但它也把 container runtime、monitor 和 GPT 管理变成新的工程约束。"
+  narrative:
+  - "优点是直接瞄准容器弱隔离这个高价值部署问题。"
+  - "不足是需要改硬件/firmware/monitor 路径，且论文评估平台与真实云规模仍有距离。"
+  - "商业潜力在机密容器、serverless 和多租户 PaaS。"
+  - "风险在容器生态兼容、debug/observability、sidecar/network/storage 路径是否同步保护。"
+  evidence_refs:
+  - "RContainer Fig.1-Fig.2: architecture and mixed-pagetable design."
+  - "RContainer Fig.5-Fig.8: workload and scaling evaluation."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "CCA-backed container isolation"]
+      - ["短板", "monitor/GPT/runtime 集成复杂"]
+      - ["落地场景", "机密容器和 serverless"]
+      - ["风险", "网络、存储、sidecar 路径需要额外保护"]
+  source_note: "评价结合 RContainer 的架构图、workload 评估和本报告 I/O 边界。"
+
+- slide_id: d04-11-nanozone-summary
+  paper_key: liu2025nanozone
+  slide_type: summary
+  claim: "NanoZone 把 CCA 隔离粒度推进到 CVM 内部安全域，但它是 2025 draft，必须保留成熟度边界。"
+  narrative:
+  - "论文关注 Arm CCA 当前以整个 CVM 为主要隔离粒度的问题。"
+  - "它提出 NanoZone，为 CVM 内部不同敏感组件提供细粒度内存保护。"
+  - "设计涉及 user-level domain switch、permission overlay 和 code-pointer integrity。"
+  - "本报告把它作为 E3 draft SOTA，不写成 ratified 或 peer-reviewed 事实。"
+  evidence_refs:
+  - "NanoZone p.1 abstract: scalable, efficient, secure memory protection for Arm CCA."
+  - "NanoZone Fig.1: comparison between NanoZone and other CCA-based TEEs."
+  proof_object:
+    type: mechanism_flow
+    title: "NanoZone 目标路径"
+    data:
+      stages:
+      - "CVM 内部划分安全域"
+      - "配置 permission overlay"
+      - "user-level domain switch"
+      - "CPI 防 domain-switch abuse"
+      - "保护 session-key 等敏感对象"
+  source_note: "机制路径依据摘要、Figure 1 和 introduction；draft 状态显式保留。"
+
+- slide_id: d04-12-nanozone-background
+  paper_key: liu2025nanozone
+  slide_type: background
+  claim: "CVM 级隔离不能自动解决 CVM 内部的大 TCB 问题，特别是内核和大型应用中的 privilege-escalation bug。"
+  narrative:
+  - "现代 Linux 和安全关键应用代码量很大，CVM 内部漏洞仍可能泄露 secrets。"
+  - "Realm/CVM 保护的是对外部 host 的隔离，不等于内部最小权限。"
+  - "细粒度内存保护希望把 session key、crypto state、sensitive module 与其它代码分开。"
+  - "NanoZone 因此把问题从 inter-VM isolation 转到 intra-CVM compartment。"
+  evidence_refs:
+  - "NanoZone p.1 introduction: intra-process threats and large CVM software stack."
+  - "NanoZone Fig.1: comparison with other CCA-based TEEs."
+  proof_object:
+    type: comparison_matrix
+    title: "CVM 内外两类威胁"
+    data:
+      columns: ["威胁", "CCA 基础保护", "NanoZone 关注"]
+      rows:
+      - ["host/hypervisor", "Realm/CVM 隔离", "继承基础保护"]
+      - ["CVM kernel bug", "不一定隔离", "域内细粒度保护"]
+      - ["library/app bug", "同地址空间暴露", "session-key isolation"]
+      - ["domain switch abuse", "基础 CCA 不覆盖", "CPI 约束"]
+  source_note: "矩阵依据 NanoZone introduction 中的 intra-CVM threat framing。"
+
+- slide_id: d04-13-nanozone-solution
+  paper_key: liu2025nanozone
+  slide_type: solution
+  claim: "NanoZone 的设计逻辑是用 permission overlay 和快速域切换，把 CCA 的粗粒度保护转成应用内 compartment。"
+  narrative:
+  - "论文提出功能原型和性能变体，面向 session-key isolation 等场景。"
+  - "POR_EL0/PIRE0_EL1 等 permission overlay 机制用于控制用户态访问。"
+  - "fast user-level CPI 约束 domain-switch control flow。"
+  - "这些机制说明 CCA deployment 的下一步是内部 least privilege，而不只是外部 host isolation。"
+  evidence_refs:
+  - "NanoZone p.1-p.2 abstract/introduction: permission overlay and fast user-level CPI."
+  - "NanoZone Figure 1 and design sections: NanoZone compared with CCA-based TEEs."
+  proof_object:
+    type: mechanism_flow
+    title: "NanoZone compartment flow"
+    data:
+      stages:
+      - "定义保护域"
+      - "设置 permission overlay"
+      - "进入敏感代码域"
+      - "CPI 检查 domain switch"
+      - "退出并恢复权限"
+  source_note: "流程根据 NanoZone 摘要和设计描述重写；不视为 ratified CCA feature。"
+
+- slide_id: d04-14-nanozone-experiments
+  paper_key: liu2025nanozone
+  slide_type: experiments
+  claim: "NanoZone draft 报告约 20% performance overhead，并声称保留 95% throughput，但这些结果要按 E3 draft 阅读。"
+  narrative:
+  - "摘要报告在细粒度隔离下约 20% performance overhead。"
+  - "摘要同时报告相比没有细粒度隔离的系统保留 95% throughput。"
+  - "论文在 Arm development boards 上评估 session-key isolation 场景。"
+  - "由于是 arXiv draft，结果适合做 emerging SOTA，不适合写成成熟标准。"
+  evidence_refs:
+  - "NanoZone p.1 abstract: 20% performance overhead and 95% throughput claim."
+  - "NanoZone p.1 metadata: arXiv:2506.07034v1, draft source."
+  proof_object:
+    type: metric_bars
+    title: "NanoZone draft 结果"
+    data:
+      metrics:
+      - label: "reported overhead"
+        value: "20%"
+        bar: 20
+        note: "abstract"
+      - label: "retained throughput"
+        value: "95%"
+        bar: 95
+        note: "abstract"
+      - label: "evidence class"
+        value: "E3"
+        bar: 35
+        note: "draft-not-ratified"
+  source_note: "数字来自摘要；页面显式保留 E3 draft 边界。"
+
+- slide_id: d04-15-nanozone-evaluation
+  paper_key: liu2025nanozone
+  slide_type: evaluation
+  claim: "NanoZone 的研究价值是提出 CCA 内部 least-privilege 方向，风险是 draft 成熟度和硬件依赖。"
+  narrative:
+  - "优点是把问题推进到 CVM 内部 TCB 和 session-key 保护。"
+  - "不足是需要未来硬件/软件支持，且当前为 draft/preprint 证据。"
+  - "商业潜力在机密服务内部 secret compartment、crypto library hardening 和 cloud confidential app。"
+  - "落地风险包括 ABI、compiler/runtime 集成、debuggability 和 domain-switch misuse。"
+  evidence_refs:
+  - "NanoZone Fig.1 and design sections: CCA-based fine-grained protection."
+  - "NanoZone p.1 source metadata and abstract: arXiv draft and reported performance."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "把 CCA 推到 intra-CVM least privilege"]
+      - ["短板", "E3 draft，依赖未来硬件/软件支持"]
+      - ["落地场景", "session-key 和敏感模块隔离"]
+      - ["风险", "domain switch、runtime、debug 集成"]
+  source_note: "评价保留 draft status，不把 NanoZone 写成成熟 CCA 标准。"
+
+- slide_id: d04-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "CCA deployment 的主线是隔离粒度逐步变细，但每一步都把新的 runtime、monitor 或 permission machinery 放进工程约束。"
+  narrative:
+  - "Shelter 证明 CCA/RME 可以支持用户态隔离。"
+  - "RContainer 证明 CCA primitive 可以服务云原生容器隔离。"
+  - "NanoZone 指向 CVM 内部安全域，但仍是 draft。"
+  - "这三篇共同说明 CCA 的价值不只在 Realm VM，也在如何被安全地组合到实际软件栈中。"
+  evidence_refs:
+  - "Shelter Fig.2-Fig.5; RContainer Fig.1-Fig.7; NanoZone p.1 and Fig.1."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 04-arm-cca-deployment."
+  proof_object:
+    type: comparison_matrix
+    title: "三种 deployment 粒度"
+    data:
+      columns: ["系统", "粒度", "主要代价"]
+      rows:
+      - ["Shelter", "用户态应用", "Monitor 和 multi-GPT"]
+      - ["RContainer", "容器", "runtime/monitor/GPT 集成"]
+      - ["NanoZone", "CVM 内部域", "draft 成熟度和 permission machinery"]
+      - ["共同边界", "都不自动解决 I/O/device path", "需要后续章节补证据"]
+  source_note: "方向总结按三篇论文的隔离粒度和 evidence class 对齐。"

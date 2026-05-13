@@ -1,0 +1,445 @@
+direction: "SmartNIC / trusted NIC / secure storage data path"
+story_version: 1
+slides:
+- slide_id: d15-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: "SmartNIC/trusted NIC/storage 这一节讨论 network/storage data path 的可信根如何从 CPU 移到 NIC 或 NVMe-oF path。"
+  narrative:
+  - "S-NIC 关注 SmartNIC 上多租户 network function 的 isolation。"
+  - "TNIC 把 formally verified root of trust 放到 NIC hardware，用于 trustworthy distributed systems。"
+  - "Hazel 把 confidential storage 的 confidentiality、integrity、freshness 组合到 disaggregated NVMe-oF data path。"
+  - "三篇共同说明 NIC/storage 不是普通 I/O 设备，而是可能承载安全控制面的 endpoint。"
+  evidence_refs:
+  - "survey/evidence_ledger.md Slide Primary Ledger, 15-smartnic-trusted-nic-storage."
+  - "S-NIC p.1 abstract; TNIC p.1 abstract; Hazel p.1 abstract."
+  proof_object:
+    type: evolution_timeline
+    title: "NIC/storage trust 递进"
+    data:
+      steps:
+      - label: "S-NIC"
+        claim: "SmartNIC function isolation"
+        evidence: "EuroSys 2024"
+      - label: "TNIC"
+        claim: "trusted NIC root"
+        evidence: "ASPLOS 2025"
+      - label: "Hazel"
+        claim: "secure disaggregated storage"
+        evidence: "2026 draft"
+  source_note: "方向页按 data path endpoint 的可信化程度组织。"
+
+- slide_id: d15-01-snic-summary
+  paper_key: zhou2024snic
+  slide_type: summary
+  claim: "S-NIC 的核心贡献是为 cloud SmartNIC 上的多租户 network functions 提供硬件辅助隔离。"
+  narrative:
+  - "论文指出现代 SmartNIC 对不同 tenants 的 network functions 隔离不足。"
+  - "SmartNIC 上的 management OS 也可能威胁 network function state。"
+  - "S-NIC 引入 locked-down TLB entries 等机制保护 function memory 和 packet path。"
+  - "它是 cloud SmartNIC isolation 的 foundational systems evidence。"
+  evidence_refs:
+  - "S-NIC p.1 abstract: commodity smart NICs provide weak isolation between network functions and management OS."
+  - "S-NIC Fig.1-Fig.2: SmartNIC architecture and S-NIC high-level architecture."
+  proof_object:
+    type: mechanism_flow
+    title: "S-NIC isolation flow"
+    data:
+      stages:
+      - "tenant launches network function"
+      - "S-NIC OS configures protected context"
+      - "locked-down TLB protects memory"
+      - "packet path remains isolated"
+      - "management OS access constrained"
+  source_note: "流程按 Figure 1 和 Figure 2 重绘。"
+
+- slide_id: d15-02-snic-background
+  paper_key: zhou2024snic
+  slide_type: background
+  claim: "S-NIC 的背景问题是 SmartNIC 已经运行租户代码，但隔离模型还停留在传统 NIC 或 host virtualization 思路。"
+  narrative:
+  - "SmartNIC 运行 DPI、firewall、load balancing 等 network functions。"
+  - "这些 functions 共享 on-NIC CPU、DRAM、accelerators 和 management OS。"
+  - "论文展示 commodity SmartNIC 可让 function 泄露或篡改彼此 state，并造成 shared hardware DoS。"
+  - "因此需要 NIC-local isolation，而不是只依赖 host VM isolation。"
+  evidence_refs:
+  - "S-NIC p.1 abstract/introduction: weak isolation and concrete attacks."
+  - "S-NIC Fig.4: sample use cases for S-NIC."
+  proof_object:
+    type: comparison_matrix
+    title: "SmartNIC attack surface"
+    data:
+      columns: ["对象", "风险", "S-NIC 方向"]
+      rows:
+      - ["network function state", "tenant 间泄露或篡改", "memory isolation"]
+      - ["packet buffers", "cross-function corruption", "protected packet path"]
+      - ["management OS", "高权限访问租户 NF", "OS access constrained"]
+      - ["accelerators", "shared resource DoS", "resource-aware isolation"]
+  source_note: "矩阵依据摘要、introduction 和 Figure 4。"
+
+- slide_id: d15-03-snic-solution
+  paper_key: zhou2024snic
+  slide_type: solution
+  claim: "S-NIC 的设计把 network function launch、memory mapping 和 packet processing 都纳入 NIC-local protection。"
+  narrative:
+  - "Figure 2 展示 S-NIC high-level architecture。"
+  - "locked-down TLB entries 保护租户 function 的内存映射。"
+  - "host-visible management APIs 被重新设计，以减少 management OS 对租户 state 的直接访问。"
+  - "Use cases 覆盖 vDPI、multi-tenant isolation 和 service chaining。"
+  evidence_refs:
+  - "S-NIC Fig.2: high-level architecture with locked-down TLB entries."
+  - "S-NIC Table 1 and Fig.4: host-visible management APIs and sample use cases."
+  proof_object:
+    type: mechanism_flow
+    title: "S-NIC launch and protect"
+    data:
+      stages:
+      - "nf_launch invoked"
+      - "protected memory mapped"
+      - "locked TLB entries installed"
+      - "packets processed by NF"
+      - "management API constrained"
+  source_note: "流程按 Figure 2、Table 1 和 Figure 4 重绘。"
+
+- slide_id: d15-04-snic-experiments
+  paper_key: zhou2024snic
+  slide_type: experiments
+  claim: "S-NIC 的评估包括 attack demonstrations、hardware cost estimates 和 use-case performance，显示 isolation cost 可控。"
+  narrative:
+  - "论文先 empirically demonstrates commodity SmartNIC weak isolation。"
+  - "Table 4 估计 virtual TLB bank hardware costs。"
+  - "文本报告某些 hardware-cost configuration 中估计 cost 增加最高约 8.37%。"
+  - "Use cases 展示 S-NIC 可支持实际 network functions。"
+  evidence_refs:
+  - "S-NIC p.1 contributions: empirical attacks and new hardware-software isolation approach."
+  - "S-NIC Table 4 and related text: estimated TLB bank hardware costs up to 8.37% in one configuration."
+  proof_object:
+    type: metric_bars
+    title: "S-NIC proof objects"
+    data:
+      metrics:
+      - label: "estimated cost upper example"
+        value: "8.37%"
+        bar: 8
+        note: "Table 4 discussion"
+      - label: "attack evidence"
+        value: "empirical"
+        bar: 70
+        note: "contributions"
+      - label: "use cases"
+        value: "Fig.4"
+        bar: 60
+        note: "sample deployments"
+  source_note: "数字来自 Table 4 附近文本；作为硬件成本估计，不是通用产品成本。"
+
+- slide_id: d15-05-snic-evaluation
+  paper_key: zhou2024snic
+  slide_type: evaluation
+  claim: "S-NIC 的价值是把 SmartNIC 视为多租户计算平台，短板是它保护 function isolation，不等于完整 trusted NIC root。"
+  narrative:
+  - "优点是问题真实，直接展示 commodity SmartNIC isolation gap。"
+  - "不足是重点在 function isolation，而不是 attested NIC root 或 distributed protocol semantics。"
+  - "商业潜力在 cloud NFV、service mesh offload 和 DPU/SmartNIC tenant isolation。"
+  - "落地风险在 NIC vendor integration、management OS updates、accelerator sharing 和 observability。"
+  evidence_refs:
+  - "S-NIC Fig.1-Fig.4: architecture, S-NIC design and use cases."
+  - "S-NIC Table 1-Table 4: APIs and hardware cost estimates."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "SmartNIC tenant function isolation"]
+      - ["短板", "不等同于 attested trusted NIC"]
+      - ["落地场景", "NFV/DPU/SmartNIC cloud isolation"]
+      - ["风险", "vendor integration and management OS"]
+  source_note: "评价把 S-NIC 限定为 function isolation 系统。"
+
+- slide_id: d15-06-tnic-summary
+  paper_key: giantsidi2025tnic
+  slide_type: summary
+  claim: "TNIC 的核心贡献是把最小 formally verified root of trust 放到 NIC hardware，服务高性能 trustworthy distributed systems。"
+  narrative:
+  - "论文提出 trusted NIC architecture，用 NIC-level silicon RoT 支持 Byzantine/untrusted cloud environments。"
+  - "设计目标包括 host CPU-agnostic security、minimal verifiable TCB 和 high performance。"
+  - "TNIC 提供 attested append-only / non-equivocation 类网络安全基元。"
+  - "它比 S-NIC 更进一步，把 NIC 从隔离平台变成协议可信根。"
+  evidence_refs:
+  - "TNIC p.1 abstract: minimal formally verified silicon root-of-trust at network interface level."
+  - "TNIC Fig.2-Fig.4: hardware architecture, remote attestation protocol and network system stack."
+  proof_object:
+    type: mechanism_flow
+    title: "TNIC trust path"
+    data:
+      stages:
+      - "host submits network operation"
+      - "TNIC attestation kernel checks state"
+      - "100Gb MAC data path transmits"
+      - "attested message generated"
+      - "remote peer verifies NIC-backed property"
+  source_note: "流程按 Figure 2-Figure 4 和摘要重绘。"
+
+- slide_id: d15-07-tnic-background
+  paper_key: giantsidi2025tnic
+  slide_type: background
+  claim: "TNIC 的背景是分布式系统需要低延迟和高吞吐，但 CPU TEE 的异构性和 TCB 代价很难支撑每个网络操作。"
+  narrative:
+  - "BFT、storage、replication、peer review 等系统需要节点行为可验证。"
+  - "在 heterogeneous cloud 中，CPU TEE 可能有不同 security guarantee 和 programming model。"
+  - "把每个网络操作都放进 CPU TEE 会损害 latency 和 throughput。"
+  - "TNIC 因此把可信根放到网络接口，贴近 data path。"
+  evidence_refs:
+  - "TNIC p.1 introduction: distributed systems in untrusted cloud and limitations of CPU-based TEEs."
+  - "TNIC Fig.2: hardware architecture with attestation kernel and 100Gb MAC."
+  proof_object:
+    type: comparison_matrix
+    title: "CPU TEE vs NIC RoT"
+    data:
+      columns: ["维度", "CPU TEE", "TNIC"]
+      rows:
+      - ["位置", "CPU package", "network interface"]
+      - ["data path", "可能绕路", "贴近 packet path"]
+      - ["TCB", "TEE runtime + app", "minimal NIC kernel"]
+      - ["分布式属性", "软件协议处理", "hardware-backed message property"]
+  source_note: "对比依据 introduction 和 Figure 2。"
+
+- slide_id: d15-08-tnic-solution
+  paper_key: giantsidi2025tnic
+  slide_type: solution
+  claim: "TNIC 的设计用 attestation kernel、request/response handlers 和 counters，在 NIC 上生成可验证网络行为。"
+  narrative:
+  - "Figure 2 展示 TNIC hardware architecture，包括 100Gb MAC 和 attestation kernel。"
+  - "Figure 3 展示 remote attestation protocol。"
+  - "Table 1 给出 TNIC programming APIs。"
+  - "核心 property 包括 non-equivocation 和 transferability。"
+  evidence_refs:
+  - "TNIC Fig.2-Fig.3: hardware architecture and remote attestation protocol."
+  - "TNIC Table 1: programming APIs; p.1 abstract: non-equivocation and transferability goals."
+  proof_object:
+    type: mechanism_flow
+    title: "TNIC operation"
+    data:
+      stages:
+      - "application invokes TNIC API"
+      - "request decoder extracts metadata"
+      - "attestation kernel checks counters/state"
+      - "message signed/attested"
+      - "receiver verifies property"
+  source_note: "流程按 Figure 2、Figure 3 和 Table 1 重绘。"
+
+- slide_id: d15-09-tnic-experiments
+  paper_key: giantsidi2025tnic
+  slide_type: experiments
+  claim: "TNIC 报告相比 CPU TEE software approach 低 3x-5x latency，并在 trusted distributed systems 中最高提升 6x throughput。"
+  narrative:
+  - "摘要报告 TNIC latency 比 software-based CPU TEE approach 低 3x-5x。"
+  - "摘要报告 TNIC 对 trusted distributed systems throughput 最高提升 6x。"
+  - "Figure 5-Figure 7 展示 Attest latency 和 breakdown。"
+  - "这些结果说明 NIC-local RoT 对网络路径有性能价值。"
+  evidence_refs:
+  - "TNIC p.1 abstract: 3x-5x lower latency and up to 6x throughput improvement."
+  - "TNIC Fig.5-Fig.7: Attest function latency, breakdown and latency over time."
+  proof_object:
+    type: metric_bars
+    title: "TNIC key results"
+    data:
+      metrics:
+      - label: "latency reduction low"
+        value: "3x"
+        bar: 60
+        note: "abstract"
+      - label: "latency reduction high"
+        value: "5x"
+        bar: 100
+        note: "abstract"
+      - label: "throughput improvement"
+        value: "up to 6x"
+        bar: 100
+        note: "abstract"
+      - label: "attest breakdown"
+        value: "Fig.5-7"
+        bar: 60
+        note: "latency evidence"
+  source_note: "数字来自摘要，图号来自 evaluation。"
+
+- slide_id: d15-10-tnic-evaluation
+  paper_key: giantsidi2025tnic
+  slide_type: evaluation
+  claim: "TNIC 的价值是把 trusted distributed systems 的可信根放到网络接口，短板是需要 NIC silicon 和形式化硬件生态支持。"
+  narrative:
+  - "优点是低 latency、高 throughput，并减少 CPU TEE 依赖。"
+  - "不足是需要专用 NIC architecture、formal verification 和 API adoption。"
+  - "商业潜力在 BFT storage、replication、consensus 和 cloud control-plane services。"
+  - "落地风险在 NIC vendor adoption、firmware lifecycle、key provisioning 和 failure recovery。"
+  evidence_refs:
+  - "TNIC Fig.2-Fig.4: architecture, attestation protocol and network stack."
+  - "TNIC Fig.5-Fig.7 and abstract: latency/throughput results."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "NIC-local formally verified RoT"]
+      - ["短板", "requires new NIC architecture"]
+      - ["落地场景", "BFT/storage/replication/control-plane"]
+      - ["风险", "vendor/key/firmware/failure lifecycle"]
+  source_note: "评价结合 TNIC architecture 和 performance claims。"
+
+- slide_id: d15-11-hazel-summary
+  paper_key: chrapek2026hazel
+  slide_type: summary
+  claim: "Hazel 的核心贡献是把 NVMe-oF disaggregated storage 的 confidentiality、integrity 和 freshness 放进 confidential computing threat model。"
+  narrative:
+  - "论文指出 NVMe-oF 在 HPC 和数据中心广泛使用，但现有 local encryption/integrity 方案难以适配 disaggregated path。"
+  - "Hazel 设计 control path 和 data path，支持 counter leasing、metadata 和 HMT。"
+  - "它关注 storage data path，不是 general NIC attestation。"
+  - "它是 E3 draft SOTA，必须保留成熟度边界。"
+  evidence_refs:
+  - "Hazel p.1 abstract: secure and efficient disaggregated storage with confidentiality, integrity and freshness."
+  - "Hazel Fig.3-Fig.5: control path, data path and HMT design."
+  proof_object:
+    type: mechanism_flow
+    title: "Hazel storage path"
+    data:
+      stages:
+      - "cluster manager schedules TEE"
+      - "control path leases counters"
+      - "NVMe-oF request issued"
+      - "data path applies crypto/integrity"
+      - "HMT manages metadata"
+      - "storage result returned"
+  source_note: "流程按 Figure 3-Figure 5 重绘；E3 draft 状态显式保留。"
+
+- slide_id: d15-12-hazel-background
+  paper_key: chrapek2026hazel
+  slide_type: background
+  claim: "Hazel 的背景问题是本地 dm-crypt/dm-integrity 思路搬到 NVMe-oF 后，会遇到 metadata、CPU 和 freshness 扩展性瓶颈。"
+  narrative:
+  - "disaggregated storage 把 host TEE、network fabric 和 JBOF SSDs 连接起来。"
+  - "local encryption/integrity stack 可能导致 throughput 降低和 CPU usage 上升。"
+  - "freshness 需要 counter/metadata 管理，分布式存储路径更难。"
+  - "Hazel 因此同时设计 control path 和 optimized data path。"
+  evidence_refs:
+  - "Hazel p.1 abstract/introduction: local solutions can reduce throughput and drive CPU usage above 80%."
+  - "Hazel Fig.1-Fig.2: disaggregated storage overview and algorithm comparison."
+  proof_object:
+    type: comparison_matrix
+    title: "local storage protection 到 NVMe-oF 的失配"
+    data:
+      columns: ["问题", "local path", "disaggregated path"]
+      rows:
+      - ["confidentiality", "dm-crypt works locally", "network/storage path extends boundary"]
+      - ["integrity", "metadata local", "side metadata must travel/manage"]
+      - ["freshness", "local counters easier", "distributed counter leasing"]
+      - ["performance", "CPU path acceptable", "NVMe-oF throughput sensitive"]
+  source_note: "矩阵依据 Figure 1-Figure 2 和 introduction。"
+
+- slide_id: d15-13-hazel-solution
+  paper_key: chrapek2026hazel
+  slide_type: solution
+  claim: "Hazel 的解决方案是把控制路径的可信调度、数据路径的 sector layout 和 HMT metadata 组合起来。"
+  narrative:
+  - "Figure 3 展示 Hazel control path，从 cluster manager scheduling TEE 开始。"
+  - "Figure 4 展示 data path、security encapsulation 和 SSD sector layout。"
+  - "Figure 5 介绍 HMT design。"
+  - "counter leasing 用于在分布式路径中管理 freshness。"
+  evidence_refs:
+  - "Hazel Fig.3-Fig.4: control path and data path with SSD sector layout."
+  - "Hazel Fig.5: HMT design; p.1 contributions mention counter-leasing."
+  proof_object:
+    type: mechanism_flow
+    title: "Hazel design pieces"
+    data:
+      stages:
+      - "control path provisions TEE"
+      - "counter lease acquired"
+      - "sector metadata prepared"
+      - "data encrypted/authenticated"
+      - "HMT updates metadata"
+      - "freshness checked on access"
+  source_note: "流程按 Figure 3-Figure 5 和 contributions 重绘。"
+
+- slide_id: d15-14-hazel-experiments
+  paper_key: chrapek2026hazel
+  slide_type: experiments
+  claim: "Hazel 的评估覆盖 read/write patterns、HMT throughput/latency 和 freshness metadata pollution，是 storage data path 证据。"
+  narrative:
+  - "Figure 6/7 展示 HMT throughput 和 median/P95 latency。"
+  - "Figure 8 展示不同 read patterns 下 Hazel performance。"
+  - "Figure 9 展示 freshness performance 随 metadata cache pollution 的变化。"
+  - "Figure 10 展示 write patterns 下的 Hazel performance。"
+  evidence_refs:
+  - "Hazel Fig.6-Fig.10: HMT throughput/latency, read patterns, freshness cache pollution and write patterns."
+  - "Hazel p.1 abstract: storage system provides confidentiality, integrity and freshness."
+  proof_object:
+    type: metric_bars
+    title: "Hazel proof objects"
+    data:
+      metrics:
+      - label: "HMT throughput"
+        value: "Fig.6"
+        bar: 60
+        note: "metadata tree"
+      - label: "HMT P95 latency"
+        value: "Fig.7"
+        bar: 55
+        note: "latency evidence"
+      - label: "read patterns"
+        value: "Fig.8"
+        bar: 60
+        note: "data path"
+      - label: "write patterns"
+        value: "Fig.10"
+        bar: 60
+        note: "data path"
+  source_note: "图号来自 Hazel evaluation；不补写未核对具体数值。"
+
+- slide_id: d15-15-hazel-evaluation
+  paper_key: chrapek2026hazel
+  slide_type: evaluation
+  claim: "Hazel 的价值是把 confidential storage 从本地磁盘扩到 disaggregated NVMe-oF，短板是 draft 成熟度和存储生态集成。"
+  narrative:
+  - "优点是同时处理 confidentiality、integrity 和 freshness，而非只加密数据。"
+  - "不足是 E3 draft，且依赖 NVMe metadata、TEE scheduling、counter leasing 和 storage stack 修改。"
+  - "商业潜力在 HPC/cloud disaggregated storage 和 confidential data lake。"
+  - "风险在 crash consistency、metadata recovery、multi-tenant key management 和 JBOF vendor support。"
+  evidence_refs:
+  - "Hazel Fig.3-Fig.5: control path, data path and HMT design."
+  - "Hazel Fig.8-Fig.10: read/write and freshness evaluations."
+  proof_object:
+    type: comparison_matrix
+    title: "评价"
+    data:
+      columns: ["维度", "判断"]
+      rows:
+      - ["强项", "NVMe-oF confidentiality/integrity/freshness"]
+      - ["短板", "E3 draft and storage-stack integration"]
+      - ["落地场景", "HPC/cloud disaggregated storage"]
+      - ["风险", "crash recovery/key/vendor support"]
+  source_note: "评价保留 Hazel draft status，不写成成熟产品。"
+
+- slide_id: d15-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: "SmartNIC/NIC/storage 的 takeaway 是 data-path endpoint 本身会变成可信计算平台，必须分别看 isolation、RoT 和 freshness。"
+  narrative:
+  - "S-NIC 解决 SmartNIC 上 tenant network function isolation。"
+  - "TNIC 把 verified trust root 放进 NIC hardware。"
+  - "Hazel 把 confidential storage 的 freshness/integrity 带到 NVMe-oF data path。"
+  - "三者共同说明 device endpoint 不只是被动外设，而是需要独立证据的计算和安全边界。"
+  evidence_refs:
+  - "S-NIC Fig.2/Table 4; TNIC Fig.2-Fig.7; Hazel Fig.3-Fig.10."
+  - "survey/evidence_ledger.md Slide Primary Ledger, 15-smartnic-trusted-nic-storage."
+  proof_object:
+    type: comparison_matrix
+    title: "三类 endpoint trust"
+    data:
+      columns: ["系统", "可信对象", "主要边界"]
+      rows:
+      - ["S-NIC", "SmartNIC network function isolation", "不是 attested NIC root"]
+      - ["TNIC", "NIC hardware RoT", "需要 new NIC architecture"]
+      - ["Hazel", "storage freshness/integrity path", "E3 draft and storage integration"]
+      - ["共同问题", "device endpoint evidence", "需要和 SPDM/TDISP/verifier policy 组合"]
+  source_note: "方向总结按 endpoint trust 类型分类。"
