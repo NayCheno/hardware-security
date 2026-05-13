@@ -60,9 +60,10 @@ For each selected primary paper, keep a five-slide mini-story:
 
 Evidence metadata is split across independent fields:
 `selection_slot` records presentation position, `paper_type` records source kind,
-`claim_strength` records E0-E5 claim support, and `source_status` records local
-source/PDF status. Legacy `role` values are compatibility labels only and must
-not be read as academic status.
+`claim_strength` records E0-E5 claim support, `maturity` records publication or
+standardization status, and `source_status` records local source/PDF status.
+Legacy `role` values are compatibility labels only and must not be read as
+academic status, evidence class, claim strength, maturity, or source status.
 
 Each direction keeps exactly three `primary` entries in `papers.yml`.
 Combined evidence packages are split into one primary paper/spec plus

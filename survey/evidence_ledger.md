@@ -45,6 +45,8 @@ three-slot slide selection pass.
 | Paper type | system, spec, sok, survey, vendor, contrast, background | Paper type records what the source is; it is independent from slide position and evidence class. |
 | Claim strength | E0, E1, E2, E3, E4, E5 | Claim strength records the strongest class of claim this source can support. |
 | Maturity | ratified, published, survey, vendor, draft/not ratified, preprint, metadata-only | Draft/preprint/metadata status must be visible in slides and prose. |
+| Source status | local_pdf_verified, source_verified_pdf_unavailable, source-limited, member-gated, metadata-only, html-only | Source/PDF verifiability status; independent from maturity and claim strength. |
+| Legacy role | existing `role` strings such as foundational, sota_1, sota_2, spec_foundation, or contrast | Compatibility text only; not a source of academic status, evidence class, claim strength, maturity, or source status. |
 
 ## Slide Primary Ledger
 

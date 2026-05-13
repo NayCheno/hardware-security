@@ -2,7 +2,7 @@
 
 更新日期：2026-05-13
 
-本文档维护当前 hardware-security survey 的知识域覆盖、SoK/survey 锚点、reference 证据、evidence-role 状态和缺口。判断依据包括 `survey/*.tex` 正文、`survey/reference.bib`、`reference/` 本地论文库、公开论文页面、规范 release、arXiv、ACM/IEEE/USENIX/NDSS/RFC/Arm/RISC-V 官方来源。
+本文档维护当前 hardware-security survey 的知识域覆盖、SoK/survey 锚点、reference 证据、证据强度、来源状态和缺口。判断依据包括 `survey/*.tex` 正文、`survey/reference.bib`、`reference/` 本地论文库、公开论文页面、规范 release、arXiv、ACM/IEEE/USENIX/NDSS/RFC/Arm/RISC-V 官方来源。
 
 当前事实：
 
@@ -26,7 +26,9 @@
 - `selection_slot`：`primary_1/primary_2/primary_3` 只表示 report-slide 的讲述位置，不表示论文的学术地位。
 - `paper_type`：`system/spec/sok/survey/vendor/contrast/background` 表示材料类型，必须和 source/maturity 分开读。
 - `claim_strength`：E0-E5 表示该材料能支撑的最强 claim；规范、survey、vendor、metadata-only 不得越级支撑机制实验结论。
-- `Foundational`、`Peer-reviewed SOTA`、`Spec/standard SOTA` 等旧标签只作为文字摘要；正式机器可读字段以 `selection_slot`、`paper_type`、`claim_strength` 为准。
+- `maturity`：表示 peer-reviewed、draft/not ratified、preprint、vendor、metadata-only 等发表或标准化状态。
+- `source_status`：表示本地 PDF、公开来源、member-gated、source-limited 或 metadata-only 的可核验状态；它独立于 `claim_strength` 和 `maturity`。
+- `Foundational`、`Peer-reviewed SOTA`、`Spec/standard SOTA` 以及 `papers.yml` 中遗留的 `role` 值只作为文字摘要或兼容标签；正式机器可读字段以 `selection_slot`、`paper_type`、`claim_strength`、`maturity` 和 `source_status` 为准。
 - `Draft/not ratified`：公开 draft、release candidate 或未 ratified 规范；正文必须显式标注状态。
 - `Industry evidence`：vendor/product/whitepaper 证据；只支撑产品行为、部署实践或 engineering building block。
 - `Background substrate`：CXL/RDMA/SmartNIC/runtime/ISA lineage 等相邻背景；SGX runtime/container entries live in `survey/background_runtime_reference.bib` unless promoted；不直接支撑 CCA/CoVE/TDISP/accelerator-TEE 安全 claim。
@@ -69,7 +71,7 @@
 
 ## 1. 知识覆盖矩阵
 
-| 知识点 / 小方向 | 状态 | 正文覆盖依据 | SoK / Survey 锚点 | 代表 reference / evidence role | 下一步 |
+| 知识点 / 小方向 | 状态 | 正文覆盖依据 | SoK / Survey 锚点 | 代表 reference / evidence summary | 下一步 |
 |---|---|---|---|---|---|
 | 硬件辅助 TEE 总体设计空间 | 已覆盖-基础 | `survey/tee_design_space.tex` 已在正文前部建立 launch/admission、runtime isolation、trusted I/O、secure storage、attestation/verifier policy、TCB/excluded attacks 的上位分类，并限定 SoK/survey 只作 taxonomy support；`report-slide/01` 已将 peer-reviewed `li2024sokteechoices` 设为 taxonomy primary，`schneider2022soktee` 保留为 arXiv/preprint supplementary boundary | `li2024sokteechoices`; `boubakri2025riscvtee`; `sok-tee`; supplementary `schneider2022soktee` | Foundational active references `mccune2008flicker`, `mccune2010trustvisor`, `suh2003aegis`; Survey/taxonomy anchors `li2024sokteechoices`, `boubakri2025riscvtee`, `sok-tee`; Preprint boundary `schneider2022soktee` | 已足够作全局入口；投稿前只随新增平台维护 taxonomy bridge。 |
 | Arm TrustZone TEE 与漏洞谱系 | 已覆盖-基础 | `arm_trustzone_whitepaper`, `pinto2019trustzone`, `guan2017trustshadow`, `cerdeira2020trustzone` | `pinto2019trustzone`; `cerdeira2020trustzone` | Foundational `arm_trustzone_whitepaper`; Background substrate `pinto2019trustzone`, `cerdeira2020trustzone` | 保持为 CCA 历史背景；避免把 TrustZone threat model 与 CCA 混写。 |
@@ -478,7 +480,7 @@
 | `chrapek2026hazel` | arXiv v2 PDF 已下载并验证。 | 用于 confidential storage/NVMe-oF data path；必须标注 arXiv preprint。 |
 | `shi2025cofunc` | USENIX Security 2025 PDF 已下载并验证。 | 用于 confidential serverless/container deployment substrate；不要写成 Arm CCA/RISC-V CoVE/TDISP/SPDM/device trusted-I/O mechanism。 |
 | `bertschi2025opencca`, `abdollahi2025caec` | Arm CCA Draft/not ratified 扩展材料，arXiv PDF 已下载。 | 用于 CCA research infrastructure 与 inter-CVM sharing；不是 Arm 官方规范。 |
-| `xu2026virtcca`, `bertschi2026devlore` | arXiv 首发早于 Bib 年份；年份可能对应目标发表或最新引用习惯。 | 在 domain evidence role 中标注 arXiv 状态，避免误导。 |
+| `xu2026virtcca`, `bertschi2026devlore` | arXiv 首发早于 Bib 年份；年份可能对应目标发表或最新引用习惯。 | 在 domain evidence summary 中标注 arXiv 状态，避免误导。 |
 | Attacks / side-channel Bib 条目 | 64 条 out-of-scope attack-only 条目已保存在 `survey/excluded_attack_reference.bib`，且正文未引用；`schluter2024heckler` 只作 interrupt boundary motivation。 | 不作为 active evidence；当前不下载、不扩展、不写 attack survey，只作为 threat boundary / limitation。 |
 | `schluter2025heracles` | SEV-SNP 攻击论文，不是防御主线。 | 只在 threat model/limitations 中使用。 |
 
