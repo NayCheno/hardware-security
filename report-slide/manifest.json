@@ -202,11 +202,11 @@
     "auxiliary": [
       {
         "key": "liu2025lesstrust",
-        "role": "Peer-reviewed SOTA / TIFS 2025",
-        "evidence": "E1 / Peer-reviewed SOTA",
+        "role": "Source-limited TIFS 2025 context",
+        "evidence": "E5 / Source-limited context",
         "source_status": "source_verified_pdf_unavailable",
         "reference": "reference/arm-confidential-computing/more-granular-less-trust-arm-cca-intra-process-isolation/README.md",
-        "use": "辅助对比 intra-process isolation 和 untrusted management threat model；本地 PDF 不可用时不写具体实验数字。"
+        "use": "Source-status boundary only for intra-process isolation context; local PDF is unavailable, so do not use it for mechanism or experiment claims."
       }
     ]
   },
@@ -457,7 +457,7 @@
         "claim_strength": "E3",
         "selection_reason": "CoVE 2023 is the early mainline design material for RISC-V confidential VMs.",
         "evidence_type": "E3 public preprint/proposal",
-        "maturity": "public preprint/proposal, not peer-reviewed",
+        "maturity": "public preprint/proposal, review status explicit",
         "pdf_status": "local_pdf_verified",
         "source_url": "https://arxiv.org/abs/2304.06167"
       },

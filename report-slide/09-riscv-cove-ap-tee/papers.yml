@@ -9,7 +9,7 @@ primary:
   claim_strength: E3
   selection_reason: CoVE 2023 is the early mainline design material for RISC-V confidential VMs.
   evidence_type: E3 public preprint/proposal
-  maturity: public preprint/proposal, not peer-reviewed
+  maturity: public preprint/proposal, review status explicit
   pdf_status: local_pdf_verified
   source_url: https://arxiv.org/abs/2304.06167
   evidence: E3 / Foundational public preprint
@@ -58,7 +58,7 @@ primary:
         title: 证据强度
         items:
         - 类型：E3 public preprint/proposal
-        - 成熟度：public preprint/proposal, not peer-reviewed
+        - 成熟度：public preprint/proposal, review status explicit
         - PDF：local_pdf_verified
     evaluation:
       claim: CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型

@@ -29,6 +29,44 @@ AUTHORED_SLIDE_TYPES = (
 )
 SELECTION_SLOTS = ("primary_1", "primary_2", "primary_3")
 PAPER_TYPES = {"system", "spec", "sok", "survey", "vendor", "contrast", "background"}
+LIMITED_STATUS_MARKERS = (
+    "preprint",
+    "draft",
+    "not ratified",
+)
+RESTRICTED_SOURCE_MARKERS = (
+    "source-limited",
+    "source_limited",
+    "metadata-only",
+    "metadata only",
+    "gated",
+    "html-only",
+    "html only",
+    "blocked",
+)
+MECHANISM_CLAIM_MARKERS = (
+    "mechanism",
+    "mechanism claim",
+    "implementation",
+    "prototype",
+    "experiment",
+    "experimental",
+    "performance",
+    "evaluation",
+    "benchmark",
+    "throughput",
+    "latency",
+    "overhead",
+    "speedup",
+    "state-machine",
+    "state machine",
+    "normative",
+    "完整性",
+    "性能",
+    "实验",
+    "机制",
+    "状态机",
+)
 
 
 def fail(errors: list[str], path: Path, message: str) -> None:
@@ -49,6 +87,35 @@ def joined(value: Any) -> str:
     if isinstance(value, list):
         return " ".join(joined(item) for item in value)
     return as_text(value)
+
+
+def evidence_class(value: Any) -> int | None:
+    match = re.search(r"\bE([0-5])\b", as_text(value))
+    if not match:
+        return None
+    return int(match.group(1))
+
+
+def has_limited_status(*values: Any) -> bool:
+    text = " ".join(as_text(value).lower() for value in values)
+    return any(marker in text for marker in LIMITED_STATUS_MARKERS)
+
+
+def has_restricted_source(*values: Any) -> bool:
+    text = " ".join(as_text(value).lower() for value in values)
+    return any(marker in text for marker in RESTRICTED_SOURCE_MARKERS)
+
+
+def has_peer_reviewed_status(*values: Any) -> bool:
+    text = " ".join(as_text(value).lower() for value in values)
+    text = re.sub(r"\b(not|non|without|no)\s+peer[- ]reviewed\b", "", text)
+    text = re.sub(r"\bnot\s+peer\s+reviewed\b", "", text)
+    return "peer-reviewed" in text or "peer reviewed" in text
+
+
+def has_mechanism_claim(*values: Any) -> bool:
+    text = " ".join(joined(value).lower() for value in values)
+    return any(marker in text for marker in MECHANISM_CLAIM_MARKERS)
 
 
 def validate_primary(
@@ -85,9 +152,28 @@ def validate_primary(
     claim_strength = as_text(primary.get("claim_strength"))
     if not re.search(r"\bE[0-5]\b", claim_strength):
         fail(errors, path, f"{key}: claim_strength must include E0-E5 class, got `{claim_strength}`")
+    claim_class = evidence_class(claim_strength)
     paper_type = as_text(primary.get("paper_type"))
     if paper_type not in PAPER_TYPES:
         fail(errors, path, f"{key}: unsupported paper_type `{paper_type}`")
+
+    source_status = as_text(primary.get("source_status"))
+    maturity = as_text(primary.get("maturity"))
+    evidence_type = as_text(primary.get("evidence_type"))
+    pdf_status = as_text(primary.get("pdf_status"))
+    if (
+        has_limited_status(source_status, maturity, evidence_type, pdf_status, evidence)
+        or has_restricted_source(source_status, maturity, evidence_type, pdf_status, evidence)
+    ) and has_peer_reviewed_status(
+        source_status, maturity, evidence_type, pdf_status
+    ):
+        fail(errors, path, f"{key}: limited/draft/preprint/source-limited material must not be marked peer-reviewed")
+    if (claim_class == 5 or has_restricted_source(source_status, maturity, evidence_type, pdf_status, evidence)) and has_mechanism_claim(
+        primary.get("selection_reason"), primary.get("slides"), primary.get("title")
+    ):
+        fail(errors, path, f"{key}: E5/source-limited material must not support mechanism, performance, or state-machine claims")
+    if paper_type == "vendor" and claim_class is not None and claim_class < 4:
+        fail(errors, path, f"{key}: vendor material cannot claim stronger than E4")
 
     if not require_slides:
         if contains_bad_marker(primary):
@@ -118,12 +204,38 @@ def validate_primary(
                 fail(errors, path, f"{key}: slides.{slide_key}.visual needs title and items")
 
     experiment_text = joined(slides.get("experiments", {}))
-    evidence_type = f"{as_text(primary.get('evidence_type'))} {as_text(primary.get('evidence'))}".lower()
-    if ("survey" in evidence_type or "sok" in evidence_type or "spec" in evidence_type or "standard" in evidence_type or "e0" in evidence_type or "e2" in evidence_type) and "无新实验" not in experiment_text:
+    combined_evidence_type = f"{as_text(primary.get('evidence_type'))} {as_text(primary.get('evidence'))}".lower()
+    if ("survey" in combined_evidence_type or "sok" in combined_evidence_type or "spec" in combined_evidence_type or "standard" in combined_evidence_type or "e0" in combined_evidence_type or "e2" in combined_evidence_type) and "无新实验" not in experiment_text:
         fail(errors, path, f"{key}: spec/survey evidence experiments must state `无新实验`")
+    if (paper_type in {"spec", "sok", "survey"} or claim_class in {0, 2}) and re.search(
+        r"\b(mechanism experiment|mechanism evaluation|prototype|implementation|benchmark|throughput|latency|overhead|speedup)\b|机制实验|机制评估|原型|吞吐|延迟|开销|加速",
+        experiment_text,
+        re.IGNORECASE,
+    ):
+        fail(errors, path, f"{key}: spec/survey/SoK entry must not be written as a mechanism experiment")
 
     if contains_bad_marker(primary):
         fail(errors, path, f"{key}: contains TODO/TBD/FIXME marker")
+
+
+def validate_auxiliary(errors: list[str], path: Path, item: dict[str, Any], index: int) -> None:
+    key = as_text(item.get("key")) or f"auxiliary[{index}]"
+    for field in ("key", "role", "evidence", "source_status", "reference", "use"):
+        if not nonempty(item.get(field)):
+            fail(errors, path, f"{key}: auxiliary missing `{field}`")
+    evidence = as_text(item.get("evidence"))
+    evidence_level = evidence_class(evidence)
+    role = as_text(item.get("role"))
+    source_status = as_text(item.get("source_status"))
+    use = as_text(item.get("use"))
+    if (evidence_level == 5 or has_restricted_source(role, evidence, source_status, use)) and has_mechanism_claim(role, use):
+        allowed_boundary = any(marker in use.lower() for marker in ("metadata", "existence", "contrast", "boundary", "source status"))
+        if not allowed_boundary:
+            fail(errors, path, f"{key}: E5 auxiliary must be limited to metadata/existence/boundary use")
+    if has_limited_status(role, evidence, source_status, use) and has_peer_reviewed_status(role, evidence, source_status):
+        fail(errors, path, f"{key}: limited auxiliary material must not be marked peer-reviewed")
+    if contains_bad_marker(item):
+        fail(errors, path, f"{key}: auxiliary contains TODO/TBD/FIXME marker")
 
 
 def validate_authored_story(
@@ -224,11 +336,30 @@ def validate_direction(errors: list[str], path: Path) -> tuple[int, int]:
     if selection_slots != list(SELECTION_SLOTS):
         fail(errors, path, f"selection_slot values must be {list(SELECTION_SLOTS)}, got {selection_slots}")
 
+    primary_types = [as_text(item.get("paper_type")) for item in primary if isinstance(item, dict)]
+    if primary_types and all(paper_type == "vendor" for paper_type in primary_types):
+        fail(errors, path, "primary selection cannot be vendor-only")
+    primary_evidence_levels = [evidence_class(item.get("claim_strength")) for item in primary if isinstance(item, dict)]
+    if primary_evidence_levels and all(level == 4 for level in primary_evidence_levels):
+        fail(errors, path, "primary selection cannot be supported only by E4/vendor evidence")
+
     for index, item in enumerate(primary, start=1):
         if not isinstance(item, dict):
             fail(errors, path, f"primary[{index}] must be a mapping")
             continue
         validate_primary(errors, path, item, index, require_slides=not has_story)
+
+    auxiliary = data.get("auxiliary", [])
+    if auxiliary is None:
+        auxiliary = []
+    if not isinstance(auxiliary, list):
+        fail(errors, path, "`auxiliary` must be a list when present")
+    else:
+        for index, item in enumerate(auxiliary, start=1):
+            if not isinstance(item, dict):
+                fail(errors, path, f"auxiliary[{index}] must be a mapping")
+                continue
+            validate_auxiliary(errors, path, item, index)
 
     if has_story:
         primary_keys = {as_text(item.get("key")) for item in primary if isinstance(item, dict) and as_text(item.get("key"))}

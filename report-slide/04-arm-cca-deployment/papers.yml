@@ -195,8 +195,8 @@ primary:
       commercialization: 若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
 auxiliary:
 - key: liu2025lesstrust
-  role: Peer-reviewed SOTA / TIFS 2025
-  evidence: E1 / Peer-reviewed SOTA
+  role: Source-limited TIFS 2025 context
+  evidence: E5 / Source-limited context
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/more-granular-less-trust-arm-cca-intra-process-isolation/README.md
-  use: 辅助对比 intra-process isolation 和 untrusted management threat model；本地 PDF 不可用时不写具体实验数字。
+  use: Source-status boundary only for intra-process isolation context; local PDF is unavailable, so do not use it for mechanism or experiment claims.

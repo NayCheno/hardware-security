@@ -89,4 +89,10 @@ narrative, source/page/figure/table evidence refs, source note, and proof object
 For specs and surveys, `slides.experiments.points` must explicitly state
 `规范/Survey，无新实验` or equivalent conservative wording.
 
+`tools/validate_content.py` is also the evidence QA gate. It rejects
+draft/preprint or source-limited entries marked as peer-reviewed, E5 entries
+that make mechanism/performance/state-machine claims, vendor-only primary
+selections, and spec/SoK/survey slides that present themselves as mechanism
+experiments.
+
 The current three-primary ledger, evidence classes, and source-limited boundaries are reconciled in `../survey/evidence_ledger.md`.
