@@ -61,4 +61,15 @@
 ### 11. 对后续研究的启发
 
 1. 更新 2026 版硬件 TEE taxonomy。2. 区分 access control、encryption、integrity、replay protection。3. 单独评估 trusted I/O 商用阻碍。4. 统一 attestation evidence chain。5. 建立 confidential accelerator 跨平台比较基准。
+
+### 13. SoK Citation Expansion
+
+| Priority | Cited work | Role in SoK | Repo category | Local status | Next action |
+|---|---|---|---|---|---|
+| P0 | Flicker | Dynamic root of trust and fine-grained attestation lineage | `reference/trusted-execution-environments/flicker-execution-infrastructure-tcb-minimization/` | added, local PDF verified, review available | Keep as foundational lineage; do not expand recursively. |
+| P0 | TrustVisor | Small-hypervisor TCB reduction and attestation lineage | `reference/trusted-execution-environments/trustvisor-efficient-tcb-reduction-attestation/` | added, local PDF verified, review available | Keep as foundational lineage; do not expand recursively. |
+| P0 | Keystone / Sanctum / CURE / Penglai | RISC-V enclave lineage and open-hardware baselines | `reference/risc-v-confidential-computing/` | existing active references, local PDFs available | Use original papers for mechanism claims. |
+| P1 | AEGIS / Efficient Memory Integrity / Bonsai Merkle Trees | Secure-processor memory encryption, integrity, and freshness lineage | `reference/architecture-and-platform-security/` | added, local PDFs verified, reviews available | Use for memory-integrity lineage only. |
+| P2 boundary | MI6 | Speculative out-of-order enclave and speculation-boundary context | `reference/risc-v-confidential-computing/mi6-secure-enclaves-speculative-out-of-order-processor/` | existing active reference, local PDF verified | Use only when explaining speculation/side-channel boundaries; do not expand under current defense/spec scope. |
+| P2 boundary | Side-channel and physical attack citations | Threat-model boundary examples | `survey/excluded_attack_reference.bib` where retained | excluded from active defense/spec corpus | Do not promote without a separate attack-scope plan. |
 <!-- END PAPER REVIEW -->
