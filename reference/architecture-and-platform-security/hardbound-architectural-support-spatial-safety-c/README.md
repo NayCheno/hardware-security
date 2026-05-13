@@ -72,11 +72,11 @@ next-plan.md 指出的 foundational backlog 与当前 active corpus：TEE/attest
 4. 为 embedded attestation/TEE 与 server confidential VM 建立 threat-model 对照。
 5. 检查经典设计在 DMA、IOMMU、SPDM/TDISP 和 accelerator endpoint 场景下的缺口。
 
-### 12. Evidence README Addendum
+### 12. SOTA README Addendum
 
-- Evidence 定位: 基础/历史入口：hardware-assisted spatial memory safety
+- SOTA 定位: 基础/历史入口：hardware-assisted spatial memory safety
 - 标准化 / 发表状态: peer-reviewed venue
-- 对应小方向: domain.md 中的 TEE lineage、attestation lineage、memory encryption/integrity/replay 或 ISA/hardware-design defense。
+- 对应小方向: ISA / 硬件设计防御: MTE、PTE/page table、CFI、capability/tagging。
 
 #### 内容摘要
 
