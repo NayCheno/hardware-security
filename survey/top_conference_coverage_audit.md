@@ -1,6 +1,6 @@
 # Top Conference Coverage Audit
 
-Status date: 2026-05-12
+Status date: 2026-05-13
 
 This table tracks the recent top-conference papers requested in `next-plan.md`.
 It separates active evidence from boundary-only attack references so that attack
@@ -21,9 +21,9 @@ papers and generic network substrates do not leak into active survey claims.
 
 - Active in-scope additions from this plan: 7 canonical entries.
 - Boundary-only additions from this plan: 1 excluded attack entry.
-- Active BibTeX count after PDF recovery and attestation-lineage promotion: 104.
+- Active BibTeX count after foundational backlog promotion: 114.
 - Excluded attack BibTeX count after audit: 64.
-- 正文 cited keys after PDF recovery and attestation-lineage promotion: 102, all present in `survey/reference.bib`.
-- Reference library status after PDF recovery and attestation-lineage promotion: 102 paper/spec entry READMEs, 88 verified local PDFs.
+- 正文 cited keys after foundational backlog promotion: 102, all present in `survey/reference.bib`.
+- Reference library status after foundational backlog promotion: 112 paper/spec entry READMEs, 98 verified local PDFs.
 - Current corpus counts are reconciled in `survey/evidence_ledger.md`.
 - `next-plan.md` remains a control file and is not part of the evidence corpus.

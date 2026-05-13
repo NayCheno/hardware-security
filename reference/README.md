@@ -30,9 +30,9 @@ Category routing for the current survey scope:
 
 Generic network-security papers such as firewall, IDS/IPS, DDoS, routing security, generic TLS/VPN, or web security are not part of this library unless they directly protect a confidential-computing network path, trusted endpoint, or device offload boundary.
 
-Download status: 88 of 102 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
+Download status: 98 of 112 paper/spec reference entry directories have verified local PDFs. Category index README files are not counted as reference entries.
 
-Bibliography corpus status: `survey/reference.bib` contains 104 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 64 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into 正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. `survey/evidence_ledger.md` is the current count, evidence-class, and boundary ledger. `survey/top_conference_coverage_audit.md`, `survey/citation_expansion_triage.md`, and `survey/pdf_recovery_log.md` are historical/source-entry logs. See `survey/related_work_300_expansion.md` before using any candidate.
+Bibliography corpus status: `survey/reference.bib` contains 114 active in-scope entries. `survey/background_runtime_reference.bib` preserves 2 SGX runtime/container background substrate entries that are not active evidence for this survey. `survey/excluded_attack_reference.bib` preserves 64 out-of-scope attack-only entries for future attack-scope work; they are not active evidence for this survey. `survey/candidate_reference.bib` contains 152 metadata-only related-work candidates; they are not downloaded/reviewed reference records and must be verified before promotion into 正文 evidence. `survey/p0_p1_candidate_status.md` gives terminal states for all 112 P0/P1 candidates and marks which are active-canonical coverage, backlog/no substantive citation, or background substrate. `survey/evidence_ledger.md` is the current count, evidence-class, and boundary ledger. `survey/top_conference_coverage_audit.md`, `survey/citation_expansion_triage.md`, and `survey/pdf_recovery_log.md` are historical/source-entry logs. See `survey/related_work_300_expansion.md` before using any candidate.
 
 Evidence role classes follow the survey methodology: E0 official standards/specs/RFCs, E1 peer-reviewed primary papers, E2 surveys/SoKs, E3 public drafts or not-ratified releases, E4 vendor/industry evidence, and E5 metadata-only/gated/blocked or HTML-only evidence. Gated or unavailable PDFs are recorded as unavailable; no private access is assumed.
 
@@ -100,6 +100,16 @@ Newly added or completed in this pass:
 - `reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/`
 - `reference/memory-and-io-fabrics/osmosis-enabling-multi-tenancy-datacenter-smartnics/`
 - `reference/trusted-execution-environments/serverless-functions-confidential-efficient-split-containers/`
+- `reference/trusted-execution-environments/flicker-execution-infrastructure-tcb-minimization/`
+- `reference/trusted-execution-environments/trustvisor-efficient-tcb-reduction-attestation/`
+- `reference/trusted-execution-environments/sancus-low-cost-trustworthy-extensible-networked-devices/`
+- `reference/trusted-execution-environments/tytan-tiny-trust-anchor-tiny-devices/`
+- `reference/architecture-and-platform-security/hardbound-architectural-support-spatial-safety-c/`
+- `reference/architecture-and-platform-security/cheri-hybrid-capability-system-architecture/`
+- `reference/architecture-and-platform-security/watchdog-hardware-safe-secure-manual-memory-management/`
+- `reference/architecture-and-platform-security/aegis-architecture-tamper-evident-tamper-resistant-processing/`
+- `reference/architecture-and-platform-security/efficient-memory-integrity-verification-encryption-secure-processors/`
+- `reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/`
 
 Entries without a verified local PDF yet:
 

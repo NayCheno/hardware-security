@@ -1,6 +1,6 @@
 # One-Hop Citation Expansion Triage
 
-Status date: 2026-05-12
+Status date: 2026-05-13
 
 This pass reviews one-hop references and related-work anchors for the recent
 top-conference papers added in `next-plan.md`. The filter is deliberately
@@ -8,11 +8,21 @@ strict: promote only public, verifiable, directly in-scope defense/spec/system
 sources. Attack-only, generic-network, and x86/runtime-only references remain
 boundary or backlog material.
 
+The 2026-05-13 foundational backlog promotion added classic TEE,
+capability/memory-safety, and memory-integrity anchors. None of those additions
+is a new SoK/SOTA survey anchor, so no recursive SoK/SOTA citation expansion is
+triggered. Their one-hop follow-up remains limited to directly in-scope TEE,
+attestation, memory-integrity/freshness, and capability/memory-safety work.
+
 ## Promoted in This Pass
 
 | Promoted key | Trigger source | Why it was promoted | Repo path | PDF status | Boundary |
 |---|---|---|---|---|---|
 | `tcg_dice_2018` | Aster uses DICE-compatible boot/attestation and pVM sealing language | Official DICE UDS/CDI derivation is directly needed to ground Android AVF-on-CCA attestation and rollback claims; existing `rw2021deviceidentifiercompositionengine` was P0 backlog | `reference/attestation/hardware-requirements-device-identifier-composition-engine/` | Verified local PDF, 12 pages | Use for DICE boot identity vocabulary only; not a complete remote-attestation protocol or platform profile. |
+| `mccune2008flicker`, `mccune2010trustvisor` | `next-plan.md` foundational backlog | Required to ground pre-SGX/pre-CCA fine-grained measured execution and minimized TCB/attestation lineage | `reference/trusted-execution-environments/` | Verified local PDFs | Use as historical TEE/attestation lineage only; do not claim modern CCA/CoVE production semantics. |
+| `devietti2008hardbound`, `watson2015cheri`, `nagarakatte2012watchdog` | `next-plan.md` foundational backlog | Required to ground hardware spatial safety, capability-system, and full-memory-safety lineage before CHERIoT/RV-CURE comparisons | `reference/architecture-and-platform-security/` | Verified local PDFs | Use for capability/memory-safety mechanism lineage; modern deployment claims need current papers/specs. |
+| `suh2003aegis`, `suh2003memoryintegrity`, `rogers2007bonsai` | `next-plan.md` memory-integrity backlog | Required to ground memory encryption, integrity tree, freshness, and replay-protection mechanisms for direction 11 | `reference/architecture-and-platform-security/` | Verified local PDFs | Use for peer-reviewed secure-processor memory integrity/freshness evidence; do not expand into attack-only memory-security literature. |
+| `noorman2013sancus`, `koeberl2015tytan` | `next-plan.md` foundational backlog | Required to ground low-cost embedded TEE / tiny-device trust-anchor lineage | `reference/trusted-execution-environments/` | Verified local PDFs | Use for embedded TEE lineage; not a direct RISC-V CoVE/AP-TEE proof. |
 
 ## Triage Table
 
@@ -29,8 +39,8 @@ boundary or backlog material.
 
 ## Count Update
 
-- Active BibTeX entries after PDF recovery and attestation-lineage promotion: 104.
+- Active BibTeX entries after foundational backlog promotion: 114.
 - Excluded attack BibTeX entries: 64.
-- 正文 cited keys after PDF recovery and attestation-lineage promotion: 102, all present in `survey/reference.bib`.
-- Reference library status after PDF recovery and attestation-lineage promotion: 102 paper/spec entry READMEs, 88 verified local PDFs.
+- 正文 cited keys after foundational backlog promotion: 102, all present in `survey/reference.bib`.
+- Reference library status after foundational backlog promotion: 112 paper/spec entry READMEs, 98 verified local PDFs.
 - Current corpus counts are reconciled in `survey/evidence_ledger.md`.

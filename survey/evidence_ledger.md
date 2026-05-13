@@ -1,24 +1,25 @@
 # Evidence Ledger
 
-Last reconciled: 2026-05-12
+Last reconciled: 2026-05-13
 
 This ledger is the current count and boundary record for `survey/`,
 `reference/`, and `report-slide/`. Older audit files explain how a source
 entered the corpus; this file records the current state after PDF recovery,
-attestation-lineage promotion, and the three-slot slide selection pass.
+attestation-lineage promotion, foundational backlog promotion, and the
+three-slot slide selection pass.
 
 ## Current Counts
 
 | Corpus item | Count | Source of truth |
 |---|---:|---|
-| Active in-scope BibTeX entries | 104 | `survey/reference.bib` entries |
+| Active in-scope BibTeX entries | 114 | `survey/reference.bib` entries |
 | Survey 正文 cited keys | 102 | `\cite{...}` keys in `survey/*.tex`; all resolve in `survey/reference.bib` |
 | Background runtime BibTeX entries | 2 | `survey/background_runtime_reference.bib` |
 | Excluded attack-only BibTeX entries | 64 | `survey/excluded_attack_reference.bib` |
 | Metadata-only candidates | 152 | `survey/candidate_reference.bib` |
 | P0/P1 candidate terminal states | 112 | `survey/p0_p1_candidate_status.md` |
-| Reference entry READMEs | 102 | `reference/**/README.md` files with `- BibTeX key:` |
-| Verified local `paper.pdf` files | 88 | `reference/**/paper.pdf` |
+| Reference entry READMEs | 112 | `reference/**/README.md` files with `- BibTeX key:` |
+| Verified local `paper.pdf` files | 98 | `reference/**/paper.pdf` |
 | Slide directions | 15 | `report-slide/manifest.json` |
 | Slide primary selections | 45 | exactly 3 primary entries per direction |
 
@@ -76,12 +77,15 @@ attestation-lineage promotion, and the three-slot slide selection pass.
 | `liu2025lesstrust`, `chen2024mraima` | Metadata/source verified, no local PDF | Mention as source-limited context only unless public PDF is recovered. |
 | DirectCXL/CXL-Tiers/ODRP | E1 primary systems | Use as memory/fabric background systems; not as surveys or confidential-computing security proof. |
 | `abera2016cflat`, `dessouky2017lofat`, `nunes2019vrased`, `ferraiuolo2017komodo` | Active E1 references with verified PDFs | Use for runtime/control-flow attestation and verified enclave lineage only. |
+| `mccune2008flicker`, `mccune2010trustvisor`, `noorman2013sancus`, `koeberl2015tytan` | Active E1 references with verified PDFs | Use for foundational TEE/attestation/embedded trust-anchor lineage only; do not infer modern CCA/CoVE production semantics. |
+| `devietti2008hardbound`, `nagarakatte2012watchdog`, `watson2015cheri` | Active E1 references with verified PDFs | Use for capability and hardware memory-safety lineage; modern CHERI/CHERIoT/RV-CURE claims still require their current primary/spec evidence. |
+| `suh2003aegis`, `suh2003memoryintegrity`, `rogers2007bonsai` | Active E1 references with verified PDFs | Use for secure-processor memory encryption/integrity/freshness lineage; vendor/spec-only CCA/SEV-SNP sources must not be the sole mechanism proof for replay/freshness claims. |
 | Attack-only bibliography | 64 excluded entries | Do not promote into active defense/spec evidence without a new attack-scope plan. |
 
 ## Validation Commands
 
 ```powershell
-rg -n "9[2] active|6[3] out-of-scope|after DICE promotion: 10[0]|after one-hop DICE promotion: 10[0]|9[8] paper/spec entry READMEs|8[1] verified local PDFs|9[8], all present" survey domain.md reference/README.md report-slide/README.md
+rg -n "114 active|112 paper/spec entry READMEs|98 verified local PDFs|45 primary|15 slide directions" README.md domain.md reference/README.md survey report-slide/README.md
 @'
 from pathlib import Path
 import json, re

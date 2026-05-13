@@ -1,8 +1,8 @@
 # Related Work Corpus Expansion to 300
 
-Status date: 2026-05-12
+Status date: 2026-05-13
 
-This file records the 152 metadata-only candidates stored in `survey/candidate_reference.bib`. They were originally appended to `survey/reference.bib` during corpus expansion, but they are now kept separate from the 104 active in-scope bibliography entries used by the survey. Two SGX runtime/container background entries are preserved in `survey/background_runtime_reference.bib`, not the active bibliography. The 64 out-of-scope attack-only entries that previously shared the active BibTeX file are preserved separately in `survey/excluded_attack_reference.bib`. Current corpus counts are reconciled in `survey/evidence_ledger.md`.
+This file records the 152 metadata-only candidates stored in `survey/candidate_reference.bib`. They were originally appended to `survey/reference.bib` during corpus expansion, but they are now kept separate from the 114 active in-scope bibliography entries used by the survey. Two SGX runtime/container background entries are preserved in `survey/background_runtime_reference.bib`, not the active bibliography. The 64 out-of-scope attack-only entries that previously shared the active BibTeX file are preserved separately in `survey/excluded_attack_reference.bib`. Current corpus counts are reconciled in `survey/evidence_ledger.md`.
 
 Important rule: these entries are triage candidates, not downloaded/reviewed reference records. Before any candidate is cited substantively in the survey, verify its authors, venue, DOI/source URL, download a public PDF when available, create the matching `reference/<category>/<paper>/README.md`, and promote a canonical BibTeX entry into `survey/reference.bib`.
 
@@ -41,6 +41,14 @@ covered by an active canonical reference, explicit backlog/no substantive
 正文 citation, or background substrate that cannot support an Arm CCA,
 RISC-V CoVE/AP-TEE, TDISP, accelerator/device TEE, attestation, or
 ISA/hardware-defense claim until promoted through the reference gate.
+
+2026-05-13 update: `rw2008flicker...`, `rw2010trustvisor...`,
+`rw2008hardbound...`, `rw2015cheri...`, `rw2013sancus...`,
+`rw2015tytan...`, `rw2012watchdog...`, `rw2003aegis...`,
+`rw2003efficientmemoryintegrity...`, and `rw2007bonsai...` now have active
+canonical references in `survey/reference.bib`, local `reference/` reviews, and
+verified `paper.pdf` files. The `rw...` rows remain metadata-only historical
+triage records and must not be cited directly.
 
 ## Immediate Download/Review Queue
 
@@ -83,10 +91,10 @@ Prioritize these newly added candidates because they are closest to the fixed su
 
 - `rw2015hafixhardwareassistedflowintegrity` (2015) HAFIX: Hardware-Assisted Flow Integrity Extension
 - `rw2016hcfihardwareenforcedcontrolflow` (2016) HCFI: Hardware-Enforced Control-Flow Integrity
-- `rw2008hardboundarchitecturalsupportspatialsafety` (2008) HardBound: Architectural Support for Spatial Safety of the C Programming Language
-- `rw2012watchdoghardwaresafesecuremanual` (2012) Watchdog: Hardware for Safe and Secure Manual Memory Management and Full Memory Safety
+- `rw2008hardboundarchitecturalsupportspatialsafety` (2008) HardBound: Architectural Support for Spatial Safety of the C Programming Language — promoted as `devietti2008hardbound`
+- `rw2012watchdoghardwaresafesecuremanual` (2012) Watchdog: Hardware for Safe and Secure Manual Memory Management and Full Memory Safety — promoted as `nagarakatte2012watchdog`
 - `rw2014watchdoglitehardwareacceleratedcompilerbased` (2014) WatchdogLite: Hardware-Accelerated Compiler-Based Pointer Checking
-- `rw2015cherihybridcapabilitysystemarchitecture` (2015) CHERI: A Hybrid Capability-System Architecture for Scalable Software Compartmentalization
+- `rw2015cherihybridcapabilitysystemarchitecture` (2015) CHERI: A Hybrid Capability-System Architecture for Scalable Software Compartmentalization — promoted as `watson2015cheri`
 - `rw2019cheriabienforcingvalidpointerprovenance` (2019) CheriABI: Enforcing Valid Pointer Provenance and Minimizing Pointer Privilege in the POSIX C Run-Time Environment
 - `rw2024cherihardwareenabledcc` (2024) CHERI: Hardware-Enabled C/C++ Memory Protection at Scale
 
@@ -101,8 +109,8 @@ Prioritize these newly added candidates because they are closest to the fixed su
 
 ### hardware-tee-architecture
 
-- `rw2010trustvisorefficienttcbreductionattestation` (2010) TrustVisor: Efficient TCB Reduction and Attestation
-- `rw2008flickerexecutioninfrastructuretcbminimization` (2008) Flicker: An Execution Infrastructure for TCB Minimization
+- `rw2010trustvisorefficienttcbreductionattestation` (2010) TrustVisor: Efficient TCB Reduction and Attestation — promoted as `mccune2010trustvisor`
+- `rw2008flickerexecutioninfrastructuretcbminimization` (2008) Flicker: An Execution Infrastructure for TCB Minimization — promoted as `mccune2008flicker`
 
 ## Search Seeds Used
 

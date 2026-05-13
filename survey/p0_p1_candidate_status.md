@@ -1,6 +1,6 @@
 # P0/P1 Candidate Terminal Status
 
-Status date: 2026-05-12
+Status date: 2026-05-13
 
 This file assigns every P0/P1 metadata-only candidate from `survey/candidate_reference.bib` to a terminal evidence state. It is a backlog/control record, not a bibliography used by正文. A `rw...` key must not be cited in `survey/*.tex`; use the listed active canonical key when one exists, or keep the candidate out of正文 until it is verified and promoted.
 
@@ -36,12 +36,12 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2019vrasedverifiedhardwaresoftwareco` | P0 | `attestation-boot-lifecycle` | 2019 | Covered by active reference `nunes2019vrased`; candidate remains metadata-only. |
 | `rw2021deviceidentifiercompositionengine` | P0 | `attestation-boot-lifecycle` | 2021 | Covered by active official TCG reference `tcg_dice_2018`; candidate remains metadata-only. |
 | `rw2023remoteattestationproceduresarchitecture` | P0 | `attestation-boot-lifecycle` | 2023 | Covered by active reference `rats_rfc`; candidate remains metadata-only. |
-| `rw2008flickerexecutioninfrastructuretcbminimization` | P0 | `hardware-tee-architecture` | 2008 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
-| `rw2010trustvisorefficienttcbreductionattestation` | P0 | `hardware-tee-architecture` | 2010 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
-| `rw2008hardboundarchitecturalsupportspatialsafety` | P0 | `isa-hardware-defense` | 2008 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
-| `rw2012watchdoghardwaresafesecuremanual` | P0 | `isa-hardware-defense` | 2012 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
+| `rw2008flickerexecutioninfrastructuretcbminimization` | P0 | `hardware-tee-architecture` | 2008 | Covered by active reference `mccune2008flicker`; candidate remains metadata-only. |
+| `rw2010trustvisorefficienttcbreductionattestation` | P0 | `hardware-tee-architecture` | 2010 | Covered by active reference `mccune2010trustvisor`; candidate remains metadata-only. |
+| `rw2008hardboundarchitecturalsupportspatialsafety` | P0 | `isa-hardware-defense` | 2008 | Covered by active reference `devietti2008hardbound`; candidate remains metadata-only. |
+| `rw2012watchdoghardwaresafesecuremanual` | P0 | `isa-hardware-defense` | 2012 | Covered by active reference `nagarakatte2012watchdog`; candidate remains metadata-only. |
 | `rw2014watchdoglitehardwareacceleratedcompilerbased` | P0 | `isa-hardware-defense` | 2014 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
-| `rw2015cherihybridcapabilitysystemarchitecture` | P0 | `isa-hardware-defense` | 2015 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
+| `rw2015cherihybridcapabilitysystemarchitecture` | P0 | `isa-hardware-defense` | 2015 | Covered by active reference `watson2015cheri`; candidate remains metadata-only. |
 | `rw2015hafixhardwareassistedflowintegrity` | P0 | `isa-hardware-defense` | 2015 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
 | `rw2016hcfihardwareenforcedcontrolflow` | P0 | `isa-hardware-defense` | 2016 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
 | `rw2019cheriabienforcingvalidpointerprovenance` | P0 | `isa-hardware-defense` | 2019 | Backlog ISA/hardware-defense lineage; current正文 should use verified specs and active CHERIoT/RV-CURE/CVA6-CFI entries. |
@@ -88,10 +88,10 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2023pondcxlbasedmemorypooling` | P1 | `confidential-io-fabric` | 2023 | Background substrate for CXL/RDMA/SmartNIC/fabric; no substantive confidential-computing claim unless promoted. |
 | `rw2023transparentpageplacementcxlenabled` | P1 | `confidential-io-fabric` | 2023 | Background substrate for CXL/RDMA/SmartNIC/fabric; no substantive confidential-computing claim unless promoted. |
 | `rw2000architecturalsupportcopytamperresistant` | P1 | `hardware-tee-architecture` | 2000 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
-| `rw2003aegisarchitecturetamperevidenttamper` | P1 | `hardware-tee-architecture` | 2003 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
-| `rw2003efficientmemoryintegrityverificationencryption` | P1 | `hardware-tee-architecture` | 2003 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
+| `rw2003aegisarchitecturetamperevidenttamper` | P1 | `hardware-tee-architecture` | 2003 | Covered by active reference `suh2003aegis`; candidate remains metadata-only. |
+| `rw2003efficientmemoryintegrityverificationencryption` | P1 | `hardware-tee-architecture` | 2003 | Covered by active reference `suh2003memoryintegrity`; candidate remains metadata-only. |
 | `rw2003singlechipsecureprocessor` | P1 | `hardware-tee-architecture` | 2003 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
-| `rw2007bonsaimerkletreesefficientsecure` | P1 | `hardware-tee-architecture` | 2007 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
+| `rw2007bonsaimerkletreesefficientsecure` | P1 | `hardware-tee-architecture` | 2007 | Covered by active reference `rogers2007bonsai`; candidate remains metadata-only. |
 | `rw2008overshadowvirtualizationbasedapproachretrofittin` | P1 | `hardware-tee-architecture` | 2008 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2010bastionarchitecturepracticalprotectionapplicatio` | P1 | `hardware-tee-architecture` | 2010 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
 | `rw2011memoirpracticalstatecontinuityprotected` | P1 | `hardware-tee-architecture` | 2011 | Backlog/foundational lineage; no substantive citation until canonical paper/PDF/README are added. |
@@ -111,8 +111,8 @@ Counts: P0 = 42, P1 = 70, total P0/P1 = 112.
 | `rw2003countermodeencryptionsecureprocessors` | P1 | `memory-encryption-integrity` | 2003 | Backlog memory-integrity lineage; use active `henson2014memory` survey unless original paper is promoted. |
 | `rw2005reducingoverheadmemoryintegrityverification` | P1 | `memory-encryption-integrity` | 2005 | Backlog memory-integrity lineage; use active `henson2014memory` survey unless original paper is promoted. |
 | `rw2010vaultsecurebindingpersistentmemory` | P1 | `memory-encryption-integrity` | 2010 | Backlog memory-integrity lineage; use active `henson2014memory` survey unless original paper is promoted. |
-| `rw2013sancuslowcosttrustworthyextensible` | P1 | `riscv-tee-architecture` | 2013 | Backlog RISC-V substrate; no substantive citation until source/PDF/README are verified. |
-| `rw2015tytantinytrustanchortiny` | P1 | `riscv-tee-architecture` | 2015 | Backlog RISC-V substrate; no substantive citation until source/PDF/README are verified. |
+| `rw2013sancuslowcosttrustworthyextensible` | P1 | `riscv-tee-architecture` | 2013 | Covered by active reference `noorman2013sancus`; candidate remains metadata-only. |
+| `rw2015tytantinytrustanchortiny` | P1 | `riscv-tee-architecture` | 2015 | Covered by active reference `koeberl2015tytan`; candidate remains metadata-only. |
 | `rw2017sancus20lowcost` | P1 | `riscv-tee-architecture` | 2017 | Backlog RISC-V substrate; no substantive citation until source/PDF/README are verified. |
 | `rw2018multizonesecurityriscv` | P1 | `riscv-tee-architecture` | 2018 | Backlog RISC-V substrate; no substantive citation until source/PDF/README are verified. |
 | `rw2019shaktitriscvprocessor` | P1 | `riscv-tee-architecture` | 2019 | Backlog RISC-V substrate; no substantive citation until source/PDF/README are verified. |
@@ -142,6 +142,16 @@ These entries were promoted as canonical keys during the `next-plan.md` implemen
 | `khalilov2024osmosis` | P2/background substrate | `memory-and-io-fabrics` | Added as active background substrate with verified PDF and README; cited for SmartNIC resource management only. |
 | `schluter2024heckler` | Boundary-only | `survey/excluded_attack_reference.bib` | Added only to excluded attack bibliography and boundary prose; no active正文 citation. |
 | `tcg_dice_2018` | One-hop P0 promotion | `attestation` | Added from Aster citation triage as official DICE UDS/CDI reference with verified PDF and README. |
+| `mccune2008flicker` | P0 foundational promotion | `trusted-execution-environments` | Added as active reference with verified PDF and README; use for dynamic root-of-trust and fine-grained attestation lineage. |
+| `mccune2010trustvisor` | P0 foundational promotion | `trusted-execution-environments` | Added as active reference with verified PDF and README; use for minimized hypervisor TCB and attestation lineage. |
+| `devietti2008hardbound` | P0 foundational promotion | `architecture-and-platform-security` | Added as active reference with verified PDF and README; use for hardware spatial memory-safety lineage. |
+| `watson2015cheri` | P0 foundational promotion | `architecture-and-platform-security` | Added as active reference with verified PDF and README; use for CHERI capability-system lineage. |
+| `nagarakatte2012watchdog` | P0 foundational promotion | `architecture-and-platform-security` | Added as active reference with verified PDF and README; use for hardware full-memory-safety lineage. |
+| `suh2003aegis` | P1 foundational promotion | `architecture-and-platform-security` | Added as active reference with verified PDF and README; use for tamper-evident secure-processor lineage. |
+| `suh2003memoryintegrity` | P1 foundational promotion | `architecture-and-platform-security` | Added as active reference with verified PDF and README; use for memory integrity/encryption mechanism lineage. |
+| `rogers2007bonsai` | P1 foundational promotion | `architecture-and-platform-security` | Added as active reference with verified PDF and README; use for Bonsai Merkle Tree freshness/replay lineage. |
+| `noorman2013sancus` | P1 foundational promotion | `trusted-execution-environments` | Added as active reference with verified PDF and README; use for low-cost embedded TEE lineage. |
+| `koeberl2015tytan` | P1 foundational promotion | `trusted-execution-environments` | Added as active reference with verified PDF and README; use for tiny-device trust-anchor lineage. |
 
 ## Promotion Gate
 
