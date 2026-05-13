@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；`riscv_aia_2023` 作为 trusted interrupt
 primary:
 - key: feng2024siopmp
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E1
   selection_reason: sIOPMP is a peer-reviewed mechanism starting point for RISC-V trusted I/O and DMA protection.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：system
         - 证据：E1 / Peer-reviewed SOTA
         - 来源：local_pdf_verified
     background:
@@ -64,6 +68,9 @@ primary:
       commercialization: 对高性能设备直通有价值；风险在硬件改造、IOMMU/IOPMP 组合和平台可观测性。
 - key: riscv_cove_io_2026
   role: sota_1
+  selection_slot: primary_2
+  paper_type: spec
+  claim_strength: E3
   selection_reason: CoVE-IO and TEE-I/O draft is the current standards-track SOTA for RISC-V confidential I/O.
   evidence_type: E3 draft/preprint, not ratified
   maturity: draft/preprint, not ratified
@@ -82,7 +89,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：spec
         - 证据：E3 / Draft-not-ratified
         - 来源：local_pdf_verified
     background:
@@ -123,6 +131,9 @@ primary:
       commercialization: 对 RISC-V confidential accelerator/NIC 生态关键；风险在 SPDM/TDISP/IDE 与平台 ABI 收敛。
 - key: riscv_iommu_2023
   role: sota_2
+  selection_slot: primary_3
+  paper_type: spec
+  claim_strength: E0
   selection_reason: RISC-V IOMMU specification provides the current DMA isolation substrate for CoVE-IO.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -142,7 +153,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：local_pdf_verified
     background:

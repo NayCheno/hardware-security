@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{RISC-V CoVE reference architecture}{E3 / Foundational public preprint}
-\PrimaryCard{SOTA 1}{RISC-V AP-TEE / CoVE TVM 规范草案}{E3 / Draft-not-ratified}
-\PrimaryCard{SOTA 2}{RISC-V TEE 谱系辅助材料}{E2 survey / Background substrate}
+\PrimaryCard{Primary 1 / system}{RISC-V CoVE reference architecture}{E3 / Foundational public preprint}
+\PrimaryCard{Primary 2 / spec}{RISC-V AP-TEE / CoVE TVM 规范草案}{E3 / Draft-not-ratified}
+\PrimaryCard{Primary 3 / sok}{RISC-V TEE 谱系辅助材料}{E2 survey / Background substrate}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item sahita2023cove: E3 / Foundational public preprint；local\_pdf\_verified
-  \item riscv\_ap\_tee\_2024: E3 / Draft-not-ratified；local\_pdf\_verified
-  \item boubakri2025riscvtee: E2 survey / Background substrate；local\_pdf\_verified
+  \item sahita2023cove: system；E3；local\_pdf\_verified
+  \item riscv\_ap\_tee\_2024: spec；E3；local\_pdf\_verified
+  \item boubakri2025riscvtee: sok；E2 survey；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：system
   \item 证据：E3 / Foundational public preprint
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：spec
   \item 证据：E3 / Draft-not-ratified
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -192,7 +194,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：sok
   \item 证据：E2 survey / Background substrate
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -263,7 +266,7 @@
 
 \begin{frame}[t]{RISC-V CoVE / AP-TEE confidential VM：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

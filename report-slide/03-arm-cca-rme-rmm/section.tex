@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；`wu2024rmm` 作为 RMM verification auxiliary，不计入三篇主讲。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{Arm Confidential Computing Architecture}{E1 / Foundational}
-\PrimaryCard{SOTA 1}{Arm CCA 架构规范}{E0 / Spec-standard SOTA}
-\PrimaryCard{SOTA 2}{Realm Management Monitor 规范}{E0 / Spec-standard SOTA}
+\PrimaryCard{Primary 1 / system}{Arm Confidential Computing Architecture}{E1 / Foundational}
+\PrimaryCard{Primary 2 / spec}{Arm CCA 架构规范}{E0 / Spec-standard SOTA}
+\PrimaryCard{Primary 3 / spec}{Realm Management Monitor 规范}{E0 / Spec-standard SOTA}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item li2022cca: E1 / Foundational；local\_pdf\_verified
-  \item arm\_cca\_spec: E0 / Spec-standard SOTA；source\_verified\_pdf\_unavailable
-  \item arm\_rmm\_spec: E0 / Spec-standard SOTA；source\_verified\_pdf\_unavailable
+  \item li2022cca: system；E1；local\_pdf\_verified
+  \item arm\_cca\_spec: spec；E0；source\_verified\_pdf\_unavailable
+  \item arm\_rmm\_spec: spec；E0；source\_verified\_pdf\_unavailable
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：system
   \item 证据：E1 / Foundational
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：spec
   \item 证据：E0 / Spec-standard SOTA
   \item 来源：source\_verified\_pdf\_unavailable
 \end{itemize}}
@@ -192,7 +194,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：spec
   \item 证据：E0 / Spec-standard SOTA
   \item 来源：source\_verified\_pdf\_unavailable
 \end{itemize}}
@@ -261,7 +264,7 @@
 
 \begin{frame}[t]{Arm CCA / RME / RMM 基础架构：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

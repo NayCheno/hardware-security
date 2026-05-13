@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；`liu2025lesstrust` 作为 intra-process 辅助材料，不计入三篇主讲。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{Shelter: CCA 用户态隔离}{E1 / Foundational}
-\PrimaryCard{SOTA 1}{RContainer: CCA 安全容器}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{SOTA 2}{NanoZone: CCA 细粒度内存保护}{E3 / Draft-not-ratified}
+\PrimaryCard{Primary 1 / system}{Shelter: CCA 用户态隔离}{E1 / Foundational}
+\PrimaryCard{Primary 2 / system}{RContainer: CCA 安全容器}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{Primary 3 / system}{NanoZone: CCA 细粒度内存保护}{E3 / Draft-not-ratified}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item zhang2023shelter: E1 / Foundational；local\_pdf\_verified
-  \item zhou2025rcontainer: E1 / Peer-reviewed SOTA；local\_pdf\_verified
-  \item liu2025nanozone: E3 / Draft-not-ratified；local\_pdf\_verified
+  \item zhang2023shelter: system；E1；local\_pdf\_verified
+  \item zhou2025rcontainer: system；E1；local\_pdf\_verified
+  \item liu2025nanozone: system；E3；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：system
   \item 证据：E1 / Foundational
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：system
   \item 证据：E1 / Peer-reviewed SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -192,7 +194,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：system
   \item 证据：E3 / Draft-not-ratified
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -261,7 +264,7 @@
 
 \begin{frame}[t]{Arm CCA 细粒度隔离与部署模型：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

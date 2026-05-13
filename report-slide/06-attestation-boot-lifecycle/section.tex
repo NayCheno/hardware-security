@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；`rats\_rfc` 主讲 attestation architecture，`eat\_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{SWATT: 软件 attestation 早期代表}{E1 / Foundational}
-\PrimaryCard{SOTA 1}{RATS 架构}{E0 / Spec-standard SOTA}
-\PrimaryCard{SOTA 2}{VRASED verified RA co-design}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{Primary 1 / system}{SWATT: 软件 attestation 早期代表}{E1 / Foundational}
+\PrimaryCard{Primary 2 / spec}{RATS 架构}{E0 / Spec-standard SOTA}
+\PrimaryCard{Primary 3 / system}{VRASED verified RA co-design}{E1 / Peer-reviewed SOTA}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item seshadri2004swatt: E1 / Foundational；local\_pdf\_verified
-  \item rats\_rfc: E0 / Spec-standard SOTA；local\_pdf\_verified
-  \item nunes2019vrased: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+  \item seshadri2004swatt: system；E1；local\_pdf\_verified
+  \item rats\_rfc: spec；E0；local\_pdf\_verified
+  \item nunes2019vrased: system；E1；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：system
   \item 证据：E1 / Foundational
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：spec
   \item 证据：E0 / Spec-standard SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -193,7 +195,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：system
   \item 证据：E1 / Peer-reviewed SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -262,7 +265,7 @@
 
 \begin{frame}[t]{Attestation、boot、lifecycle：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；`sang2025portal`、`deng2022strongbox`、
 primary:
 - key: zhu2020hetee
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E1
   selection_reason: HETEE is a foundational peer-reviewed work for heterogeneous CPU-accelerator TEEs.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：system
         - 证据：E1 / Foundational peer-reviewed
         - 来源：local_pdf_verified
     background:
@@ -63,6 +67,9 @@ primary:
       commercialization: 适合启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle 复杂度。
 - key: dhar2024cloudscale
   role: sota_1
+  selection_slot: primary_2
+  paper_type: system
+  claim_strength: E1
   selection_reason: Cloud-scale acceleration work is a peer-reviewed 2024 SOTA item for confidential accelerator deployment.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -82,7 +89,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：system
         - 证据：E1 / Peer-reviewed SOTA
         - 来源：local_pdf_verified
     background:
@@ -123,6 +131,9 @@ primary:
       commercialization: 贴近云 DPU/SmartNIC/NPU resource-pool 问题；风险在多租户编排、热插拔、failure isolation 和 production attestation。
 - key: wang2026cage
   role: sota_2
+  selection_slot: primary_3
+  paper_type: system
+  claim_strength: E1
   selection_reason: CAGE is a recent peer-reviewed SOTA item for GPU accelerator enclaves.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -144,7 +155,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：system
         - 证据：E1 / Peer-reviewed SOTA
         - 来源：local_pdf_verified
     background:

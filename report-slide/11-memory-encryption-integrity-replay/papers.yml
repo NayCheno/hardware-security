@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；`riscv_ap_tee_2024` 作为 AP-TEE/CoVE li
 primary:
 - key: henson2014memory
   role: foundational
+  selection_slot: primary_1
+  paper_type: sok
+  claim_strength: E2
   selection_reason: Henson 2014 is the background starting point for secure memory encryption, integrity, and replay defense.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：sok
         - 证据：E2 / Background substrate
         - 来源：local_pdf_verified
     background:
@@ -65,6 +69,9 @@ primary:
       commercialization: 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
 - key: amd_sev_snp
   role: sota_1
+  selection_slot: primary_2
+  paper_type: vendor
+  claim_strength: E4
   selection_reason: AMD SEV-SNP whitepaper captures a mature commercial VM memory integrity and replay-protection design.
   evidence_type: E4 industry/vendor evidence
   maturity: industry/vendor evidence
@@ -83,7 +90,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：vendor
         - 证据：E4 / Industry evidence
         - 来源：local_pdf_verified
     background:
@@ -124,6 +132,9 @@ primary:
       commercialization: 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
 - key: arm_cca_spec
   role: sota_2
+  selection_slot: primary_3
+  paper_type: spec
+  claim_strength: E0
   selection_reason: Arm CCA specification defines current Realm memory ownership and granule lifecycle evidence.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -143,7 +154,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：source_verified_pdf_unavailable
     background:

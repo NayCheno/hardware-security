@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；`riscv_iopmp_2026` 与 `manoni2026cva6cfi
 primary:
 - key: riscv_privileged
   role: foundational
+  selection_slot: primary_1
+  paper_type: spec
+  claim_strength: E0
   selection_reason: RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：spec
         - 证据：E0 / Foundational standard substrate
         - 来源：local_pdf_verified
     background:
@@ -63,6 +67,9 @@ primary:
       commercialization: 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
 - key: riscv_iommu_2023
   role: sota_1
+  selection_slot: primary_2
+  paper_type: spec
+  claim_strength: E0
   selection_reason: RISC-V IOMMU specification is the current standard substrate for DMA isolation and CoVE-IO.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -82,7 +89,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：local_pdf_verified
     background:
@@ -125,6 +133,9 @@ primary:
       commercialization: 对服务器和加速器直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
 - key: riscv_aia_2023
   role: sota_2
+  selection_slot: primary_3
+  paper_type: spec
+  claim_strength: E0
   selection_reason: RISC-V AIA specification is the current interrupt virtualization and ownership substrate.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -144,7 +155,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：local_pdf_verified
     background:

@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；不引入辅助材料，直接呈现 RISC
 primary:
 - key: lee2020keystone
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E1
   selection_reason: EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE framework paper.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：system
         - 证据：E1 / Foundational
         - 来源：author_hosted_eurosys_pdf_verified
     background:
@@ -64,6 +68,9 @@ primary:
       commercialization: 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
 - key: feng2021penglai
   role: sota_1
+  selection_slot: primary_2
+  paper_type: system
+  claim_strength: E1
   selection_reason: OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS after Keystone.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -82,7 +89,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：system
         - 证据：E1 / Peer-reviewed SOTA
         - 来源：local_pdf_verified
     background:
@@ -123,6 +131,9 @@ primary:
       commercialization: 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
 - key: schrammel2023spearv
   role: sota_2
+  selection_slot: primary_3
+  paper_type: system
+  claim_strength: E1
   selection_reason: SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-attestation focus.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -141,7 +152,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：system
         - 证据：E1 / Peer-reviewed SOTA
         - 来源：local_pdf_verified
     background:

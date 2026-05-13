@@ -5,6 +5,9 @@ selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architectur
 primary:
 - key: seshadri2004swatt
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E1
   selection_reason: SWATT is the classic starting point for remote software attestation problem framing.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -23,7 +26,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：system
         - 证据：E1 / Foundational
         - 来源：local_pdf_verified
     background:
@@ -64,6 +68,9 @@ primary:
       commercialization: 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
 - key: rats_rfc
   role: sota_1
+  selection_slot: primary_2
+  paper_type: spec
+  claim_strength: E0
   selection_reason: RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -83,7 +90,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：local_pdf_verified
     background:
@@ -125,6 +133,9 @@ primary:
       commercialization: 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
 - key: nunes2019vrased
   role: sota_2
+  selection_slot: primary_3
+  paper_type: system
+  claim_strength: E1
   selection_reason: VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software remote attestation.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -143,7 +154,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：system
         - 证据：E1 / Peer-reviewed SOTA
         - 来源：local_pdf_verified
     background:

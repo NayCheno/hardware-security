@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；`cxl_spec` 与 `pcie_ide` 作为 fabric/l
 primary:
 - key: gouk2022directcxl
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E1 primary systems
   selection_reason: DirectCXL is the primary systems-paper entry point for CXL memory fabric research.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -17,6 +20,9 @@ primary:
   - cxl_spec
 - key: zhong2024cxltiers
   role: sota_1
+  selection_slot: primary_2
+  paper_type: system
+  claim_strength: E1 primary systems
   selection_reason: CXL-Tiers is a peer-reviewed OSDI 2024 SOTA system for CXL memory tiering.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -30,6 +36,9 @@ primary:
   - cxl_spec
 - key: wang2025odrp
   role: sota_2
+  selection_slot: primary_3
+  paper_type: system
+  claim_strength: E1 primary systems
   selection_reason: ODRP is a peer-reviewed NSDI 2025 SOTA system for CXL and RDMA data paths.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work

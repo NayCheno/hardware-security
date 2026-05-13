@@ -117,7 +117,8 @@ def migrate_primary(primary: dict[str, Any]) -> dict[str, Any]:
 
     title = as_text(migrated.get("title")) or as_text(migrated.get("key"))
     evidence = as_text(migrated.get("evidence"))
-    role = as_text(migrated.get("role"))
+    selection_slot = as_text(migrated.get("selection_slot") or migrated.get("role"))
+    paper_type = as_text(migrated.get("paper_type"))
     source_status = as_text(migrated.get("source_status") or migrated.get("pdf_status"))
     evidence_type = as_text(migrated.get("evidence_type"))
     maturity = as_text(migrated.get("maturity"))
@@ -135,7 +136,8 @@ def migrate_primary(primary: dict[str, Any]) -> dict[str, Any]:
             "visual": {
                 "title": "证据定位",
                 "items": [
-                    f"角色：{role}",
+                    f"槽位：{selection_slot}",
+                    f"类型：{paper_type}",
                     f"证据：{evidence}",
                     f"来源：{source_status}",
                 ],

@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；不引入辅助材料，直接呈现 RISC-V enclave lineage。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{Keystone: 开源 RISC-V TEE 框架}{E1 / Foundational}
-\PrimaryCard{SOTA 1}{Penglai: scalable enclave memory protection}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{SOTA 2}{SPEAR-V: low-overhead RISC-V enclave primitive}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{Primary 1 / system}{Keystone: 开源 RISC-V TEE 框架}{E1 / Foundational}
+\PrimaryCard{Primary 2 / system}{Penglai: scalable enclave memory protection}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{Primary 3 / system}{SPEAR-V: low-overhead RISC-V enclave primitive}{E1 / Peer-reviewed SOTA}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item lee2020keystone: E1 / Foundational；author\_hosted\_eurosys\_pdf\_verified
-  \item feng2021penglai: E1 / Peer-reviewed SOTA；local\_pdf\_verified
-  \item schrammel2023spearv: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+  \item lee2020keystone: system；E1；author\_hosted\_eurosys\_pdf\_verified
+  \item feng2021penglai: system；E1；local\_pdf\_verified
+  \item schrammel2023spearv: system；E1；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：system
   \item 证据：E1 / Foundational
   \item 来源：author\_hosted\_eurosys\_pdf\_verified
 \end{itemize}}
@@ -114,7 +115,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：system
   \item 证据：E1 / Peer-reviewed SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -193,7 +195,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：system
   \item 证据：E1 / Peer-reviewed SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -262,7 +265,7 @@
 
 \begin{frame}[t]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

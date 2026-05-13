@@ -58,9 +58,17 @@ For each selected primary paper, keep a five-slide mini-story:
 4. 实验结果 / 证据状态
 5. 文章评价：优点、不足、商业落地潜力
 
-Evidence labels must be preserved: Foundational, Peer-reviewed SOTA, Spec/standard SOTA, Draft/not ratified, Industry evidence, Background substrate, Candidate/metadata-only.
+Evidence metadata is split across independent fields:
+`selection_slot` records presentation position, `paper_type` records source kind,
+`claim_strength` records E0-E5 claim support, and `source_status` records local
+source/PDF status. Legacy `role` values are compatibility labels only and must
+not be read as academic status.
 
-Each direction keeps exactly three `primary` entries in `papers.yml`. Combined evidence packages are split into one primary paper/spec plus `auxiliary` comparison materials that do not count toward the three-paper rule. Missing-PDF, gated, metadata-only, and source-limited entries may describe source status only; they must not carry strong experimental claims.
+Each direction keeps exactly three `primary` entries in `papers.yml`.
+Combined evidence packages are split into one primary paper/spec plus
+`auxiliary` comparison materials that do not count toward the three-slot rule.
+Missing-PDF, gated, metadata-only, and source-limited entries may describe
+source status only; they must not carry strong experimental claims.
 
 For legacy directions, each `primary` entry must include:
 

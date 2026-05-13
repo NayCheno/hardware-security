@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；`wu2024rmm` 作为 RMM verification auxil
 primary:
 - key: li2022cca
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E1
   selection_reason: OSDI 2022 paper is the foundational peer-reviewed system treatment of Arm CCA, RME, and RMM.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：system
         - 证据：E1 / Foundational
         - 来源：local_pdf_verified
     background:
@@ -63,6 +67,9 @@ primary:
       commercialization: 商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。
 - key: arm_cca_spec
   role: sota_1
+  selection_slot: primary_2
+  paper_type: spec
+  claim_strength: E0
   selection_reason: First-party Arm CCA specification defines the current Realm model and standard evidence base.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -83,7 +90,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：source_verified_pdf_unavailable
     background:
@@ -124,6 +132,9 @@ primary:
       commercialization: 商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。
 - key: arm_rmm_spec
   role: sota_2
+  selection_slot: primary_3
+  paper_type: spec
+  claim_strength: E0
   selection_reason: First-party RMM specification defines Realm management and lifecycle semantics for CCA systems.
   evidence_type: E0 official standard/specification
   maturity: official standard/specification
@@ -143,7 +154,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：spec
         - 证据：E0 / Spec-standard SOTA
         - 来源：source_verified_pdf_unavailable
     background:

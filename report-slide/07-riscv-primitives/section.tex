@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；`riscv\_iopmp\_2026` 与 `manoni2026cva6cfi` 作为辅助材料，不计入三篇主讲。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{RISC-V privileged architecture}{E0 / Foundational standard substrate}
-\PrimaryCard{SOTA 1}{RISC-V IOMMU}{E0 / Spec-standard SOTA}
-\PrimaryCard{SOTA 2}{RISC-V Advanced Interrupt Architecture}{E0 / Spec-standard SOTA}
+\PrimaryCard{Primary 1 / spec}{RISC-V privileged architecture}{E0 / Foundational standard substrate}
+\PrimaryCard{Primary 2 / spec}{RISC-V IOMMU}{E0 / Spec-standard SOTA}
+\PrimaryCard{Primary 3 / spec}{RISC-V Advanced Interrupt Architecture}{E0 / Spec-standard SOTA}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item riscv\_privileged: E0 / Foundational standard substrate；local\_pdf\_verified
-  \item riscv\_iommu\_2023: E0 / Spec-standard SOTA；local\_pdf\_verified
-  \item riscv\_aia\_2023: E0 / Spec-standard SOTA；local\_pdf\_verified
+  \item riscv\_privileged: spec；E0；local\_pdf\_verified
+  \item riscv\_iommu\_2023: spec；E0；local\_pdf\_verified
+  \item riscv\_aia\_2023: spec；E0；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：spec
   \item 证据：E0 / Foundational standard substrate
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：spec
   \item 证据：E0 / Spec-standard SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -194,7 +196,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：spec
   \item 证据：E0 / Spec-standard SOTA
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -265,7 +268,7 @@
 
 \begin{frame}[t]{RISC-V 基础安全 primitives：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

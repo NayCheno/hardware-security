@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；TrustZone 白皮书、survey 和漏洞 SoK 只支撑历史背景、生态和迁移动机。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{Arm TrustZone 白皮书}{E4 / Foundational industry evidence}
-\PrimaryCard{SOTA 1}{Demystifying Arm TrustZone}{E2 / Background substrate}
-\PrimaryCard{SOTA 2}{TrustZone-assisted TEE 漏洞 SoK}{E2 / Peer-reviewed SoK}
+\PrimaryCard{Primary 1 / vendor}{Arm TrustZone 白皮书}{E4 / Foundational industry evidence}
+\PrimaryCard{Primary 2 / sok}{Demystifying Arm TrustZone}{E2 / Background substrate}
+\PrimaryCard{Primary 3 / sok}{TrustZone-assisted TEE 漏洞 SoK}{E2 / Peer-reviewed SoK}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item arm\_trustzone\_whitepaper: E4 / Foundational industry evidence；local\_pdf\_verified
-  \item pinto2019trustzone: E2 / Background substrate；local\_pdf\_verified
-  \item cerdeira2020trustzone: E2 / Peer-reviewed SoK；local\_pdf\_verified
+  \item arm\_trustzone\_whitepaper: vendor；E4；local\_pdf\_verified
+  \item pinto2019trustzone: sok；E2；local\_pdf\_verified
+  \item cerdeira2020trustzone: sok；E2；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：vendor
   \item 证据：E4 / Foundational industry evidence
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：sok
   \item 证据：E2 / Background substrate
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -191,7 +193,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：sok
   \item 证据：E2 / Peer-reviewed SoK
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -260,7 +263,7 @@
 
 \begin{frame}[t]{Arm TrustZone TEE 与漏洞谱系：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

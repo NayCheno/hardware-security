@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；TrustZone 白皮书、survey 和漏洞 So
 primary:
 - key: arm_trustzone_whitepaper
   role: foundational
+  selection_slot: primary_1
+  paper_type: vendor
+  claim_strength: E4
   selection_reason: First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for this direction.
   evidence_type: E4 industry/vendor evidence
   maturity: industry/vendor evidence
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：vendor
         - 证据：E4 / Foundational industry evidence
         - 来源：local_pdf_verified
     background:
@@ -63,6 +67,9 @@ primary:
       commercialization: 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
 - key: pinto2019trustzone
   role: sota_1
+  selection_slot: primary_2
+  paper_type: sok
+  claim_strength: E2
   selection_reason: Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE lineage.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
@@ -81,7 +88,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：sok
         - 证据：E2 / Background substrate
         - 来源：local_pdf_verified
     background:
@@ -121,6 +129,9 @@ primary:
       commercialization: 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
 - key: cerdeira2020trustzone
   role: sota_2
+  selection_slot: primary_3
+  paper_type: sok
+  claim_strength: E2
   selection_reason: S&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narrative.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
@@ -139,7 +150,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：sok
         - 证据：E2 / Peer-reviewed SoK
         - 来源：local_pdf_verified
     background:

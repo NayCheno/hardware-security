@@ -23,9 +23,10 @@
 - `已覆盖`：正文已有实质叙述并引用对应 key。
 - `待补足`：Bib/reference 已有材料，但正文还缺机制化展开或引用未进入正文。
 - `未提到`：正文缺少该方向的关键概念、论文或规范。
-- `Foundational`：历史起点或机制谱系入口。
-- `Peer-reviewed SOTA`：正式发表的近年系统、SoK 或评估论文。
-- `Spec/standard SOTA`：官方规范、标准或 RFC；无实验时只支撑规范性机制/状态 claim。
+- `selection_slot`：`primary_1/primary_2/primary_3` 只表示 report-slide 的讲述位置，不表示论文的学术地位。
+- `paper_type`：`system/spec/sok/survey/vendor/contrast/background` 表示材料类型，必须和 source/maturity 分开读。
+- `claim_strength`：E0-E5 表示该材料能支撑的最强 claim；规范、survey、vendor、metadata-only 不得越级支撑机制实验结论。
+- `Foundational`、`Peer-reviewed SOTA`、`Spec/standard SOTA` 等旧标签只作为文字摘要；正式机器可读字段以 `selection_slot`、`paper_type`、`claim_strength` 为准。
 - `Draft/not ratified`：公开 draft、release candidate 或未 ratified 规范；正文必须显式标注状态。
 - `Industry evidence`：vendor/product/whitepaper 证据；只支撑产品行为、部署实践或 engineering building block。
 - `Background substrate`：CXL/RDMA/SmartNIC/runtime/ISA lineage 等相邻背景；SGX runtime/container entries live in `survey/background_runtime_reference.bib` unless promoted；不直接支撑 CCA/CoVE/TDISP/accelerator-TEE 安全 claim。
@@ -124,7 +125,7 @@
 
 ## 3. 小方向三篇精选与五维介绍
 
-每个小方向固定三篇：第一篇为 Foundational/基础入口，后两篇优先选择 Peer-reviewed SOTA、Spec/standard SOTA、Draft/not ratified、Industry evidence 或 Background substrate。若材料是规范、RFC 或 survey，则在“实验结果”中标为无新实验，并说明证据类型。
+每个小方向固定三个 primary slot：`primary_1/primary_2/primary_3` 是讲述位置，不能解释为学术排名；每条材料另外用 `paper_type` 标注 system/spec/sok/survey/vendor/contrast/background，并用 `claim_strength` 标注 E0-E5。若材料是规范、RFC 或 survey，则在“实验结果”中标为无新实验，并说明证据类型。
 
 ### 3.1 硬件辅助 TEE taxonomy
 

@@ -4,6 +4,9 @@ selection_rule: 固定三篇 primary；survey 只作为 background substrate，�
 primary:
 - key: sahita2023cove
   role: foundational
+  selection_slot: primary_1
+  paper_type: system
+  claim_strength: E3
   selection_reason: CoVE 2023 is the early mainline design material for RISC-V confidential VMs.
   evidence_type: E3 public preprint/proposal
   maturity: public preprint/proposal, not peer-reviewed
@@ -22,7 +25,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：foundational
+        - 槽位：primary_1
+        - 类型：system
         - 证据：E3 / Foundational public preprint
         - 来源：local_pdf_verified
     background:
@@ -63,6 +67,9 @@ primary:
       commercialization: 对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
 - key: riscv_ap_tee_2024
   role: sota_1
+  selection_slot: primary_2
+  paper_type: spec
+  claim_strength: E3
   selection_reason: AP-TEE draft is the current standards-track source for RISC-V confidential VM semantics.
   evidence_type: E3 draft/preprint, not ratified
   maturity: draft/preprint, not ratified
@@ -81,7 +88,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_1
+        - 槽位：primary_2
+        - 类型：spec
         - 证据：E3 / Draft-not-ratified
         - 来源：local_pdf_verified
     background:
@@ -122,6 +130,9 @@ primary:
       commercialization: 商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
 - key: boubakri2025riscvtee
   role: sota_2
+  selection_slot: primary_3
+  paper_type: sok
+  claim_strength: E2 survey
   selection_reason: Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave systems.
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
@@ -140,7 +151,8 @@ primary:
       visual:
         title: 证据定位
         items:
-        - 角色：sota_2
+        - 槽位：primary_3
+        - 类型：sok
         - 证据：E2 survey / Background substrate
         - 来源：local_pdf_verified
     background:

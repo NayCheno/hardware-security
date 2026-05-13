@@ -223,7 +223,7 @@ function coverSlide(presentation, deck) {
   });
   metricRail(slide, 60, 530, [
     ["15", "小方向", "由 evidence ledger 固定"],
-    ["45", "主讲材料", "1 篇 foundational + 2 篇 SOTA"],
+    ["45", "primary slot", "paper type 与 claim strength 分离"],
     ["225", "精讲页", "摘要/背景/方案/实验/评价"],
     ["2", "交付轨道", "Beamer PDF + editable PPTX"],
   ]);
@@ -287,7 +287,7 @@ function overviewSlides(presentation, deck, pageStart) {
   const three = presentation.slides.add();
   bg(three);
   kicker(three, "Direction index");
-  title(three, "15 个小方向按 foundational + SOTA 证据组织。", 58, 84, 940, 70, 32);
+  title(three, "15 个小方向按 primary slot、paper type 与 claim strength 组织。", 58, 84, 940, 70, 32);
   deck.forEach((direction, index) => {
     const col = index < 8 ? 0 : 1;
     const row = col === 0 ? index : index - 8;
@@ -317,11 +317,11 @@ function directionIntro(presentation, direction, page) {
   addText(slide, direction.selection_rule, 88, 292, 580, 54, { size: 13.5, color: STYLE.soft });
   direction.primary.forEach((paper, index) => {
     const yy = 370 + index * 46;
-    addText(slide, index === 0 ? "基础入口" : `SOTA ${index}`, 88, yy, 78, 24, { size: 11, color: STYLE.accent, bold: true });
+    addText(slide, paper.selection_slot || `primary_${index + 1}`, 88, yy, 78, 24, { size: 11, color: STYLE.accent, bold: true });
     addText(slide, paper.title, 178, yy - 2, 330, 28, { size: 13, color: STYLE.ink, bold: true });
     addText(slide, paper.evidence, 520, yy, 140, 22, { size: 9.5, color: STYLE.muted });
   });
-  visualStack(slide, "证据边界", direction.primary.map((paper) => `${paper.key}: ${paper.evidence}; ${paper.source_status}`), 768, 246, 364, 314);
+  visualStack(slide, "证据边界", direction.primary.map((paper) => `${paper.key}: ${paper.paper_type}; ${paper.claim_strength}; ${paper.source_status}`), 768, 246, 364, 314);
   footer(slide, page, `Direction | ${direction.direction}`);
   return slide;
 }
@@ -377,7 +377,7 @@ function directionSummary(presentation, direction, page) {
   bg(slide);
   kicker(slide, "Direction takeaway");
   title(slide, `${direction.direction}：技术演进总结`, 58, 82, 1020, 54, 28);
-  addText(slide, "三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。", 58, 160, 880, 36, {
+  addText(slide, "三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。", 58, 160, 880, 36, {
     size: 20,
     color: STYLE.ink,
     bold: true,

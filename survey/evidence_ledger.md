@@ -5,7 +5,7 @@ Last reconciled: 2026-05-12
 This ledger is the current count and boundary record for `survey/`,
 `reference/`, and `report-slide/`. Older audit files explain how a source
 entered the corpus; this file records the current state after PDF recovery,
-attestation-lineage promotion, and the three-primary slide selection pass.
+attestation-lineage promotion, and the three-slot slide selection pass.
 
 ## Current Counts
 
@@ -40,12 +40,14 @@ attestation-lineage promotion, and the three-primary slide selection pass.
 | Survey lane | Arm/RISC-V confidential-computing defense; confidential-computing network/I/O/data-path defense; ISA/hardware-design defense | New sources must map to one lane before promotion into active evidence. |
 | Protected object | Realm/TVM/enclave memory; device/DMA/MMIO/interrupt path; boot/attestation evidence; NIC/DPU/accelerator endpoint; ISA memory/control-flow state | Do not reuse evidence for a different protected object without an explicit bridge source. |
 | Mechanism type | Access control/ownership; encryption/integrity/freshness; attestation/evidence chain; trusted I/O/device lifecycle; hardware memory safety/CFI | Keep access-control, encryption, attestation, and device-lifecycle claims separate. |
-| Evidence role | foundational, sota_1, sota_2, auxiliary, background, candidate | Each slide direction has exactly three primary entries: one foundational and two SOTA entries. |
+| Selection slot | primary_1, primary_2, primary_3, auxiliary, background, candidate | Each slide direction has exactly three primary entries; slot position is presentation structure, not academic status. |
+| Paper type | system, spec, sok, survey, vendor, contrast, background | Paper type records what the source is; it is independent from slide position and evidence class. |
+| Claim strength | E0, E1, E2, E3, E4, E5 | Claim strength records the strongest class of claim this source can support. |
 | Maturity | ratified, published, survey, vendor, draft/not ratified, preprint, metadata-only | Draft/preprint/metadata status must be visible in slides and prose. |
 
 ## Slide Primary Ledger
 
-| Direction | Foundational | SOTA 1 | SOTA 2 |
+| Direction | Primary 1 | Primary 2 | Primary 3 |
 |---|---|---|---|
 | `01-tee-taxonomy` | `schneider2022soktee` (E2) | `boubakri2025riscvtee` (E2 survey) | `sok-tee` (E2) |
 | `02-trustzone-lineage` | `arm_trustzone_whitepaper` (E4) | `pinto2019trustzone` (E2) | `cerdeira2020trustzone` (E2) |
@@ -55,7 +57,7 @@ attestation-lineage promotion, and the three-primary slide selection pass.
 | `06-attestation-boot-lifecycle` | `seshadri2004swatt` (E1) | `rats_rfc` (E0) | `nunes2019vrased` (E1) |
 | `07-riscv-primitives` | `riscv_privileged` (E0) | `riscv_iommu_2023` (E0) | `riscv_aia_2023` (E0) |
 | `08-riscv-tee-lineage` | `lee2020keystone` (E1) | `feng2021penglai` (E1) | `schrammel2023spearv` (E1) |
-| `09-riscv-cove-ap-tee` | `sahita2023cove` (E3 public preprint/proposal; foundational role) | `riscv_ap_tee_2024` (E3) | `boubakri2025riscvtee` (E2 survey) |
+| `09-riscv-cove-ap-tee` | `sahita2023cove` (E3 public preprint/proposal) | `riscv_ap_tee_2024` (E3) | `boubakri2025riscvtee` (E2 survey) |
 | `10-riscv-cove-io-tee-io` | `feng2024siopmp` (E1) | `riscv_cove_io_2026` (E3) | `riscv_iommu_2023` (E0) |
 | `11-memory-encryption-integrity-replay` | `henson2014memory` (E2) | `amd_sev_snp` (E4) | `arm_cca_spec` (E0) |
 | `12-memory-io-fabrics` | `gouk2022directcxl` (E1 primary systems) | `zhong2024cxltiers` (E1 primary systems) | `wang2025odrp` (E1 primary systems) |

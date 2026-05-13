@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；survey/SoK 只作为 taxonomy 和术语入口，不替代一手机制证据。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{硬件辅助 TEE 总体设计空间}{E2 / Foundational}
-\PrimaryCard{SOTA 1}{RISC-V secure enclave 与 TEE 谱系 survey}{E2 survey / Background substrate}
-\PrimaryCard{SOTA 2}{Accelerator TEE 设计空间}{E2 / Background substrate}
+\PrimaryCard{Primary 1 / sok}{硬件辅助 TEE 总体设计空间}{E2 / Foundational}
+\PrimaryCard{Primary 2 / sok}{RISC-V secure enclave 与 TEE 谱系 survey}{E2 survey / Background substrate}
+\PrimaryCard{Primary 3 / sok}{Accelerator TEE 设计空间}{E2 / Background substrate}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item schneider2022soktee: E2 / Foundational；local\_pdf\_verified
-  \item boubakri2025riscvtee: E2 survey / Background substrate；local\_pdf\_verified
-  \item sok-tee: E2 / Background substrate；local\_pdf\_verified
+  \item schneider2022soktee: sok；E2；local\_pdf\_verified
+  \item boubakri2025riscvtee: sok；E2 survey；local\_pdf\_verified
+  \item sok-tee: sok；E2；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：sok
   \item 证据：E2 / Foundational
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -113,7 +114,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：sok
   \item 证据：E2 survey / Background substrate
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -192,7 +194,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：sok
   \item 证据：E2 / Background substrate
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -261,7 +264,7 @@
 
 \begin{frame}[t]{硬件辅助 TEE taxonomy：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

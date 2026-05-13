@@ -8,15 +8,15 @@
     \textbf{三篇主讲选择规则}\par
     \SmallLead{固定三篇 primary；ACAI 和 Devlore 均保持 draft/not-ratified 状态，`sok-tee` 只作为 accelerator TEE taxonomy。}
     \vspace{2mm}
-\PrimaryCard{基础入口}{ACAI: CCA accelerator execution}{E3 / Draft-not-ratified}
-\PrimaryCard{SOTA 1}{Devlore: device interrupt protection}{E3 / Draft-not-ratified}
-\PrimaryCard{SOTA 2}{Accelerator TEE SoK for CCA I/O}{E2 / Background substrate}
+\PrimaryCard{Primary 1 / system}{ACAI: CCA accelerator execution}{E3 / Draft-not-ratified}
+\PrimaryCard{Primary 2 / system}{Devlore: device interrupt protection}{E3 / Draft-not-ratified}
+\PrimaryCard{Primary 3 / sok}{Accelerator TEE SoK for CCA I/O}{E2 / Background substrate}
   \end{column}
   \begin{column}{0.38\textwidth}
     \VisualPanel{证据边界}{\begin{itemize}
-  \item acai2023: E3 / Draft-not-ratified；local\_pdf\_verified
-  \item bertschi2026devlore: E3 / Draft-not-ratified；local\_pdf\_verified
-  \item sok-tee: E2 / Background substrate；local\_pdf\_verified
+  \item acai2023: system；E3；local\_pdf\_verified
+  \item bertschi2026devlore: system；E3；local\_pdf\_verified
+  \item sok-tee: sok；E2；local\_pdf\_verified
 \end{itemize}}
   \end{column}
 \end{columns}
@@ -34,7 +34,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：foundational
+  \item 槽位：primary\_1
+  \item 类型：system
   \item 证据：E3 / Draft-not-ratified
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -114,7 +115,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_1
+  \item 槽位：primary\_2
+  \item 类型：system
   \item 证据：E3 / Draft-not-ratified
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -193,7 +195,8 @@
 \end{itemize}}
 {证据定位}
 {\begin{itemize}
-  \item 角色：sota\_2
+  \item 槽位：primary\_3
+  \item 类型：sok
   \item 证据：E2 / Background substrate
   \item 来源：local\_pdf\_verified
 \end{itemize}}
@@ -263,7 +266,7 @@
 
 \begin{frame}[t]{Arm CCA I/O、DMA、accelerator、interrupt：技术演进总结}
 \DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.31\textwidth}
     \VisualPanel{技术演进}{\begin{itemize}

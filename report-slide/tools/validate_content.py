@@ -27,6 +27,8 @@ AUTHORED_SLIDE_TYPES = (
     "evaluation",
     "direction_summary",
 )
+SELECTION_SLOTS = ("primary_1", "primary_2", "primary_3")
+PAPER_TYPES = {"system", "spec", "sok", "survey", "vendor", "contrast", "background"}
 
 
 def fail(errors: list[str], path: Path, message: str) -> None:
@@ -60,7 +62,9 @@ def validate_primary(
     key = as_text(primary.get("key")) or f"primary[{index}]"
     required_meta = (
         "key",
-        "role",
+        "selection_slot",
+        "paper_type",
+        "claim_strength",
         "selection_reason",
         "evidence_type",
         "maturity",
@@ -78,6 +82,12 @@ def validate_primary(
     evidence = as_text(primary.get("evidence"))
     if not re.search(r"\bE[0-5]\b", evidence):
         fail(errors, path, f"{key}: evidence must include E0-E5 class, got `{evidence}`")
+    claim_strength = as_text(primary.get("claim_strength"))
+    if not re.search(r"\bE[0-5]\b", claim_strength):
+        fail(errors, path, f"{key}: claim_strength must include E0-E5 class, got `{claim_strength}`")
+    paper_type = as_text(primary.get("paper_type"))
+    if paper_type not in PAPER_TYPES:
+        fail(errors, path, f"{key}: unsupported paper_type `{paper_type}`")
 
     if not require_slides:
         if contains_bad_marker(primary):
@@ -210,10 +220,9 @@ def validate_direction(errors: list[str], path: Path) -> tuple[int, int]:
     if len(primary) != 3:
         fail(errors, path, f"expected exactly 3 primary entries, found {len(primary)}")
 
-    roles = [as_text(item.get("role")) for item in primary if isinstance(item, dict)]
-    for expected in ("foundational", "sota_1", "sota_2"):
-        if expected not in roles:
-            fail(errors, path, f"missing primary role `{expected}`")
+    selection_slots = [as_text(item.get("selection_slot")) for item in primary if isinstance(item, dict)]
+    if selection_slots != list(SELECTION_SLOTS):
+        fail(errors, path, f"selection_slot values must be {list(SELECTION_SLOTS)}, got {selection_slots}")
 
     for index, item in enumerate(primary, start=1):
         if not isinstance(item, dict):

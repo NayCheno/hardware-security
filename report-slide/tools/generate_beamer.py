@@ -31,21 +31,23 @@ def write(path: Path, content: str) -> None:
 
 def primary_cards(primary: list[dict[str, Any]]) -> str:
     rows = []
-    role_labels = {
-        "foundational": "基础入口",
-        "sota_1": "SOTA 1",
-        "sota_2": "SOTA 2",
+    slot_labels = {
+        "primary_1": "Primary 1",
+        "primary_2": "Primary 2",
+        "primary_3": "Primary 3",
     }
     for paper in primary:
-        role = role_labels.get(as_text(paper.get("role")), as_text(paper.get("role")))
-        rows.append(rf"\PrimaryCard{{{latex_escape(role)}}}{{{latex_escape(paper.get('title'))}}}{{{latex_escape(paper.get('evidence'))}}}")
+        slot = slot_labels.get(as_text(paper.get("selection_slot")), as_text(paper.get("selection_slot")))
+        paper_type = as_text(paper.get("paper_type"))
+        label = f"{slot} / {paper_type}" if paper_type else slot
+        rows.append(rf"\PrimaryCard{{{latex_escape(label)}}}{{{latex_escape(paper.get('title'))}}}{{{latex_escape(paper.get('evidence'))}}}")
     return "\n".join(rows)
 
 
 def evidence_items(primary: list[dict[str, Any]]) -> str:
     return latex_itemize(
         [
-            f"{paper.get('key')}: {paper.get('evidence')}；{paper.get('source_status')}"
+            f"{paper.get('key')}: {paper.get('paper_type')}；{paper.get('claim_strength')}；{paper.get('source_status')}"
             for paper in primary
         ]
     )
@@ -248,15 +250,15 @@ def render_overview(directions: list[dict[str, Any]]) -> str:
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.56\textwidth}}
     \begin{{itemize}}
-      \item 15 个小方向，每个方向固定 3 篇主讲材料。
+      \item 15 个小方向，每个方向固定 3 个 selection slot。
       \item 每篇文章固定 5 页：内容摘要、研究背景、解决方案、实验结果、文章评价。
-      \item 规范、Survey、draft、industry evidence 均在页内保留证据等级。
+      \item 每个 primary 独立记录 paper type、claim strength、maturity/source status。
       \item PDF 与 PPTX 只作为交付物；可维护内容是 \texttt{{papers.yml}}、方向级 \texttt{{story.yml}} 和生成脚本。
     \end{{itemize}}
   \end{{column}}
   \begin{{column}}{{0.38\textwidth}}
     \VisualPanel{{页数与结构}}{{\begin{{itemize}}
-      \item 45 篇主讲材料
+      \item 45 个 primary slot
       \item 225 页文章精讲
       \item 每方向 1 页开场 + 1 页总结
       \item 全 deck 约 260 页
@@ -283,7 +285,7 @@ E5 metadata/source-limited & 只写来源状态，不支撑强机制或性能 cl
 \end{{tabularx}}
 \end{{frame}}
 
-\begin{{frame}}[t]{{15 个小方向与三篇主讲材料}}
+\begin{{frame}}[t]{{15 个小方向与 primary slot}}
 \DeckKicker{{DIRECTION INDEX}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.49\textwidth}}
@@ -387,7 +389,7 @@ def render_summary(data: dict[str, Any]) -> str:
     ]
     return rf"""\begin{{frame}}[t]{{{latex_escape(data.get("direction"))}：技术演进总结}}
 \DeckKicker{{DIRECTION TAKEAWAY}}
-\ClaimLine{{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}}
+\ClaimLine{{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.31\textwidth}}
     \VisualPanel{{技术演进}}{{{latex_itemize(titles)}}}
