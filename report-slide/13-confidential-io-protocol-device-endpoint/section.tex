@@ -1,119 +1,291 @@
 \section{Confidential I/O protocol、trusted device interface、network endpoint}
 
-\DirectionIntro
-{Confidential I/O protocol、trusted device interface、network endpoint}
-{本方向把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写，并明确 network endpoint 与 PCIe device interface 的层次差异。}
-{三篇主讲材料是 \Key{dmtf_spdm_2025}、\Key{riscv_cove_io_2026}、\Key{li2024folio}；TDISP/XT、SEV-TIO、TLS+RA、BlueField 只作辅助。}
-{SPDM 是 published standard，CoVE-IO 是 draft/not-ratified，TDISP/XT 是 gated metadata；FOLIO 是网络 data-path 反例，不是完整 trusted-I/O 替代品。}
-
-\begin{frame}{Confidential I/O protocol：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-Device evidence & SPDM device identity and measurement & Spec-standard SOTA / E0 \\
-Device lifecycle & CoVE-IO and TDISP trusted-device lifecycle & Draft-not-ratified / E3 plus E5 metadata \\
-Network tradeoff & FOLIO network path without trusted I/O devices & Draft/preprint design point / E3 \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{辅助材料：SPDM secured messages/TCP、TDISP/XT、SEV-TIO、TLS+RA、BlueField DPU evidence；均不计入三篇主讲。}
+\begin{frame}[t]{Confidential I/O protocol、trusted device interface、network endpoint：方向开场}
+\DeckKicker{13-confidential-io-protocol-device-endpoint}
+\ClaimLine{把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.56\textwidth}
+    \textbf{三篇主讲选择规则}\par
+    \SmallLead{固定三篇 primary；SPDM 辅助规范、TDISP/TDISP XT、SEV-TIO、TLS+RA 和 BlueField DPU evidence 均为 auxiliary。}
+    \vspace{2mm}
+\PrimaryCard{基础入口}{SPDM device identity and measurement}{E0 / Spec-standard SOTA}
+\PrimaryCard{SOTA 1}{CoVE-IO and TDISP trusted-device lifecycle}{E3 / Draft-not-ratified}
+\PrimaryCard{SOTA 2}{FOLIO network path without trusted I/O devices}{E3 / Draft-not-ratified}
+  \end{column}
+  \begin{column}{0.38\textwidth}
+    \VisualPanel{证据边界}{\begin{itemize}
+  \item dmtf\_spdm\_2025: E0 / Spec-standard SOTA；local\_pdf\_verified
+  \item riscv\_cove\_io\_2026: E3 / Draft-not-ratified；local\_pdf\_verified
+  \item li2024folio: E3 / Draft-not-ratified；local\_pdf\_verified
+\end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 
-\PaperStory
+\PaperSlide
+{内容摘要}
 {SPDM device identity and measurement}
-{\Meta{dmtf\_spdm\_2025}{Spec-standard SOTA / E0}{source: local PDF verified}{claim: device identity and measurement control plane}}
+{dmtf\_spdm\_2025}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{SPDM 定义 device/component identity、measurement、capability negotiation、cert。}
 {\begin{itemize}
-  \item SPDM 定义 device/component identity、measurement、capability negotiation、certificate/challenge 和 key exchange。
-  \item 它是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同底座。
+  \item SPDM 定义 device/component identity、measurement、capability negotiation、certificate/challenge 和 key exchange
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态。
-  \item NIC/DPU/accelerator 需要可验证的 identity、firmware/config measurement 和证书链。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把设备证明放在 requester/responder control plane，而不是把设备 ID 当成信任证据。
-  \item 解决方案通过 certificate、measurement、challenge、transcript 和 secured session 建立 device trust bootstrap。
-\end{itemize}}
-{\begin{itemize}
-  \item Device certificate and measurement retrieval。
-  \item Challenge-response and transcript binding。
-  \item Key exchange for secured control messages。
-\end{itemize}}
-{\begin{itemize}
-  \item 规范/Survey，无新实验。
-  \item SPDM 证明协议语义；不能单独证明设备内部隔离、DMA、interrupt 或 data path 已安全。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}统一 device evidence/control-plane vocabulary，可连接 TDISP、IDE、CoVE-IO 和 vendor NIC/DPU attestation。
-  \item \textbf{不足：}SPDM session 成功不等于 TDI state、IOMMU/IOPMP policy、IDE link 或 firmware 隔离正确。
-  \item \textbf{商业落地：}适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update policy。
+  \item 角色：foundational
+  \item 证据：E0 / Spec-standard SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{SPDM device identity and measurement}
+{dmtf\_spdm\_2025}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态}
+{\begin{itemize}
+  \item Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{SPDM device identity and measurement}
+{dmtf\_spdm\_2025}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{通过 requester/responder 协议、certificate chain、measurement blocks、transcript。}
+{\begin{itemize}
+  \item 通过 requester/responder 协议、certificate chain、measurement blocks、transcript 和 secured session 建立 device trust control plane
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Device certificate and measurement retrieval
+  \item Challenge-response and transcript binding
+  \item Key exchange for secured control messages
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{SPDM device identity and measurement}
+{dmtf\_spdm\_2025}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{规范/Survey，无新实验}
+{\begin{itemize}
+  \item 规范/Survey，无新实验
+  \item 它证明协议语义，不证明设备内部隔离、DMA、interrupt 或 data path 已安全
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E0 official standard/specification
+  \item 成熟度：official standard/specification
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{SPDM device identity and measurement}
+{dmtf\_spdm\_2025}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-ev。}
+{是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。}
+{单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。}
+{适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update policy。}
+
+\PaperSlide
+{内容摘要}
 {CoVE-IO and TDISP trusted-device lifecycle}
-{\Meta{riscv\_cove\_io\_2026}{Draft/not ratified / E3}{source: local PDF verified; TDISP/XT: gated metadata only}{claim: draft trusted-device lifecycle composition}}
+{riscv\_cove\_io\_2026}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、truste。}
 {\begin{itemize}
-  \item CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 CoVE ABI。
-  \item TDISP/TDISP XT 只作为公开 metadata 辅助，不写 gated normative rules。
+  \item CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 CoVE ABI
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery 和 PCIe/CXL link 放到同一边界。
-  \item 这也是 vendor NIC/DPU 和 accelerator assignment 能否进入 confidential boundary 的核心问题。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把设备接口的 attach/detach、link protection 和 memory ownership 做成可证明 lifecycle。
-  \item 解决方案是 CoVE-IO draft + SPDM/TDISP/IDE + IOMMU/IOPMP/AIA 的组合，而不是单个协议。
-\end{itemize}}
-{\begin{itemize}
-  \item TDI/TDM/DSM and TSM/RDSM lifecycle。
-  \item SPDM plus TDISP plus PCIe IDE composition。
-  \item IOMMU/IOPMP/AIA trusted DMA and interrupt substrate。
-\end{itemize}}
-{\begin{itemize}
-  \item 规范/Survey，无新实验；CoVE-IO 是 draft，不能写成 ratified standard 或 production CoVE-IO stack。
-  \item TDISP/TDISP XT PDF member-gated，只能写 public metadata 和 high-level lifecycle role。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
-  \item \textbf{不足：}v0.3.0 未 ratified，TDISP/XT 不可公开复核，不能支撑精确 message/state-machine claim。
-  \item \textbf{商业落地：}指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 revocation。
+  \item 角色：sota\_1
+  \item 证据：E3 / Draft-not-ratified
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{CoVE-IO and TDISP trusted-device lifecycle}
+{riscv\_cove\_io\_2026}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery。}
+{\begin{itemize}
+  \item TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery 和 PCIe/CXL link 放到同一边界
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{CoVE-IO and TDISP trusted-device lifecycle}
+{riscv\_cove\_io\_2026}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle}
+{\begin{itemize}
+  \item 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle
+  \item TDISP/TDISP XT 只作为公开 metadata 辅助，不推断 gated normative rules
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item TDI/TDM/DSM and TSM/RDSM lifecycle
+  \item SPDM plus TDISP plus PCIe IDE composition
+  \item IOMMU/IOPMP/AIA trusted DMA and interrupt substrate
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{CoVE-IO and TDISP trusted-device lifecycle}
+{riscv\_cove\_io\_2026}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{规范/Survey，无新实验}
+{\begin{itemize}
+  \item 规范/Survey，无新实验
+  \item CoVE-IO 是 draft，TDISP/TDISP XT PDF member-gated，只能写 public metadata 和 high-level lifecycle role
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E3 draft/preprint, not ratified
+  \item 成熟度：draft/preprint, not ratified
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{CoVE-IO and TDISP trusted-device lifecycle}
+{riscv\_cove\_io\_2026}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口}
+{给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。}
+{v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。}
+{指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 revocation。}
+
+\PaperSlide
+{内容摘要}
 {FOLIO network path without trusted I/O devices}
-{\Meta{li2024folio}{Draft/preprint data-path design point / E3}{source: local PDF verified}{claim: network path tradeoff, not universal trusted-I/O replacement}}
+{li2024folio}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径，是 trusted I/O 不是唯一网络答案的。}
 {\begin{itemize}
-  \item FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径。
-  \item 它是 trusted I/O 不是唯一网络答案的反例。
+  \item FOLIO 研究不信任 I/O device 时 confidential VM 的高性能网络路径，是 trusted I/O 不是唯一网络答案的反例
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 网络流量通常已有端到端加密；把 NIC 加入 TCB 可能带来 device ecosystem 和 verifier policy 成本。
-  \item 但 plaintext accelerator、storage 或 RDMA offload 仍可能需要 trusted device/interface evidence。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是网络场景可让 NIC outside TCB，并优化 CVM 内 packet path。
-  \item 解决方案通过 DPDK/SNP 路径优化减少 shared/private transition 和 packet processing overhead。
-\end{itemize}}
-{\begin{itemize}
-  \item SEV-SNP CVM networking path analysis。
-  \item DPDK data-plane optimization。
-  \item Trusted-I/O versus untrusted-device tradeoff。
-\end{itemize}}
-{\begin{itemize}
-  \item arXiv preprint 提供 SEV-SNP/DPDK 网络路径原型评估。
-  \item 报告接近理想 TIO 网络配置，但不能泛化到 plaintext accelerator、storage、RDMA offload 或 DPU-hosted TLS termination。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}防止把 SPDM/TDISP/IDE 写成所有网络性能问题的唯一答案。
-  \item \textbf{不足：}不证明 Arm CCA/CoVE、SmartNIC/DPU 或 storage offload 的同等安全/性能。
-  \item \textbf{商业落地：}对 CVM networking 软件路径有现实意义；风险在 secure vNIC/vSwitch/offload production evidence 不足。
+  \item 角色：sota\_2
+  \item 证据：E3 / Draft-not-ratified
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\DirectionSummary
-{Confidential I/O protocol / endpoint}
-{SPDM 提供 device identity、measurement 和 secure control plane，但不能单独覆盖 DMA、interrupt、link 或 TDI state。}
-{CoVE-IO/TDISP/IDE 把 device interface lifecycle、link protection 和 I/O translation 组合为 trusted I/O 边界。}
-{FOLIO/TLS+RA/SEV-TIO 展示三种 endpoint 路线：不信任 NIC、绑定 attested application channel、或把设备纳入 trusted I/O。}
-{Vendor NIC/DPU attestation 和 secure vNIC/vSwitch/offload production evidence 必须与 SPDM/TDISP 和 SmartNIC local root 组合；BlueField 只证明 building blocks，不能当作完整 production DPU TEE。}
+\PaperSlide
+{研究背景}
+{FOLIO network path without trusted I/O devices}
+{li2024folio}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{网络流量通常已有端到端加密}
+{\begin{itemize}
+  \item 网络流量通常已有端到端加密
+  \item 把 NIC 加入 TCB 可能带来 device ecosystem 和 verifier policy 成本
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{FOLIO network path without trusted I/O devices}
+{li2024folio}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{通过 DPDK/SNP 网络路径优化减少 shared/private transition 和 packet processing overhe。}
+{\begin{itemize}
+  \item 通过 DPDK/SNP 网络路径优化减少 shared/private transition 和 packet processing overhead，同时保持 NIC outside TCB
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item SEV-SNP CVM networking path analysis
+  \item DPDK data-plane optimization
+  \item Trusted-I/O versus untrusted-device tradeoff
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{FOLIO network path without trusted I/O devices}
+{li2024folio}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{arXiv preprint 提供 SEV-SNP/DPDK 网络路径原型评估，报告接近理想 TIO 网络配置}
+{\begin{itemize}
+  \item arXiv preprint 提供 SEV-SNP/DPDK 网络路径原型评估，报告接近理想 TIO 网络配置
+  \item 结论不能泛化到 plaintext accelerator、storage 或 RDMA offload
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E3 draft/preprint, not ratified
+  \item 成熟度：draft/preprint, not ratified
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{FOLIO network path without trusted I/O devices}
+{li2024folio}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{防止把 SPDM/TDISP/IDE 写成所有网络性能问题的唯一答案}
+{防止把 SPDM/TDISP/IDE 写成所有网络性能问题的唯一答案。}
+{基于 SEV-SNP 网络场景，不证明 Arm CCA/CoVE、SmartNIC/DPU 或 storage offload 的同等安全/性能。}
+{对 CVM networking 软件路径有现实意义；风险在明文 offload、TLS termination 和 secure vNIC/vSwitch production evidence 不足。}
+
+\begin{frame}[t]{Confidential I/O protocol、trusted device interface、network endpoint：技术演进总结}
+\DeckKicker{DIRECTION TAKEAWAY}
+\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{技术演进}{\begin{itemize}
+  \item SPDM device identity and measurement
+  \item CoVE-IO and TDISP trusted-device lifecycle
+  \item FOLIO network path without trusted I/O devices
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点与缺口}{\begin{itemize}
+  \item 是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。
+  \item 给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
+  \item 单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。
+  \item v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业化适配}{\begin{itemize}
+  \item 适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update policy。
+  \item 指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 revocation。
+  \item 对 CVM networking 软件路径有现实意义；风险在明文 offload、TLS termination 和 secure vNIC/vSwitch production evidence 不足。
+\end{itemize}}
+  \end{column}
+\end{columns}
+\end{frame}

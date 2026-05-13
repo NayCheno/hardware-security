@@ -24,13 +24,25 @@
 \input{13-confidential-io-protocol-device-endpoint/section}
 \input{14-accelerator-dpu-smartnic-offload/section}
 \input{15-smartnic-trusted-nic-storage/section}
-\begin{frame}{全局汇报约束}
-\small
-\begin{itemize}
-  \item 每篇主讲材料固定扩展为 7 页：标题页、内容摘要、研究背景、核心洞察/解决方案、关键技术、实验结果、文章评价。
-  \item 所有 draft、metadata-only、gated、industry evidence 必须在标题或脚注显式标注证据等级。
-  \item 所有性能数据必须回到原论文或规范页面核验；不得只从二手 survey 复制。
-  \item 每个小方向最后保留“技术演进总结页”，仿照参考 PDF 的维度总结页。
-\end{itemize}
+\begin{frame}[t]{全局汇报约束}
+\DeckKicker{DELIVERY CONTRACT}
+\ClaimLine{每页都保留证据等级，并只写当前证据能支撑的结论。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.48\textwidth}
+    \TextPanel{内容契约}{\begin{itemize}
+      \item 每篇主讲材料固定 5 页：内容摘要、研究背景、解决方案、实验结果、文章评价。
+      \item 每个小方向固定 3 篇主讲材料；辅助材料只作对比，不计入三篇。
+      \item Beamer/PDF 与 PPTX 从同一份 \texttt{papers.yml} 生成。
+    \end{itemize}}
+  \end{column}
+  \begin{column}{0.46\textwidth}
+    \VisualPanel{证据约束}{\begin{itemize}
+      \item draft/not ratified 不写成量产标准。
+      \item spec/survey 页面必须写“无新实验”。
+      \item 性能数据只来自本地 PDF 或官方来源。
+      \item source-limited 只写来源状态。
+    \end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 \end{document}

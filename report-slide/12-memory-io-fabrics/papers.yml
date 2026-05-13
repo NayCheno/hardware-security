@@ -13,18 +13,6 @@ primary:
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/directcxl-direct-access-high-performance-memory-disaggregation/paper.pdf
   title: Direct Access, High-Performance Memory Disaggregation with DirectCXL
-  summary: DirectCXL 研究 CXL-attached memory 的高性能直接访问，展示内存可被远端/池化 fabric 重新组织。
-  background: CXL 让内存位置和访问路径脱离本地 DRAM 假设；confidential workload 的 boundary 不能只画在 CPU package 内。
-  insight_solution: 通过 DirectCXL 数据路径减少 disaggregated memory 访问开销，把远端内存纳入普通 load/store-like 访问模型。
-  key_technologies:
-  - CXL-attached memory access path
-  - Memory disaggregation data placement
-  - Host/fabric latency and bandwidth tradeoff
-  experiment_claim: ATC 论文提供系统评估；本方向只使用其 fabric/data-path 结论，不把它写成 TEE 或 trusted-I/O proof。
-  evaluation:
-    strengths: 清楚说明 CXL 改变 memory locality 和 data-path 边界。
-    limitations: 不是机密计算防御论文，不解决 device identity、link encryption、TDISP 或 verifier policy。
-    commercialization: 对 CXL memory pooling 和云内存扩展有启发；风险在多租户隔离、链路保护和运营配置复杂度。
   auxiliary:
   - cxl_spec
 - key: zhong2024cxltiers
@@ -38,18 +26,6 @@ primary:
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/managing-memory-tiers-with-cxl-in-virtualized-environments/paper.pdf
   title: Managing Memory Tiers with CXL in Virtualized Environments
-  summary: 研究虚拟化环境中 CXL memory tiers 的资源管理、placement 与性能权衡。
-  background: 云平台需要在本地 DRAM、CXL-attached memory 和远端/分层资源之间调度 workload memory。
-  insight_solution: 设计 virtualized memory-tier 管理系统，使 host 可以管理 placement，同时让 workload 看到可用内存层级。
-  key_technologies:
-  - CXL memory tier management
-  - Virtualized placement and migration policy
-  - Host-managed resource scheduling
-  experiment_claim: OSDI 论文提供系统评估；它支撑 resource-management context，不证明 trusted-I/O 或 confidential boundary 完整性。
-  evaluation:
-    strengths: 适合支撑“host 管资源但不能破坏 confidential boundary”的动机。
-    limitations: 安全边界、attestation、IDE keying 和 device ownership 不是论文主目标。
-    commercialization: 对云 CXL 内存分层直接相关；风险在 confidential VM memory ownership 与 host placement policy 的冲突。
   auxiliary:
   - cxl_spec
 - key: wang2025odrp
@@ -63,18 +39,6 @@ primary:
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/odrp-on-demand-remote-paging-with-programmable-rdma/paper.pdf
   title: 'ODRP: on-demand remote paging with programmable RDMA'
-  summary: ODRP 用 programmable RDMA 支撑 on-demand remote paging，说明远程内存可进入高性能 data path。
-  background: RDMA 和远程分页让数据离开 CPU/本地 DRAM 路径；confidential computing 必须处理远端 endpoint、NIC/DPU 和 buffer ownership。
-  insight_solution: 把 remote paging 与 programmable RDMA 数据路径结合，减少传统远程内存访问路径中的软件开销。
-  key_technologies:
-  - Programmable RDMA data path
-  - On-demand remote paging
-  - Remote-memory buffer management
-  experiment_claim: NSDI 论文提供系统评估；本方向只引用 data-path context，不把它写成完整 confidential-computing boundary proof。
-  evaluation:
-    strengths: 说明 RDMA/remote paging 会把敏感数据路径扩展到 NIC/fabric/remote memory。
-    limitations: 不提供 attested endpoint、encrypted link、trusted vNIC/vSwitch/offload 或 device lifecycle 证明。
-    commercialization: 对 remote memory 和 SmartNIC/DPU offload 有价值；风险在 endpoint trust、buffer revocation 和 QoS/side-channel。
   auxiliary:
   - pcie_ide
 auxiliary:

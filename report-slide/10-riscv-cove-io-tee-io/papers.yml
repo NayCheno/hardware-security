@@ -13,19 +13,55 @@ primary:
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/siopmp-scalable-efficient-io-protection-for-tees/paper.pdf
   title: 'sIOPMP: scalable I/O protection for TEE'
-  summary: 提出面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checking 可扩展性。
-  background: DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口；只保护 CPU 页表或 PMP 不足以覆盖设备侧访问。
-  insight_solution: 设计 scalable I/O protection metadata/checking 机制，提高设备访问控制效率并支撑更大规模 I/O protection。
-  key_technologies:
-  - Scalable I/O protection metadata
-  - Device access-control checking path
-  - TEE-oriented DMA isolation substrate
-  experiment_claim: ASPLOS 论文给出吞吐和开销评估；具体数值以本地 PDF 为准。
-  evaluation:
-    strengths: RISC-V I/O protection 的 peer-reviewed SOTA，可作为 CoVE-IO access-control 前置材料。
-    limitations: 主要解决 access control，不覆盖完整 device identity、TDISP、link security 或 trusted interrupt path。
-    commercialization: 对高性能设备直通有价值；风险在硬件改造、IOMMU/IOPMP 组合和平台可观测性。
   auxiliary: []
+  slides:
+    summary:
+      claim: 提出面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checkin。
+      points:
+      - 提出面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checking 可扩展性
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口
+      points:
+      - DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口
+      - 只保护 CPU 页表或 PMP 不足以覆盖设备侧访问
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 设计 scalable I/O protection metadata/checking 机制，提高设备访问控制效率并支撑更大规模 I/O pro。
+      points:
+      - 设计 scalable I/O protection metadata/checking 机制，提高设备访问控制效率并支撑更大规模 I/O protection
+      visual:
+        title: 关键机制
+        items:
+        - Scalable I/O protection metadata
+        - Device access-control checking path
+        - TEE-oriented DMA isolation substrate
+    experiments:
+      claim: ASPLOS 论文给出吞吐和开销评估
+      points:
+      - ASPLOS 论文给出吞吐和开销评估
+      - 具体数值以本地 PDF 为准
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: RISC-V I/O protection 的 peer-reviewed SOTA，可作为 CoVE-IO access-control 前置材料
+      strengths: RISC-V I/O protection 的 peer-reviewed SOTA，可作为 CoVE-IO access-control 前置材料。
+      limitations: 主要解决 access control，不覆盖完整 device identity、TDISP、link security 或 trusted interrupt path。
+      commercialization: 对高性能设备直通有价值；风险在硬件改造、IOMMU/IOPMP 组合和平台可观测性。
 - key: riscv_cove_io_2026
   role: sota_1
   selection_reason: CoVE-IO and TEE-I/O draft is the current standards-track SOTA for RISC-V confidential I/O.
@@ -37,19 +73,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf
   title: RISC-V CoVE-IO 规范草案
-  summary: 定义 RISC-V CoVE-IO confidential I/O 架构，把 TVM 设备使用扩展到 device identity、DMA/MMIO、interrupt 和 link security。
-  background: TVM 使用真实设备时，安全边界必须覆盖设备身份、DMA/MMIO、interrupt delivery、link protection 和管理 control plane。
-  insight_solution: 用 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合描述 draft confidential I/O lifecycle。
-  key_technologies:
-  - TDI/TDM/DSM device-domain vocabulary
-  - SPDM/TDISP and PCIe IDE linkage
-  - Trusted MSI and interrupt-path concepts
-  experiment_claim: 规范/Survey，无新实验；draft/not-ratified，不能写成 ratified standard 或 production CoVE-IO stack。
-  evaluation:
-    strengths: 当前最重要的 RISC-V confidential I/O 规范入口。
-    limitations: v0.3.0 draft 仍可能变化，不证明任一硬件或 OS 实现成熟。
-    commercialization: 对 RISC-V confidential accelerator/NIC 生态关键；风险在 SPDM/TDISP/IDE 与平台 ABI 收敛。
   auxiliary: []
+  slides:
+    summary:
+      claim: 定义 RISC-V CoVE-IO confidential I/O 架构，把 TVM 设备使用扩展到 device identity、DMA/M。
+      points:
+      - 定义 RISC-V CoVE-IO confidential I/O 架构，把 TVM 设备使用扩展到 device identity、DMA/MMIO、interrupt 和 link security
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E3 / Draft-not-ratified
+        - 来源：local_pdf_verified
+    background:
+      claim: TVM 使用真实设备时，安全边界必须覆盖设备身份、DMA/MMIO、interrupt delivery、link protection 和管理。
+      points:
+      - TVM 使用真实设备时，安全边界必须覆盖设备身份、DMA/MMIO、interrupt delivery、link protection 和管理 control plane
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 用 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合描述 draft confidential。
+      points:
+      - 用 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、trusted MSI 等机制组合描述 draft confidential I/O lifecycle
+      visual:
+        title: 关键机制
+        items:
+        - TDI/TDM/DSM device-domain vocabulary
+        - SPDM/TDISP and PCIe IDE linkage
+        - Trusted MSI and interrupt-path concepts
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - draft/not-ratified，不能写成 ratified standard 或 production CoVE-IO stack
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E3 draft/preprint, not ratified
+        - 成熟度：draft/preprint, not ratified
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 当前最重要的 RISC-V confidential I/O 规范入口
+      strengths: 当前最重要的 RISC-V confidential I/O 规范入口。
+      limitations: v0.3.0 draft 仍可能变化，不证明任一硬件或 OS 实现成熟。
+      commercialization: 对 RISC-V confidential accelerator/NIC 生态关键；风险在 SPDM/TDISP/IDE 与平台 ABI 收敛。
 - key: riscv_iommu_2023
   role: sota_2
   selection_reason: RISC-V IOMMU specification provides the current DMA isolation substrate for CoVE-IO.
@@ -61,20 +132,57 @@ primary:
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf
   title: RISC-V IOMMU 支撑 CoVE-IO
-  summary: IOMMU 支撑设备 DMA translation/protection，是 CoVE-IO 设备侧地址访问控制的标准底座。
-  background: CoVE-IO 不能只靠 PMP 或 CPU page table；设备侧 DMA 需要独立的 translation/protection 语义。
-  insight_solution: IOMMU 控制设备可访问地址空间；`riscv_aia_2023` 作为 trusted MSI/interrupt delivery 辅助材料。
-  key_technologies:
-  - Device DMA translation/protection
-  - I/O page-table permission semantics
-  - Integration point with CoVE-IO trusted device lifecycle
-  experiment_claim: 规范/Survey，无新实验；只支撑公开 I/O translation/protection 语义，不证明完整 confidential I/O。
-  evaluation:
-    strengths: CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点。
-    limitations: IOMMU 不是单独的 confidential I/O 方案，也不覆盖 device identity、SPDM/TDISP 或 link security。
-    commercialization: 适合服务器设备直通与多租户 DMA 管控；风险在配置完整性、固件测量和 verifier 可见性。
   auxiliary:
   - riscv_aia_2023
+  slides:
+    summary:
+      claim: IOMMU 支撑设备 DMA translation/protection，是 CoVE-IO 设备侧地址访问控制的标准底座
+      points:
+      - IOMMU 支撑设备 DMA translation/protection，是 CoVE-IO 设备侧地址访问控制的标准底座
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E0 / Spec-standard SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: CoVE-IO 不能只靠 PMP 或 CPU page table
+      points:
+      - CoVE-IO 不能只靠 PMP 或 CPU page table
+      - 设备侧 DMA 需要独立的 translation/protection 语义
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: IOMMU 控制设备可访问地址空间
+      points:
+      - IOMMU 控制设备可访问地址空间
+      - '`riscv_aia_2023` 作为 trusted MSI/interrupt delivery 辅助材料'
+      visual:
+        title: 关键机制
+        items:
+        - Device DMA translation/protection
+        - I/O page-table permission semantics
+        - Integration point with CoVE-IO trusted device lifecycle
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - 只支撑公开 I/O translation/protection 语义，不证明完整 confidential I/O
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E0 official standard/specification
+        - 成熟度：official standard/specification
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点
+      strengths: CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点。
+      limitations: IOMMU 不是单独的 confidential I/O 方案，也不覆盖 device identity、SPDM/TDISP 或 link security。
+      commercialization: 适合服务器设备直通与多租户 DMA 管控；风险在配置完整性、固件测量和 verifier 可见性。
 auxiliary:
 - key: riscv_aia_2023
   role: Spec/standard SOTA / RISC-V AIA

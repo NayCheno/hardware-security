@@ -1,119 +1,288 @@
 \section{Accelerator / DPU / SmartNIC confidential offload}
 
-\DirectionIntro
-{Accelerator / DPU / SmartNIC confidential offload}
-{本方向从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CCA accelerator workflow，并把 DPU/SmartNIC offload 纳入同一数据路径问题。}
-{三篇主讲材料是 \Key{zhu2020hetee}、\Key{dhar2024cloudscale}、\Key{wang2026cage}；PORTAL、StrongBox、BlueField 只作辅助对比。}
-{HETEE/CloudScale/CAGE 是系统论文，不是 SPDM/TDISP/CoVE-IO 规范；BlueField 只证明 vendor DPU TEE/fTPM building blocks，不证明完整 production DPU TEE。}
-
-\begin{frame}{Accelerator / DPU / SmartNIC offload：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-Rack-scale baseline & HETEE rack-scale heterogeneous TEE & Foundational / E1 IEEE S\&P 2020 \\
-Cloud-scale pool & CloudScale heterogeneous device confidential computing & Peer-reviewed SOTA / E1 ACSAC 2024 \\
-CCA accelerator & CAGE confidential accelerator workflow for Arm CCA & Peer-reviewed SOTA / E1 TDSC 2026 \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{辅助材料：\Key{sang2025portal}、\Key{deng2022strongbox}、\Key{nvidia_bluefield_operation_2025} 不计入三篇主讲。}
+\begin{frame}[t]{Accelerator / DPU / SmartNIC confidential offload：方向开场}
+\DeckKicker{14-accelerator-dpu-smartnic-offload}
+\ClaimLine{从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CCA accelerator。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.56\textwidth}
+    \textbf{三篇主讲选择规则}\par
+    \SmallLead{固定三篇 primary；`sang2025portal`、`deng2022strongbox`、`nvidia\_bluefield\_operation\_2025` 作为辅助对比，不计入三篇主讲。}
+    \vspace{2mm}
+\PrimaryCard{基础入口}{HETEE: rack-scale heterogeneous TEE}{E1 / Foundational peer-reviewed}
+\PrimaryCard{SOTA 1}{CloudScale confidential computing with heterogeneous devices}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{SOTA 2}{CAGE confidential accelerator workflow for Arm CCA}{E1 / Peer-reviewed SOTA}
+  \end{column}
+  \begin{column}{0.38\textwidth}
+    \VisualPanel{证据边界}{\begin{itemize}
+  \item zhu2020hetee: E1 / Foundational peer-reviewed；local\_pdf\_verified
+  \item dhar2024cloudscale: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+  \item wang2026cage: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+\end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 
-\PaperStory
+\PaperSlide
+{内容摘要}
 {HETEE: rack-scale heterogeneous TEE}
-{\Meta{zhu2020hetee}{Foundational peer-reviewed / E1}{source: local PDF verified}{claim: rack-level accelerator TEE baseline}}
+{zhu2020hetee}
+{E1 / Foundational peer-reviewed}
+{local\_pdf\_verified}
+{HETEE 用 rack-level security controller 与 PCIe fabric 动态隔离 GPU/FPGA/TPU 等。}
 {\begin{itemize}
-  \item HETEE 用 rack-level security controller 与 PCIe fabric 动态隔离 GPU/FPGA/TPU 等 accelerator。
-  \item 它把 confidential computing boundary 从 CPU TEE 扩展到 rack-scale heterogeneous accelerators。
+  \item HETEE 用 rack-level security controller 与 PCIe fabric 动态隔离 GPU/FPGA/TPU 等 accelerator
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item CPU TEE 不能天然保护 accelerator offload path。
-  \item 敏感数据进入 GPU、driver、PCIe fabric 或 remote resource pool 后，host/CSP 仍可能观察或操控路径。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把复杂 accelerator stack 留在受控 microserver/enclave 外围，用 SC 管生命周期。
-  \item 解决方案让 SC 管理 assignment、加密认证、remote attestation、secure cleanup 和资源回收。
-\end{itemize}}
-{\begin{itemize}
-  \item Rack-level Security Controller。
-  \item PCIe ExpressFabric accelerator assignment。
-  \item Remote attestation and secure cleanup lifecycle。
-\end{itemize}}
-{\begin{itemize}
-  \item 真实硬件原型。
-  \item 论文报告 ResNet152 inference 最大 throughput overhead 2.17\%，training 最大 overhead 0.95\%。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}foundational baseline，说明 CPU TEE 边界可以被 rack-level controller 扩展。
-  \item \textbf{不足：}早于 SPDM/TDISP/CoVE-IO，不能当作 modern trusted I/O 标准或 vendor DPU attestation proof。
-  \item \textbf{商业落地：}启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle 复杂度。
+  \item 角色：foundational
+  \item 证据：E1 / Foundational peer-reviewed
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
-{CloudScale heterogeneous device confidential computing}
-{\Meta{dhar2024cloudscale}{Peer-reviewed SOTA / E1 ACSAC 2024}{source: local PDF verified}{claim: cloud-scale DSA pool offload mechanism}}
+\PaperSlide
+{研究背景}
+{HETEE: rack-scale heterogeneous TEE}
+{zhu2020hetee}
+{E1 / Foundational peer-reviewed}
+{local\_pdf\_verified}
+{CPU TEE 不能天然保护 accelerator offload path，敏感数据进入 GPU、driver、PCIe fabric 或 r。}
 {\begin{itemize}
-  \item CloudScale 用 cloud-scale Security Controller 桥接 TEE-enabled nodes 与 legacy non-TEE DSA/NPU/GPU nodes。
-  \item 它把 accelerator TEE 问题从单机设备扩展到云内 heterogeneous DSA pool。
+  \item CPU TEE 不能天然保护 accelerator offload path，敏感数据进入 GPU、driver、PCIe fabric 或 remote resource pool 后仍可能暴露
 \end{itemize}}
+{问题边界}
 {\begin{itemize}
-  \item 数据中心中多数 DSA 节点没有 TEE 能力。
-  \item 用户要在 accelerator 性能与敏感数据保护之间取舍，DPU/SmartNIC/NPU 编排让问题更接近资源池。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是让 SC 成为 legacy non-TEE DSA 的 TEE proxy。
-  \item 解决方案由 SC 执行 access control、attestation、key exchange 和 encrypted/authenticated data path。
-\end{itemize}}
-{\begin{itemize}
-  \item Cloud-scale Security Controller。
-  \item TEE / non-TEE DSA pool attestation。
-  \item Encrypted and authenticated offload path。
-\end{itemize}}
-{\begin{itemize}
-  \item 论文报告 AI、Redis、file-system workloads 平均 1.5--5\% overhead。
-  \item 还报告可扩展到 2236 concurrent NPUs running CNNs。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}把 confidential heterogeneous computing 放在 cloud-scale resource pool 视角下。
-  \item \textbf{不足：}SC 正确性和供应链可信是硬假设；不替代 SPDM/TDISP/PCIe IDE/IOMMU 或 vendor DPU RoT。
-  \item \textbf{商业落地：}贴近云 DPU/SmartNIC/NPU resource-pool；风险在多租户编排、热插拔、failure isolation 和 production attestation。
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{解决方案}
+{HETEE: rack-scale heterogeneous TEE}
+{zhu2020hetee}
+{E1 / Foundational peer-reviewed}
+{local\_pdf\_verified}
+{Security Controller 作为 thin TCB 管理 accelerator assignment、加密认证、remote att。}
+{\begin{itemize}
+  \item Security Controller 作为 thin TCB 管理 accelerator assignment、加密认证、remote attestation、secure cleanup 和资源回收
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Rack-level Security Controller
+  \item PCIe ExpressFabric accelerator assignment
+  \item Remote attestation and secure cleanup lifecycle
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{HETEE: rack-scale heterogeneous TEE}
+{zhu2020hetee}
+{E1 / Foundational peer-reviewed}
+{local\_pdf\_verified}
+{真实硬件原型}
+{\begin{itemize}
+  \item 真实硬件原型
+  \item 论文报告 ResNet152 inference 最大 throughput overhead 2.17\%，training 最大 overhead 0.95\%
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{HETEE: rack-scale heterogeneous TEE}
+{zhu2020hetee}
+{E1 / Foundational peer-reviewed}
+{local\_pdf\_verified}
+{accelerator confidential offload 的 foundational baseline，说明 CPU TEE 边界可以被。}
+{accelerator confidential offload 的 foundational baseline，说明 CPU TEE 边界可以被 rack-level controller 扩展。}
+{早于 SPDM/TDISP/CoVE-IO，不能当作 modern trusted I/O 标准或 vendor DPU attestation proof。}
+{适合启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle 复杂度。}
+
+\PaperSlide
+{内容摘要}
+{CloudScale confidential computing with heterogeneous devices}
+{dhar2024cloudscale}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{CloudScale 用 cloud-scale Security Controller 桥接 TEE-enabled nodes 与 legac。}
+{\begin{itemize}
+  \item CloudScale 用 cloud-scale Security Controller 桥接 TEE-enabled nodes 与 legacy non-TEE DSA/NPU/GPU nodes
+\end{itemize}}
+{证据定位}
+{\begin{itemize}
+  \item 角色：sota\_1
+  \item 证据：E1 / Peer-reviewed SOTA
+  \item 来源：local\_pdf\_verified
+\end{itemize}}
+
+\PaperSlide
+{研究背景}
+{CloudScale confidential computing with heterogeneous devices}
+{dhar2024cloudscale}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{数据中心中多数 DSA 节点没有 TEE 能力}
+{\begin{itemize}
+  \item 数据中心中多数 DSA 节点没有 TEE 能力
+  \item 用户要在 accelerator 性能与敏感数据保护之间取舍
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{CloudScale confidential computing with heterogeneous devices}
+{dhar2024cloudscale}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{SC 作为 TEE proxy 执行 access control、attestation、key exchange 和 encrypted/au。}
+{\begin{itemize}
+  \item SC 作为 TEE proxy 执行 access control、attestation、key exchange 和 encrypted/authenticated data path
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Cloud-scale Security Controller
+  \item TEE / non-TEE DSA pool attestation
+  \item Encrypted and authenticated offload path
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{CloudScale confidential computing with heterogeneous devices}
+{dhar2024cloudscale}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{论文报告 AI、Redis、file-system workloads 平均 1.5-5\% overhead，并扩展到 2236 concurre。}
+{\begin{itemize}
+  \item 论文报告 AI、Redis、file-system workloads 平均 1.5-5\% overhead，并扩展到 2236 concurrent NPUs running CNNs
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{CloudScale confidential computing with heterogeneous devices}
+{dhar2024cloudscale}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{把 accelerator TEE 从单机扩展到 cloud-scale heterogeneous DSA pool}
+{把 accelerator TEE 从单机扩展到 cloud-scale heterogeneous DSA pool。}
+{SC 正确性和供应链可信是硬假设；不替代 SPDM/TDISP/PCIe IDE/IOMMU 或 vendor DPU RoT。}
+{贴近云 DPU/SmartNIC/NPU resource-pool 问题；风险在多租户编排、热插拔、failure isolation 和 production attestation。}
+
+\PaperSlide
+{内容摘要}
 {CAGE confidential accelerator workflow for Arm CCA}
-{\Meta{wang2026cage}{Peer-reviewed SOTA / E1 TDSC 2026}{source: local PDF verified}{claim: CCA GPU/FPGA accelerator workflow}}
+{wang2026cage}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{CAGE 用 Arm CCA GPC/GPT 与 Monitor-side shadow task 保护 Realm 使用 GPU/FPGA ac。}
 {\begin{itemize}
-  \item CAGE 用 Arm CCA GPC/GPT 与 Monitor-side shadow task 保护 Realm 使用 GPU/FPGA accelerator 的 workflow。
-  \item PORTAL 和 StrongBox 只作为 device-access 与 TrustZone-era baseline 辅助对比。
+  \item CAGE 用 Arm CCA GPC/GPT 与 Monitor-side shadow task 保护 Realm 使用 GPU/FPGA accelerator 的 workflow
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item Arm CCA 保护 Realm memory，但 untrusted accelerator driver/runtime 会处理 code、metadata、MMIO、DMA buffer 和 completion state。
-  \item 这类机制未来也会影响 DPU/SmartNIC packet-processing rules、queue descriptors 和 TLS termination keys。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是由 Monitor 从 untrusted stub 重建真实 accelerator task。
-  \item 解决方案用 shadow task、Monitor verification、GPC/GPT protection 和 accelerator-specific cleanup 限制 driver/runtime。
-\end{itemize}}
-{\begin{itemize}
-  \item Shadow task and Monitor-side verification。
-  \item GPC/GPT protected accelerator buffers。
-  \item GPU/FPGA workflow-specific cleanup。
-\end{itemize}}
-{\begin{itemize}
-  \item 论文报告 GPU benchmark 开销 0.58\%--5.31\%，FPGA benchmark 开销 9.61\%--16.30\%。
-  \item TCB 增量约 1301 LoC + 140 LoC；真实 production CCA hardware 和 device identity 仍需后续验证。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA。
-  \item \textbf{不足：}Device identity、SPDM/TDISP、production CCA hardware、多租户 scheduling 和侧信道仍需额外机制。
-  \item \textbf{商业落地：}可迁移到 DPU/SmartNIC offload；风险在 TCB 增量、设备身份和 scheduler 隔离。
+  \item 角色：sota\_2
+  \item 证据：E1 / Peer-reviewed SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\DirectionSummary
-{Accelerator / DPU / SmartNIC offload}
-{HETEE 建立 rack-level controller 保护非 TEE accelerator 的 foundational 路线。}
-{CloudScale 把问题推进到 cloud-scale DSA/NPU/GPU pool，并让 SC 类似 DPU/SmartNIC root-of-trust 候选。}
-{CAGE 把 Arm CCA Realm 与 GPU/FPGA workflow 对齐；PORTAL/StrongBox 只是 device-access 与 TrustZone-era 辅助基线。}
-{仍需把 vendor NIC/DPU attestation、secure vNIC/vSwitch/offload production evidence、SPDM/TDISP 与 SmartNIC local root 组合起来；BlueField OP-TEE/fTPM 只能作为 building-block evidence。}
+\PaperSlide
+{研究背景}
+{CAGE confidential accelerator workflow for Arm CCA}
+{wang2026cage}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{Arm CCA 保护 Realm memory，但 untrusted accelerator driver/runtime 会处理 code、m。}
+{\begin{itemize}
+  \item Arm CCA 保护 Realm memory，但 untrusted accelerator driver/runtime 会处理 code、metadata、MMIO、DMA buffer 和 completion state
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{CAGE confidential accelerator workflow for Arm CCA}
+{wang2026cage}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{用 shadow task、Monitor verification、GPC/GPT protection 和 accelerator-speci。}
+{\begin{itemize}
+  \item 用 shadow task、Monitor verification、GPC/GPT protection 和 accelerator-specific cleanup，把真实 accelerator task 从 untrusted stub 中重建出来
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Shadow task and Monitor-side verification
+  \item GPC/GPT protected accelerator buffers
+  \item GPU/FPGA workflow-specific cleanup
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{CAGE confidential accelerator workflow for Arm CCA}
+{wang2026cage}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{论文报告 GPU benchmark 开销 0.58\%-5.31\%，FPGA benchmark 开销 9.61\%-16.30\%，TCB 增量约。}
+{\begin{itemize}
+  \item 论文报告 GPU benchmark 开销 0.58\%-5.31\%，FPGA benchmark 开销 9.61\%-16.30\%，TCB 增量约 1301 LoC + 140 LoC
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{CAGE confidential accelerator workflow for Arm CCA}
+{wang2026cage}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA}
+{当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA。}
+{Device identity、SPDM/TDISP、production CCA hardware、复杂多租户 accelerator scheduling 和侧信道仍需额外机制。}
+{可迁移到 DPU/SmartNIC packet-processing rules、queue descriptors 和 TLS keys；风险在 TCB 增量、设备身份和 scheduler 隔离。}
+
+\begin{frame}[t]{Accelerator / DPU / SmartNIC confidential offload：技术演进总结}
+\DeckKicker{DIRECTION TAKEAWAY}
+\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{技术演进}{\begin{itemize}
+  \item HETEE: rack-scale heterogeneous TEE
+  \item CloudScale confidential computing with heterogeneous devices
+  \item CAGE confidential accelerator workflow for Arm CCA
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点与缺口}{\begin{itemize}
+  \item accelerator confidential offload 的 foundational baseline，说明 CPU TEE 边界可以被 rack-level controller 扩展。
+  \item 把 accelerator TEE 从单机扩展到 cloud-scale heterogeneous DSA pool。
+  \item 早于 SPDM/TDISP/CoVE-IO，不能当作 modern trusted I/O 标准或 vendor DPU attestation proof。
+  \item SC 正确性和供应链可信是硬假设；不替代 SPDM/TDISP/PCIe IDE/IOMMU 或 vendor DPU RoT。
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业化适配}{\begin{itemize}
+  \item 适合启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle 复杂度。
+  \item 贴近云 DPU/SmartNIC/NPU resource-pool 问题；风险在多租户编排、热插拔、failure isolation 和 production attestation。
+  \item 可迁移到 DPU/SmartNIC packet-processing rules、queue descriptors 和 TLS keys；风险在 TCB 增量、设备身份和 scheduler 隔离。
+\end{itemize}}
+  \end{column}
+\end{columns}
+\end{frame}

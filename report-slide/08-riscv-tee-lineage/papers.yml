@@ -13,19 +13,55 @@ primary:
   source_status: author_hosted_eurosys_pdf_verified
   reference: reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf
   title: 'Keystone: 开源 RISC-V TEE 框架'
-  summary: 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave。
-  background: 商业 TEE 难定制、难验证；RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline。
-  insight_solution: 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架。
-  key_technologies:
-  - PMP-based enclave isolation
-  - Security monitor and runtime abstraction
-  - Open RISC-V TEE software/hardware co-design
-  experiment_claim: 论文报告 CoreMark/Beebs/RV8 等开销结果；具体数字以本地 PDF 为准。
-  evaluation:
-    strengths: RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
-    limitations: EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
-    commercialization: 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
   auxiliary: []
+  slides:
+    summary:
+      claim: 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
+      points:
+      - 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E1 / Foundational
+        - 来源：author_hosted_eurosys_pdf_verified
+    background:
+      claim: 商业 TEE 难定制、难验证
+      points:
+      - 商业 TEE 难定制、难验证
+      - RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
+      points:
+      - 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
+      visual:
+        title: 关键机制
+        items:
+        - PMP-based enclave isolation
+        - Security monitor and runtime abstraction
+        - Open RISC-V TEE software/hardware co-design
+    experiments:
+      claim: 论文报告 CoreMark/Beebs/RV8 等开销结果
+      points:
+      - 论文报告 CoreMark/Beebs/RV8 等开销结果
+      - 具体数字以本地 PDF 为准
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：author_hosted_eurosys_pdf_verified
+    evaluation:
+      claim: RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制
+      strengths: RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
+      limitations: EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+      commercialization: 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
 - key: feng2021penglai
   role: sota_1
   selection_reason: OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS after Keystone.
@@ -37,19 +73,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf
   title: 'Penglai: scalable enclave memory protection'
-  summary: 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求。
-  background: 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存。
-  insight_solution: 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化。
-  key_technologies:
-  - Scalable enclave memory protection
-  - Metadata management for enclave lifecycle
-  - Serverless/microservice-oriented enclave scaling
-  experiment_claim: OSDI 论文报告可支持大量 enclave 和较大安全内存；具体指标以本地 PDF 为准。
-  evaluation:
-    strengths: 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
-    limitations: 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
-    commercialization: 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
   auxiliary: []
+  slides:
+    summary:
+      claim: 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量。
+      points:
+      - 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
+      points:
+      - 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
+      points:
+      - 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
+      visual:
+        title: 关键机制
+        items:
+        - Scalable enclave memory protection
+        - Metadata management for enclave lifecycle
+        - Serverless/microservice-oriented enclave scaling
+    experiments:
+      claim: OSDI 论文报告可支持大量 enclave 和较大安全内存
+      points:
+      - OSDI 论文报告可支持大量 enclave 和较大安全内存
+      - 具体指标以本地 PDF 为准
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈
+      strengths: 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
+      limitations: 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
+      commercialization: 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
 - key: schrammel2023spearv
   role: sota_2
   selection_reason: SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-attestation focus.
@@ -61,17 +132,52 @@ primary:
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf
   title: 'SPEAR-V: low-overhead RISC-V enclave primitive'
-  summary: 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离。
-  background: RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive。
-  insight_solution: 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互。
-  key_technologies:
-  - Tag/metadata enclave primitive
-  - Bidirectional sandbox and nested isolation
-  - Low-overhead protected/unprotected transitions
-  experiment_claim: AsiaCCS 论文报告 protected/unprotected 场景低开销；具体数值以本地 PDF 为准。
-  evaluation:
-    strengths: 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
-    limitations: Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
-    commercialization: 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
   auxiliary: []
+  slides:
+    summary:
+      claim: 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox。
+      points:
+      - 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
+      points:
+      - RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotec。
+      points:
+      - 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
+      visual:
+        title: 关键机制
+        items:
+        - Tag/metadata enclave primitive
+        - Bidirectional sandbox and nested isolation
+        - Low-overhead protected/unprotected transitions
+    experiments:
+      claim: AsiaCCS 论文报告 protected/unprotected 场景低开销
+      points:
+      - AsiaCCS 论文报告 protected/unprotected 场景低开销
+      - 具体数值以本地 PDF 为准
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进
+      strengths: 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
+      limitations: Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
+      commercialization: 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
 auxiliary: []

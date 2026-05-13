@@ -13,19 +13,55 @@ primary:
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/acai-protecting-accelerator-execution-with-arm-cca/paper.pdf
   title: 'ACAI: CCA accelerator execution'
-  summary: 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认继承机密性。
-  background: Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器；如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露。
-  insight_solution: 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面。
-  key_technologies:
-  - CCA-aware accelerator execution path
-  - Protected DMA and command/data movement
-  - Driver/runtime TCB boundary for offload
-  experiment_claim: arXiv 系统论文提供原型/设计评估；draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果，不写成标准或生产事实。
-  evaluation:
-    strengths: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
-    limitations: 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
-    commercialization: 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
   auxiliary: []
+  slides:
+    summary:
+      claim: 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认。
+      points:
+      - 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认继承机密性
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E3 / Draft-not-ratified
+        - 来源：local_pdf_verified
+    background:
+      claim: Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器
+      points:
+      - Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器
+      - 如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation。
+      points:
+      - 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面
+      visual:
+        title: 关键机制
+        items:
+        - CCA-aware accelerator execution path
+        - Protected DMA and command/data movement
+        - Driver/runtime TCB boundary for offload
+    experiments:
+      claim: arXiv 系统论文提供原型/设计评估
+      points:
+      - arXiv 系统论文提供原型/设计评估
+      - draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果，不写成标准或生产事实
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E3 draft/preprint, not ratified
+        - 成熟度：draft/preprint, not ratified
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点
+      strengths: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
+      limitations: 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
+      commercialization: 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
 - key: bertschi2026devlore
   role: sota_1
   selection_reason: Devlore is a recent draft on device interrupt protection for confidential VMs and CCA-like I/O paths.
@@ -37,19 +73,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/arm-confidential-computing/devlore-device-interrupt-protection-for-confidential-vms/paper.pdf
   title: 'Devlore: device interrupt protection'
-  summary: 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机密计算边界。
-  background: 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机。
-  insight_solution: 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只是外围控制面问题。
-  key_technologies:
-  - Confidential-device interrupt ownership
-  - Interrupt delivery mediation
-  - VM/device lifecycle coupling
-  experiment_claim: 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据；本 deck 只写机制方向和证据状态，不写未复核数字或成熟部署结论。
-  evaluation:
-    strengths: 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
-    limitations: Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
-    commercialization: 对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
   auxiliary: []
+  slides:
+    summary:
+      claim: 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机。
+      points:
+      - 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机密计算边界
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E3 / Draft-not-ratified
+        - 来源：local_pdf_verified
+    background:
+      claim: 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidentia。
+      points:
+      - 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只。
+      points:
+      - 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只是外围控制面问题
+      visual:
+        title: 关键机制
+        items:
+        - Confidential-device interrupt ownership
+        - Interrupt delivery mediation
+        - VM/device lifecycle coupling
+    experiments:
+      claim: 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据
+      points:
+      - 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据
+      - 本 deck 只写机制方向和证据状态，不写未复核数字或成熟部署结论
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E3 draft/preprint, not ratified
+        - 成熟度：draft/preprint, not ratified
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA
+      strengths: 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
+      limitations: Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
+      commercialization: 对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
 - key: sok-tee
   role: sota_2
   selection_reason: Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runtime, and attestation.
@@ -61,17 +132,53 @@ primary:
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf
   title: Accelerator TEE SoK for CCA I/O
-  summary: 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题。
-  background: 设备 TEE 机制比 CPU TEE 更分散；不同 accelerator 的队列、固件、驱动和本地 root 差异很大。
-  insight_solution: 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的背景基底。
-  key_technologies:
-  - Accelerator/device TEE design taxonomy
-  - Device identity and attestation vocabulary
-  - Memory, queue, runtime and driver TCB dimensions
-  experiment_claim: 规范/Survey，无新实验；primary mechanism claim 必须回引原始论文、规范或平台文档。
-  evaluation:
-    strengths: 能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
-    limitations: 不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。
-    commercialization: 有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
   auxiliary: []
+  slides:
+    summary:
+      claim: 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、r。
+      points:
+      - 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E2 / Background substrate
+        - 来源：local_pdf_verified
+    background:
+      claim: 设备 TEE 机制比 CPU TEE 更分散
+      points:
+      - 设备 TEE 机制比 CPU TEE 更分散
+      - 不同 accelerator 的队列、固件、驱动和本地 root 差异很大
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的。
+      points:
+      - 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的背景基底
+      visual:
+        title: 关键机制
+        items:
+        - Accelerator/device TEE design taxonomy
+        - Device identity and attestation vocabulary
+        - Memory, queue, runtime and driver TCB dimensions
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - primary mechanism claim 必须回引原始论文、规范或平台文档
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E2 peer-reviewed survey/SoK
+        - 成熟度：peer-reviewed survey/SoK
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事
+      strengths: 能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
+      limitations: 不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。
+      commercialization: 有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
 auxiliary: []

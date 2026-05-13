@@ -13,19 +13,56 @@ primary:
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf
   title: 'Memory Encryption: A Survey of Existing Techniques'
-  summary: 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡。
-  background: Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文；access control 与 encryption/integrity/replay 是不同问题。
-  insight_solution: 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot 的边界。
-  key_technologies:
-  - Off-chip memory confidentiality threat model
-  - Memory authentication and integrity taxonomy
-  - Counter/freshness/replay-protection tradeoff
-  experiment_claim: 规范/Survey，无新实验；证据来自既有论文、系统设计和攻击案例。
-  evaluation:
-    strengths: 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
-    limitations: 2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
-    commercialization: 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
   auxiliary: []
+  slides:
+    summary:
+      claim: 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡
+      points:
+      - 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E2 / Background substrate
+        - 来源：local_pdf_verified
+    background:
+      claim: Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文
+      points:
+      - Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文
+      - access control 与 encryption/integrity/replay 是不同问题
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encry。
+      points:
+      - 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot
+        的边界
+      visual:
+        title: 关键机制
+        items:
+        - Off-chip memory confidentiality threat model
+        - Memory authentication and integrity taxonomy
+        - Counter/freshness/replay-protection tradeoff
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - 证据来自既有论文、系统设计和攻击案例
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E2 peer-reviewed survey/SoK
+        - 成熟度：peer-reviewed survey/SoK
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption
+      strengths: 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
+      limitations: 2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
+      commercialization: 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
 - key: amd_sev_snp
   role: sota_1
   selection_reason: AMD SEV-SNP whitepaper captures a mature commercial VM memory integrity and replay-protection design.
@@ -37,19 +74,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf
   title: AMD SEV-SNP as memory-integrity industry evidence
-  summary: SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-controlled metadata 风险。
-  background: 早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和 malicious hypervisor 控制面风险。
-  insight_solution: 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted VM lifecycle 结合。
-  key_technologies:
-  - Secure Nested Paging
-  - Reverse Map Table / memory ownership metadata
-  - Integrity-oriented VM isolation controls
-  experiment_claim: 厂商技术材料，无独立学术实验；只能作为产业机制和部署 evidence。
-  evaluation:
-    strengths: 展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。
-    limitations: Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。
-    commercialization: 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
   auxiliary: []
+  slides:
+    summary:
+      claim: SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-contro。
+      points:
+      - SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-controlled metadata 风险
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E4 / Industry evidence
+        - 来源：local_pdf_verified
+    background:
+      claim: 早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和。
+      points:
+      - 早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和 malicious hypervisor 控制面风险
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted。
+      points:
+      - 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted VM lifecycle 结合
+      visual:
+        title: 关键机制
+        items:
+        - Secure Nested Paging
+        - Reverse Map Table / memory ownership metadata
+        - Integrity-oriented VM isolation controls
+    experiments:
+      claim: 厂商技术材料，无独立学术实验
+      points:
+      - 厂商技术材料，无独立学术实验
+      - 只能作为产业机制和部署 evidence
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E4 industry/vendor evidence
+        - 成熟度：industry/vendor evidence
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的。
+      strengths: 展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。
+      limitations: Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。
+      commercialization: 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
 - key: arm_cca_spec
   role: sota_2
   selection_reason: Arm CCA specification defines current Realm memory ownership and granule lifecycle evidence.
@@ -61,20 +133,56 @@ primary:
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/arm-cca-specification/README.md
   title: Arm CCA memory ownership and lifecycle
-  summary: Arm CCA 用 Realm、GPT/GPC、RIPAS 和 lifecycle 语义保护 confidential workload memory ownership。
-  background: CCA 需要让 host 管理资源，同时不能直接读取或破坏 Realm protected memory；这里的重点是 ownership/access-control，不是 memory-encryption survey 的替代品。
-  insight_solution: 通过 CCA/RME 公共概念描述 Realm lifecycle、granule ownership、protected address space 和 host/Realm transition。
-  key_technologies:
-  - Realm and protected address space lifecycle
-  - GPT/GPC ownership and access-control semantics
-  - RIPAS / memory state transition concepts
-  experiment_claim: 规范/Survey，无新实验；官方规范来源已核验但本地 PDF 不可用，只使用公开架构概念。
-  evaluation:
-    strengths: 给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据。
-    limitations: 不能把未下载的非公开细节写成已复核机制，也不能把 access-control/lifecycle 写成 encryption/integrity proof。
-    commercialization: 适合说明 Arm server/mobile CCA 的标准边界；风险在真实硬件、固件实现和云平台策略尚需 production evidence。
   auxiliary:
   - riscv_ap_tee_2024
+  slides:
+    summary:
+      claim: Arm CCA 用 Realm、GPT/GPC、RIPAS 和 lifecycle 语义保护 confidential workload memo。
+      points:
+      - Arm CCA 用 Realm、GPT/GPC、RIPAS 和 lifecycle 语义保护 confidential workload memory ownership
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E0 / Spec-standard SOTA
+        - 来源：source_verified_pdf_unavailable
+    background:
+      claim: CCA 需要让 host 管理资源，同时不能直接读取或破坏 Realm protected memory
+      points:
+      - CCA 需要让 host 管理资源，同时不能直接读取或破坏 Realm protected memory
+      - 这里的重点是 ownership/access-control，不是 memory-encryption survey 的替代品
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 通过 CCA/RME 公共概念描述 Realm lifecycle、granule ownership、protected address spa。
+      points:
+      - 通过 CCA/RME 公共概念描述 Realm lifecycle、granule ownership、protected address space 和 host/Realm transition
+      visual:
+        title: 关键机制
+        items:
+        - Realm and protected address space lifecycle
+        - GPT/GPC ownership and access-control semantics
+        - RIPAS / memory state transition concepts
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - 官方规范来源已核验但本地 PDF 不可用，只使用公开架构概念
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E0 official standard/specification
+        - 成熟度：official standard/specification
+        - PDF：source_verified_pdf_unavailable
+    evaluation:
+      claim: 给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据
+      strengths: 给 Arm CCA memory ownership 和 lifecycle 提供 E0 规范证据。
+      limitations: 不能把未下载的非公开细节写成已复核机制，也不能把 access-control/lifecycle 写成 encryption/integrity proof。
+      commercialization: 适合说明 Arm server/mobile CCA 的标准边界；风险在真实硬件、固件实现和云平台策略尚需 production evidence。
 auxiliary:
 - key: riscv_ap_tee_2024
   role: Draft/not ratified / AP-TEE v0.7 RC2

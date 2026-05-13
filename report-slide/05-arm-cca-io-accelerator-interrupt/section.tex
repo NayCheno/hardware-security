@@ -1,119 +1,291 @@
 \section{Arm CCA I/O、DMA、accelerator、interrupt}
 
-\DirectionIntro
-{Arm CCA I/O、DMA、accelerator、interrupt}
-{本方向把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界，避免把 Realm 安全误写成只覆盖 CPU 内存。}
-{三篇主讲材料是 \Key{acai2023}、\Key{bertschi2026devlore}、\Key{sok-tee}；前两篇是 draft/not-ratified，本页只保守使用其设计证据。}
-{本方向连接后续 confidential I/O、DPU/SmartNIC 和 secure offload；所有 production claim 留给后续 vendor/spec evidence。}
-
-\begin{frame}{Arm CCA I/O、DMA、accelerator、interrupt：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-方向入口 & ACAI: CCA accelerator execution & Draft/not ratified / E3 arXiv 2023 \\
-中断边界 & Devlore: device interrupt protection & Draft/not ratified / E3 arXiv \\
-设计空间 & Accelerator TEE SoK for CCA I/O & Background substrate / E2 NDSS 2026 SoK \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{ACAI/Devlore 都是本地 PDF verified 的 draft evidence；\Key{sok-tee} 只作为 accelerator/device TEE taxonomy。}
+\begin{frame}[t]{Arm CCA I/O、DMA、accelerator、interrupt：方向开场}
+\DeckKicker{05-arm-cca-io-accelerator-interrupt}
+\ClaimLine{把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.56\textwidth}
+    \textbf{三篇主讲选择规则}\par
+    \SmallLead{固定三篇 primary；ACAI 和 Devlore 均保持 draft/not-ratified 状态，`sok-tee` 只作为 accelerator TEE taxonomy。}
+    \vspace{2mm}
+\PrimaryCard{基础入口}{ACAI: CCA accelerator execution}{E3 / Draft-not-ratified}
+\PrimaryCard{SOTA 1}{Devlore: device interrupt protection}{E3 / Draft-not-ratified}
+\PrimaryCard{SOTA 2}{Accelerator TEE SoK for CCA I/O}{E2 / Background substrate}
+  \end{column}
+  \begin{column}{0.38\textwidth}
+    \VisualPanel{证据边界}{\begin{itemize}
+  \item acai2023: E3 / Draft-not-ratified；local\_pdf\_verified
+  \item bertschi2026devlore: E3 / Draft-not-ratified；local\_pdf\_verified
+  \item sok-tee: E2 / Background substrate；local\_pdf\_verified
+\end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 
-\PaperStory
+\PaperSlide
+{内容摘要}
 {ACAI: CCA accelerator execution}
-{\Meta{acai2023}{Draft/not ratified / E3 arXiv 2023}{source: local PDF verified}{claim: draft accelerator-execution design}}
+{acai2023}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认。}
 {\begin{itemize}
-  \item ACAI 研究如何用 Arm CCA 保护 accelerator execution。
-  \item 它说明 CPU Realm 之外的 offload path 不能默认继承机密性。
+  \item 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认继承机密性
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器。
-  \item 如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 Realm 安全边界延伸到 accelerator execution path。
-  \item 解决方案围绕 CCA-aware offload，连接设备内存访问、队列管理和 attestation。
-\end{itemize}}
-{\begin{itemize}
-  \item CCA-aware accelerator execution path。
-  \item Protected DMA and command/data movement。
-  \item Driver/runtime TCB boundary for offload。
-\end{itemize}}
-{\begin{itemize}
-  \item arXiv 系统论文提供原型/设计评估。
-  \item Draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果，不能写成标准或生产事实。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow。
-  \item \textbf{不足：}预印本不能代表标准化接口或量产设备能力，驱动/runtime TCB 仍是主要风险。
-  \item \textbf{商业落地：}适合 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
+  \item 角色：foundational
+  \item 证据：E3 / Draft-not-ratified
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{ACAI: CCA accelerator execution}
+{acai2023}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器}
+{\begin{itemize}
+  \item Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器
+  \item 如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{ACAI: CCA accelerator execution}
+{acai2023}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation。}
+{\begin{itemize}
+  \item 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item CCA-aware accelerator execution path
+  \item Protected DMA and command/data movement
+  \item Driver/runtime TCB boundary for offload
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{ACAI: CCA accelerator execution}
+{acai2023}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{arXiv 系统论文提供原型/设计评估}
+{\begin{itemize}
+  \item arXiv 系统论文提供原型/设计评估
+  \item draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果，不写成标准或生产事实
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E3 draft/preprint, not ratified
+  \item 成熟度：draft/preprint, not ratified
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{ACAI: CCA accelerator execution}
+{acai2023}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点}
+{把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。}
+{预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。}
+{可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。}
+
+\PaperSlide
+{内容摘要}
 {Devlore: device interrupt protection}
-{\Meta{bertschi2026devlore}{Draft/not ratified / E3 arXiv}{source: local PDF verified}{claim: draft interrupt-protection design}}
+{bertschi2026devlore}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机。}
 {\begin{itemize}
-  \item Devlore 关注 confidential VM 的 device interrupt protection。
-  \item 它把 interrupt delivery 纳入机密计算边界，而不是只讨论 DMA。
+  \item 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机密计算边界
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息。
-  \item Host 也可能通过 interrupt path 干扰 confidential VM 的状态机和设备所有权。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是 interrupt 是 device ownership 的一部分。
-  \item 解决方案将 interrupt delivery、device ownership 与 confidential boundary 绑定。
-\end{itemize}}
-{\begin{itemize}
-  \item Confidential-device interrupt ownership。
-  \item Interrupt delivery mediation。
-  \item VM/device lifecycle coupling。
-\end{itemize}}
-{\begin{itemize}
-  \item 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据。
-  \item 本 deck 只写机制方向和证据状态，不写未复核数字或成熟部署结论。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}明确指出 interrupt 是 CCA device path 的核心安全面。
-  \item \textbf{不足：}Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
-  \item \textbf{商业落地：}对云端直通设备和加速器租户隔离关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
+  \item 角色：sota\_1
+  \item 证据：E3 / Draft-not-ratified
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{Devlore: device interrupt protection}
+{bertschi2026devlore}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidentia。}
+{\begin{itemize}
+  \item 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{Devlore: device interrupt protection}
+{bertschi2026devlore}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只。}
+{\begin{itemize}
+  \item 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只是外围控制面问题
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Confidential-device interrupt ownership
+  \item Interrupt delivery mediation
+  \item VM/device lifecycle coupling
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{Devlore: device interrupt protection}
+{bertschi2026devlore}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据}
+{\begin{itemize}
+  \item 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据
+  \item 本 deck 只写机制方向和证据状态，不写未复核数字或成熟部署结论
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E3 draft/preprint, not ratified
+  \item 成熟度：draft/preprint, not ratified
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{Devlore: device interrupt protection}
+{bertschi2026devlore}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA}
+{明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。}
+{Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。}
+{对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。}
+
+\PaperSlide
+{内容摘要}
 {Accelerator TEE SoK for CCA I/O}
-{\Meta{sok-tee}{Background substrate / E2 NDSS 2026 SoK}{source: local PDF verified}{claim: taxonomy only}}
+{sok-tee}
+{E2 / Background substrate}
+{local\_pdf\_verified}
+{为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、r。}
 {\begin{itemize}
-  \item Accelerator TEE SoK 为 accelerator/device TEE 提供 taxonomy。
-  \item 本方向用它组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题。
+  \item 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 设备 TEE 机制比 CPU TEE 更分散。
-  \item 不同 accelerator 的队列、固件、驱动和本地 root 差异很大，不能用一个 CPU TEE 模型覆盖。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是用 taxonomy 分层，而不是把所有 offload 都写成同一种 TEE。
-  \item 解决方案区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation。
-\end{itemize}}
-{\begin{itemize}
-  \item Accelerator/device TEE design taxonomy。
-  \item Device identity and attestation vocabulary。
-  \item Memory, queue, runtime and driver TCB dimensions。
-\end{itemize}}
-{\begin{itemize}
-  \item 规范/Survey，无新实验。
-  \item Primary mechanism claim 必须回引原始论文、规范或平台文档。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
-  \item \textbf{不足：}不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。
-  \item \textbf{商业落地：}有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
+  \item 角色：sota\_2
+  \item 证据：E2 / Background substrate
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\DirectionSummary
-{Arm CCA I/O、DMA、accelerator、interrupt}
-{第一条推进线：ACAI 把 CCA 保护面延伸到 accelerator execution，但证据仍是 draft design point。}
-{第二条推进线：Devlore 强调 interrupt delivery 也是 confidential device ownership 的一部分。}
-{第三条推进线：Accelerator TEE SoK 提供设备 TEE taxonomy，用于拆分 identity、memory、queue、runtime、driver 和 attestation。}
-{该方向自然过渡到后续 confidential I/O protocol、DPU/SmartNIC offload 和 secure vNIC/vSwitch 的生产证据审查。}
+\PaperSlide
+{研究背景}
+{Accelerator TEE SoK for CCA I/O}
+{sok-tee}
+{E2 / Background substrate}
+{local\_pdf\_verified}
+{设备 TEE 机制比 CPU TEE 更分散}
+{\begin{itemize}
+  \item 设备 TEE 机制比 CPU TEE 更分散
+  \item 不同 accelerator 的队列、固件、驱动和本地 root 差异很大
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{Accelerator TEE SoK for CCA I/O}
+{sok-tee}
+{E2 / Background substrate}
+{local\_pdf\_verified}
+{用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的。}
+{\begin{itemize}
+  \item 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的背景基底
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Accelerator/device TEE design taxonomy
+  \item Device identity and attestation vocabulary
+  \item Memory, queue, runtime and driver TCB dimensions
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{Accelerator TEE SoK for CCA I/O}
+{sok-tee}
+{E2 / Background substrate}
+{local\_pdf\_verified}
+{规范/Survey，无新实验}
+{\begin{itemize}
+  \item 规范/Survey，无新实验
+  \item primary mechanism claim 必须回引原始论文、规范或平台文档
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E2 peer-reviewed survey/SoK
+  \item 成熟度：peer-reviewed survey/SoK
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{Accelerator TEE SoK for CCA I/O}
+{sok-tee}
+{E2 / Background substrate}
+{local\_pdf\_verified}
+{能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事}
+{能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。}
+{不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。}
+{有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。}
+
+\begin{frame}[t]{Arm CCA I/O、DMA、accelerator、interrupt：技术演进总结}
+\DeckKicker{DIRECTION TAKEAWAY}
+\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{技术演进}{\begin{itemize}
+  \item ACAI: CCA accelerator execution
+  \item Devlore: device interrupt protection
+  \item Accelerator TEE SoK for CCA I/O
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点与缺口}{\begin{itemize}
+  \item 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
+  \item 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
+  \item 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
+  \item Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业化适配}{\begin{itemize}
+  \item 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
+  \item 对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
+  \item 有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
+\end{itemize}}
+  \end{column}
+\end{columns}
+\end{frame}

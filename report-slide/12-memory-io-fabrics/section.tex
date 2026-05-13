@@ -1,119 +1,774 @@
 \section{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
 
-\DirectionIntro
-{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}
-{本方向说明 data path 不再局限于 CPU 本地内存，confidential boundary 必须跨 CXL、PCIe link、RDMA/NIC 和远端 memory endpoint 建模。}
-{三篇主讲材料是 \Key{gouk2022directcxl}、\Key{zhong2024cxltiers}、\Key{wang2025odrp}；\Key{cxl_spec} 与 \Key{pcie_ide} 只作为辅助材料。}
-{三篇主讲都是 fabric/data-path background substrate，不是 TEE、TDISP、SPDM 或 trusted-I/O proof；PCIe IDE 只覆盖 link integrity/encryption。}
-
-\begin{frame}{Memory / I/O fabrics：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-CXL disaggregation & DirectCXL memory disaggregation & E1 primary systems / background role \\
-CXL tiers & CXL memory tiers in virtualized environments & E1 primary systems / background role \\
-RDMA remote paging & Programmable RDMA on-demand remote paging & E1 primary systems / background role \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{辅助材料：\Key{cxl_spec} 支撑 CXL 语义，\Key{pcie_ide} 支撑 PCIe link protection；二者不计入三篇主讲。}
+\begin{frame}[t,shrink=6]{Memory / I/O fabrics: CXL、PCIe IDE、RDMA：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{12-memory-io-fabrics}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} 这个方向讨论的是高性能 memory/fabric data path 如何把 confidential boundary 推出 CPU 本地内存。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item DirectCXL 证明 CXL.mem 可以让 host 通过 load/store 直接访问远端内存资源，核心变量是 latency 和 copy path。
+  \item CXL-Tiers 讨论云虚拟化里本地 DRAM 与 CXL capacity tier 的 placement、隔离和尾部性能问题。
+  \item ODRP 说明 RDMA remote paging 的瓶颈不只是数据传输，还包括远端内存分配、MNode CPU 与 utilization。
+  \item 三篇都属于 data-path/fabric substrate：能解释为何需要跨 fabric 建模，但不能单独证明 CCA/CoVE confidential I/O 安全性。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三条 data-path 演进线}
+      \scriptsize \textcolor{Accent}{\bfseries 2022 DirectCXL}\par\textbf{CXL.mem direct load/store}\par{\tiny\textcolor{Muted}{2705 cycles RDMA vs 328 cycles CXL}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries 2024 CXL-Tiers}\par\textbf{CXL memory tiering for VMs}\par{\tiny\textcolor{Muted}{82\% workloads <=5\% slowdown}}\par\vspace{1.6mm}
+\textcolor{Accent}{\bfseries 2025 ODRP}\par\textbf{programmable RDMA remote paging}\par{\tiny\textcolor{Muted}{1.72x-12x utilization gain}}\par\vspace{1.6mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 本页只建立方向边界；性能数字分别来自三篇论文的摘要、Figure 6/10、Figure 5/10/12、Figure 7/9。}}
 \end{frame}
 
-\PaperStory
-{DirectCXL memory disaggregation}
-{\Meta{gouk2022directcxl}{E1 primary systems / background role}{source: local PDF verified}{claim: CXL fabric data-path context}}
-{\begin{itemize}
-  \item DirectCXL 研究 CXL-attached memory 的高性能直接访问。
-  \item 它展示内存可被远端/池化 fabric 重新组织，而不是固定在 CPU 本地 DRAM。
-\end{itemize}}
-{\begin{itemize}
-  \item CXL 让内存位置和访问路径脱离本地 DRAM 假设。
-  \item 对 confidential workload 来说，boundary 不能只画在 CPU package 内。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是让 disaggregated memory 更接近普通 load/store-like 访问模型。
-  \item 解决方案优化 DirectCXL 数据路径，降低远端/池化内存访问成本。
-\end{itemize}}
-{\begin{itemize}
-  \item CXL-attached memory access path。
-  \item Memory disaggregation data placement。
-  \item Host/fabric latency and bandwidth tradeoff。
-\end{itemize}}
-{\begin{itemize}
-  \item ATC 论文提供系统评估。
-  \item 本方向只使用其 fabric/data-path 结论，不把它写成 TEE 或 trusted-I/O proof。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}清楚说明 CXL 改变 memory locality 和 data-path 边界。
-  \item \textbf{不足：}不解决 device identity、link encryption、TDISP 或 verifier policy。
-  \item \textbf{商业落地：}对 CXL memory pooling 有启发；风险在多租户隔离、链路保护和运营配置复杂度。
-\end{itemize}}
 
-\PaperStory
-{CXL memory tiers in virtualized environments}
-{\Meta{zhong2024cxltiers}{E1 primary systems / background role}{source: local PDF verified}{claim: CXL tier management context}}
-{\begin{itemize}
-  \item 这篇工作研究虚拟化环境中 CXL memory tiers 的资源管理、placement 与性能权衡。
-  \item 它把 CXL 视为 cloud resource-management substrate，而不是安全边界本身。
-\end{itemize}}
-{\begin{itemize}
-  \item 云平台需要在本地 DRAM、CXL-attached memory 和远端/分层资源之间调度 workload memory。
-  \item Host 管理 placement 时，confidential VM 的 ownership 和 measurement 语义不能被隐式破坏。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 CXL memory tier 当作可调度资源，而非透明硬件细节。
-  \item 解决方案设计 virtualized memory-tier 管理系统，使 host 可以做 placement/migration policy。
-\end{itemize}}
-{\begin{itemize}
-  \item CXL memory tier management。
-  \item Virtualized placement and migration policy。
-  \item Host-managed resource scheduling。
-\end{itemize}}
-{\begin{itemize}
-  \item OSDI 论文提供系统评估。
-  \item 它支撑 resource-management context，不证明 trusted-I/O 或 confidential boundary 完整性。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}支撑“host 管资源但不能破坏 confidential boundary”的动机。
-  \item \textbf{不足：}安全边界、attestation、IDE keying 和 device ownership 不是论文主目标。
-  \item \textbf{商业落地：}对云 CXL 内存分层直接相关；风险在 VM ownership 与 host placement policy 的冲突。
-\end{itemize}}
+\begin{frame}[t,shrink=6]{Direct Access, High-Performance Memory Disaggregation with DirectCXL：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{gouk2022directcxl}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} DirectCXL 的核心贡献不是“更快网络”，而是把远端内存变成 host 可直接 load/store 的 CXL.mem 地址空间。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文提出 directly accessible memory disaggregation：host processor complex 通过 CXL.mem 直连 remote memory resources。
+  \item 与 RDMA 路径相比，DirectCXL 不把数据先搬到 host DRAM 或 RNIC memory region，而是把 HDM 映射进系统地址空间。
+  \item 作者还补了当时缺失的系统软件：Linux 5.13 runtime、cxl-namespace、segment table 和 mmap 接口。
+  \item 在本 survey 中，它是 fabric data-path 基础论文，不是 confidential I/O 或 device trust 论文。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RDMA copy path vs CXL.mem direct path}
+      \scriptsize \textbf{RDMA disaggregation}\par
+page fault / object request → host runtime copies to RNIC MR → network transfer → memory-node runtime or RNIC → remote memory\par
+{\tiny\textcolor{Muted}{copy + software fabric intervention}}\par\vspace{1.8mm}
+\textbf{DirectCXL}\par
+load/store → CXL root port → CXL switch → HDM address translation → remote DRAM\par
+{\tiny\textcolor{Muted}{address-mapped access, no host-memory copy}}\par\vspace{1.8mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 重绘自 DirectCXL Figure 1 与 Figure 2-Figure 4；未复制原论文图片。}}
+\end{frame}
 
-\PaperStory
-{Programmable RDMA on-demand remote paging}
-{\Meta{wang2025odrp}{E1 primary systems / background role}{source: local PDF verified}{claim: RDMA remote-memory data-path context}}
-{\begin{itemize}
-  \item ODRP 用 programmable RDMA 支撑 on-demand remote paging。
-  \item 它说明远程内存可以进入高性能 data path，而不是只作为慢速后台存储。
-\end{itemize}}
-{\begin{itemize}
-  \item RDMA 和远程分页让数据离开 CPU/本地 DRAM 路径。
-  \item Confidential computing 必须处理远端 endpoint、NIC/DPU、buffer ownership 和 revocation。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 remote paging 与 programmable RDMA 数据路径结合。
-  \item 解决方案减少传统远程内存访问路径中的软件开销。
-\end{itemize}}
-{\begin{itemize}
-  \item Programmable RDMA data path。
-  \item On-demand remote paging。
-  \item Remote-memory buffer management。
-\end{itemize}}
-{\begin{itemize}
-  \item NSDI 论文提供系统评估。
-  \item 本方向只引用 data-path context，不写成完整 confidential-computing boundary proof。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}说明 RDMA/remote paging 会把敏感数据路径扩展到 NIC/fabric/remote memory。
-  \item \textbf{不足：}不提供 attested endpoint、encrypted link、trusted vNIC/vSwitch/offload 或 device lifecycle 证明。
-  \item \textbf{商业落地：}对 remote memory 和 SmartNIC/DPU offload 有价值；风险在 endpoint trust、buffer revocation 和 QoS/side-channel。
-\end{itemize}}
 
-\DirectionSummary
-{Memory / I/O fabrics}
-{DirectCXL 表明 memory locality 不再等于本地 DRAM，fabric 会进入 workload memory path。}
-{CXL tiers 把远端/分层 memory 变成 host-managed cloud resource，需要与 confidential ownership/lifecycle 对齐。}
-{ODRP 说明 RDMA/NIC/remote paging 会把 data path 推到 NIC、DPU 和远端 endpoint。}
-{PCIe IDE、CXL security、SPDM/TDISP 和 SmartNIC local root 必须组合建模；单篇 CXL/RDMA 系统论文不能证明完整机密边界。}
+\begin{frame}[t,shrink=6]{Direct Access, High-Performance Memory Disaggregation with DirectCXL：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{gouk2022directcxl}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 传统 memory disaggregation 的主要成本来自 page/object 软件路径，而不是单纯的链路带宽。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item page-based 方案依赖虚拟内存和 swap/page-fault，把页从 host 与 memory node 之间搬运，透明但有 page fault、I/O amplification 和 context switch。
+  \item object-based 方案用 key-value 或对象接口绕开部分地址转换成本，但要求应用改接口，语义依赖应用。
+  \item 两类方案通常仍依赖 RDMA 或类似 DMA 协议，仍需要 memory region、metadata、copy 和 runtime 参与。
+  \item 因此论文的背景问题是：能否让远端内存像系统内存一样被 CPU 直接访问。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{传统路径的三类开销}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYYY@{}}
+\toprule
+\textbf{路径} & \textbf{优势} & \textbf{主要成本} & \textbf{对 confidential data path 的含义} \\
+\midrule
+Page-based & 应用透明 & page fault、swap、copy、context switch & 敏感页会被软件路径和远端节点状态影响 \\
+Object-based & 可避开部分 VM 开销 & 应用改造、对象语义绑定 & 只能保护被重写接口覆盖的数据 \\
+DirectCXL 目标 & load/store-like & CXL/PCIe latency 和 HDM 管理 & fabric 成为内存边界的一部分 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵依据 DirectCXL Section 1-2 的 related-work 分类和 Figure 1 的 RDMA 路径重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Direct Access, High-Performance Memory Disaggregation with DirectCXL：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{gouk2022directcxl}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} DirectCXL 的设计妙处是把远端 DRAM 暴露为 HDM，并用 CXL switch/runtime 管理 namespace，而不是让远端 CPU 管数据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item CXL device 是被动内存模块：CXL controller 解析 CXL flits，将地址转换后交给内部 DRAM controllers。
+  \item host kernel 在 PCIe enumeration 后映射 BAR/HDM，CPU 访问 HDM system memory 时请求经 root port 转成 CXL flit。
+  \item CXL switch 用 virtual hierarchy 和 routing table 连接 host 与 CXL device；runtime 用 /dev/directcxl、ioctl、cxl-namespace 和 mmap 暴露给应用。
+  \item 这个方案的逻辑是把 copy path 改成 address path，把 memory node computing resource 从关键路径拿掉。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{DirectCXL 访问机制}
+      \scriptsize \begin{itemize}
+  \item 01. 应用 mmap cxl-namespace
+  \item 02. CPU load/store 到 HDM system memory
+  \item 03. Root Port 转成 CXL flit
+  \item 04. CXL switch virtual hierarchy 路由
+  \item 05. CXL controller 访问远端 DRAM
+  \item 06. 数据沿 CXL path 返回 CPU cache
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 机制图按 DirectCXL Figure 2-Figure 5 重绘，保留 HDM、switch、runtime 三个关键对象。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Direct Access, High-Performance Memory Disaggregation with DirectCXL：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{gouk2022directcxl}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} DirectCXL 的实测收益集中在 64B load latency 与真实 workload：RDMA 2705 cycles，DirectCXL 328 cycles，并带来约 3x 应用性能。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 64B read latency 中，RDMA 路径约 2705 cycles，DirectCXL memory load request 约 328 cycles，论文报告 8.3x faster。
+  \item 从 memory hierarchy 看，RDMA 比 DirectCXL 慢 6.2x；DirectCXL 仍比 local DRAM 慢，瓶颈主要来自 PCIe/CXL IP。
+  \item 真实 workload 中，DirectCXL 相对 RDMA-based memory disaggregation 平均约 3x 性能提升。
+  \item 这些数据证明的是 fabric access path 的性能差异，不证明链路加密、设备身份或多租户隔离。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{DirectCXL 关键实验数字}
+      \scriptsize \textbf{RDMA 64B read}\hfill \textcolor{Accent}{\bfseries 2705 cycles}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{baseline}}\par\vspace{1.4mm}
+\textbf{DirectCXL 64B load}\hfill \textcolor{Accent}{\bfseries 328 cycles}\par\textcolor{Accent}{\rule{0.12\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{8.3x faster in Fig.6}}\par\vspace{1.4mm}
+\textbf{RDMA vs DirectCXL hierarchy}\hfill \textcolor{Accent}{\bfseries 6.2x slower}\par\textcolor{Accent}{\rule{0.62\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.8/Table 2}}\par\vspace{1.4mm}
+\textbf{real workload speedup}\hfill \textcolor{Accent}{\bfseries about 3x}\par\textcolor{Accent}{\rule{0.45\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.10/conclusion}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 实验图按 DirectCXL Figure 6、Figure 8/Table 2、Figure 10 的数字重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Direct Access, High-Performance Memory Disaggregation with DirectCXL：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{gouk2022directcxl}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} DirectCXL 很适合说明 CXL 会改变内存边界，但它缺少 confidential I/O 所需的身份、加密和 lifecycle 证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点：问题切得准，系统原型覆盖 CXL device、switch、runtime 和 workload 评估，能支撑 memory fabric substrate 的叙事。
+  \item 不足：论文目标是性能和 disaggregation，不覆盖 CXL IDE、SPDM/TDISP、attestation、multi-tenant memory ownership 或 verifier policy。
+  \item 商业潜力：CXL memory expansion/pooling 有明确数据中心价值，DirectCXL 的 namespace/runtime 思路可转化为平台管理接口。
+  \item 落地风险：真实商用环境还需要链路保护、设备身份、热插拔/故障恢复、资源隔离和运维可观测性。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{商业化判断}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+强项 & CXL.mem direct access 和 runtime 原型可解释 memory pooling 性能价值 \\
+短板 & 不处理 device identity、link encryption、TDISP 或 verifier policy \\
+可落地场景 & 云内存扩展、CXL pool 管理、远端内存性能建模 \\
+不能承担的 claim & 不能单独证明 confidential I/O 或 CCA/CoVE data-path 安全 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价结合 DirectCXL conclusion 与本仓库 evidence boundary，不添加论文未声称的安全结论。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Managing Memory Tiers with CXL in Virtualized Environments：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{zhong2024cxltiers}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CXL-Tiers 的关键不是“用 CXL 扩内存”，而是在 VM 云环境里把硬件 tiering 与软件隔离策略组合起来。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文提出 Intel Flat Memory Mode：在 memory controller 内以 cache-line 粒度管理 local DRAM 与 CXL memory。
+  \item 硬件 tiering 避免 hypervisor/OS 用 page-table 扫描、PTE poisoning 或 instruction sampling 追踪 hotness。
+  \item Memstrata 是轻量 multi-tenant allocator，用 slowdown estimator 和 dedicated local pages 缓解 outlier VM。
+  \item 在本 survey 中，它说明 fabric memory 与 VM resource management 的冲突，但仍不是 confidential boundary 证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{硬件 tiering + 软件 isolation}
+      \scriptsize \begin{itemize}
+  \item 01. CXL capacity tier 扩展 VM 可见内存
+  \item 02. Memory controller cache-line swap local/CXL lines
+  \item 03. mixed mode 保留 dedicated local DRAM
+  \item 04. Memstrata 预测 VM slowdown
+  \item 05. allocator 把 local pages 给 outlier VM
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 机制图重绘自 CXL-Tiers Figure 3、Figure 4 和 Figure 8。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Managing Memory Tiers with CXL in Virtualized Environments：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{zhong2024cxltiers}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} 虚拟化让软件 memory tiering 很难做对：guest 不配合、page 粒度太粗、host 追踪成本又高。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 云平台希望用 CXL memory 降低成本和 embodied carbon，但 CXL 访问延迟高于本地 DRAM。
+  \item 软件 tiering 需要追踪 hotness：PTE 扫描、PTE poisoning 或 instruction sampling 在 VM 场景里有开销、兼容性和隐私问题。
+  \item page 级 placement 假设页内访问有空间局部性，但 VM 的 free-page randomization、warm VM 和 huge page 会破坏这个假设。
+  \item 论文给出的设计目标包括 unmodified VM、低 host overhead、不增加 cross-VM interference、接近 local DRAM 性能。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{VM 场景下 software tiering 的失配}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{问题} & \textbf{论文中的原因} & \textbf{对 confidential VM 的启发} \\
+\midrule
+host CPU 成本 & 细粒度 hotness 追踪要扫描 PTE 或触发 fault & 不能让不可信 host 为性能频繁窥视 guest 行为 \\
+隐私/兼容性 & instruction sampling 不支持或不适合 VM & telemetry 本身可能成为信任边界问题 \\
+placement 粒度 & 2MB/1GB page 会混合 hot/cold cache lines & ownership 与 placement 不能只按页粗糙绑定 \\
+cross-VM interference & VM 会竞争 local DRAM capacity & 资源调度会影响机密 workload 尾部性能 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 背景矩阵依据 CXL-Tiers Section 2 与 Figure 1-Figure 2 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Managing Memory Tiers with CXL in Virtualized Environments：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{zhong2024cxltiers}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} Flat Memory Mode 把细粒度 placement 放到 memory controller，Memstrata 只处理 VM 间 performance isolation。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item hardware-tiered NUMA node 将 local DRAM 与 CXL memory 组合成软件可见的 aggregate capacity，并在 cache-line 粒度交换。
+  \item mixed mode 额外暴露 dedicated local memory NUMA node，为 cache-unfriendly 或 latency-sensitive VM 预留稳定本地页。
+  \item Memstrata 读取 performance events，用 random forest slowdown estimator 识别 outlier VM，并迁移 dedicated local pages。
+  \item 妙处是分工清楚：硬件处理行级 hotness，软件处理多租户公平和 outlier 缓解。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{Memstrata 控制回路}
+      \scriptsize \begin{itemize}
+  \item 01. VM runs on HW-tiered + dedicated local memory
+  \item 02. collect per-VM performance events
+  \item 03. predict slowdown >5\%
+  \item 04. rank outlier VMs
+  \item 05. migrate dedicated local pages
+  \item 06. reduce tail slowdown without guest cooperation
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 控制回路按 CXL-Tiers Figure 8、Figure 9 和 Listing 1 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Managing Memory Tiers with CXL in Virtualized Environments：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{zhong2024cxltiers}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CXL-Tiers 的实验结论很具体：mixed mode 中 82\% workloads 不超过 5\% slowdown，Memstrata 把 realistic multi-VM outlier 从 35\% 压到 <6\%。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 单 VM 115 workloads 中，mixed mode 下 82\% workload slowdown <=5\%，95\% workload slowdown <=10\%，但 outlier 可达 34\%。
+  \item multi-VM 场景中，Memstrata 可以识别 outlier 并迁移 dedicated local pages，把 worst-case slowdown 从 35\% 降到小于 6\%。
+  \item Memstrata 的最大 CPU overhead 是 single core 的 4\%，内存开销约 110 MB。
+  \item 这些数据证明 CXL tiering 能接近 local DRAM，但也显示 resource-management policy 会决定尾部体验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CXL-Tiers 关键实验数字}
+      \scriptsize \textbf{mixed-mode workloads <=5\% slowdown}\hfill \textcolor{Accent}{\bfseries 82\%}\par\textcolor{Accent}{\rule{0.82\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{115 workloads}}\par\vspace{1.4mm}
+\textbf{mixed-mode workloads <=10\% slowdown}\hfill \textcolor{Accent}{\bfseries 95\%}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{single VM distribution}}\par\vspace{1.4mm}
+\textbf{outlier before policy}\hfill \textcolor{Accent}{\bfseries up to 34-35\%}\par\textcolor{Accent}{\rule{0.35\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{tail risk}}\par\vspace{1.4mm}
+\textbf{after Memstrata}\hfill \textcolor{Accent}{\bfseries <6\%}\par\textcolor{Accent}{\rule{0.06\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{realistic multi-VM}}\par\vspace{1.4mm}
+\textbf{CPU overhead}\hfill \textcolor{Accent}{\bfseries 4\% of one core}\par\textcolor{Accent}{\rule{0.04\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{manager + ML model}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 实验条形图按 CXL-Tiers abstract、Figure 5、Figure 10-Figure 12 和正文数值重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Managing Memory Tiers with CXL in Virtualized Environments：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{zhong2024cxltiers}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} CXL-Tiers 最接近云平台落地，但它解决的是 performance isolation，不是机密内存 ownership 或 link trust。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点：真实 CXL hardware prototype、115 workloads、multi-VM outlier 实验和 Azure production motivation，让商业可信度强。
+  \item 不足：Intel Flat Memory Mode 依赖特定处理器/MC 能力，且论文不解决 CXL IDE keying、attestation、device assignment 或 confidential VM ownership。
+  \item 商业潜力：CXL capacity tier 能直接服务云成本、内存扩容和碳排优化，Memstrata 可作为 hypervisor 管理层策略。
+  \item 对机密计算的价值：它提示 host placement policy 与 confidential boundary 之间会有冲突，需要把资源管理和安全证据分开写。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{落地潜力与边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+最强证据 & 真实 CXL prototype + 115 workloads + multi-VM 实验 \\
+商业场景 & 云 VM memory expansion、DRAM cost/carbon reduction、tail-performance control \\
+安全缺口 & 不覆盖 IDE/SPDM/TDISP、attestation、ownership lifecycle \\
+对本 deck 的作用 & 支撑 fabric memory resource-management 问题，不支撑 confidential I/O 安全证明 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价基于 CXL-Tiers conclusion/discussion 和本仓库 background-substrate 证据边界。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ODRP: on-demand remote paging with programmable RDMA：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{wang2025odrp}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ODRP 的贡献是把 remote paging 的内存管理也搬进 RNIC data path，而不是只用 RDMA 加速数据搬运。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 论文目标是 swap-based memory disaggregation：CNode 透明地把 cold pages swap 到 MNode。
+  \item 传统 one-sided RDMA 适合读写远端 buffer，但不擅长动态 memory allocation/deallocation。
+  \item ODRP 用 RDMA WR chain 在 RNIC 上实现 load、mapped store、unmapped store、invalidate 等 frontswap API。
+  \item 结果是 page granularity remote memory management、zero MNode CPU usage 和接近 coarse-grained one-sided RDMA 的性能。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{ODRP high-level path}
+      \scriptsize \begin{itemize}
+  \item 01. Linux frontswap request on CNode
+  \item 02. CNode backend computes TT entry / request type
+  \item 03. RDMA SEND triggers WR chain
+  \item 04. RNIC reads TT and page queue
+  \item 05. RNIC loads/stores/allocates 4KB page
+  \item 06. MNode CPU stays off the data path
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 机制图按 ODRP Figure 3 和 Table 2 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ODRP: on-demand remote paging with programmable RDMA：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{wang2025odrp}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} RDMA remote paging 的核心 tradeoff 是：static one-sided 快但浪费内存，dynamic/two-sided 节省内存却吃掉 MNode CPU。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item one-sided static 预注册大 slab，runtime 不用 MNode CPU，但 internal fragmentation 导致 remote memory utilization 低。
+  \item one-sided dynamic 细化 allocation 粒度，但 memory registration 是 control path 操作，4KB 或 1MB MR 注册代价很高。
+  \item two-sided 可做到 4KB 粒度，但每次 swap 请求都要 MNode CPU 参与，CPU 很快成为瓶颈。
+  \item ODRP 的研究问题是：能否同时获得 fine-grained utilization、zero MNode CPU 和 good performance。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{RDMA alternatives tradeoff}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYYY@{}}
+\toprule
+\textbf{方案} & \textbf{memory utilization} & \textbf{MNode CPU} & \textbf{性能风险} \\
+\midrule
+one-sided static & 低，slab over-provision & 低 & 浪费 remote memory \\
+one-sided dynamic & 中，1MB slab 仍有碎片 & 高，MR registration & allocation 队列和 CPU bottleneck \\
+two-sided & 高，4KB 粒度 & 很高，每次 swap 参与 & CPU 饱和后延迟放大 \\
+ODRP & 高，4KB page & 接近 0 & WR chain complexity \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 矩阵重绘自 ODRP Table 1、Figure 1 和 Section 2.2-2.3。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ODRP: on-demand remote paging with programmable RDMA：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{wang2025odrp}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ODRP 的设计妙处是 client-assisted WR chains：CNode 做轻量判断，RNIC 执行 TT/page-queue 操作，MNode CPU 不进关键路径。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item MNode 把内存切成 4KB pages，用 FIFO free page queue 管空闲页，并为每个 CNode 维护 translation table。
+  \item CNode backend 维护 allocation bitmap，提前判断 mapped/unmapped store，避免 WR chain 内额外分支。
+  \item RNIC WR chain 用 READ/WRITE/CAS/FAA 等 primitives 实现 page load、mapped store、unmapped store、invalidate。
+  \item EndianSwap、Modulo WR 和 WR recycling 是为克服 RNIC semantics 限制而做的工程设计。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{CNode-assisted WR chain}
+      \scriptsize \begin{itemize}
+  \item 01. CNode computes tt\_addr and store type
+  \item 02. RECV fills WR arguments
+  \item 03. READ TT entry or free-page queue
+  \item 04. FAA updates queue head/tail when allocating/freeing
+  \item 05. WRITE page data and completion signal
+  \item 06. CNode helps recycle consumed WRs
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: WR-chain 图按 ODRP Figure 4-Figure 6 和 Section 4.3-4.4 重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ODRP: on-demand remote paging with programmable RDMA：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{wang2025odrp}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ODRP 的实验重点是三件事同时成立：1.72x-12x utilization gain、zero MNode CPU、真实应用 0.8\%-14.6\% overhead。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 与 one-sided static 相比，ODRP 实现 1.72x 到 12x remote memory utilization 提升；与 one-sided dynamic 相比最多 1.82x。
+  \item ODRP 和 one-sided static 都绕过 runtime MNode CPU；dynamic/two-sided 在多 CNode 时会饱和 MNode CPU。
+  \item 真实应用 overhead 范围约 0.8\%-14.6\%，swap-intensive Kmeans 的 overhead 约 14.2\%。
+  \item 8 CNodes 时 ODRP 达到 one-sided static 约 87.3\% 的 swap throughput，同时显著改善 utilization。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{ODRP 关键实验数字}
+      \scriptsize \textbf{utilization gain vs one-sided static}\hfill \textcolor{Accent}{\bfseries 1.72x-12x}\par\textcolor{Accent}{\rule{0.92\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.7}}\par\vspace{1.4mm}
+\textbf{runtime MNode CPU}\hfill \textcolor{Accent}{\bfseries zero}\par\textcolor{Accent}{\rule{0.04\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{RNIC offload}}\par\vspace{1.4mm}
+\textbf{application overhead}\hfill \textcolor{Accent}{\bfseries 0.8\%-14.6\%}\par\textcolor{Accent}{\rule{0.15\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{real-world apps}}\par\vspace{1.4mm}
+\textbf{Kmeans overhead}\hfill \textcolor{Accent}{\bfseries 14.2\%}\par\textcolor{Accent}{\rule{0.14\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{swap-intensive}}\par\vspace{1.4mm}
+\textbf{swap throughput at 8 CNodes}\hfill \textcolor{Accent}{\bfseries 87.3\% of static}\par\textcolor{Accent}{\rule{0.87\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Fig.9}}\par\vspace{1.4mm}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 实验图按 ODRP abstract、Figure 7、Figure 8、Figure 9 和正文数值重绘。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{ODRP: on-demand remote paging with programmable RDMA：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{wang2025odrp}{E1 primary systems / Background substrate}{local\_pdf\_verified}
+{\large\bfseries\color{Ink} ODRP 很适合说明 SmartNIC/RNIC 可成为 memory-management actor，但它也暴露了 endpoint trust 和 state recovery 的新边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item 优点：问题定义清晰，真正把 allocation/deallocation 从 control path 推到 data path，且用 commodity RDMA hardware。
+  \item 不足：WR-chain 编程复杂，empty free queue、CNode crash、TT recovery 等 corner cases 仍需 MNode CPU 或额外 recovery 逻辑。
+  \item 商业潜力：适合 remote memory、SmartNIC/DPU offload 和低 CPU memory pooling 场景。
+  \item 安全边界：论文不提供 attested endpoint、encrypted link、buffer revocation policy、trusted vNIC/vSwitch 或 confidential VM ownership 证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{落地潜力与安全边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+最强贡献 & RNIC data path 同时处理 memory access 和 management \\
+工程复杂度 & WR chain、EndianSwap、Modulo、recycle、crash recovery \\
+可落地场景 & remote memory pool、SmartNIC/DPU offload、CPU-light MNode \\
+安全缺口 & endpoint identity、link encryption、attestation、buffer lifecycle \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 评价依据 ODRP Section 4.5、Section 6、conclusion 与本仓库 confidential-I/O 证据边界。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Memory / I/O fabrics: CXL、PCIe IDE、RDMA：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{12-memory-io-fabrics}{authored direction}{local evidence synthesis}
+{\large\bfseries\color{Ink} 三篇论文共同说明 data path 已经从本地 DRAM 扩展到 CXL/RDMA fabric；下一步安全问题是证明这个 fabric path 可信。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{讲解逻辑}
+      \scriptsize \begin{itemize}
+  \item DirectCXL 优化 latency：把远端内存访问从 copy/runtime path 改成 CXL.mem address path。
+  \item CXL-Tiers 优化 VM resource management：用硬件 tiering 处理 cache-line hotness，用 Memstrata 管 outlier VM。
+  \item ODRP 优化 utilization 与 MNode CPU：用 RNIC WR chain 做 page-granular remote memory management。
+  \item 这些都还缺 confidential I/O 组合证据：CXL IDE/PCIe IDE、SPDM/TDISP、device attestation、CCA/CoVE memory ownership 与 verifier policy。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向结论矩阵}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{解决的 data-path 问题} & \textbf{没有解决的 confidential-I/O 问题} \\
+\midrule
+DirectCXL & CXL.mem latency / direct access & IDE keying、device identity、TDISP lifecycle \\
+CXL-Tiers & VM tiering / performance isolation & confidential ownership 与 host placement policy 一致性 \\
+ODRP & remote paging utilization / MNode CPU & attested RNIC/DPU、encrypted link、buffer revocation \\
+后续组合 & CXL/RDMA fabric 可作为高性能底座 & 必须接 SPDM/TDISP/CCA/CoVE 证据链 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{Source: 总结页使用三篇论文实验结果与 evidence ledger 的 claim-strength 边界。}}
+\end{frame}

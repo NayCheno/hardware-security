@@ -1,119 +1,288 @@
 \section{SmartNIC / trusted NIC / secure storage data path}
 
-\DirectionIntro
-{SmartNIC / trusted NIC / secure storage data path}
-{本方向把 NIC-local root、secure vNIC/vSwitch/offload、SmartNIC resource management 与 confidential storage data path 分开写，并承接前两节的 SPDM/TDISP 与 DPU offload 讨论。}
-{三篇主讲材料是 \Key{zhou2024snic}、\Key{giantsidi2025tnic}、\Key{chrapek2026hazel}；BlueField 和 OSMOSIS 只作为辅助材料。}
-{S-NIC/TNIC/Hazel 是系统或 preprint evidence，不是 PCIe trusted-device 标准；SPDM/TDISP 提供设备身份和 lifecycle，仍需要和 SmartNIC local root、TEE quote、key release policy 组合。}
-
-\begin{frame}{SmartNIC / trusted NIC / secure storage：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-Secure vNIC/offload isolation & S-NIC: SmartNIC function isolation & Peer-reviewed SOTA / E1 EuroSys 2024 \\
-NIC local root & TNIC: trusted NIC architecture & Peer-reviewed SOTA / E1 ASPLOS 2025 \\
-Secure storage path & Hazel: secure disaggregated storage data path & Draft / E3 arXiv 2026 \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{辅助材料：\Key{nvidia_bluefield_operation_2025} 和 \Key{khalilov2024osmosis} 不计入三篇主讲。}
+\begin{frame}[t]{SmartNIC / trusted NIC / secure storage data path：方向开场}
+\DeckKicker{15-smartnic-trusted-nic-storage}
+\ClaimLine{把 NIC-local root、secure offload、resource management 与 confidential storage 分开写。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.56\textwidth}
+    \textbf{三篇主讲选择规则}\par
+    \SmallLead{固定三篇 primary；`nvidia\_bluefield\_operation\_2025` 与 `khalilov2024osmosis` 作为辅助材料，不计入三篇主讲。}
+    \vspace{2mm}
+\PrimaryCard{基础入口}{S-NIC: SmartNIC function isolation}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{SOTA 1}{TNIC: trusted NIC architecture}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{SOTA 2}{Hazel: secure disaggregated storage data path}{E3 / Draft-not-ratified}
+  \end{column}
+  \begin{column}{0.38\textwidth}
+    \VisualPanel{证据边界}{\begin{itemize}
+  \item zhou2024snic: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+  \item giantsidi2025tnic: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+  \item chrapek2026hazel: E3 / Draft-not-ratified；local\_pdf\_verified
+\end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 
-\PaperStory
+\PaperSlide
+{内容摘要}
 {S-NIC: SmartNIC function isolation}
-{\Meta{zhou2024snic}{Peer-reviewed SOTA / E1 EuroSys 2024}{source: local PDF verified}{claim: NIC-local network-function isolation}}
+{zhou2024snic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions}
 {\begin{itemize}
-  \item S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 tenant network functions。
-  \item 它是 secure vNIC、vSwitch rule、packet-processing 和 storage-offload state 的重要隔离基线。
+  \item S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户函数可能泄漏或篡改 state。
-  \item 普通 SR-IOV/IOMMU/QoS 不能自动给出 NIC-local cache、bus、accelerator 和 DMA single-owner semantics。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 SmartNIC 看作需要独立 TCB 和资源所有权规则的多租户机器。
-  \item 解决方案用 launch/destroy lifecycle、hardware ownership checks 和 attestation 限制 NIC OS 与其他 functions。
-\end{itemize}}
-{\begin{itemize}
-  \item Virtual SmartNIC launch/destroy lifecycle。
-  \item Memory denylist、locked TLB、DMA isolation。
-  \item Cache partitioning、accelerator virtualization、bus arbitration。
-\end{itemize}}
-{\begin{itemize}
-  \item 论文报告硬件面积约 +8.89\%，功耗约 +11.45\%。
-  \item Function throughput worst-case 下降小于 1.7\%；但没有真实 production NIC silicon。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。
-  \item \textbf{不足：}不是完整 VM/Realm trusted I/O，也不定义 SPDM/TDISP lifecycle。
-  \item \textbf{商业落地：}可指导 DPU tenant function isolation；风险在资源利用率、function chaining 和 vendor attestation 绑定。
+  \item 角色：foundational
+  \item 证据：E1 / Peer-reviewed SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{S-NIC: SmartNIC function isolation}
+{zhou2024snic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户。}
+{\begin{itemize}
+  \item SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户函数可能泄漏或篡改 state
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{S-NIC: SmartNIC function isolation}
+{zhou2024snic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{用 memory denylist、locked TLB、cache partitioning、accelerator virtualizatio。}
+{\begin{itemize}
+  \item 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Virtual SmartNIC launch/destroy lifecycle
+  \item Memory denylist, locked TLB, and DMA isolation
+  \item Cache partitioning, accelerator virtualization, and bus arbitration
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{S-NIC: SmartNIC function isolation}
+{zhou2024snic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{论文报告硬件面积约 +8.89\%，功耗约 +11.45\%，function throughput worst-case 下降小于 1.7\%}
+{\begin{itemize}
+  \item 论文报告硬件面积约 +8.89\%，功耗约 +11.45\%，function throughput worst-case 下降小于 1.7\%
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{S-NIC: SmartNIC function isolation}
+{zhou2024snic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline}
+{为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。}
+{没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。}
+{可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attestation 绑定。}
+
+\PaperSlide
+{内容摘要}
 {TNIC: trusted NIC architecture}
-{\Meta{giantsidi2025tnic}{Peer-reviewed SOTA / E1 ASPLOS 2025}{source: local PDF verified}{claim: NIC-level silicon root-of-trust}}
+{giantsidi2025tnic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable aut。}
 {\begin{itemize}
-  \item TNIC 在 NIC 级别构建 minimal silicon root-of-trust。
-  \item 它为可信分布式系统提供 transferable authentication 和 non-equivocation，而不是把全部信任压到 CPU TEE。
+  \item TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高。
-  \item 对 confidential networking，网络 endpoint identity 可能必须终止在 NIC/DPU local root。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是用最小 NIC hardware primitive 支撑跨节点协议中的可转移证明。
-  \item 解决方案包括 NIC hardware root、kernel-bypass stack、协议 transformation 和形式化验证。
-\end{itemize}}
-{\begin{itemize}
-  \item NIC-level silicon root-of-trust。
-  \item Transferable authentication and non-equivocation。
-  \item Tamarin-verified protocol core and kernel-bypass stack。
-\end{itemize}}
-{\begin{itemize}
-  \item 论文报告相比 CPU-centric TEE systems 最多 6x 性能提升。
-  \item 硬件 TCB 约 2,114 LoC，并用 Tamarin 验证核心性质。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}提供 network endpoint root-of-trust 的 peer-reviewed SOTA 和形式化证据。
-  \item \textbf{不足：}不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。
-  \item \textbf{商业落地：}可作为 SmartNIC local root 蓝图；风险在 silicon provisioning、证书链和云厂商互操作。
+  \item 角色：sota\_1
+  \item 证据：E1 / Peer-reviewed SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{TNIC: trusted NIC architecture}
+{giantsidi2025tnic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate}
+{\begin{itemize}
+  \item CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{TNIC: trusted NIC architecture}
+{giantsidi2025tnic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议}
+{\begin{itemize}
+  \item 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议
+  \item 用 Tamarin 验证核心性质
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item NIC-level silicon root-of-trust
+  \item Transferable authentication and non-equivocation
+  \item Tamarin-verified protocol core and kernel-bypass stack
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{TNIC: trusted NIC architecture}
+{giantsidi2025tnic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验。}
+{\begin{itemize}
+  \item 论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验证核心性质
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{TNIC: trusted NIC architecture}
+{giantsidi2025tnic}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据}
+{为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据。}
+{不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。}
+{可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。}
+
+\PaperSlide
+{内容摘要}
 {Hazel: secure disaggregated storage data path}
-{\Meta{chrapek2026hazel}{Draft-not-ratified / E3 arXiv 2026}{source: local PDF verified}{claim: secure NVMe-oF storage data path}}
+{chrapek2026hazel}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 fres。}
 {\begin{itemize}
-  \item Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness。
-  \item 它利用 BlueField-3 offload 降低开销，但不把 vendor DPU building block 写成完整 production DPU TEE。
+  \item Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item Confidential workload 使用远端存储时，本地 dm-crypt、dm-integrity、dm-x 难以保持性能、扩展性和 replay freshness。
-  \item Storage endpoint identity、DPU attestation、KBS policy 和 workload TEE quote 需要闭环。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 freshness/integrity metadata 放进 disaggregated storage path，而不是只在本地 block layer 做保护。
-  \item 解决方案用 counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload。
-\end{itemize}}
-{\begin{itemize}
-  \item Counter leasing and KBS/TEE-assisted control path。
-  \item NVMe metadata plus Hazel Merkle Tree freshness。
-  \item BlueField-3 crypto offload for NVMe-oF data path。
-\end{itemize}}
-{\begin{itemize}
-  \item arXiv preprint 提供 NVMe-oF storage 原型评估。
-  \item 报告常见路径 1\%--2\% overhead，IO500 平均约 6.3\%，YCSB p99 latency 平均约 2.2\%；小随机 freshness I/O 是弱点。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}把 confidential storage data path、freshness 和 DPU offload 放到同一原型中。
-  \item \textbf{不足：}仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。
-  \item \textbf{商业落地：}接近云上 confidential storage；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。
+  \item 角色：sota\_2
+  \item 证据：E3 / Draft-not-ratified
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\DirectionSummary
-{SmartNIC / trusted NIC / secure storage}
-{SmartNIC/DPU 一旦承载 vNIC、vSwitch、TLS、storage 和 tenant functions，本身就成为 confidential-computing 数据路径边界。}
-{S-NIC 给出 NIC-local resource ownership 和 secure offload isolation，OSMOSIS 只补多租户资源管理背景。}
-{TNIC 给出 SmartNIC local root，Hazel 把 DPU offload 推到 secure storage path；BlueField 文档只证明 OP-TEE/fTPM building blocks。}
-{仍需 vendor NIC/DPU attestation、secure vNIC/vSwitch/offload production evidence，以及 SPDM/TDISP device lifecycle + SmartNIC local root + workload TEE quote + key release policy 的组合关系。}
+\PaperSlide
+{研究背景}
+{Hazel: secure disaggregated storage data path}
+{chrapek2026hazel}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 r。}
+{\begin{itemize}
+  \item confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{Hazel: secure disaggregated storage data path}
+{chrapek2026hazel}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual c。}
+{\begin{itemize}
+  \item counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Counter leasing and KBS/TEE-assisted control path
+  \item NVMe metadata plus Hazel Merkle Tree freshness
+  \item BlueField-3 crypto offload for NVMe-oF data path
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{Hazel: secure disaggregated storage data path}
+{chrapek2026hazel}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1\%-2\% overhead，IO500 平均约 6.。}
+{\begin{itemize}
+  \item arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1\%-2\% overhead，IO500 平均约 6.3\%，YCSB p99 latency 平均约 2.2\%
+  \item 小随机 freshness I/O 是弱点
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E3 draft/preprint, not ratified
+  \item 成熟度：draft/preprint, not ratified
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{Hazel: secure disaggregated storage data path}
+{chrapek2026hazel}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一。}
+{把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。}
+{仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。}
+{接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。}
+
+\begin{frame}[t]{SmartNIC / trusted NIC / secure storage data path：技术演进总结}
+\DeckKicker{DIRECTION TAKEAWAY}
+\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{技术演进}{\begin{itemize}
+  \item S-NIC: SmartNIC function isolation
+  \item TNIC: trusted NIC architecture
+  \item Hazel: secure disaggregated storage data path
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点与缺口}{\begin{itemize}
+  \item 为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。
+  \item 为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据。
+  \item 没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。
+  \item 不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业化适配}{\begin{itemize}
+  \item 可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attestation 绑定。
+  \item 可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。
+  \item 接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。
+\end{itemize}}
+  \end{column}
+\end{columns}
+\end{frame}

@@ -46,6 +46,8 @@ survey/*.pdf
 next-plan.md
 report-slide/slide-example.pdf
 report-slide/main.pdf
+report-slide/output/
+report-slide/preview/
 report-slide/*.aux
 report-slide/*.log
 report-slide/*.nav

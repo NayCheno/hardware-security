@@ -1,8 +1,6 @@
 direction: SmartNIC / trusted NIC / secure storage data path
-focus: 把 NIC-local root、secure offload、resource management 与 confidential storage
-  分开写。
-selection_rule: 固定三篇 primary；`nvidia_bluefield_operation_2025` 与 `khalilov2024osmosis`
-  作为辅助材料，不计入三篇主讲。
+focus: 把 NIC-local root、secure offload、resource management 与 confidential storage 分开写。
+selection_rule: 固定三篇 primary；`nvidia_bluefield_operation_2025` 与 `khalilov2024osmosis` 作为辅助材料，不计入三篇主讲。
 primary:
 - key: zhou2024snic
   role: foundational
@@ -15,23 +13,56 @@ primary:
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf
   title: 'S-NIC: SmartNIC function isolation'
-  summary: S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions。
-  background: SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS
-    和其他租户函数可能泄漏或篡改 state。
-  insight_solution: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA
-    isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics。
-  key_technologies:
-  - Virtual SmartNIC launch/destroy lifecycle
-  - Memory denylist, locked TLB, and DMA isolation
-  - Cache partitioning, accelerator virtualization, and bus arbitration
-  experiment_claim: 论文报告硬件面积约 +8.89%，功耗约 +11.45%，function throughput worst-case 下降小于 1.7%。
-  evaluation:
-    strengths: 为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。
-    limitations: 没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。
-    commercialization: 可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attestation 绑定。
   auxiliary:
   - khalilov2024osmosis
   - nvidia_bluefield_operation_2025
+  slides:
+    summary:
+      claim: S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions
+      points:
+      - S-NIC 提出 virtual smart NIC，用硬件隔离 SmartNIC 上的 network functions
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户。
+      points:
+      - SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户函数可能泄漏或篡改 state
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualizatio。
+      points:
+      - 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation
+        实现 NIC-local single-owner semantics
+      visual:
+        title: 关键机制
+        items:
+        - Virtual SmartNIC launch/destroy lifecycle
+        - Memory denylist, locked TLB, and DMA isolation
+        - Cache partitioning, accelerator virtualization, and bus arbitration
+    experiments:
+      claim: 论文报告硬件面积约 +8.89%，功耗约 +11.45%，function throughput worst-case 下降小于 1.7%
+      points:
+      - 论文报告硬件面积约 +8.89%，功耗约 +11.45%，function throughput worst-case 下降小于 1.7%
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline
+      strengths: 为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。
+      limitations: 没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。
+      commercialization: 可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attestation 绑定。
 - key: giantsidi2025tnic
   role: sota_1
   selection_reason: TNIC is a peer-reviewed ASPLOS 2025 SOTA trusted NIC system.
@@ -43,22 +74,55 @@ primary:
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/tnic-trusted-nic-architecture/paper.pdf
   title: 'TNIC: trusted NIC architecture'
-  summary: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication
-    和 non-equivocation。
-  background: CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate。
-  insight_solution: 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议；用 Tamarin
-    验证核心性质。
-  key_technologies:
-  - NIC-level silicon root-of-trust
-  - Transferable authentication and non-equivocation
-  - Tamarin-verified protocol core and kernel-bypass stack
-  experiment_claim: 论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验证核心性质。
-  evaluation:
-    strengths: 为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据。
-    limitations: 不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。
-    commercialization: 可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。
   auxiliary:
   - nvidia_bluefield_operation_2025
+  slides:
+    summary:
+      claim: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable aut。
+      points:
+      - TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate
+      points:
+      - CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议
+      points:
+      - 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议
+      - 用 Tamarin 验证核心性质
+      visual:
+        title: 关键机制
+        items:
+        - NIC-level silicon root-of-trust
+        - Transferable authentication and non-equivocation
+        - Tamarin-verified protocol core and kernel-bypass stack
+    experiments:
+      claim: 论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验。
+      points:
+      - 论文报告相比 CPU-centric TEE systems 最多 6x 性能提升，硬件 TCB 约 2,114 LoC，并用 Tamarin 验证核心性质
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据
+      strengths: 为 network endpoint root-of-trust 提供 peer-reviewed SOTA 和形式化验证证据。
+      limitations: 不保护 workload memory，也不替代 SPDM/TDISP、IOMMU、link encryption 或 device lifecycle 标准。
+      commercialization: 可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。
 - key: chrapek2026hazel
   role: sota_2
   selection_reason: Hazel is retained as a draft SOTA item for trusted NIC and secure storage data paths.
@@ -70,30 +134,63 @@ primary:
   source_status: local_pdf_verified
   reference: reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/paper.pdf
   title: 'Hazel: secure disaggregated storage data path'
-  summary: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用
-    BlueField-3 offload 降低开销。
-  background: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和
-    replay freshness。
-  insight_solution: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual
-    consistency 和 DPU crypto offload。
-  key_technologies:
-  - Counter leasing and KBS/TEE-assisted control path
-  - NVMe metadata plus Hazel Merkle Tree freshness
-  - BlueField-3 crypto offload for NVMe-oF data path
-  experiment_claim: arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latency 平均约 2.2%；小随机 freshness I/O 是弱点。
-  evaluation:
-    strengths: 把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。
-    limitations: 仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。
-    commercialization: 接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。
   auxiliary:
   - nvidia_bluefield_operation_2025
+  slides:
+    summary:
+      claim: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 fres。
+      points:
+      - Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E3 / Draft-not-ratified
+        - 来源：local_pdf_verified
+    background:
+      claim: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 r。
+      points:
+      - confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual c。
+      points:
+      - counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload
+      visual:
+        title: 关键机制
+        items:
+        - Counter leasing and KBS/TEE-assisted control path
+        - NVMe metadata plus Hazel Merkle Tree freshness
+        - BlueField-3 crypto offload for NVMe-oF data path
+    experiments:
+      claim: arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.。
+      points:
+      - arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latency 平均约 2.2%
+      - 小随机 freshness I/O 是弱点
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E3 draft/preprint, not ratified
+        - 成熟度：draft/preprint, not ratified
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一。
+      strengths: 把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。
+      limitations: 仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。
+      commercialization: 接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint evidence。
 auxiliary:
 - key: nvidia_bluefield_operation_2025
   role: Industry evidence / vendor DPU OP-TEE/fTPM
   evidence: E4 / Industry evidence
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/paper.pdf
-  use: 辅助说明 vendor NIC/DPU attestation 与 OP-TEE/fTPM building blocks；保留 fTPM TA testing/development-key 限制，不写成 complete production DPU TEE。
+  use: 辅助说明 vendor NIC/DPU attestation 与 OP-TEE/fTPM building blocks；保留 fTPM TA testing/development-key 限制，不写成 complete production
+    DPU TEE。
 - key: khalilov2024osmosis
   role: Peer-reviewed background substrate / USENIX ATC 2024
   evidence: E1 / Peer-reviewed background substrate

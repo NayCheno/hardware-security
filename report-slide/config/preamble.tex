@@ -1,4 +1,3 @@
-
 \documentclass[aspectratio=169,10pt]{ctexbeamer}
 \usefonttheme{professionalfonts}
 \usetheme{default}
@@ -12,111 +11,91 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{ragged2e}
-\definecolor{Accent}{HTML}{A60000}
-\definecolor{Muted}{HTML}{666666}
-\definecolor{LightBG}{HTML}{F7F7F7}
-\definecolor{RuleBG}{HTML}{FFF7F7}
+
+\definecolor{Ink}{HTML}{111827}
+\definecolor{SoftInk}{HTML}{4B5563}
+\definecolor{Muted}{HTML}{6B7280}
+\definecolor{Accent}{HTML}{B42318}
+\definecolor{AccentSoft}{HTML}{FEE4E2}
+\definecolor{Paper}{HTML}{FFFFFF}
+\definecolor{Panel}{HTML}{F8FAFC}
+\definecolor{Rule}{HTML}{D0D5DD}
+\definecolor{Deep}{HTML}{101828}
+
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}{\hfill\scriptsize\insertframenumber\,/\,\inserttotalframenumber\hspace{1.2em}\vspace{0.7em}}
-\setbeamercolor{title}{fg=black}
-\setbeamercolor{frametitle}{fg=black}
+\setbeamertemplate{footline}{%
+  \hfill\scriptsize\textcolor{Muted}{\insertframenumber\,/\,\inserttotalframenumber}\hspace{1.2em}\vspace{0.7em}}
+\setbeamercolor{background canvas}{bg=Paper}
+\setbeamercolor{title}{fg=Ink}
+\setbeamercolor{frametitle}{fg=Ink}
 \setbeamerfont{frametitle}{series=\bfseries,size=\large}
-\setbeamercolor{section in toc}{fg=black}
 \setbeamertemplate{itemize item}{\textcolor{Accent}{\scriptsize$\blacktriangleright$}}
 \setbeamertemplate{itemize subitem}{\textcolor{Muted}{\scriptsize$\bullet$}}
+
 \newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
-\newcommand{\Tag}[1]{\textcolor{Accent}{\scriptsize\bfseries #1}}
-\newcommand{\Key}[1]{\textcolor{Muted}{\scriptsize\texttt{\detokenize{#1}}}}
-\newcommand{\Evidence}[1]{\textcolor{Accent}{\scriptsize\bfseries #1}}
-\newcommand{\SourceState}[1]{\textcolor{Muted}{\scriptsize #1}}
-\newcommand{\Meta}[4]{%
-  {\Key{#1}\quad\Evidence{#2}\par
-  \SourceState{#3}\par
-  \SourceState{#4}\par}}
-\newcommand{\Divider}{\vspace{0.6mm}\hrule\vspace{1.5mm}}
-\newcommand{\RuleBox}[1]{%
-  \vspace{1mm}
-  \fcolorbox{Accent}{RuleBG}{\begin{minipage}{0.96\textwidth}\scriptsize #1\end{minipage}}
-  \vspace{1mm}}
-\newcommand{\DirectionIntro}[4]{%
-\begin{frame}[t]{#1}
-\small
-\textbf{方向定位}\par #2
-\medskip
-\textbf{三篇主讲选择规则}\par #3
-\medskip
-\textbf{证据边界}\par #4
+\newcommand{\DeckKicker}[1]{%
+  {\scriptsize\textcolor{Accent}{\rule{1.1em}{0.95ex}}\hspace{0.6em}\textcolor{Muted}{\bfseries #1}}\par\vspace{1.4mm}}
+\newcommand{\ClaimLine}[1]{%
+  {\Large\bfseries\color{Ink} #1\par}\vspace{3mm}}
+\newcommand{\SmallLead}[1]{%
+  {\small\color{SoftInk} #1\par}}
+\newcommand{\SlideMeta}[3]{%
+  {\scriptsize\textcolor{Muted}{\texttt{#1}}\quad\textcolor{Accent}{\bfseries #2}\quad\textcolor{Muted}{#3}\par}\vspace{1.2mm}}
+\newcommand{\PanelTitle}[1]{%
+  {\scriptsize\textcolor{Accent}{\bfseries #1}\par}\vspace{1mm}}
+\newcommand{\IndexEntry}[3]{%
+  {\scriptsize\textcolor{Accent}{\bfseries #1}\hspace{0.8em}\textbf{#2}\par
+  \hspace{2.7em}\textcolor{Muted}{\tiny #3}\par\vspace{1.5mm}}}
+\newcommand{\PrimaryCard}[3]{%
+  \vspace{1.2mm}
+  {\scriptsize\textcolor{Accent}{\bfseries #1}\hspace{0.8em}\textbf{#2}\par
+  \hspace{3.8em}\textcolor{Muted}{#3}\par}}
+\newcommand{\VisualPanel}[2]{%
+  \fcolorbox{Rule}{Panel}{%
+    \begin{minipage}[t][0.52\textheight][t]{0.94\linewidth}
+      \vspace{1.8mm}
+      \hspace{1.8mm}\begin{minipage}{0.90\linewidth}
+      \PanelTitle{#1}
+      \scriptsize #2
+      \end{minipage}
+    \end{minipage}}}
+\newcommand{\TextPanel}[2]{%
+  \fcolorbox{Rule}{Paper}{%
+    \begin{minipage}[t][0.52\textheight][t]{0.98\linewidth}
+      \vspace{1.8mm}
+      \hspace{1.8mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{#1}
+      \scriptsize #2
+      \end{minipage}
+    \end{minipage}}}
+\newcommand{\PaperSlide}[9]{%
+\begin{frame}[t]{#2：#1}
+\DeckKicker{#1}
+\SlideMeta{#3}{#4}{#5}
+\ClaimLine{#6}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.58\textwidth}
+    \TextPanel{讲解要点}{#7}
+  \end{column}
+  \begin{column}{0.36\textwidth}
+    \VisualPanel{#8}{#9}
+  \end{column}
+\end{columns}
 \end{frame}}
-\newcommand{\DirectionSummary}[5]{%
-\begin{frame}[t]{#1：技术演进总结}
-\small
-\begin{itemize}
-  \item \textbf{基础问题：}#2
-  \item \textbf{第一条推进线：}#3
-  \item \textbf{第二条推进线：}#4
-  \item \textbf{仍需保留的缺口：}#5
-\end{itemize}
-\end{frame}}
-\newcommand{\PaperStory}[8]{%
-\begin{frame}[t]{#1}
-\small
-#2
-\Divider
-\begin{itemize}
-  \item 本组 slide 固定按 7 页展开：标题页、内容摘要、研究背景、核心洞察/解决方案、关键技术、实验结果/证据状态、文章评价。
-  \item 证据等级在每页保留；draft、metadata-only、gated、source-limited 和 industry evidence 不写成已完全落地的学术系统。
-\end{itemize}
-\end{frame}
-\begin{frame}[t]{#1：内容摘要}
-\small
-#2
-\Divider
-#3
-\end{frame}
-\begin{frame}[t]{#1：研究背景}
-\small
-#2
-\Divider
-#4
-\end{frame}
-\begin{frame}[t]{#1：核心洞察 / 解决方案}
-\small
-#2
-\Divider
-#5
-\end{frame}
-\begin{frame}[t]{#1：关键技术}
-\small
-#2
-\Divider
-#6
-\end{frame}
-\begin{frame}[t]{#1：实验结果 / 证据状态}
-\small
-#2
-\Divider
-#7
-\end{frame}
+\newcommand{\PaperEvalSlide}[8]{%
 \begin{frame}[t]{#1：文章评价}
-\small
-#2
-\Divider
-#8
-\end{frame}}
-\newcommand{\PaperFrame}[7]{%
-\begin{frame}[t]
-  \frametitle{#1}
-  \vspace{-2mm}
-  {\Tag{#2}}\Divider
-  \begin{columns}[t,totalwidth=\textwidth]
-    \begin{column}{0.49\textwidth}
-      {\scriptsize\textbf{内容摘要}\par #3\par\medskip
-      \textbf{研究背景}\par #4\par\medskip
-      \textbf{解决方案}\par #5\par}
-    \end{column}
-    \begin{column}{0.49\textwidth}
-      {\scriptsize\textbf{实验结果}\par #6\par\medskip
-      \textbf{文章评价}\par #7\par}
-    \end{column}
-  \end{columns}
+\DeckKicker{文章评价}
+\SlideMeta{#2}{#3}{#4}
+\ClaimLine{#5}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点}{\scriptsize #6}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{不足}{\scriptsize #7}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业落地}{\scriptsize #8}
+  \end{column}
+\end{columns}
 \end{frame}}

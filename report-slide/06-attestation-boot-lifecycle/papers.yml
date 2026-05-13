@@ -1,6 +1,7 @@
 direction: Attestation、boot、lifecycle
 focus: 区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。
-selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。
+selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA
+  作为 runtime-attestation lineage auxiliary。
 primary:
 - key: seshadri2004swatt
   role: foundational
@@ -13,19 +14,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/attestation/swatt-software-based-attestation-for-embedded-devices/paper.pdf
   title: 'SWATT: 软件 attestation 早期代表'
-  summary: 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。
-  background: 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态。
-  insight_solution: 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum。
-  key_technologies:
-  - Software-only remote attestation
-  - Timing-sensitive memory checksum
-  - Verifier/prover challenge-response model
-  experiment_claim: 论文在嵌入式节点场景评估；安全性强依赖 timing、硬件和网络假设。
-  evaluation:
-    strengths: 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
-    limitations: 面对现代强对手和复杂 SoC/TEE 时适用性有限。
-    commercialization: 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
   auxiliary: []
+  slides:
+    summary:
+      claim: 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容
+      points:
+      - 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E1 / Foundational
+        - 来源：local_pdf_verified
+    background:
+      claim: 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态
+      points:
+      - 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum
+      points:
+      - 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum
+      visual:
+        title: 关键机制
+        items:
+        - Software-only remote attestation
+        - Timing-sensitive memory checksum
+        - Verifier/prover challenge-response model
+    experiments:
+      claim: 论文在嵌入式节点场景评估
+      points:
+      - 论文在嵌入式节点场景评估
+      - 安全性强依赖 timing、硬件和网络假设
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因
+      strengths: 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
+      limitations: 面对现代强对手和复杂 SoC/TEE 时适用性有限。
+      commercialization: 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
 - key: rats_rfc
   role: sota_1
   selection_reason: RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.
@@ -37,20 +73,56 @@ primary:
   source_status: local_pdf_verified
   reference: reference/attestation/remote-attestation-procedures-rats-architecture/paper.pdf
   title: RATS 架构
-  summary: 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy。
-  background: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐。
-  insight_solution: RATS 规范化 evidence 生成、传递、评估角色与拓扑；`eat_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码。
-  key_technologies:
-  - Attester/verifier/relying-party roles
-  - Evidence, endorsements, reference values and appraisal policy
-  - Attestation results and freshness vocabulary
-  experiment_claim: 规范/Survey，无新实验；不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义。
-  evaluation:
-    strengths: 是跨平台 attestation 术语和 verifier policy 的权威基线。
-    limitations: 不证明任一平台测量链充分，也不定义完整 token claim encoding。
-    commercialization: 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
   auxiliary:
   - eat_rfc
+  slides:
+    summary:
+      claim: 定义 attester、verifier、relying party、evidence、endorsements、reference values。
+      points:
+      - 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E0 / Spec-standard SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。
+      points:
+      - 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: RATS 规范化 evidence 生成、传递、评估角色与拓扑
+      points:
+      - RATS 规范化 evidence 生成、传递、评估角色与拓扑
+      - '`eat_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码'
+      visual:
+        title: 关键机制
+        items:
+        - Attester/verifier/relying-party roles
+        - Evidence, endorsements, reference values and appraisal policy
+        - Attestation results and freshness vocabulary
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - 不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E0 official standard/specification
+        - 成熟度：official standard/specification
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 是跨平台 attestation 术语和 verifier policy 的权威基线
+      strengths: 是跨平台 attestation 术语和 verifier policy 的权威基线。
+      limitations: 不证明任一平台测量链充分，也不定义完整 token claim encoding。
+      commercialization: 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
 - key: nunes2019vrased
   role: sota_2
   selection_reason: VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software remote attestation.
@@ -62,19 +134,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/attestation/vrased-verified-hardware-software-co-design-remote-attestation/paper.pdf
   title: VRASED verified RA co-design
-  summary: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root。
-  background: RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明。
-  insight_solution: 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性。
-  key_technologies:
-  - Hardware/software RA root co-design
-  - Formal verification of security sub-properties
-  - MSP430/Basys3 FPGA implementation
-  experiment_claim: USENIX Security 2019 peer-reviewed paper; reports prototype and verification evidence for simple embedded devices.
-  evaluation:
-    strengths: 证据强，结合形式化验证、硬件/软件 co-design 和真实原型。
-    limitations: 目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。
-    commercialization: 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
   auxiliary: []
+  slides:
+    summary:
+      claim: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。
+      points:
+      - 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：local_pdf_verified
+    background:
+      claim: RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明
+      points:
+      - RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性
+      points:
+      - 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性
+      visual:
+        title: 关键机制
+        items:
+        - Hardware/software RA root co-design
+        - Formal verification of security sub-properties
+        - MSP430/Basys3 FPGA implementation
+    experiments:
+      claim: USENIX Security 2019 peer-reviewed paper
+      points:
+      - USENIX Security 2019 peer-reviewed paper
+      - reports prototype and verification evidence for simple embedded devices.
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 证据强，结合形式化验证、硬件/软件 co-design 和真实原型
+      strengths: 证据强，结合形式化验证、硬件/软件 co-design 和真实原型。
+      limitations: 目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。
+      commercialization: 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
 auxiliary:
 - key: eat_rfc
   role: Spec/standard SOTA / RFC 9711

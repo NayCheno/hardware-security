@@ -1,119 +1,290 @@
 \section{Attestation、boot、lifecycle}
 
-\DirectionIntro
-{Attestation、boot、lifecycle}
-{本方向区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy，避免把一次性启动测量写成持续可信。}
-{三篇主讲材料是 \Key{seshadri2004swatt}、\Key{rats_rfc}、\Key{nunes2019vrased}；\Key{eat_rfc}、\Key{abera2016cflat}、\Key{dessouky2017lofat}、\Key{mao2025pdrima} 作为 auxiliary。}
-{RFC 页只写规范语义和证据类型；verified RA 只写 simple embedded device 范围，不泛化成 CCA/CoVE 完整证据链。}
-
-\begin{frame}{Attestation、boot、lifecycle：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-历史入口 & SWATT: 软件 attestation 早期代表 & Foundational / E1 IEEE S\&P 2004 \\
-标准架构 & RATS 架构 & Spec-standard SOTA / E0 RFC 9334 \\
-Verified RA & VRASED verified RA co-design & Peer-reviewed SOTA / E1 USENIX Security 2019 \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{辅助材料：\Key{eat_rfc} 是 EAT token/claim encoding；\Key{abera2016cflat}、\Key{dessouky2017lofat}、\Key{mao2025pdrima} 只补 runtime/control-flow attestation lineage。}
+\begin{frame}[t]{Attestation、boot、lifecycle：方向开场}
+\DeckKicker{06-attestation-boot-lifecycle}
+\ClaimLine{区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.56\textwidth}
+    \textbf{三篇主讲选择规则}\par
+    \SmallLead{固定三篇 primary；`rats\_rfc` 主讲 attestation architecture，`eat\_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。}
+    \vspace{2mm}
+\PrimaryCard{基础入口}{SWATT: 软件 attestation 早期代表}{E1 / Foundational}
+\PrimaryCard{SOTA 1}{RATS 架构}{E0 / Spec-standard SOTA}
+\PrimaryCard{SOTA 2}{VRASED verified RA co-design}{E1 / Peer-reviewed SOTA}
+  \end{column}
+  \begin{column}{0.38\textwidth}
+    \VisualPanel{证据边界}{\begin{itemize}
+  \item seshadri2004swatt: E1 / Foundational；local\_pdf\_verified
+  \item rats\_rfc: E0 / Spec-standard SOTA；local\_pdf\_verified
+  \item nunes2019vrased: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+\end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 
-\PaperStory
+\PaperSlide
+{内容摘要}
 {SWATT: 软件 attestation 早期代表}
-{\Meta{seshadri2004swatt}{Foundational / E1 IEEE S\&P 2004}{source: local PDF verified}{claim: embedded software attestation baseline}}
+{seshadri2004swatt}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容}
 {\begin{itemize}
-  \item SWATT 提出软件 attestation 的早期代表方法。
-  \item 它用 timing-sensitive checksum 让远程 verifier 检查设备内存内容。
+  \item 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 低端嵌入式设备缺少硬件 root of trust。
-  \item 远程管理者仍需要确认设备代码完整性和启动状态。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把软件 checksum 与严格时间假设绑定。
-  \item 解决方案通过 verifier/prover challenge-response 约束篡改设备伪造完整内存 checksum 的空间。
-\end{itemize}}
-{\begin{itemize}
-  \item Software-only remote attestation。
-  \item Timing-sensitive memory checksum。
-  \item Verifier/prover challenge-response model。
-\end{itemize}}
-{\begin{itemize}
-  \item 论文在嵌入式节点场景评估。
-  \item 安全性强依赖 timing、硬件和网络假设，不能直接迁移到现代复杂 TEE/SoC threat model。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
-  \item \textbf{不足：}面对现代强对手和复杂 SoC/TEE 时适用性有限。
-  \item \textbf{商业落地：}现代方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
+  \item 角色：foundational
+  \item 证据：E1 / Foundational
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{SWATT: 软件 attestation 早期代表}
+{seshadri2004swatt}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态}
+{\begin{itemize}
+  \item 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{SWATT: 软件 attestation 早期代表}
+{seshadri2004swatt}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum}
+{\begin{itemize}
+  \item 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Software-only remote attestation
+  \item Timing-sensitive memory checksum
+  \item Verifier/prover challenge-response model
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{SWATT: 软件 attestation 早期代表}
+{seshadri2004swatt}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{论文在嵌入式节点场景评估}
+{\begin{itemize}
+  \item 论文在嵌入式节点场景评估
+  \item 安全性强依赖 timing、硬件和网络假设
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{SWATT: 软件 attestation 早期代表}
+{seshadri2004swatt}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因}
+{历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。}
+{面对现代强对手和复杂 SoC/TEE 时适用性有限。}
+{现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。}
+
+\PaperSlide
+{内容摘要}
 {RATS 架构}
-{\Meta{rats\_rfc}{Spec-standard SOTA / E0 RFC 9334}{source: local PDF verified}{claim: architecture vocabulary only}}
+{rats\_rfc}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{定义 attester、verifier、relying party、evidence、endorsements、reference values。}
 {\begin{itemize}
-  \item RATS 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy。
-  \item 本 deck 用它统一后续 CCA、CoVE、DPU/NIC attestation 词汇。
+  \item 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇。
-  \item 没有架构词汇时，platform evidence、token encoding 和 verifier result 容易混在一起。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 evidence 生成、传递、评估角色与拓扑标准化。
-  \item \Key{eat_rfc} 只作为辅助材料，说明实体状态和安全属性 claims 的 token 编码。
-\end{itemize}}
-{\begin{itemize}
-  \item Attester/verifier/relying-party roles。
-  \item Evidence, endorsements, reference values and appraisal policy。
-  \item Attestation results and freshness vocabulary。
-\end{itemize}}
-{\begin{itemize}
-  \item 规范/Survey，无新实验。
-  \item 不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}跨平台 attestation 术语和 verifier policy 的权威基线。
-  \item \textbf{不足：}不证明任一平台测量链充分，也不定义完整 token claim encoding。
-  \item \textbf{商业落地：}标准化潜力强；风险在 evidence profile、endorsement 分发和 verifier policy 运维复杂。
+  \item 角色：sota\_1
+  \item 证据：E0 / Spec-standard SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{RATS 架构}
+{rats\_rfc}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。}
+{\begin{itemize}
+  \item 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{RATS 架构}
+{rats\_rfc}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{RATS 规范化 evidence 生成、传递、评估角色与拓扑}
+{\begin{itemize}
+  \item RATS 规范化 evidence 生成、传递、评估角色与拓扑
+  \item `eat\_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Attester/verifier/relying-party roles
+  \item Evidence, endorsements, reference values and appraisal policy
+  \item Attestation results and freshness vocabulary
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{RATS 架构}
+{rats\_rfc}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{规范/Survey，无新实验}
+{\begin{itemize}
+  \item 规范/Survey，无新实验
+  \item 不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E0 official standard/specification
+  \item 成熟度：official standard/specification
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{RATS 架构}
+{rats\_rfc}
+{E0 / Spec-standard SOTA}
+{local\_pdf\_verified}
+{是跨平台 attestation 术语和 verifier policy 的权威基线}
+{是跨平台 attestation 术语和 verifier policy 的权威基线。}
+{不证明任一平台测量链充分，也不定义完整 token claim encoding。}
+{标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。}
+
+\PaperSlide
+{内容摘要}
 {VRASED verified RA co-design}
-{\Meta{nunes2019vrased}{Peer-reviewed SOTA / E1 USENIX Security 2019}{source: local PDF verified}{claim: verified RA co-design for simple embedded devices}}
+{nunes2019vrased}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。}
 {\begin{itemize}
-  \item VRASED 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root。
-  \item 它把硬件隔离、软件 attestation routine 和形式化证明放进同一个 co-design。
+  \item 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item RA 安全性依赖硬件、软件和协议共同成立。
-  \item 早期方案很少对实现级安全性质做机器可检查证明，低端 IoT 设备还需要控制硬件成本。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是用少量硬件扩展保护 attestation 代码、密钥和内存访问。
-  \item 软件 RA routine 与硬件约束一起被形式化验证，而不是只给协议草图。
-\end{itemize}}
-{\begin{itemize}
-  \item Hardware/software RA root co-design。
-  \item Formal verification of security sub-properties。
-  \item MSP430/Basys3 FPGA implementation。
-\end{itemize}}
-{\begin{itemize}
-  \item USENIX Security 2019 peer-reviewed paper。
-  \item 论文报告 simple embedded device 原型和 verification evidence；具体资源、性能和证明规模以原文为准。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}证据强，结合形式化验证、硬件/软件 co-design 和真实原型。
-  \item \textbf{不足：}目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。
-  \item \textbf{商业落地：}适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
+  \item 角色：sota\_2
+  \item 证据：E1 / Peer-reviewed SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\DirectionSummary
-{Attestation、boot、lifecycle}
-{SWATT 说明早期 remote attestation 依赖软件测量和 timing 假设，现代方案需要硬件 RoT 与标准化 evidence。}
-{RATS 把 attester/verifier/relying party、evidence、endorsement、reference value、appraisal policy 和 result 统一成架构词汇。}
-{VRASED 说明 RA root 本身也需要硬件/软件 co-design 和机器可检查证明；C-FLAT/LO-FAT 补 runtime control-flow evidence lineage。}
-{后续 CCA、CoVE、SPDM/TDISP、DPU/NIC attestation 都需要映射到 RATS/EAT 与平台特定 evidence profile。}
+\PaperSlide
+{研究背景}
+{VRASED verified RA co-design}
+{nunes2019vrased}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明}
+{\begin{itemize}
+  \item RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{VRASED verified RA co-design}
+{nunes2019vrased}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性}
+{\begin{itemize}
+  \item 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Hardware/software RA root co-design
+  \item Formal verification of security sub-properties
+  \item MSP430/Basys3 FPGA implementation
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{VRASED verified RA co-design}
+{nunes2019vrased}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{USENIX Security 2019 peer-reviewed paper}
+{\begin{itemize}
+  \item USENIX Security 2019 peer-reviewed paper
+  \item reports prototype and verification evidence for simple embedded devices.
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{VRASED verified RA co-design}
+{nunes2019vrased}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{证据强，结合形式化验证、硬件/软件 co-design 和真实原型}
+{证据强，结合形式化验证、硬件/软件 co-design 和真实原型。}
+{目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。}
+{适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。}
+
+\begin{frame}[t]{Attestation、boot、lifecycle：技术演进总结}
+\DeckKicker{DIRECTION TAKEAWAY}
+\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{技术演进}{\begin{itemize}
+  \item SWATT: 软件 attestation 早期代表
+  \item RATS 架构
+  \item VRASED verified RA co-design
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点与缺口}{\begin{itemize}
+  \item 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
+  \item 是跨平台 attestation 术语和 verifier policy 的权威基线。
+  \item 面对现代强对手和复杂 SoC/TEE 时适用性有限。
+  \item 不证明任一平台测量链充分，也不定义完整 token claim encoding。
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业化适配}{\begin{itemize}
+  \item 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
+  \item 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
+  \item 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
+\end{itemize}}
+  \end{column}
+\end{columns}
+\end{frame}

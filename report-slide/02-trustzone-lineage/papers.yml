@@ -13,19 +13,54 @@ primary:
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/arm-security-technology-trustzone/README.md
   title: Arm TrustZone 白皮书
-  summary: 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型。
-  background: 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来。
-  insight_solution: 在处理器、互连和外设路径传播安全状态，形成双世界系统。
-  key_technologies:
-  - Secure world / Non-secure world
-  - NS bit and SoC security state propagation
-  - Secure monitor and trusted service boundary
-  experiment_claim: 白皮书/industry evidence，无独立实验；只支撑 TrustZone 基础模型。
-  evaluation:
-    strengths: 历史基础价值高，能解释 Arm TEE 的双世界起点。
-    limitations: 不代表 CCA/RME/RMM 或 confidential VM threat model。
-    commercialization: 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
   auxiliary: []
+  slides:
+    summary:
+      claim: 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型
+      points:
+      - 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型
+      visual:
+        title: 证据定位
+        items:
+        - 角色：foundational
+        - 证据：E4 / Foundational industry evidence
+        - 来源：local_pdf_verified
+    background:
+      claim: 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来
+      points:
+      - 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 在处理器、互连和外设路径传播安全状态，形成双世界系统
+      points:
+      - 在处理器、互连和外设路径传播安全状态，形成双世界系统
+      visual:
+        title: 关键机制
+        items:
+        - Secure world / Non-secure world
+        - NS bit and SoC security state propagation
+        - Secure monitor and trusted service boundary
+    experiments:
+      claim: 白皮书/industry evidence，无独立实验
+      points:
+      - 白皮书/industry evidence，无独立实验
+      - 只支撑 TrustZone 基础模型
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E4 industry/vendor evidence
+        - 成熟度：industry/vendor evidence
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 历史基础价值高，能解释 Arm TEE 的双世界起点
+      strengths: 历史基础价值高，能解释 Arm TEE 的双世界起点。
+      limitations: 不代表 CCA/RME/RMM 或 confidential VM threat model。
+      commercialization: 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
 - key: pinto2019trustzone
   role: sota_1
   selection_reason: Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE lineage.
@@ -37,19 +72,53 @@ primary:
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/paper.pdf
   title: Demystifying Arm TrustZone
-  summary: 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作。
-  background: TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一。
-  insight_solution: 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map。
-  key_technologies:
-  - TEE OS and trusted applications
-  - Hardware-assisted virtualization use cases
-  - IoT and mobile deployment patterns
-  experiment_claim: 规范/Survey，无新实验；只支撑背景和生态分类。
-  evaluation:
-    strengths: 适合写 TrustZone 背景和生态谱系。
-    limitations: 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
-    commercialization: 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
   auxiliary: []
+  slides:
+    summary:
+      claim: 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作
+      points:
+      - 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_1
+        - 证据：E2 / Background substrate
+        - 来源：local_pdf_verified
+    background:
+      claim: TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一
+      points:
+      - TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map
+      points:
+      - 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map
+      visual:
+        title: 关键机制
+        items:
+        - TEE OS and trusted applications
+        - Hardware-assisted virtualization use cases
+        - IoT and mobile deployment patterns
+    experiments:
+      claim: 规范/Survey，无新实验；只支撑背景和生态分类
+      points:
+      - 规范/Survey，无新实验；只支撑背景和生态分类
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E2 peer-reviewed survey/SoK
+        - 成熟度：peer-reviewed survey/SoK
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 适合写 TrustZone 背景和生态谱系
+      strengths: 适合写 TrustZone 背景和生态谱系。
+      limitations: 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
+      commercialization: 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
 - key: cerdeira2020trustzone
   role: sota_2
   selection_reason: S&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narrative.
@@ -61,17 +130,52 @@ primary:
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/sok/understanding-prevailing-security-vulnerabilities-trustzone-tee/paper.pdf
   title: TrustZone-assisted TEE 漏洞 SoK
-  summary: 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因。
-  background: TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞。
-  insight_solution: 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界。
-  key_technologies:
-  - Trusted application and TEE OS attack surface
-  - Secure monitor / driver interface risk
-  - Vulnerability taxonomy and root-cause grouping
-  experiment_claim: 规范/Survey，无新实验；证据基础是 SoK/漏洞 taxonomy，不证明 CCA 安全性。
-  evaluation:
-    strengths: 能支撑“为什么需要更强 CCA threat model”的历史动机。
-    limitations: 不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。
-    commercialization: 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
   auxiliary: []
+  slides:
+    summary:
+      claim: 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因
+      points:
+      - 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因
+      visual:
+        title: 证据定位
+        items:
+        - 角色：sota_2
+        - 证据：E2 / Peer-reviewed SoK
+        - 来源：local_pdf_verified
+    background:
+      claim: TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞
+      points:
+      - TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞
+      visual:
+        title: 问题边界
+        items:
+        - 保护对象
+        - 攻击/管理边界
+        - 现有方法缺口
+    solution:
+      claim: 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界
+      points:
+      - 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界
+      visual:
+        title: 关键机制
+        items:
+        - Trusted application and TEE OS attack surface
+        - Secure monitor / driver interface risk
+        - Vulnerability taxonomy and root-cause grouping
+    experiments:
+      claim: 规范/Survey，无新实验
+      points:
+      - 规范/Survey，无新实验
+      - 证据基础是 SoK/漏洞 taxonomy，不证明 CCA 安全性
+      visual:
+        title: 证据强度
+        items:
+        - 类型：E2 peer-reviewed survey/SoK
+        - 成熟度：peer-reviewed survey/SoK
+        - PDF：local_pdf_verified
+    evaluation:
+      claim: 能支撑“为什么需要更强 CCA threat model”的历史动机
+      strengths: 能支撑“为什么需要更强 CCA threat model”的历史动机。
+      limitations: 不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。
+      commercialization: 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
 auxiliary: []

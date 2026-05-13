@@ -1,119 +1,289 @@
 \section{Arm CCA 细粒度隔离与部署模型}
 
-\DirectionIntro
-{Arm CCA 细粒度隔离与部署模型}
-{本方向从 VM 级 Realm 扩展到用户态、容器和进程内保护域，关注 CCA 如何服务更小粒度的真实 workload。}
-{三篇主讲材料是 \Key{zhang2023shelter}、\Key{zhou2025rcontainer}、\Key{liu2025nanozone}；\Key{liu2025lesstrust} 只作为 intra-process 辅助对比，不计入三篇。}
-{缺少本地 PDF 的辅助材料只写 source/evidence 状态；draft/not-ratified 材料不写成成熟 production evidence。}
-
-\begin{frame}{Arm CCA 细粒度隔离与部署模型：三篇主讲材料}
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}lYl@{}}
-\toprule
-角色 & 主讲材料 & 证据类型 \\
-\midrule
-方向入口 & Shelter: CCA 用户态隔离 & Foundational / E1 USENIX Security 2023 \\
-云原生部署 & RContainer: CCA 安全容器 & Peer-reviewed SOTA / E1 NDSS 2025 \\
-细粒度内存 & NanoZone: CCA 细粒度内存保护 & Draft/not ratified / E3 arXiv 2025 \\
-\bottomrule
-\end{tabularx}
-\medskip
-\SourceState{辅助材料：\Key{liu2025lesstrust} 是 TIFS peer-reviewed SOTA，但本地 PDF 不可用，只用于进程内隔离和 less-trust 管理模型对比。}
+\begin{frame}[t]{Arm CCA 细粒度隔离与部署模型：方向开场}
+\DeckKicker{04-arm-cca-deployment}
+\ClaimLine{从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.56\textwidth}
+    \textbf{三篇主讲选择规则}\par
+    \SmallLead{固定三篇 primary；`liu2025lesstrust` 作为 intra-process 辅助材料，不计入三篇主讲。}
+    \vspace{2mm}
+\PrimaryCard{基础入口}{Shelter: CCA 用户态隔离}{E1 / Foundational}
+\PrimaryCard{SOTA 1}{RContainer: CCA 安全容器}{E1 / Peer-reviewed SOTA}
+\PrimaryCard{SOTA 2}{NanoZone: CCA 细粒度内存保护}{E3 / Draft-not-ratified}
+  \end{column}
+  \begin{column}{0.38\textwidth}
+    \VisualPanel{证据边界}{\begin{itemize}
+  \item zhang2023shelter: E1 / Foundational；local\_pdf\_verified
+  \item zhou2025rcontainer: E1 / Peer-reviewed SOTA；local\_pdf\_verified
+  \item liu2025nanozone: E3 / Draft-not-ratified；local\_pdf\_verified
+\end{itemize}}
+  \end{column}
+\end{columns}
 \end{frame}
 
-\PaperStory
+\PaperSlide
+{内容摘要}
 {Shelter: CCA 用户态隔离}
-{\Meta{zhang2023shelter}{Foundational / E1 USENIX Security 2023}{source: local PDF verified}{claim: prototype and overhead claims from primary paper}}
+{zhang2023shelter}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment}
 {\begin{itemize}
-  \item Shelter 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment。
-  \item 本 deck 用它作为 CCA 细粒度隔离方向入口。
+  \item 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item Realm 机制不必只服务 VM；进程内敏感代码同样需要小 TCB、host-untrusted 的隔离边界。
-  \item 传统进程或库级隔离仍可能依赖过大的 OS/runtime 信任基础。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把 CCA primitives 封装成可被应用使用的隔离抽象。
-  \item 解决方案让应用 compartment 在不完全信任 OS/host 的前提下运行敏感逻辑。
-\end{itemize}}
-{\begin{itemize}
-  \item User-space compartment over Arm CCA。
-  \item Realm-backed isolation boundary。
-  \item Runtime and OS integration path for fine-grained protection。
-\end{itemize}}
-{\begin{itemize}
-  \item USENIX Security 论文提供原型与开销评估。
-  \item 具体数值需回引本地 PDF；这里不从二手摘要复制性能数字。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。
-  \item \textbf{不足：}系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。
-  \item \textbf{商业落地：}适合云端敏感函数、插件隔离和移动端安全服务；风险在开发者可用性和平台普及速度。
+  \item 角色：foundational
+  \item 证据：E1 / Foundational
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{Shelter: CCA 用户态隔离}
+{zhang2023shelter}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{Realm 机制不必只服务 VM}
+{\begin{itemize}
+  \item Realm 机制不必只服务 VM
+  \item 进程内敏感代码同样需要小 TCB、host-untrusted 的隔离边界
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{Shelter: CCA 用户态隔离}
+{zhang2023shelter}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{把 CCA primitives 封装成用户态隔离模型，让应用 compartment 在不完全信任 OS/host 的前提下运行敏感逻辑}
+{\begin{itemize}
+  \item 把 CCA primitives 封装成用户态隔离模型，让应用 compartment 在不完全信任 OS/host 的前提下运行敏感逻辑
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item User-space compartment over Arm CCA
+  \item Realm-backed isolation boundary
+  \item Runtime and OS integration path for fine-grained protection
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{Shelter: CCA 用户态隔离}
+{zhang2023shelter}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{USENIX Security 论文提供原型与开销评估；具体数值需回引本地 PDF}
+{\begin{itemize}
+  \item USENIX Security 论文提供原型与开销评估；具体数值需回引本地 PDF
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{Shelter: CCA 用户态隔离}
+{zhang2023shelter}
+{E1 / Foundational}
+{local\_pdf\_verified}
+{开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口}
+{开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。}
+{系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。}
+{对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。}
+
+\PaperSlide
+{内容摘要}
 {RContainer: CCA 安全容器}
-{\Meta{zhou2025rcontainer}{Peer-reviewed SOTA / E1 NDSS 2025}{source: local PDF verified}{claim: mechanism and evaluation claims from primary paper}}
+{zhou2025rcontainer}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{把 Arm CCA 扩展到安全容器架构，面向云原生场景重构容器隔离边界}
 {\begin{itemize}
-  \item RContainer 把 Arm CCA 扩展到安全容器架构，面向云原生场景重构容器隔离边界。
-  \item 本 deck 用它代表 CCA 从 confidential VM 走向容器 workload 的落地点。
+  \item 把 Arm CCA 扩展到安全容器架构，面向云原生场景重构容器隔离边界
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 容器共享内核带来部署效率，但传统容器边界难以抵御高权限 host/内核路径的泄露风险。
-  \item 云原生用户希望保留容器工作流，同时获得更接近 confidential VM 的机密性边界。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是把容器 runtime/lifecycle 与 CCA 保护域 lifecycle 对齐。
-  \item 解决方案利用 CCA 硬件 primitives 为容器 workload 建立更强机密性边界。
-\end{itemize}}
-{\begin{itemize}
-  \item CCA-backed secure container boundary。
-  \item Container lifecycle and Realm lifecycle mapping。
-  \item Runtime/orchestration integration considerations。
-\end{itemize}}
-{\begin{itemize}
-  \item NDSS 系统论文提供原型评估。
-  \item 本 deck 不复制未核对的具体性能数字；production readiness 仍需云平台和编排系统证据。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload。
-  \item \textbf{不足：}容器生态、编排系统和 CCA lifecycle 的耦合复杂。
-  \item \textbf{商业落地：}适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
+  \item 角色：sota\_1
+  \item 证据：E1 / Peer-reviewed SOTA
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\PaperStory
+\PaperSlide
+{研究背景}
+{RContainer: CCA 安全容器}
+{zhou2025rcontainer}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{容器共享内核带来部署效率，但传统容器边界难以抵御高权限 host/内核路径的泄露风险}
+{\begin{itemize}
+  \item 容器共享内核带来部署效率，但传统容器边界难以抵御高权限 host/内核路径的泄露风险
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{RContainer: CCA 安全容器}
+{zhou2025rcontainer}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{利用 CCA 硬件 primitives 为容器 workload 建立更强机密性边界，同时保留容器化部署模型}
+{\begin{itemize}
+  \item 利用 CCA 硬件 primitives 为容器 workload 建立更强机密性边界，同时保留容器化部署模型
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item CCA-backed secure container boundary
+  \item Container lifecycle and Realm lifecycle mapping
+  \item Runtime/orchestration integration considerations
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{RContainer: CCA 安全容器}
+{zhou2025rcontainer}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{NDSS 系统论文提供原型评估}
+{\begin{itemize}
+  \item NDSS 系统论文提供原型评估
+  \item 本 deck 不复制未核对的具体性能数字
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E1 peer-reviewed primary work
+  \item 成熟度：peer-reviewed primary work
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{RContainer: CCA 安全容器}
+{zhou2025rcontainer}
+{E1 / Peer-reviewed SOTA}
+{local\_pdf\_verified}
+{贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload}
+{贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload。}
+{容器生态、编排系统和 CCA lifecycle 的耦合复杂，生产部署需要额外工程证据。}
+{商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。}
+
+\PaperSlide
+{内容摘要}
 {NanoZone: CCA 细粒度内存保护}
-{\Meta{liu2025nanozone}{Draft/not ratified / E3 arXiv 2025}{source: local PDF verified}{claim: draft evidence only}}
+{liu2025nanozone}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题}
 {\begin{itemize}
-  \item NanoZone 探索 Arm CCA 上更可扩展、更细粒度的内存保护域。
-  \item 本 deck 用它代表 CCA 粒度从 VM/container 继续下探的前沿方向。
+  \item 探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题
 \end{itemize}}
+{证据定位}
 {\begin{itemize}
-  \item 只用 Realm/VM 粒度会在管理成本、保护域数量和应用内敏感数据隔离之间形成矛盾。
-  \item 更小保护域需要重新审视 CCA granule、lifecycle 和管理者信任边界。
-\end{itemize}}
-{\begin{itemize}
-  \item 核心洞察是利用 CCA granule/lifecycle 支撑更小保护域。
-  \item \Key{liu2025lesstrust} 作为辅助材料，对照 intra-process isolation 和 less-trust management threat model。
-\end{itemize}}
-{\begin{itemize}
-  \item Fine-grained memory protection over CCA。
-  \item Granule/lifecycle scaling pressure。
-  \item Intra-process isolation comparison with less-trust management。
-\end{itemize}}
-{\begin{itemize}
-  \item arXiv 预印本提供设计与评估线索。
-  \item Draft/not ratified 状态下只作为前沿方向证据，不能写成同行评议共识或成熟生产证据。
-\end{itemize}}
-{\begin{itemize}
-  \item \textbf{优点：}直接回应 CCA 保护粒度和可扩展性问题。
-  \item \textbf{不足：}预印本尚不能代表同行评议共识或硬件/OS 生态成熟度。
-  \item \textbf{商业落地：}可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
+  \item 角色：sota\_2
+  \item 证据：E3 / Draft-not-ratified
+  \item 来源：local\_pdf\_verified
 \end{itemize}}
 
-\DirectionSummary
-{Arm CCA 细粒度隔离与部署模型}
-{Shelter 把 CCA 从 VM 级 Realm 推到用户态 compartment，证明 CCA 可服务更细应用边界。}
-{RContainer 把 CCA 与容器工作流结合，说明云原生部署需要把 runtime、orchestration 和 Realm lifecycle 联动。}
-{NanoZone 继续下探到更细内存保护域，但证据等级仍是 draft/not ratified，不能当作成熟生产事实。}
-{下一步需要把这些 fine-grained workload 与 I/O、DMA、interrupt 和 accelerator ownership 问题连接起来。}
+\PaperSlide
+{研究背景}
+{NanoZone: CCA 细粒度内存保护}
+{liu2025nanozone}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{只用 Realm/VM 粒度会在管理成本、保护域数量和应用内敏感数据隔离之间形成矛盾}
+{\begin{itemize}
+  \item 只用 Realm/VM 粒度会在管理成本、保护域数量和应用内敏感数据隔离之间形成矛盾
+\end{itemize}}
+{问题边界}
+{\begin{itemize}
+  \item 保护对象
+  \item 攻击/管理边界
+  \item 现有方法缺口
+\end{itemize}}
+
+\PaperSlide
+{解决方案}
+{NanoZone: CCA 细粒度内存保护}
+{liu2025nanozone}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{研究 CCA granule/lifecycle 能否支撑更小保护域，并用辅助材料 `liu2025lesstrust` 对照进程内信任收缩问题}
+{\begin{itemize}
+  \item 研究 CCA granule/lifecycle 能否支撑更小保护域，并用辅助材料 `liu2025lesstrust` 对照进程内信任收缩问题
+\end{itemize}}
+{关键机制}
+{\begin{itemize}
+  \item Fine-grained memory protection over CCA
+  \item Granule/lifecycle scaling pressure
+  \item Intra-process isolation comparison with less-trust management
+\end{itemize}}
+
+\PaperSlide
+{实验结果}
+{NanoZone: CCA 细粒度内存保护}
+{liu2025nanozone}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{arXiv 预印本提供设计与评估线索}
+{\begin{itemize}
+  \item arXiv 预印本提供设计与评估线索
+  \item draft/not ratified 状态下只作为前沿方向证据，不能写成同行评议共识或成熟生产证据
+\end{itemize}}
+{证据强度}
+{\begin{itemize}
+  \item 类型：E3 draft/preprint, not ratified
+  \item 成熟度：draft/preprint, not ratified
+  \item PDF：local\_pdf\_verified
+\end{itemize}}
+
+\PaperEvalSlide
+{NanoZone: CCA 细粒度内存保护}
+{liu2025nanozone}
+{E3 / Draft-not-ratified}
+{local\_pdf\_verified}
+{直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿}
+{直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿。}
+{预印本尚不能代表同行评议共识或硬件/OS 生态成熟度。}
+{若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。}
+
+\begin{frame}[t]{Arm CCA 细粒度隔离与部署模型：技术演进总结}
+\DeckKicker{DIRECTION TAKEAWAY}
+\ClaimLine{三篇材料共同回答本方向从基础机制到 SOTA 边界的演进关系。}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{技术演进}{\begin{itemize}
+  \item Shelter: CCA 用户态隔离
+  \item RContainer: CCA 安全容器
+  \item NanoZone: CCA 细粒度内存保护
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{优点与缺口}{\begin{itemize}
+  \item 开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。
+  \item 贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload。
+  \item 系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。
+  \item 容器生态、编排系统和 CCA lifecycle 的耦合复杂，生产部署需要额外工程证据。
+\end{itemize}}
+  \end{column}
+  \begin{column}{0.31\textwidth}
+    \VisualPanel{商业化适配}{\begin{itemize}
+  \item 对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。
+  \item 商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
+  \item 若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
+\end{itemize}}
+  \end{column}
+\end{columns}
+\end{frame}
