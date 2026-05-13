@@ -37,12 +37,18 @@ LIMITED_STATUS_MARKERS = (
 RESTRICTED_SOURCE_MARKERS = (
     "source-limited",
     "source_limited",
+    "source_verified_pdf_unavailable",
     "metadata-only",
     "metadata only",
     "gated",
     "html-only",
     "html only",
     "blocked",
+)
+SOURCE_UNAVAILABLE_MARKERS = (
+    "source_verified_pdf_unavailable",
+    "local pdf unavailable",
+    "pdf unavailable",
 )
 MECHANISM_CLAIM_MARKERS = (
     "mechanism",
@@ -106,6 +112,11 @@ def has_restricted_source(*values: Any) -> bool:
     return any(marker in text for marker in RESTRICTED_SOURCE_MARKERS)
 
 
+def has_source_unavailable(*values: Any) -> bool:
+    text = " ".join(as_text(value).lower() for value in values)
+    return any(marker in text for marker in SOURCE_UNAVAILABLE_MARKERS)
+
+
 def has_peer_reviewed_status(*values: Any) -> bool:
     text = " ".join(as_text(value).lower() for value in values)
     text = re.sub(r"\b(not|non|without|no)\s+peer[- ]reviewed\b", "", text)
@@ -116,6 +127,35 @@ def has_peer_reviewed_status(*values: Any) -> bool:
 def has_mechanism_claim(*values: Any) -> bool:
     text = " ".join(joined(value).lower() for value in values)
     return any(marker in text for marker in MECHANISM_CLAIM_MARKERS)
+
+
+def is_official_public_spec(
+    paper_type: str,
+    claim_class: int | None,
+    *values: Any,
+) -> bool:
+    text = " ".join(as_text(value).lower() for value in values)
+    return paper_type == "spec" and claim_class == 0 and ("official" in text or "standard" in text or "spec" in text)
+
+
+def evidence_needs_no_new_experiment(paper_type: str, claim_class: int | None, *values: Any) -> bool:
+    text = " ".join(as_text(value).lower() for value in values)
+    return (
+        paper_type in {"spec", "sok", "survey"}
+        or claim_class in {0, 2}
+        or any(marker in text for marker in ("survey", "sok", "spec", "standard", "e0", "e2"))
+    )
+
+
+def story_experiment_overstates(value: Any) -> bool:
+    text = joined(value)
+    return bool(
+        re.search(
+            r"\b(mechanism experiment|mechanism evaluation|prototype|implementation|benchmark|throughput|latency|overhead|speedup)\b|机制实验|机制评估|原型|吞吐|延迟|开销|加速",
+            text,
+            re.IGNORECASE,
+        )
+    )
 
 
 def validate_primary(
@@ -161,14 +201,38 @@ def validate_primary(
     maturity = as_text(primary.get("maturity"))
     evidence_type = as_text(primary.get("evidence_type"))
     pdf_status = as_text(primary.get("pdf_status"))
+    public_status_fields = (
+        source_status,
+        maturity,
+        evidence_type,
+        pdf_status,
+        primary.get("evidence"),
+        primary.get("claim_strength"),
+        primary.get("selection_reason"),
+        primary.get("slides"),
+        primary.get("reference"),
+        primary.get("title"),
+    )
+    official_public_spec = is_official_public_spec(
+        paper_type,
+        claim_class,
+        evidence_type,
+        maturity,
+        primary.get("evidence"),
+        primary.get("selection_reason"),
+    )
     if (
         has_limited_status(source_status, maturity, evidence_type, pdf_status, evidence)
         or has_restricted_source(source_status, maturity, evidence_type, pdf_status, evidence)
+        or has_source_unavailable(source_status, pdf_status)
     ) and has_peer_reviewed_status(
-        source_status, maturity, evidence_type, pdf_status
+        *public_status_fields
     ):
         fail(errors, path, f"{key}: limited/draft/preprint/source-limited material must not be marked peer-reviewed")
-    if (claim_class == 5 or has_restricted_source(source_status, maturity, evidence_type, pdf_status, evidence)) and has_mechanism_claim(
+    restricted_for_claims = has_restricted_source(source_status, maturity, evidence_type, pdf_status, evidence)
+    if official_public_spec and restricted_for_claims and not evidence_class(evidence) == 5:
+        restricted_for_claims = False
+    if (claim_class == 5 or restricted_for_claims) and has_mechanism_claim(
         primary.get("selection_reason"), primary.get("slides"), primary.get("title")
     ):
         fail(errors, path, f"{key}: E5/source-limited material must not support mechanism, performance, or state-machine claims")
@@ -204,14 +268,9 @@ def validate_primary(
                 fail(errors, path, f"{key}: slides.{slide_key}.visual needs title and items")
 
     experiment_text = joined(slides.get("experiments", {}))
-    combined_evidence_type = f"{as_text(primary.get('evidence_type'))} {as_text(primary.get('evidence'))}".lower()
-    if ("survey" in combined_evidence_type or "sok" in combined_evidence_type or "spec" in combined_evidence_type or "standard" in combined_evidence_type or "e0" in combined_evidence_type or "e2" in combined_evidence_type) and "无新实验" not in experiment_text:
+    if evidence_needs_no_new_experiment(paper_type, claim_class, primary.get("evidence_type"), primary.get("evidence")) and "无新实验" not in experiment_text:
         fail(errors, path, f"{key}: spec/survey evidence experiments must state `无新实验`")
-    if (paper_type in {"spec", "sok", "survey"} or claim_class in {0, 2}) and re.search(
-        r"\b(mechanism experiment|mechanism evaluation|prototype|implementation|benchmark|throughput|latency|overhead|speedup)\b|机制实验|机制评估|原型|吞吐|延迟|开销|加速",
-        experiment_text,
-        re.IGNORECASE,
-    ):
+    if evidence_needs_no_new_experiment(paper_type, claim_class, primary.get("evidence_type"), primary.get("evidence")) and story_experiment_overstates(experiment_text):
         fail(errors, path, f"{key}: spec/survey/SoK entry must not be written as a mechanism experiment")
 
     if contains_bad_marker(primary):
@@ -241,7 +300,7 @@ def validate_auxiliary(errors: list[str], path: Path, item: dict[str, Any], inde
 def validate_authored_story(
     errors: list[str],
     story_path: Path,
-    primary_keys: set[str],
+    primary_meta: dict[str, dict[str, Any]],
 ) -> int:
     story = load_yaml(story_path)
     slides = story.get("slides")
@@ -252,6 +311,7 @@ def validate_authored_story(
         fail(errors, story_path, f"expected 17 authored slides, found {len(slides)}")
 
     expected_per_paper = set(SLIDE_KEYS)
+    primary_keys = set(primary_meta)
     seen: dict[str, set[str]] = {key: set() for key in primary_keys}
     seen_ids: set[str] = set()
 
@@ -279,6 +339,19 @@ def validate_authored_story(
             refs = joined(slide.get("evidence_refs"))
             if not re.search(r"\b(p\.|pp\.|Fig\.|Figure|Table|§|Section)\b", refs):
                 fail(errors, story_path, f"{prefix}: evidence_refs must include page/figure/table/section evidence")
+            primary = primary_meta[paper_key]
+            paper_type = as_text(primary.get("paper_type"))
+            claim_class = evidence_class(primary.get("claim_strength"))
+            if slide_type in {"experiments", "evaluation"} and evidence_needs_no_new_experiment(
+                paper_type,
+                claim_class,
+                primary.get("evidence_type"),
+                primary.get("evidence"),
+            ):
+                if "无新实验" not in joined(slide):
+                    fail(errors, story_path, f"{prefix}: spec/survey evidence story slide must state `无新实验`")
+                if story_experiment_overstates(slide):
+                    fail(errors, story_path, f"{prefix}: spec/survey/SoK story slide must not be written as a mechanism experiment")
 
         narrative = slide.get("narrative")
         if not isinstance(narrative, list) or not all(as_text(item) for item in narrative):
@@ -362,8 +435,8 @@ def validate_direction(errors: list[str], path: Path) -> tuple[int, int]:
             validate_auxiliary(errors, path, item, index)
 
     if has_story:
-        primary_keys = {as_text(item.get("key")) for item in primary if isinstance(item, dict) and as_text(item.get("key"))}
-        paper_slide_count = validate_authored_story(errors, story_path, primary_keys)
+        primary_meta = {as_text(item.get("key")): item for item in primary if isinstance(item, dict) and as_text(item.get("key"))}
+        paper_slide_count = validate_authored_story(errors, story_path, primary_meta)
     else:
         paper_slide_count = len(primary) * 5
 
