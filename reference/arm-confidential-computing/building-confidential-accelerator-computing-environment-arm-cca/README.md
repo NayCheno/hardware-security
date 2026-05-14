@@ -97,3 +97,202 @@ GPU benchmark 开销 0.58%--5.31%，FPGA benchmark 开销 9.61%--16.30%，TCB �
 
 这是 Arm CCA accelerator 方向必须引用的 Peer-reviewed SOTA；限制是 device identity、production CCA hardware 和复杂多租户 accelerator scheduling 仍需进一步研究。
 <!-- END PAPER REVIEW -->
+
+<!-- BEGIN REPORT-SLIDE DETAILED ADDENDUM -->
+
+## Report-Slide Detailed Addendum
+
+### 所属方向
+
+- Direction: `14-accelerator-dpu-smartnic-offload` - Accelerator / DPU / SmartNIC Offload TEE
+- Paper key: `wang2026cage`
+- Role: peer-reviewed SOTA Arm CCA GPU/FPGA accelerator workflow
+- Evidence base: CAGE Figure 5 GPU overhead; Figure 8 FPGA overhead; Table III breakdown; implementation LoC.
+- Boundary: CAGE 不完整解决 device identity、SPDM/TDISP、真实量产 CCA 硬件和多租户 accelerator scheduling。
+
+### 1. 完整题目 / 作者 / 会议
+
+- 完整题目: Building Confidential Accelerator Computing Environment for Arm CCA
+- 作者: Chenxu Wang et al.
+- 会议/来源: IEEE Transactions on Dependable and Secure Computing (TDSC), 2026
+- Title evidence: README metadata; TDSC 2026 PDF title page.
+
+### 2. 内容摘要
+
+### 2.1 Slide-ready summary
+
+**Claim:** CAGE 的贡献是把 Realm 的机密边界延伸到 accelerator workflow，而不是让 untrusted driver 直接处理敏感 task。
+
+- 动机: Arm CCA 保护 Realm memory，但 accelerator driver/runtime 会接触 code、metadata、MMIO、DMA buffer 和 completion state。
+- 工作: Monitor 维护 shadow task，验证 untrusted stub 操作，用 GPC/GPT 保护 accelerator buffers，并做 GPU/FPGA cleanup。
+- 数据: GPU benchmark overhead 0.58%-5.31%，FPGA benchmark 9.61%-16.30%；GPU TCB 增量 1301 LoC，FPGA 额外 140 LoC。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: CAGE 的贡献是把 Realm 的机密边界延伸到 accelerator workflow，而不是让 untrusted driver 直接处理敏感 task。第一步解释为什么需要这一页: 动机: Arm CCA 保护 Realm memory，但 accelerator driver/runtime 会接触 code、metadata、MMIO、DMA buffer 和 completion state。第二步说明论文或规范实际做了什么: 工作: Monitor 维护 shadow task，验证 untrusted stub 操作，用 GPC/GPT 保护 accelerator buffers，并做 GPU/FPGA cleanup。第三步收束到证据边界: 数据: GPU benchmark overhead 0.58%-5.31%，FPGA benchmark 9.61%-16.30%；GPU TCB 增量 1301 LoC，FPGA 额外 140 LoC。引用时只把 CAGE abstract; Figure 5; Figure 8; implementation section 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE abstract; Figure 5; Figure 8; implementation section.
+
+- Proof object: flow - CAGE workflow: Realm app -> untrusted accelerator stack -> shadow task in Monitor -> GPC/GPT protected buffers -> GPU/FPGA execution -> verified result
+
+
+### 3. 研究背景
+
+### 3.1 Slide-ready background
+
+**Claim:** 背景问题是 CCA 的 GPC/GPT 能保护内存 ownership，但 accelerator workflow 还有大量 metadata 和 queue state。
+
+- Driver 可以伪造 task metadata 或地址。
+- Accelerator DMA buffer 需要 Granule Protection Check/translation policy。
+- GPU/FPGA workflow 差异大，不能只做通用 copy wrapper。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 背景问题是 CCA 的 GPC/GPT 能保护内存 ownership，但 accelerator workflow 还有大量 metadata 和 queue state。第一步解释为什么需要这一页: Driver 可以伪造 task metadata 或地址。第二步说明论文或规范实际做了什么: Accelerator DMA buffer 需要 Granule Protection Check/translation policy。第三步收束到证据边界: GPU/FPGA workflow 差异大，不能只做通用 copy wrapper。引用时只把 CAGE introduction and threat model 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE introduction and threat model.
+
+- Proof object: matrix - CCA accelerator gap: Realm memory = protected by CCA; Driver/runtime = untrusted; Task metadata = tamper risk; DMA buffer = needs GPC/GPT; Device identity = not fully solved
+
+
+### 4. 关键点核心思想
+
+### 4.1 Slide-ready core insight
+
+**Claim:** 核心洞察: 让 untrusted stack 继续做复杂工程，但在 Monitor 里重建并验证一个可信 shadow task。
+
+- Shadow task 捕获真实 accelerator task 的安全关键字段。
+- Monitor 验证 metadata、地址和状态转换。
+- GPC/GPT 保护 accelerator-visible memory，降低 driver TCB。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 核心洞察: 让 untrusted stack 继续做复杂工程，但在 Monitor 里重建并验证一个可信 shadow task。第一步解释为什么需要这一页: Shadow task 捕获真实 accelerator task 的安全关键字段。第二步说明论文或规范实际做了什么: Monitor 验证 metadata、地址和状态转换。第三步收束到证据边界: GPC/GPT 保护 accelerator-visible memory，降低 driver TCB。引用时只把 CAGE design sections 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE design sections.
+
+- Proof object: cards - CAGE core: shadow task; Monitor verification; GPC/GPT protection; accelerator cleanup; untrusted stub
+
+
+### 5. 架构总览
+
+### 5.1 Slide-ready architecture
+
+**Claim:** 架构总览: Realm 与 accelerator stack 之间插入 Monitor-side verification 和 GPT/GPC protection。
+
+- Untrusted driver 发起 GPU/FPGA task。
+- Monitor 检查并同步 shadow task 到真实 task。
+- Protected buffers 经 accelerator GPT/GPC 管理，防止 host 访问敏感数据。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 架构总览: Realm 与 accelerator stack 之间插入 Monitor-side verification 和 GPT/GPC protection。第一步解释为什么需要这一页: Untrusted driver 发起 GPU/FPGA task。第二步说明论文或规范实际做了什么: Monitor 检查并同步 shadow task 到真实 task。第三步收束到证据边界: Protected buffers 经 accelerator GPT/GPC 管理，防止 host 访问敏感数据。引用时只把 CAGE architecture figures; Figure 5/8 evaluation context 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE architecture figures; Figure 5/8 evaluation context.
+
+- Proof object: matrix - 组件: Realm = confidential workload; Monitor = shadow task and policy; Untrusted stack = driver/runtime; GPC/GPT = memory ownership; Accelerator = GPU/FPGA execution
+
+
+### 6. 核心方法拆解
+
+#### 方法 1: Shadow Task
+
+**Claim:** Shadow task 是 CAGE 的核心抽象: 在可信 Monitor 内保存可验证的 accelerator task 镜像。
+
+- 真实 task 仍由 untrusted stack 操作。
+- Monitor 根据 shadow task 检查 metadata/address。
+- 避免把庞大 GPU/FPGA driver 纳入 TCB。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: Shadow task 是 CAGE 的核心抽象: 在可信 Monitor 内保存可验证的 accelerator task 镜像。第一步解释为什么需要这一页: 真实 task 仍由 untrusted stack 操作。第二步说明论文或规范实际做了什么: Monitor 根据 shadow task 检查 metadata/address。第三步收束到证据边界: 避免把庞大 GPU/FPGA driver 纳入 TCB。引用时只把 CAGE design sections; shadow task discussion 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE design sections; shadow task discussion.
+
+- Proof object: flow - shadow task: driver prepares task -> Monitor extracts fields -> shadow task validates -> sync to real task -> launch accelerator
+
+#### 方法 2: GPC/GPT Buffer Protection
+
+**Claim:** CAGE 用 CCA GPC/GPT 保护 accelerator buffer ownership。
+
+- Sensitive buffers 切到 Realm/accelerator 可用状态。
+- Monitor 优化 GPT maintenance，减少同步开销。
+- 错误地址/metadata 只导致 DoS，不应泄露或篡改 secret。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: CAGE 用 CCA GPC/GPT 保护 accelerator buffer ownership。第一步解释为什么需要这一页: Sensitive buffers 切到 Realm/accelerator 可用状态。第二步说明论文或规范实际做了什么: Monitor 优化 GPT maintenance，减少同步开销。第三步收束到证据边界: 错误地址/metadata 只导致 DoS，不应泄露或篡改 secret。引用时只把 CAGE GPC/GPT design and optimization sections 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE GPC/GPT design and optimization sections.
+
+- Proof object: matrix - buffer policy: Realm private = host blocked; Accelerator-visible = controlled by Monitor; Untrusted metadata = verified; GPT sync = optimized; Failure = DoS over disclosure
+
+#### 方法 3: GPU vs FPGA Workflow
+
+**Claim:** CAGE 明确 GPU 和 FPGA 工作流不同，因此保护模块也不同。
+
+- GPU 侧重 task/queue/buffer 元数据。
+- FPGA 侧重 bitstream/task metadata 和 XDMA-like path。
+- 扩展到 DPU/SmartNIC 时也要重画 workflow-specific state。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: CAGE 明确 GPU 和 FPGA 工作流不同，因此保护模块也不同。第一步解释为什么需要这一页: GPU 侧重 task/queue/buffer 元数据。第二步说明论文或规范实际做了什么: FPGA 侧重 bitstream/task metadata 和 XDMA-like path。第三步收束到证据边界: 扩展到 DPU/SmartNIC 时也要重画 workflow-specific state。引用时只把 CAGE GPU/FPGA evaluation and implementation 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE GPU/FPGA evaluation and implementation.
+
+- Proof object: cards - workflow-specific: GPU queue; GPU buffer; FPGA metadata; XDMA driver; device cleanup
+
+#### 方法 4: TCB and Identity Boundary
+
+**Claim:** CAGE 缩小 driver TCB，但仍未解决所有 device trust 问题。
+
+- 增加约 1301 LoC GPU security modules 和 140 LoC FPGA extension。
+- 真实 device identity/fake accelerator/SMMU 路径需要额外机制。
+- SPDM/TDISP/IDE 是商业化时必须补上的层。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: CAGE 缩小 driver TCB，但仍未解决所有 device trust 问题。第一步解释为什么需要这一页: 增加约 1301 LoC GPU security modules 和 140 LoC FPGA extension。第二步说明论文或规范实际做了什么: 真实 device identity/fake accelerator/SMMU 路径需要额外机制。第三步收束到证据边界: SPDM/TDISP/IDE 是商业化时必须补上的层。引用时只把 CAGE implementation/security discussion 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE implementation/security discussion.
+
+- Proof object: matrix - boundary: TCB add = 1301 LoC + 140 LoC; Not solved = device identity; Needs = SPDM/TDISP; Risk = scheduler/side channels; Value = CCA workflow proof
+
+
+### 7. 实验环境和数据 / 证据基础
+
+### 7.1 Slide-ready evidence environment
+
+**Claim:** 实验环境与数据: Arm CCA emulation/prototype，GPU Rodinia/ML 和 FPGA benchmarks。
+
+- 实现: Arm Trusted Firmware-A v2.8 Monitor 修改，GPU security modules 1301 LoC，FPGA extension 140 LoC。
+- GPU: 六个 Rodinia benchmarks 和 ML inference models。
+- FPGA: 六个 C benchmarks / Xilinx workflow。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 实验环境与数据: Arm CCA emulation/prototype，GPU Rodinia/ML 和 FPGA benchmarks。第一步解释为什么需要这一页: 实现: Arm Trusted Firmware-A v2.8 Monitor 修改，GPU security modules 1301 LoC，FPGA extension 140 LoC。第二步说明论文或规范实际做了什么: GPU: 六个 Rodinia benchmarks 和 ML inference models。第三步收束到证据边界: FPGA: 六个 C benchmarks / Xilinx workflow。引用时只把 CAGE implementation/evaluation sections; Figure 5; Figure 8 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE implementation/evaluation sections; Figure 5; Figure 8.
+
+- Proof object: matrix - 实验设置: Platform = Arm CCA emulation/prototype; GPU = Rodinia + ML inference; FPGA = Xilinx tasks; TCB = 1301 LoC + 140 LoC; Metrics = overhead/breakdown
+
+
+### 8. 性能 / Claim Strength
+
+### 8.1 Slide-ready performance
+
+**Claim:** 性能结论: CAGE 的 GPU 开销较低，FPGA 更高但仍在论文声称的 moderate 区间。
+
+- GPU Rodinia: overhead 0.58%-5.31%。
+- FPGA benchmarks: overhead 9.61%-16.30%。
+- 论文还报告通过优化缓解 84.63%-96.55% GPT sync overhead。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 性能结论: CAGE 的 GPU 开销较低，FPGA 更高但仍在论文声称的 moderate 区间。第一步解释为什么需要这一页: GPU Rodinia: overhead 0.58%-5.31%。第二步说明论文或规范实际做了什么: FPGA benchmarks: overhead 9.61%-16.30%。第三步收束到证据边界: 论文还报告通过优化缓解 84.63%-96.55% GPT sync overhead。引用时只把 CAGE Figure 5; Figure 8; GPT optimization evaluation 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE Figure 5; Figure 8; GPT optimization evaluation.
+
+- Proof object: bars - key numbers: GPU overhead low 0.58%; GPU overhead high 5.31%; FPGA overhead low 9.61%; FPGA overhead high 16.30%
+
+
+### 9. 文章评价
+
+### 9.1 Slide-ready evaluation
+
+**Claim:** 评价: CAGE 是当前 Arm CCA accelerator workflow 的强 SOTA，最适合支撑 GPU/FPGA confidential offload slides。
+
+- 优势: 机制贴近 CCA，shadow task 概念清楚，GPU/FPGA 都有评估。
+- 局限: device identity、production CCA hardware、multi-tenant scheduling、side channels 仍需额外机制。
+- 商业化潜力: 可迁移到 DPU/SmartNIC queue descriptor 和 packet-processing task，但必须补 SPDM/TDISP。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 评价: CAGE 是当前 Arm CCA accelerator workflow 的强 SOTA，最适合支撑 GPU/FPGA confidential offload slides。第一步解释为什么需要这一页: 优势: 机制贴近 CCA，shadow task 概念清楚，GPU/FPGA 都有评估。第二步说明论文或规范实际做了什么: 局限: device identity、production CCA hardware、multi-tenant scheduling、side channels 仍需额外机制。第三步收束到证据边界: 商业化潜力: 可迁移到 DPU/SmartNIC queue descriptor 和 packet-processing task，但必须补 SPDM/TDISP。引用时只把 CAGE conclusion and README evaluation 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** CAGE conclusion and README evaluation.
+
+- Proof object: matrix - 评价: 优势 = CCA-native accelerator workflow; 局限 = identity/scheduling gaps; 商业化 = GPU/FPGA/DPU offload; 本方向角色 = Arm CCA SOTA
+
+
+<!-- END REPORT-SLIDE DETAILED ADDENDUM -->

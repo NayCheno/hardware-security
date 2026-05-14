@@ -24,17 +24,105 @@ SLIDE_LABELS = {
     "evaluation": "文章评价",
 }
 
+PAPER_TYPE_LABELS = {
+    "system": "系统论文",
+    "spec": "规范/标准材料",
+    "sok": "SoK/综述",
+    "survey": "Survey/综述",
+    "vendor": "厂商白皮书",
+    "whitepaper": "厂商白皮书",
+    "benchmark": "Benchmark",
+}
+
+SOURCE_STATUS_LABELS = {
+    "local_pdf_verified": "本地 PDF 已核验",
+    "author_hosted_eurosys_pdf_verified": "作者公开 PDF 已核验",
+    "source_verified_pdf_unavailable": "公开来源已核验，PDF 暂缺",
+}
+
+PUBLIC_TEXT_REWRITES = {
+    "local_pdf_verified": "本地 PDF 已核验",
+    "author_hosted_eurosys_pdf_verified": "作者公开 PDF 已核验",
+    "source_verified_pdf_unavailable": "公开来源已核验，PDF 暂缺",
+    "source status": "来源状态",
+    "source-status": "来源状态",
+    "source_status": "来源状态",
+    "paper type": "材料类型",
+    "claim strength": "证据强度",
+    "primary slot": "主讲定位",
+    "selection slot": "主讲定位",
+    "Primary 1": "基础入口",
+    "Primary 2": "代表性改进",
+    "Primary 3": "当前边界",
+    "primary": "主讲材料",
+    "Foundational industry evidence": "基础产业证据",
+    "Peer-reviewed SOTA": "同行评审改进证据",
+    "Foundational": "基础证据",
+    "Draft-not-ratified": "草案/未批准规范",
+}
+
 
 def write(path: Path, content: str) -> None:
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
 
 
+def compact_title(value: Any, limit: int = 46) -> str:
+    text = as_text(value)
+    for prefix in ("SoK: ", "A Survey of ", "The ", "Towards "):
+        if text.startswith(prefix):
+            text = text[len(prefix) :]
+    return text if len(text) <= limit else text[: limit - 1].rstrip(" ,;；，") + "…"
+
+
+def source_status_label(value: Any) -> str:
+    text = as_text(value)
+    return SOURCE_STATUS_LABELS.get(text, text or "来源状态未标注")
+
+
+def public_text(value: Any) -> str:
+    text = as_text(value)
+    for old, new in PUBLIC_TEXT_REWRITES.items():
+        text = text.replace(old, new)
+    return text
+
+
+def evidence_label(value: Any) -> str:
+    text = public_text(value)
+    replacements = {
+        "E1 primary systems": "E1 系统论文",
+        "peer-reviewed primary": "同行评审系统论文",
+        "Peer-reviewed primary": "同行评审系统论文",
+        "Primary": "主讲材料",
+        "primary": "主讲材料",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    return text
+
+
+def source_note_for_display(value: Any) -> str:
+    text = public_text(value)
+    internal_terms = (
+        "papers.yml",
+        "story.yml",
+        "report-slide",
+        "reference entry",
+        "source URL",
+        "source-status",
+        "evidence ledger",
+        "claim 强度保持",
+    )
+    if not text or any(term in text for term in internal_terms):
+        text = "论文原文、官方规范或公开材料；具体结论受证据等级和原文实验范围约束。"
+    return text
+
+
 def primary_cards(primary: list[dict[str, Any]]) -> str:
     rows = []
     slot_labels = {
-        "primary_1": "Primary 1",
-        "primary_2": "Primary 2",
-        "primary_3": "Primary 3",
+        "primary_1": "基础入口",
+        "primary_2": "代表性改进",
+        "primary_3": "当前边界",
     }
     for paper in primary:
         slot = slot_labels.get(as_text(paper.get("selection_slot")), as_text(paper.get("selection_slot")))
@@ -47,7 +135,7 @@ def primary_cards(primary: list[dict[str, Any]]) -> str:
 def evidence_items(primary: list[dict[str, Any]]) -> str:
     return latex_itemize(
         [
-            f"{paper.get('key')}: {paper.get('paper_type')}；{paper.get('claim_strength')}；{paper.get('source_status')}"
+            f"{compact_title(paper.get('title'), 42)}：{paper.get('evidence')}；{source_status_label(paper.get('source_status'))}"
             for paper in primary
         ]
     )
@@ -198,9 +286,9 @@ def render_authored_slide(data: dict[str, Any], slide: dict[str, Any]) -> str:
     label = authored_label(slide_type)
     paper = paper_by_key(data, paper_key)
     title = as_text(data.get("direction")) if paper is None else as_text(paper.get("title"))
-    meta_key = paper_key if paper is not None else as_text(data.get("_directory"))
-    evidence = as_text(paper.get("evidence")) if paper is not None else "authored direction"
-    source = as_text(paper.get("source_status")) if paper is not None else "local evidence synthesis"
+    meta_key = "证据等级"
+    evidence = evidence_label(paper.get("evidence")) if paper is not None else "方向综述"
+    source = f"来源状态：{source_status_label(paper.get('source_status'))}" if paper is not None else "来源状态：公开材料综合"
     narrative = slide.get("narrative", [])
     proof = slide.get("proof_object", {})
     if not isinstance(proof, dict):
@@ -211,14 +299,14 @@ def render_authored_slide(data: dict[str, Any], slide: dict[str, Any]) -> str:
 {{\large\bfseries\color{{Ink}} {latex_escape(slide.get("claim"))}\par}}\vspace{{1.8mm}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.45\textwidth}}
-    {authored_panel("讲解逻辑", latex_itemize(narrative), fill="Paper")}
+    {authored_panel("内容说明", latex_itemize(narrative), fill="Paper")}
   \end{{column}}
   \begin{{column}}{{0.49\textwidth}}
     {render_proof_object(proof)}
   \end{{column}}
 \end{{columns}}
 \vspace{{1mm}}
-{{\tiny\textcolor{{Muted}}{{Source: {latex_escape(slide.get("source_note"))}}}}}
+{{\tiny\textcolor{{Muted}}{{引用依据：{latex_escape(source_note_for_display(slide.get("source_note")))}}}}}
 \end{{frame}}
 """
 
@@ -236,57 +324,57 @@ def render_authored_direction(data: dict[str, Any]) -> str:
 def render_overview(directions: list[dict[str, Any]]) -> str:
     rows = []
     for index, direction in enumerate(directions, start=1):
-        keys = " / ".join(as_text(paper.get("key")) for paper in direction.get("primary", []))
-        rows.append(rf"\IndexEntry{{{index:02d}}}{{{latex_escape(direction.get('direction'))}}}{{{latex_escape(keys)}}}")
+        rows.append(rf"\IndexEntry{{{index:02d}}}{{{latex_escape(direction.get('direction'))}}}{{基础入口 / 代表改进 / 当前边界}}")
     left_rows = "\n".join(rows[:8])
     right_rows = "\n".join(rows[8:])
 
     return rf"""
 \section{{总览与证据规则}}
 
-\begin{{frame}}[t]{{重做后的 report-slide 交付形态}}
-\DeckKicker{{REPORT STRUCTURE}}
-\ClaimLine{{同一份 YAML 内容源同时生成 Beamer/PDF 与可编辑 PPTX，避免内容漂移。}}
+\begin{{frame}}[t]{{报告问题与技术路线}}
+\DeckKicker{{报告定位}}
+\ClaimLine{{本报告围绕硬件辅助隔离如何从 CPU TEE 扩展到机密虚拟机、可信 I/O 与异构设备数据路径。}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.56\textwidth}}
     \begin{{itemize}}
-      \item 15 个小方向，每个方向固定 3 个 selection slot。
-      \item 每篇文章固定 5 页：内容摘要、研究背景、解决方案、实验结果、文章评价。
-      \item 每个 primary 独立记录 paper type、claim strength、maturity/source status。
-      \item PDF 与 PPTX 只作为交付物；可维护内容是 \texttt{{papers.yml}}、方向级 \texttt{{story.yml}} 和生成脚本。
+      \item 核心问题：平台管理者不可信，但仍掌握调度、内存、I/O 和设备资源。
+      \item 报告范围：Arm TrustZone/CCA、RISC-V TEE/CoVE、内存保护、CXL/RDMA/SPDM、DPU/GPU/SmartNIC。
+      \item 组织方式：15 个技术方向，每个方向选择 3 篇代表性材料串联技术演进。
+      \item 阅读主线：保护对象、资源管理者、证据链、设备边界和工程落地。
     \end{{itemize}}
   \end{{column}}
   \begin{{column}}{{0.38\textwidth}}
-    \VisualPanel{{页数与结构}}{{\begin{{itemize}}
-      \item 45 个 primary slot
-      \item 225 页文章精讲
-      \item 每方向 1 页开场 + 1 页总结
-      \item 全 deck 约 260 页
+    \VisualPanel{{报告主线}}{{\begin{{itemize}}
+      \item TEE taxonomy 与 TrustZone 谱系
+      \item Arm CCA/RME/RMM 与部署模型
+      \item RISC-V primitives、TEE 与 CoVE
+      \item Memory/I/O fabrics 与 trusted device path
+      \item Accelerator、DPU、SmartNIC 与安全存储
     \end{{itemize}}}}
   \end{{column}}
 \end{{columns}}
 \end{{frame}}
 
-\begin{{frame}}[t]{{证据等级与允许 claim}}
-\DeckKicker{{EVIDENCE RULES}}
+\begin{{frame}}[t]{{证据等级与结论边界}}
+\DeckKicker{{证据边界}}
 \ClaimLine{{所有机制和实验结论都必须落在证据等级允许的范围内。}}
 \scriptsize
 \begin{{tabularx}}{{\textwidth}}{{@{{}}lY@{{}}}}
 \toprule
-标签 & Slide 中允许的表述 \\
+标签 & 报告中允许的表述 \\
 \midrule
 E0 official spec/RFC & 只写规范性机制、状态、接口和术语；没有独立实验时写“规范，无新实验”。 \\
-E1 peer-reviewed primary & 可写系统设计、实现和实验结果，但必须限定在论文 threat model 和 workload 内。 \\
-E2 SoK/Survey & 用于 taxonomy、覆盖范围和 related-work framing；机制 claim 回到原论文或规范。 \\
+E1 同行评审系统论文 & 可写系统设计、实现和实验结果，但必须限定在论文 threat model 和 workload 内。 \\
+E2 SoK/Survey & 用于 taxonomy、覆盖范围和 related-work framing；机制结论回到原论文或规范。 \\
 E3 draft/preprint & 只写 emerging direction 与草案状态；标题或证据行显式标注 draft/not ratified。 \\
-E4 industry evidence & 只支撑产品行为、部署实践或 building block；不当作普适安全证明。 \\
-E5 metadata/source-limited & 只写来源状态，不支撑强机制或性能 claim。 \\
+E4 industry evidence & 只支撑产品行为、部署实践或工程背景；不当作普适安全证明。 \\
+E5 limited public evidence & 只写来源状态和研究线索，不支撑强机制或性能结论。 \\
 \bottomrule
 \end{{tabularx}}
 \end{{frame}}
 
-\begin{{frame}}[t]{{15 个小方向与 primary slot}}
-\DeckKicker{{DIRECTION INDEX}}
+\begin{{frame}}[t]{{15 个技术方向总览}}
+\DeckKicker{{方向索引}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.49\textwidth}}
 {left_rows}
@@ -307,13 +395,11 @@ def render_direction(data: dict[str, Any]) -> str:
     focus = latex_escape(data.get("focus"))
     selection_rule = latex_escape(data.get("selection_rule"))
     primary = data.get("primary", [])
-    directory = latex_escape(data.get("_directory", ""))
-
     parts = [
         rf"""\section{{{direction}}}
 
 \begin{{frame}}[t]{{{direction}：方向开场}}
-\DeckKicker{{{directory}}}
+\DeckKicker{{方向开场}}
 \ClaimLine{{{focus}}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.56\textwidth}}
@@ -339,9 +425,8 @@ def render_direction(data: dict[str, Any]) -> str:
 
 def render_paper(paper: dict[str, Any]) -> list[str]:
     title = latex_escape(paper.get("title"))
-    key = latex_escape(paper.get("key"))
-    evidence = latex_escape(paper.get("evidence"))
-    source = latex_escape(paper.get("source_status"))
+    evidence = latex_escape(evidence_label(paper.get("evidence")))
+    source = latex_escape(f"来源状态：{source_status_label(paper.get('source_status'))}")
     slides = paper.get("slides", {})
     rendered: list[str] = []
 
@@ -352,7 +437,7 @@ def render_paper(paper: dict[str, Any]) -> list[str]:
             rf"""\PaperSlide
 {{{latex_escape(SLIDE_LABELS[slide_key])}}}
 {{{title}}}
-{{{key}}}
+{{证据等级}}
 {{{evidence}}}
 {{{source}}}
 {{{latex_escape(slide.get("claim"))}}}
@@ -364,9 +449,9 @@ def render_paper(paper: dict[str, Any]) -> list[str]:
 
     evaluation = slides.get("evaluation", {})
     rendered.append(
-        rf"""\PaperEvalSlide
+rf"""\PaperEvalSlide
 {{{title}}}
-{{{key}}}
+{{证据等级}}
 {{{evidence}}}
 {{{source}}}
 {{{latex_escape(evaluation.get("claim"))}}}
@@ -388,7 +473,7 @@ def render_summary(data: dict[str, Any]) -> str:
         for paper in primary
     ]
     return rf"""\begin{{frame}}[t]{{{latex_escape(data.get("direction"))}：技术演进总结}}
-\DeckKicker{{DIRECTION TAKEAWAY}}
+\DeckKicker{{方向总结}}
 \ClaimLine{{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.31\textwidth}}

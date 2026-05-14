@@ -1,294 +1,786 @@
 \section{RISC-V CoVE / AP-TEE confidential VM}
 
-\begin{frame}[t]{RISC-V CoVE / AP-TEE confidential VM：方向开场}
-\DeckKicker{09-riscv-cove-ap-tee}
-\ClaimLine{把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。}
+\begin{frame}[t,shrink=6]{RISC-V CoVE / AP-TEE confidential VM：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} RISC-V CoVE / AP-TEE confidential VM 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{RISC-V CoVE reference architecture}{E3 / Foundational public preprint}
-\PrimaryCard{Primary 2 / spec}{RISC-V AP-TEE / CoVE TVM 规范草案}{E3 / Draft-not-ratified}
-\PrimaryCard{Primary 3 / sok}{RISC-V TEE 谱系辅助材料}{E2 survey / Background substrate}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+  \item 固定三篇主讲材料；survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item sahita2023cove: system；E3；local\_pdf\_verified
-  \item riscv\_ap\_tee\_2024: spec；E3；local\_pdf\_verified
-  \item boubakri2025riscvtee: sok；E2 survey；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+RISC-V CoVE reference architecture & 开创/基础入口 & E3 / 基础证据 public preprint \\
+RISC-V AP-TEE / CoVE TVM 规范草案 & 代表性改进 & E3 / 草案/未批准规范 \\
+RISC-V TEE 谱系辅助材料 & 当前 SOTA/补充边界 & E2 survey / Background substrate \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{RISC-V CoVE reference architecture}
-{sahita2023cove}
-{E3 / Foundational public preprint}
-{local\_pdf\_verified}
-{提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、n。}
-{\begin{itemize}
-  \item 提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、non-ISA、SoC 与 platform requirements
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E3 / Foundational public preprint
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{RISC-V CoVE reference architecture}
-{sahita2023cove}
-{E3 / Foundational public preprint}
-{local\_pdf\_verified}
-{多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lin。}
-{\begin{itemize}
-  \item 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lineage
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V CoVE reference architecture}
-{sahita2023cove}
-{E3 / Foundational public preprint}
-{local\_pdf\_verified}
-{用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform suppo。}
-{\begin{itemize}
-  \item 用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform support
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item RISC-V confidential VM reference architecture
-  \item ISA/non-ISA/SoC/platform requirement split
-  \item Host/hypervisor trust reduction for TVM
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V CoVE reference architecture}
-{sahita2023cove}
-{E3 / Foundational public preprint}
-{local\_pdf\_verified}
-{架构论文/position-style，无完整系统实验}
-{\begin{itemize}
-  \item 架构论文/position-style，无完整系统实验
-  \item 具体 ABI/state details 需要 AP-TEE draft
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 public preprint/proposal
-  \item 成熟度：public preprint/proposal, review status explicit
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V CoVE reference architecture}
-{sahita2023cove}
-{E3 / Foundational public preprint}
-{local\_pdf\_verified}
-{CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型}
-{CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。}
-{不提供完整 ABI、状态机或 ratified standard 语义。}
-{对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。}
-
-\PaperSlide
-{内容摘要}
-{RISC-V AP-TEE / CoVE TVM 规范草案}
-{riscv\_ap\_tee\_2024}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memo。}
-{\begin{itemize}
-  \item 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memory lifecycle
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E3 / Draft-not-ratified
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V AP-TEE / CoVE TVM 规范草案}
-{riscv\_ap\_tee\_2024}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm。}
-{\begin{itemize}
-  \item CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm CCA/RMM 同层比较
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V AP-TEE / CoVE TVM 规范草案}
-{riscv\_ap\_tee\_2024}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/sh。}
-{\begin{itemize}
-  \item 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/reclaim/share 等 draft 规范语义
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item TVM/TSM lifecycle and SBI ABI
-  \item COVH/COVG host/guest interface split
-  \item Memory donation, reclaim and sharing semantics
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V AP-TEE / CoVE TVM 规范草案}
-{riscv\_ap\_tee\_2024}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item draft/not-ratified，不能写成 ratified standard 或 production ABI
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 draft/preprint, not ratified
-  \item 成熟度：draft/preprint, not ratified
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V AP-TEE / CoVE TVM 规范草案}
-{riscv\_ap\_tee\_2024}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle}
-{当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。}
-{v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。}
-{商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。}
-
-\PaperSlide
-{内容摘要}
-{RISC-V TEE 谱系辅助材料}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trus。}
-{\begin{itemize}
-  \item 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtime 和 confidential VM
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：sok
-  \item 证据：E2 survey / Background substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V TEE 谱系辅助材料}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{RISC-V TEE 论文和规范发展快，survey 可减少分类断裂}
-{\begin{itemize}
-  \item RISC-V TEE 论文和规范发展快，survey 可减少分类断裂
-  \item 即使本地 PDF 已核验，机制细节仍要回到原始论文/spec
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V TEE 谱系辅助材料}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类}
-{\begin{itemize}
-  \item 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类
-  \item 机制 claim 必须回引 CoVE paper 和 AP-TEE spec
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item RISC-V enclave and TEE taxonomy
-  \item Pre-CoVE versus CoVE/AP-TEE classification
-  \item Survey bridge for representative systems
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V TEE 谱系辅助材料}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 本地 PDF 已核验，但仍只使用 taxonomy/background claim
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V TEE 谱系辅助材料}
-{boubakri2025riscvtee}
-{E2 survey / Background substrate}
-{local\_pdf\_verified}
-{有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE}
-{有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。}
-{Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。}
-{适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。}
-
-\begin{frame}[t]{RISC-V CoVE / AP-TEE confidential VM：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{RISC-V CoVE reference architecture：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E3 / 基础证据 public preprint}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、n。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item RISC-V CoVE reference architecture
-  \item RISC-V AP-TEE / CoVE TVM 规范草案
-  \item RISC-V TEE 谱系辅助材料
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、non-ISA、SoC 与 platf。
+  \item CoVE 2023 is the early mainline design material for RISC-V confidential VMs.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。
-  \item 当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。
-  \item 不提供完整 ABI、状态机或 ratified standard 语义。
-  \item v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
-  \item 商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
-  \item 适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 系统论文 \\
+证据等级 & E3 / 基础证据 public preprint \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 基础证据 public preprint 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE reference architecture：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E3 / 基础证据 public preprint}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lin。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lineage
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V CoVE / AP-TEE confidential VM \\
+传统瓶颈 & 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。 \\
+本文入口 & RISC-V CoVE reference architecture \\
+证据限制 & E3 / 基础证据 public preprint \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 基础证据 public preprint 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE reference architecture：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E3 / 基础证据 public preprint}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform suppo。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform support
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. RISC-V confidential VM reference architecture
+  \item 02. ISA/non-ISA/SoC/platform requirement split
+  \item 03. Host/hypervisor trust reduction for TVM
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 基础证据 public preprint 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE reference architecture：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E3 / 基础证据 public preprint}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 架构论文/position-style，无完整系统实验\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 架构论文/position-style，无完整系统实验
+  \item 具体 ABI/state details 需要 AP-TEE draft
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RISC-V CoVE reference architecture & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E3 / 基础证据 public preprint \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 基础证据 public preprint 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE reference architecture：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E3 / 基础证据 public preprint}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。
+  \item 局限性：不提供完整 ABI、状态机或 ratified standard 语义。
+  \item 商业化潜力：对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
+  \item 证据边界：E3 / Foundational public preprint；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。 \\
+主要局限 & 不提供完整 ABI、状态机或 ratified standard 语义。 \\
+商业落地 & 对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E3 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 基础证据 public preprint 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V AP-TEE / CoVE TVM 规范草案：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memo。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memory lifecycle
+  \item AP-TEE draft is the current standards-track source for RISC-V confidential VM semantics.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E3 / 草案/未批准规范 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V AP-TEE / CoVE TVM 规范草案：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm CCA/RMM 同层比较
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V CoVE / AP-TEE confidential VM \\
+传统瓶颈 & 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。 \\
+本文入口 & RISC-V AP-TEE / CoVE TVM 规范草案 \\
+证据限制 & E3 / 草案/未批准规范 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V AP-TEE / CoVE TVM 规范草案：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/re结论/sh。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/re结论/share 等 draft 规范语义
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. TVM/TSM lifecycle and SBI ABI
+  \item 02. COVH/COVG host/guest interface split
+  \item 03. Memory donation, re结论 and sharing semantics
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V AP-TEE / CoVE TVM 规范草案：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V AP-TEE / CoVE TVM 规范草案 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：AP-TEE draft is the current standards-track source for RISC-V confidential VM semanti。
+  \item 证据等级：E3 / Draft-not-ratified；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RISC-V AP-TEE / CoVE TVM 规范草案 & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E3 / 草案/未批准规范 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V AP-TEE / CoVE TVM 规范草案：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：RISC-V AP-TEE / CoVE TVM 规范草案 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。
+  \item 局限性：v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。
+  \item 商业化潜力：商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。 \\
+主要局限 & v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。 \\
+商业落地 & 商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。 \\
+讲稿定位 & 代表性改进; 证据强度 E3 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE 谱系辅助材料：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trus。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtim。
+  \item Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave sys。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & SoK/综述 \\
+证据等级 & E2 survey / Background substrate \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE 谱系辅助材料：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} RISC-V TEE 论文和规范发展快，survey 可减少分类断裂\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RISC-V TEE 论文和规范发展快，survey 可减少分类断裂
+  \item 即使本地 PDF 已核验，机制细节仍要回到原始论文/spec
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V CoVE / AP-TEE confidential VM \\
+传统瓶颈 & 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。 \\
+本文入口 & RISC-V TEE 谱系辅助材料 \\
+证据限制 & E2 survey / Background substrate \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE 谱系辅助材料：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类
+  \item 机制 结论 必须回引 CoVE paper 和 AP-TEE spec
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. RISC-V enclave and TEE taxonomy
+  \item 02. Pre-CoVE versus CoVE/AP-TEE classification
+  \item 03. Survey bridge for representative systems
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE 谱系辅助材料：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V TEE 谱系辅助材料 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older encla。
+  \item 证据等级：E2 survey / Background substrate；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RISC-V TEE 谱系辅助材料 & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E2 survey / Background substrate \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE 谱系辅助材料：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：RISC-V TEE 谱系辅助材料 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
+  \item 局限性：Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。
+  \item 商业化潜力：适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。 \\
+主要局限 & Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。 \\
+商业落地 & 适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E2 survey \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V CoVE / AP-TEE confidential VM：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} RISC-V CoVE / AP-TEE confidential VM 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RISC-V CoVE reference architecture：开创/基础入口，E3 / 基础证据 public preprint。
+  \item RISC-V AP-TEE / CoVE TVM 规范草案：代表性改进，E3 / 草案/未批准规范。
+  \item RISC-V TEE 谱系辅助材料：当前 SOTA/补充边界，E2 survey / Background substrate。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+RISC-V CoVE reference architecture & 开创/基础入口 & CoVE 2023 is the early mainline design material for RISC-V confidential V。 \\
+RISC-V AP-TEE / CoVE TVM 规范草案 & 代表性改进 & AP-TEE draft is the current standards-track source for RISC-V confidentia。 \\
+RISC-V TEE 谱系辅助材料 & 当前 SOTA/补充边界 & Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

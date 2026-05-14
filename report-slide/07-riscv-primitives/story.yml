@@ -1,0 +1,471 @@
+direction: RISC-V 基础安全 primitives
+story_version: 1
+slides:
+- slide_id: d07-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: RISC-V 基础安全 primitives 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
+  - 固定三篇主讲材料；`riscv_iopmp_2026` 与 `manoni2026cva6cfi` 作为辅助材料，不计入三篇主讲。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - RISC-V privileged architecture
+        - 开创/基础入口
+        - E0 / 基础证据 standard substrate
+      - - RISC-V IOMMU
+        - 代表性改进
+        - E0 / Spec-standard SOTA
+      - - RISC-V Advanced Interrupt Architecture
+        - 当前 SOTA/补充边界
+        - E0 / Spec-standard SOTA
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d07-primary-1-summary
+  paper_key: riscv_privileged
+  slide_type: summary
+  claim: 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础
+  narrative:
+  - 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础
+  - RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_privileged` summary slide metadata.
+  - 'reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 规范/标准材料
+      - - 证据等级
+        - E0 / 基础证据 standard substrate
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-1-background
+  paper_key: riscv_privileged
+  slide_type: background
+  claim: RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离。
+  narrative:
+  - RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离语义
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_privileged` background slide metadata.
+  - 'reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - RISC-V 基础安全 primitives
+      - - 传统瓶颈
+        - 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
+      - - 本文入口
+        - RISC-V privileged architecture
+      - - 证据限制
+        - E0 / 基础证据 standard substrate
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-1-solution
+  paper_key: riscv_privileged
+  slide_type: solution
+  claim: 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate
+  narrative:
+  - 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_privileged` solution slide metadata.
+  - 'reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - M/S/U and virtualization privilege modes
+      - PMP/ePMP/Smepmp memory protection substrate
+      - Trap, translation and supervisor/guest isolation vocabulary
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-1-experiments
+  paper_key: riscv_privileged
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；RISC-V privileged architecture 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.
+  - 证据等级：E0 / Foundational standard substrate；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_privileged` experiments slide metadata.
+  - 'reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - RISC-V privileged architecture
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E0 / 基础证据 standard substrate
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-1-evaluation
+  paper_key: riscv_privileged
+  slide_type: evaluation
+  claim: 评价：RISC-V privileged architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
+  - 局限性：不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
+  - 商业化潜力：商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_privileged` evaluation slide metadata.
+  - 'reference/architecture-and-platform-security/risc-v-privileged-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/isa/_attachments/riscv-privileged.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
+      - - 主要局限
+        - 不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
+      - - 商业落地
+        - 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E0
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-2-summary
+  paper_key: riscv_iommu_2023
+  slide_type: summary
+  claim: 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限
+  narrative:
+  - 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限
+  - RISC-V IOMMU specification is the current standard substrate for DMA isolation and CoVE-IO.
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_iommu_2023` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf; source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 规范/标准材料
+      - - 证据等级
+        - E0 / Spec-standard SOTA
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-2-background
+  paper_key: riscv_iommu_2023
+  slide_type: background
+  claim: DMA 和总线 master 可绕过 CPU-side PMP/页表
+  narrative:
+  - DMA 和总线 master 可绕过 CPU-side PMP/页表
+  - TEE 或 CoVE-IO 需要 I/O 侧地址转换和权限控制
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_iommu_2023` background slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf; source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - RISC-V 基础安全 primitives
+      - - 传统瓶颈
+        - 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
+      - - 本文入口
+        - RISC-V IOMMU
+      - - 证据限制
+        - E0 / Spec-standard SOTA
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-2-solution
+  paper_key: riscv_iommu_2023
+  slide_type: solution
+  claim: IOMMU 把设备发起的访问纳入可配置 translation/protection 边界
+  narrative:
+  - IOMMU 把设备发起的访问纳入可配置 translation/protection 边界
+  - '`riscv_iopmp_2026` 作为 requester/memory-domain filtering 的 draft 辅助材料'
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_iommu_2023` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf; source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Device address translation and protection
+      - I/O page-table and permission semantics
+      - CoVE-IO substrate for DMA isolation discussions
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-2-experiments
+  paper_key: riscv_iommu_2023
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；RISC-V IOMMU 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：RISC-V IOMMU specification is the current standard substrate for DMA isolation and Co。
+  - 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_iommu_2023` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf; source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - RISC-V IOMMU
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E0 / Spec-standard SOTA
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-2-evaluation
+  paper_key: riscv_iommu_2023
+  slide_type: evaluation
+  claim: 评价：RISC-V IOMMU 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
+  - 局限性：IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
+  - 商业化潜力：对服务器和异构设备直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_iommu_2023` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-iommu-specification/paper.pdf; source_url: https://docs.riscv.org/reference/iommu/_attachments/riscv-iommu.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
+      - - 主要局限
+        - IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
+      - - 商业落地
+        - 对服务器和异构设备直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E0
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-3-summary
+  paper_key: riscv_aia_2023
+  slide_type: summary
+  claim: 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 con。
+  narrative:
+  - 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准。
+  - RISC-V AIA specification is the current interrupt virtualization and ownership substrate.
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_aia_2023` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - 规范/标准材料
+      - - 证据等级
+        - E0 / Spec-standard SOTA
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-3-background
+  paper_key: riscv_aia_2023
+  slide_type: background
+  claim: Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery
+  narrative:
+  - Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery
+  - runtime CFI 则是独立的控制流防护 substrate
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_aia_2023` background slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - RISC-V 基础安全 primitives
+      - - 传统瓶颈
+        - 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
+      - - 本文入口
+        - RISC-V Advanced Interrupt Architecture
+      - - 证据限制
+        - E0 / Spec-standard SOTA
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-3-solution
+  paper_key: riscv_aia_2023
+  slide_type: solution
+  claim: AIA 规范化 interrupt controller 与 MSI/virtual interrupt
+  narrative:
+  - AIA 规范化 interrupt controller 与 MSI/virtual interrupt
+  - '`manoni2026cva6cfi` 作为 RISC-V CFI draft implementation auxiliary'
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_aia_2023` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Advanced interrupt controller architecture
+      - MSI and virtual interrupt semantics
+      - Trusted interrupt-delivery substrate for confidential I/O
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-3-experiments
+  paper_key: riscv_aia_2023
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；RISC-V Advanced Interrupt Architecture 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：RISC-V AIA specification is the current interrupt virtualization and ownership substr。
+  - 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_aia_2023` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - RISC-V Advanced Interrupt Architecture
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E0 / Spec-standard SOTA
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-primary-3-evaluation
+  paper_key: riscv_aia_2023
+  slide_type: evaluation
+  claim: 评价：RISC-V Advanced Interrupt Architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。
+  - 局限性：不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。
+  - 商业化潜力：对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml `riscv_aia_2023` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-advanced-interrupt-architecture/paper.pdf; source_url: https://docs.riscv.org/reference/aia/_attachments/riscv-interrupts.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。
+      - - 主要局限
+        - 不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。
+      - - 商业落地
+        - 对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E0
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d07-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: RISC-V 基础安全 primitives 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - RISC-V privileged architecture：开创/基础入口，E0 / 基础证据 standard substrate。
+  - RISC-V IOMMU：代表性改进，E0 / Spec-standard SOTA。
+  - RISC-V Advanced Interrupt Architecture：当前 SOTA/补充边界，E0 / Spec-standard SOTA。
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/07-riscv-primitives/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - RISC-V privileged architecture
+        - 开创/基础入口
+        - RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for。
+      - - RISC-V IOMMU
+        - 代表性改进
+        - RISC-V IOMMU specification is the current standard substrate for DMA isol。
+      - - RISC-V Advanced Interrupt Architecture
+        - 当前 SOTA/补充边界
+        - RISC-V AIA specification is the current interrupt virtualization and owne。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

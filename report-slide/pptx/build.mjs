@@ -123,7 +123,7 @@ function title(slide, value, x = 58, y = 82, w = 900, h = 90, size = 36) {
 }
 
 function meta(slide, paper, y = 151) {
-  addText(slide, `${paper.key}   ${paper.evidence}   ${paper.source_status}`, 58, y, 1060, 20, {
+  addText(slide, `证据等级：${publicEvidence(paper.evidence)}   来源状态：${publicSourceStatus(paper.source_status)}`, 58, y, 1060, 20, {
     size: 10,
     color: STYLE.muted,
   });
@@ -156,6 +156,83 @@ function asList(value) {
   if (Array.isArray(value)) return value.filter(Boolean).map(String);
   if (typeof value === "string" && value.trim()) return [value.trim()];
   return [];
+}
+
+function publicSourceStatus(value) {
+  const map = {
+    local_pdf_verified: "本地 PDF 已核验",
+    author_hosted_eurosys_pdf_verified: "作者公开 PDF 已核验",
+    source_verified_pdf_unavailable: "公开来源已核验，PDF 暂缺",
+  };
+  return map[value] || value || "来源状态未标注";
+}
+
+function publicEvidence(value) {
+  let text = String(value || "");
+  const replacements = [
+    ["E1 primary systems", "E1 系统论文"],
+    ["peer-reviewed primary", "同行评审系统论文"],
+    ["Peer-reviewed primary", "同行评审系统论文"],
+    ["Primary", "主讲材料"],
+    ["primary", "主讲材料"],
+    ["Foundational industry evidence", "基础产业证据"],
+    ["Peer-reviewed SOTA", "同行评审改进证据"],
+    ["Foundational", "基础证据"],
+    ["Draft-not-ratified", "草案/未批准规范"],
+  ];
+  for (const [oldValue, newValue] of replacements) {
+    text = text.replaceAll(oldValue, newValue);
+  }
+  return text;
+}
+
+function shortTitle(value, limit = 48) {
+  let text = String(value || "");
+  for (const prefix of ["SoK: ", "A Survey of ", "The ", "Towards "]) {
+    if (text.startsWith(prefix)) text = text.slice(prefix.length);
+  }
+  return text.length <= limit ? text : `${text.slice(0, limit - 1).replace(/[ ,;；，]+$/u, "")}…`;
+}
+
+function sanitizeSourceNote(note) {
+  let text = String(note || "");
+  const publicRewrites = [
+    ["local_pdf_verified", "本地 PDF 已核验"],
+    ["author_hosted_eurosys_pdf_verified", "作者公开 PDF 已核验"],
+    ["source_verified_pdf_unavailable", "公开来源已核验，PDF 暂缺"],
+    ["source status", "来源状态"],
+    ["source-status", "来源状态"],
+    ["source_status", "来源状态"],
+    ["paper type", "材料类型"],
+    ["claim strength", "证据强度"],
+    ["primary slot", "主讲定位"],
+    ["selection slot", "主讲定位"],
+    ["Primary 1", "基础入口"],
+    ["Primary 2", "代表性改进"],
+    ["Primary 3", "当前边界"],
+    ["primary", "主讲材料"],
+    ["Foundational industry evidence", "基础产业证据"],
+    ["Peer-reviewed SOTA", "同行评审改进证据"],
+    ["Foundational", "基础证据"],
+    ["Draft-not-ratified", "草案/未批准规范"],
+  ];
+  for (const [oldValue, newValue] of publicRewrites) {
+    text = text.replaceAll(oldValue, newValue);
+  }
+  const internalTerms = [
+    "papers.yml",
+    "story.yml",
+    "report-slide",
+    "reference entry",
+    "source URL",
+    "source-status",
+    "evidence ledger",
+    "claim 强度保持",
+  ];
+  if (!text || internalTerms.some((term) => text.includes(term))) {
+    return "论文原文、官方规范或公开材料；具体结论受证据等级和原文实验范围约束。";
+  }
+  return text;
 }
 
 function bulletList(slide, items, x, y, w, options = {}) {
@@ -213,22 +290,22 @@ function coverSlide(presentation, deck) {
   const slide = presentation.slides.add();
   bg(slide);
   addShape(slide, 58, 54, 6, 58, STYLE.accent);
-  addText(slide, "HARDWARE SECURITY SURVEY", 80, 55, 420, 18, { size: 10, color: STYLE.muted, bold: true });
-  addText(slide, "Arm/RISC-V 机密计算、I/O/Data-path 防御与硬件设计防御", 80, 84, 780, 24, { size: 14, color: STYLE.soft });
-  title(slide, "Report-Slide\n全量重做版", 58, 178, 700, 160, 58);
-  addText(slide, "45 篇精选主讲材料 · 15 个小方向 · 5 页精讲结构", 62, 378, 680, 30, {
+  addText(slide, "硬件安全研究综述", 80, 55, 420, 18, { size: 10, color: STYLE.muted, bold: true });
+  addText(slide, "Arm/RISC-V TEE、CCA/CoVE、内存与 I/O 数据路径的技术演进", 80, 84, 820, 24, { size: 14, color: STYLE.soft });
+  title(slide, "硬件辅助机密计算\n与可信 I/O 安全综述", 58, 172, 760, 170, 48);
+  addText(slide, "面向体系结构、系统安全与云基础设施的研究型技术演进报告", 62, 378, 760, 30, {
     size: 19,
     color: STYLE.soft,
     bold: true,
   });
   metricRail(slide, 60, 530, [
-    ["15", "小方向", "由 evidence ledger 固定"],
-    ["45", "primary slot", "paper type 与 claim strength 分离"],
-    ["225", "精讲页", "摘要/背景/方案/实验/评价"],
-    ["2", "交付轨道", "Beamer PDF + editable PPTX"],
+    ["15", "技术方向", "覆盖 CPU TEE 到可信设备路径"],
+    ["45", "代表材料", "规范、系统论文与 SoK 分层引用"],
+    ["225", "论文精讲页", "摘要/背景/方案/实验/评价"],
+    ["5", "分析维度", "痛点、方法、证据、局限与落地"],
   ]);
-  visualStack(slide, "内容源", ["papers.yml", "story.yml", "generate_beamer.py", "pptx/build.mjs"], 820, 190, 340, 292, "flow");
-  footer(slide, 1, `Generated from ${deck.length} report-slide directions`);
+  visualStack(slide, "报告主线", ["TEE 分类", "Arm CCA", "RISC-V CoVE", "内存与 I/O", "DPU / SmartNIC"], 820, 190, 340, 292);
+  footer(slide, 1, "硬件安全研究综述");
   return slide;
 }
 
@@ -252,42 +329,42 @@ function overviewSlides(presentation, deck, pageStart) {
   const slides = [];
   const one = presentation.slides.add();
   bg(one);
-  kicker(one, "Report structure");
-  title(one, "同一份 YAML 内容源同时生成 Beamer/PDF 与可编辑 PPTX。", 58, 86, 930, 86, 34);
+  kicker(one, "报告定位");
+  title(one, "本报告关注硬件辅助隔离如何扩展到机密虚拟机、可信 I/O 与异构设备数据路径。", 58, 86, 980, 92, 32);
   bulletList(one, [
-    "15 个小方向，每个方向固定 3 篇主讲材料。",
-    "每篇文章固定 5 页：内容摘要、研究背景、解决方案、实验结果、文章评价。",
-    "规范、Survey、draft、industry evidence 均在页内保留证据等级。",
-    "PDF 与 PPTX 只作为交付物；可维护内容是 papers.yml、story.yml 和生成脚本。",
+    "核心问题：平台管理者不可信，但仍掌握调度、内存、I/O 与设备资源。",
+    "报告范围：Arm TrustZone/CCA、RISC-V TEE/CoVE、内存保护、CXL/RDMA/SPDM、DPU/GPU/SmartNIC。",
+    "组织方式：15 个技术方向，每个方向选择 3 篇代表性材料串联技术演进。",
+    "阅读主线：保护对象、资源管理者、证据链、设备边界和工程落地。",
   ], 78, 230, 620, { gap: 58, size: 18 });
-  visualStack(one, "页数与结构", ["45 篇主讲材料", "225 页文章精讲", "每方向 1 页开场 + 1 页总结", "全 deck 约 260 页"], 780, 210, 350, 320);
-  footer(one, page++, "Overview | delivery shape");
+  visualStack(one, "报告主线", ["TEE taxonomy 与 TrustZone 谱系", "Arm CCA/RME/RMM 与部署模型", "RISC-V primitives、TEE 与 CoVE", "Memory/I/O fabrics 与 trusted device path", "Accelerator、DPU、SmartNIC 与安全存储"], 780, 210, 350, 320);
+  footer(one, page++, "总览 | 报告定位");
   slides.push(one);
 
   const two = presentation.slides.add();
   bg(two);
-  kicker(two, "Evidence rules");
+  kicker(two, "证据边界");
   title(two, "所有机制和实验结论都必须落在证据等级允许的范围内。", 58, 86, 900, 86, 34);
   const evidence = [
     ["E0", "规范性机制、状态、接口和术语；没有独立实验时写“规范，无新实验”。"],
-    ["E1", "系统设计、实现和实验结果，但限定在论文 threat model 和 workload 内。"],
-    ["E2", "taxonomy、覆盖范围和 related-work framing；机制 claim 回到原论文或规范。"],
+    ["E1", "同行评审系统论文可支撑系统设计、实现和实验结果，但限定在论文 threat model 和 workload 内。"],
+    ["E2", "SoK/Survey 用于 taxonomy、覆盖范围和 related-work framing；机制结论回到原论文或规范。"],
     ["E3", "emerging direction 与草案状态；显式标注 draft/not ratified。"],
-    ["E4/E5", "industry evidence 只支撑产品行为；metadata/source-limited 只写来源状态。"],
+    ["E4/E5", "厂商材料或来源受限材料只支撑产品行为、工程背景或研究线索。"],
   ];
   evidence.forEach((row, index) => {
     const yy = 210 + index * 74;
     addText(two, row[0], 84, yy, 86, 38, { size: 24, color: index % 2 ? STYLE.gold : STYLE.accent, face: STYLE.display, bold: true });
-    rule(two, 180, yy + 18, 850, index % 2 ? "#FEDF89" : "#FDA29B", 2);
+    rule(two, 180, yy + 52, 850, index % 2 ? "#FEDF89" : "#FDA29B", 2);
     addText(two, row[1], 202, yy + 2, 780, 42, { size: 15, color: STYLE.ink });
   });
-  footer(two, page++, "Overview | evidence rules");
+  footer(two, page++, "总览 | 证据边界");
   slides.push(two);
 
   const three = presentation.slides.add();
   bg(three);
-  kicker(three, "Direction index");
-  title(three, "15 个小方向按 primary slot、paper type 与 claim strength 组织。", 58, 84, 940, 70, 32);
+  kicker(three, "方向索引");
+  title(three, "15 个技术方向按保护对象、资源管理者、证据链和设备边界展开。", 58, 84, 940, 70, 32);
   deck.forEach((direction, index) => {
     const col = index < 8 ? 0 : 1;
     const row = col === 0 ? index : index - 8;
@@ -300,9 +377,9 @@ function overviewSlides(presentation, deck, pageStart) {
       bold: true,
     });
     addText(three, direction.direction, x + 52, y - 2, 480, 22, { size: 12.5, color: STYLE.ink, bold: true });
-    addText(three, direction.primary.map((p) => p.key).join(" / "), x + 52, y + 22, 480, 18, { size: 8.6, color: STYLE.muted });
+    addText(three, direction.primary.map((p) => shortTitle(p.title, 26)).join(" / "), x + 52, y + 22, 480, 18, { size: 8.6, color: STYLE.muted });
   });
-  footer(three, page++, "Overview | direction index");
+  footer(three, page++, "总览 | 方向索引");
   slides.push(three);
   return { slides, nextPage: page };
 }
@@ -310,19 +387,19 @@ function overviewSlides(presentation, deck, pageStart) {
 function directionIntro(presentation, direction, page) {
   const slide = presentation.slides.add();
   bg(slide);
-  kicker(slide, direction._directory || direction.direction);
+  kicker(slide, "方向开场");
   title(slide, `${direction.direction}：方向开场`, 58, 82, 990, 54, 31);
   addText(slide, direction.focus, 60, 154, 820, 58, { size: 17, color: STYLE.soft, bold: true });
   panel(slide, 64, 252, 630, 268, "三篇主讲选择规则", { fill: "#FFFFFF" });
   addText(slide, direction.selection_rule, 88, 292, 580, 54, { size: 13.5, color: STYLE.soft });
   direction.primary.forEach((paper, index) => {
     const yy = 370 + index * 46;
-    addText(slide, paper.selection_slot || `primary_${index + 1}`, 88, yy, 78, 24, { size: 11, color: STYLE.accent, bold: true });
+    addText(slide, `主讲 ${index + 1}`, 88, yy, 78, 24, { size: 11, color: STYLE.accent, bold: true });
     addText(slide, paper.title, 178, yy - 2, 330, 28, { size: 13, color: STYLE.ink, bold: true });
-    addText(slide, paper.evidence, 520, yy, 140, 22, { size: 9.5, color: STYLE.muted });
+    addText(slide, publicEvidence(paper.evidence), 520, yy, 140, 22, { size: 9.5, color: STYLE.muted });
   });
-  visualStack(slide, "证据边界", direction.primary.map((paper) => `${paper.key}: ${paper.paper_type}; ${paper.claim_strength}; ${paper.source_status}`), 768, 246, 364, 314);
-  footer(slide, page, `Direction | ${direction.direction}`);
+  visualStack(slide, "证据边界", direction.primary.map((paper) => `${shortTitle(paper.title, 32)}：${publicEvidence(paper.evidence)}；${publicSourceStatus(paper.source_status)}`), 768, 246, 364, 314);
+  footer(slide, page, `方向开场 | ${direction.direction}`);
   return slide;
 }
 
@@ -344,7 +421,7 @@ function paperSlide(presentation, direction, paper, slideKey, page) {
   bulletList(slide, data.points, 90, 324, 590, { size: 16, gap: 58, limit: 4 });
   const mode = slideKey === "solution" ? "flow" : "stack";
   visualStack(slide, data.visual.title, data.visual.items, 780, 252, 360, 320, mode);
-  footer(slide, page, `${direction.direction} | ${paper.key}`);
+  footer(slide, page, `${direction.direction} | ${labels[slideKey]}`);
   return slide;
 }
 
@@ -368,14 +445,14 @@ function evaluationSlide(presentation, direction, paper, page) {
     addText(slide, card[0], x + 22, 300, 260, 24, { size: 15, color: card[2], bold: true });
     addText(slide, card[1], x + 22, 344, 282, 132, { size: 14, color: STYLE.ink });
   });
-  footer(slide, page, `${direction.direction} | ${paper.key}`);
+  footer(slide, page, `${direction.direction} | 文章评价`);
   return slide;
 }
 
 function directionSummary(presentation, direction, page) {
   const slide = presentation.slides.add();
   bg(slide);
-  kicker(slide, "Direction takeaway");
+  kicker(slide, "方向总结");
   title(slide, `${direction.direction}：技术演进总结`, 58, 82, 1020, 54, 28);
   addText(slide, "三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。", 58, 160, 880, 36, {
     size: 20,
@@ -388,7 +465,7 @@ function directionSummary(presentation, direction, page) {
   visualStack(slide, "技术演进", titles, 70, 252, 330, 308);
   visualStack(slide, "优点与缺口", gap, 472, 252, 330, 308);
   visualStack(slide, "商业化适配", commercial, 874, 252, 330, 308);
-  footer(slide, page, `Direction summary | ${direction.direction}`);
+  footer(slide, page, `方向总结 | ${direction.direction}`);
   return slide;
 }
 
@@ -410,7 +487,7 @@ function authoredLabel(slideType) {
 
 function drawSourceNote(slide, note) {
   addShape(slide, 64, 610, 1086, 42, "#FFFFFF", { line: { style: "solid", fill: STYLE.rule, width: 1 } });
-  addText(slide, `Source: ${note}`, 80, 620, 1054, 20, { size: 8.4, color: STYLE.muted });
+  addText(slide, `引用依据：${sanitizeSourceNote(note)}`, 80, 620, 1054, 20, { size: 8.4, color: STYLE.muted });
 }
 
 function drawAuthoredPanel(slide, x, y, w, h, heading) {
@@ -420,7 +497,7 @@ function drawAuthoredPanel(slide, x, y, w, h, heading) {
 }
 
 function drawNarrative(slide, items, x, y, w, h) {
-  drawAuthoredPanel(slide, x, y, w, h, "讲解逻辑");
+  drawAuthoredPanel(slide, x, y, w, h, "内容说明");
   asList(items).slice(0, 4).forEach((item, index) => {
     const yy = y + 58 + index * 55;
     addText(slide, String(index + 1).padStart(2, "0"), x + 20, yy, 36, 22, {
@@ -552,7 +629,7 @@ function authoredStorySlide(presentation, direction, storySlide, page) {
   bg(slide);
   kicker(slide, label);
   title(slide, slideTitle, 58, 78, 1060, 58, paper ? 24 : 28);
-  addText(slide, paper ? `${paper.key}   ${paper.evidence}   ${paper.source_status}` : `${direction._directory}   authored story   local evidence synthesis`, 58, 138, 1060, 18, {
+  addText(slide, paper ? `证据等级：${publicEvidence(paper.evidence)}   来源状态：${publicSourceStatus(paper.source_status)}` : "方向综述：主讲材料与公开来源综合", 58, 138, 1060, 18, {
     size: 9.2,
     color: STYLE.muted,
   });
@@ -560,7 +637,7 @@ function authoredStorySlide(presentation, direction, storySlide, page) {
   drawNarrative(slide, storySlide.narrative, 64, 260, 496, 320);
   drawAuthoredProof(slide, storySlide.proof_object || {}, 610, 236, 570, 352);
   drawSourceNote(slide, storySlide.source_note || "");
-  footer(slide, page, `${direction.direction} | ${storySlide.slide_id}`);
+  footer(slide, page, `${direction.direction} | ${label}`);
   return slide;
 }
 
@@ -577,20 +654,21 @@ function authoredDirectionSlides(presentation, direction, pageStart) {
 function finalSlide(presentation, page) {
   const slide = presentation.slides.add();
   bg(slide);
-  kicker(slide, "Delivery contract");
-  title(slide, "每页都保留证据等级，并只写当前证据能支撑的结论。", 58, 84, 920, 88, 34);
-  visualStack(slide, "内容契约", [
-    "每篇主讲材料固定 5 页。",
-    "每方向固定 3 篇主讲材料，辅助材料只作对比。",
-    "Beamer/PDF 与 PPTX 从 papers.yml/story.yml 生成。",
+  kicker(slide, "全局总结");
+  title(slide, "可信执行边界正在从 CPU 内部隔离扩展到完整数据路径。", 58, 84, 920, 88, 34);
+  visualStack(slide, "技术结论", [
+    "早期 TEE 主要解决 CPU 与内存隔离。",
+    "新一代机密计算必须纳入设备、DMA、interrupt 和远端 verifier。",
+    "Arm CCA 与 RISC-V CoVE/AP-TEE 代表架构级 confidential VM 路线。",
+    "可信 I/O 仍处在规范与系统原型共同演进阶段。",
   ], 92, 232, 430, 310);
-  visualStack(slide, "证据约束", [
-    "draft/not ratified 不写成量产标准。",
-    "spec/survey 页面必须写“无新实验”。",
-    "性能数据只来自本地 PDF 或官方来源。",
-    "source-limited 只写来源状态。",
+  visualStack(slide, "研究空白", [
+    "统一的 device identity、lifecycle 与 attestation 语义仍不成熟。",
+    "可信 I/O 的性能、安全和可部署性需要更多公开系统评测。",
+    "异构设备与存储路径中的 TCB 划分仍缺少通用框架。",
+    "未来工作应同时关注规范互操作、真实工作负载和端到端证据链。",
   ], 690, 232, 430, 310);
-  footer(slide, page, "Global constraints");
+  footer(slide, page, "全局总结 | 研究启示");
   return slide;
 }
 

@@ -97,3 +97,202 @@ Commodity SmartNIC 多租户隔离不足，NIC OS 或其他 function 可泄漏�
 
 S-NIC 是 SmartNIC confidential offload 方向的重要隔离基线；但它不是完整 TEE/confidential VM 方案，需要和 attestation/key-release/device lifecycle 机制组合。
 <!-- END PAPER REVIEW -->
+
+<!-- BEGIN REPORT-SLIDE DETAILED ADDENDUM -->
+
+## Report-Slide Detailed Addendum
+
+### 所属方向
+
+- Direction: `15-smartnic-trusted-nic-storage` - SmartNIC / Trusted NIC / Secure Storage Data Path
+- Paper key: `zhou2024snic`
+- Role: foundational SmartNIC function isolation system
+- Evidence base: S-NIC Figure 1 SmartNIC architecture; Figure 2 S-NIC architecture; Table 1 APIs; Figure 5/6/8; Tables 2-8.
+- Boundary: S-NIC 不等同于完整 VM/Realm trusted I/O，也没有真实 production NIC silicon。
+
+### 1. 完整题目 / 作者 / 会议
+
+- 完整题目: S-NIC: SmartNIC Security Isolation for the Cloud
+- 作者: Zhou et al.
+- 会议/来源: EuroSys 2024
+- Title evidence: README metadata; EuroSys 2024 PDF title page.
+
+### 2. 内容摘要
+
+### 2.1 Slide-ready summary
+
+**Claim:** S-NIC 的贡献是让 SmartNIC 上的 tenant network function 像拥有自己的 virtual NIC 一样被隔离。
+
+- 动机: SmartNIC 上多个 tenant/function 共享 NIC OS、DRAM、cores、accelerators，容易泄露或篡改 state。
+- 工作: 提出 locked-down TLB entries、memory denylist、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation。
+- 数据: function throughput worst-case 下降 <1.7%，chip area up to 8.89%，power up to 11.45%。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: S-NIC 的贡献是让 SmartNIC 上的 tenant network function 像拥有自己的 virtual NIC 一样被隔离。第一步解释为什么需要这一页: 动机: SmartNIC 上多个 tenant/function 共享 NIC OS、DRAM、cores、accelerators，容易泄露或篡改 state。第二步说明论文或规范实际做了什么: 工作: 提出 locked-down TLB entries、memory denylist、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation。第三步收束到证据边界: 数据: function throughput worst-case 下降 <1.7%，chip area up to 8.89%，power up to 11.45%。引用时只把 S-NIC abstract; Figure 2; Table 1; evaluation tables 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC abstract; Figure 2; Table 1; evaluation tables.
+
+- Proof object: flow - S-NIC: host launches NF -> nf_launch -> locked TLB entries -> isolated RAM/accelerator -> bus arbitration -> attestation
+
+
+### 3. 研究背景
+
+### 3.1 Slide-ready background
+
+**Claim:** 背景问题是 SmartNIC 自己也变成多租户计算平台，NIC OS 不能默认可信。
+
+- Packet processing、DPI、NAT、ZIP、RAID、load balancer 可能同时运行。
+- 共享 allocator、accelerator 或 bus 可造成 cross-function leakage/corruption。
+- 传统 NIC SR-IOV 不覆盖 SmartNIC 内部可编程资源。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 背景问题是 SmartNIC 自己也变成多租户计算平台，NIC OS 不能默认可信。第一步解释为什么需要这一页: Packet processing、DPI、NAT、ZIP、RAID、load balancer 可能同时运行。第二步说明论文或规范实际做了什么: 共享 allocator、accelerator 或 bus 可造成 cross-function leakage/corruption。第三步收束到证据边界: 传统 NIC SR-IOV 不覆盖 SmartNIC 内部可编程资源。引用时只把 S-NIC Section 2-3; Figure 1 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Section 2-3; Figure 1.
+
+- Proof object: matrix - SmartNIC attack surface: DRAM = shared buffers/metadata; Cores = programmable NF; Accelerators = DPI/ZIP/RAID; NIC OS = management authority; Bus/cache = contention/leakage
+
+
+### 4. 关键点核心思想
+
+### 4.1 Slide-ready core insight
+
+**Claim:** 核心洞察: NIC 上也需要类似 enclave/VM 的 resource ownership，但对象是 NIC-local resources。
+
+- Memory denylist 防止 NIC OS 访问 function private memory。
+- Locked TLB entries 固定 NF address translation。
+- Accelerator virtualization 和 bus arbitration 防止 shared hardware 造成越权。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 核心洞察: NIC 上也需要类似 enclave/VM 的 resource ownership，但对象是 NIC-local resources。第一步解释为什么需要这一页: Memory denylist 防止 NIC OS 访问 function private memory。第二步说明论文或规范实际做了什么: Locked TLB entries 固定 NF address translation。第三步收束到证据边界: Accelerator virtualization 和 bus arbitration 防止 shared hardware 造成越权。引用时只把 S-NIC Figure 2; Table 1 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Figure 2; Table 1.
+
+- Proof object: cards - isolation objects: memory denylist; locked TLB; cache partition; accelerator virtualization; bus arbitration
+
+
+### 5. 架构总览
+
+### 5.1 Slide-ready architecture
+
+**Claim:** 架构总览: S-NIC 在 SmartNIC SoC 内加入硬件隔离机制和 host-visible management API。
+
+- Figure 2 展示 high-level architecture。
+- Table 1 展示 nf_launch 等 management APIs。
+- Attestation 让 host/tenant 知道 function 由 certified S-NIC 启动。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 架构总览: S-NIC 在 SmartNIC SoC 内加入硬件隔离机制和 host-visible management API。第一步解释为什么需要这一页: Figure 2 展示 high-level architecture。第二步说明论文或规范实际做了什么: Table 1 展示 nf_launch 等 management APIs。第三步收束到证据边界: Attestation 让 host/tenant 知道 function 由 certified S-NIC 启动。引用时只把 S-NIC Figure 2; Table 1 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Figure 2; Table 1.
+
+- Proof object: matrix - 组件: Management core = launch/control; Programmable cores = run NFs; TLB banks = locked translations; Accelerators = virtualized; Attestation = launch evidence
+
+
+### 6. 核心方法拆解
+
+#### 方法 1: Locked TLB / Memory Denylist
+
+**Claim:** S-NIC 用 locked TLB 和 denylist 建立 NIC-local single-owner memory semantics。
+
+- NF launch 时锁定 translation。
+- NIC OS 之后不能更新 NF TLB。
+- Denylist 阻止管理软件访问 function memory。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: S-NIC 用 locked TLB 和 denylist 建立 NIC-local single-owner memory semantics。第一步解释为什么需要这一页: NF launch 时锁定 translation。第二步说明论文或规范实际做了什么: NIC OS 之后不能更新 NF TLB。第三步收束到证据边界: Denylist 阻止管理软件访问 function memory。引用时只把 S-NIC Figure 2; Table 1 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Figure 2; Table 1.
+
+- Proof object: flow - NF launch: host request -> nf_launch -> allocate memory -> lock TLB -> denylist owner -> run NF
+
+#### 方法 2: Accelerator Virtualization
+
+**Claim:** SmartNIC 的 DPI/ZIP/RAID 等 accelerator 也必须虚拟化和隔离。
+
+- Virtual accelerator 分配独立 state。
+- 硬件检查请求属于哪个 function。
+- 避免一个 NF 读取另一个 NF 的 accelerator metadata。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: SmartNIC 的 DPI/ZIP/RAID 等 accelerator 也必须虚拟化和隔离。第一步解释为什么需要这一页: Virtual accelerator 分配独立 state。第二步说明论文或规范实际做了什么: 硬件检查请求属于哪个 function。第三步收束到证据边界: 避免一个 NF 读取另一个 NF 的 accelerator metadata。引用时只把 S-NIC Figure 3; Tables 3/7 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Figure 3; Tables 3/7.
+
+- Proof object: matrix - accelerator isolation: DPI = rule/cache state; ZIP = compression buffers; RAID = storage metadata; Virtualization = per-NF state; Risk = shared accelerator leakage
+
+#### 方法 3: Cache / Bus Partitioning
+
+**Claim:** 即使 memory 权限正确，共享 cache 和 bus 仍能造成性能和信息干扰。
+
+- S-NIC 加 bus arbiter 和 cache partition。
+- Evaluation 报告 worst-case IPC degradation 约 1.66%。
+- 这是 NIC-local side/control channel 的系统化处理。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 即使 memory 权限正确，共享 cache 和 bus 仍能造成性能和信息干扰。第一步解释为什么需要这一页: S-NIC 加 bus arbiter 和 cache partition。第二步说明论文或规范实际做了什么: Evaluation 报告 worst-case IPC degradation 约 1.66%。第三步收束到证据边界: 这是 NIC-local side/control channel 的系统化处理。引用时只把 S-NIC Figure 5; evaluation section 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Figure 5; evaluation section.
+
+- Proof object: bars - interference control: throughput worst-case drop <1.7%; IPC degradation 1.66%; area overhead 8.89%
+
+#### 方法 4: Attested Function Lifecycle
+
+**Claim:** S-NIC 提供 function launch/attest/destroy 的 lifecycle，而不是只给静态隔离。
+
+- nf_attest 证明 function was launched on certified S-NIC。
+- 生命周期 API 让 host 管理 NF，但不能越权改私有资源。
+- 仍不等同于 TVM trusted device assignment。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: S-NIC 提供 function launch/attest/destroy 的 lifecycle，而不是只给静态隔离。第一步解释为什么需要这一页: nf_attest 证明 function was launched on certified S-NIC。第二步说明论文或规范实际做了什么: 生命周期 API 让 host 管理 NF，但不能越权改私有资源。第三步收束到证据边界: 仍不等同于 TVM trusted device assignment。引用时只把 S-NIC Table 1; Appendix attestation 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC Table 1; Appendix attestation.
+
+- Proof object: flow - lifecycle: nf_launch -> resource lock -> nf_attest -> run packets -> nf_destroy -> resource cleanup
+
+
+### 7. 实验环境和数据 / 证据基础
+
+### 7.1 Slide-ready evidence environment
+
+**Claim:** 实验环境与数据: SmartNIC architecture simulation/modeling + six network functions。
+
+- Functions: DPI、NAT、ZIP、RAID、load balancer、monitor 等。
+- Metrics: area/power estimates、throughput/IPC degradation、instruction latency、memory usage。
+- Evidence boundary: 不是 production silicon。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 实验环境与数据: SmartNIC architecture simulation/modeling + six network functions。第一步解释为什么需要这一页: Functions: DPI、NAT、ZIP、RAID、load balancer、monitor 等。第二步说明论文或规范实际做了什么: Metrics: area/power estimates、throughput/IPC degradation、instruction latency、memory usage。第三步收束到证据边界: Evidence boundary: 不是 production silicon。引用时只把 S-NIC evaluation section; Tables 2-8; Figure 5-Figure 8 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC evaluation section; Tables 2-8; Figure 5-Figure 8.
+
+- Proof object: matrix - 实验设置: Functions = six NFs; Metrics = area/power/perf; Hardware cost = TLB/cache/bus estimates; Security = resource ownership; Boundary = no production NIC silicon
+
+
+### 8. 性能 / Claim Strength
+
+### 8.1 Slide-ready performance
+
+**Claim:** 性能结论: S-NIC 的隔离成本在论文评估中较小，主要硬件成本是 TLB/cache/bus support。
+
+- Abstract/evaluation: throughput worst-case drop <1.7%。
+- Chip area increases up to 8.89%，power draw up to 11.45%。
+- nf_attest latency 受 RSA 等 crypto 影响，管理操作不是 packet fast path。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 性能结论: S-NIC 的隔离成本在论文评估中较小，主要硬件成本是 TLB/cache/bus support。第一步解释为什么需要这一页: Abstract/evaluation: throughput worst-case drop <1.7%。第二步说明论文或规范实际做了什么: Chip area increases up to 8.89%，power draw up to 11.45%。第三步收束到证据边界: nf_attest latency 受 RSA 等 crypto 影响，管理操作不是 packet fast path。引用时只把 S-NIC abstract; evaluation Tables 2-5; Figure 5/6 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC abstract; evaluation Tables 2-5; Figure 5/6.
+
+- Proof object: bars - key numbers: throughput drop <1.7%; area overhead 8.89%; power overhead 11.45%; IPC degradation 1.66%
+
+
+### 9. 文章评价
+
+### 9.1 Slide-ready evaluation
+
+**Claim:** 评价: S-NIC 是 SmartNIC 内部多租户隔离的强基线，但它不是完整 confidential I/O。
+
+- 优势: 资源对象拆得清楚，硬件成本量化，贴近 DPU/NIC 多租户问题。
+- 局限: 无生产 silicon；不处理 SPDM/TDISP、TVM binding、link encryption。
+- 商业化潜力: DPU tenant NF isolation；风险在功能链、资源利用率和 vendor attestation。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 评价: S-NIC 是 SmartNIC 内部多租户隔离的强基线，但它不是完整 confidential I/O。第一步解释为什么需要这一页: 优势: 资源对象拆得清楚，硬件成本量化，贴近 DPU/NIC 多租户问题。第二步说明论文或规范实际做了什么: 局限: 无生产 silicon；不处理 SPDM/TDISP、TVM binding、link encryption。第三步收束到证据边界: 商业化潜力: DPU tenant NF isolation；风险在功能链、资源利用率和 vendor attestation。引用时只把 S-NIC conclusion and README evaluation 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** S-NIC conclusion and README evaluation.
+
+- Proof object: matrix - 评价: 优势 = NIC-local isolation; 局限 = not full TEE-I/O; 商业化 = DPU NF isolation; 本方向角色 = SmartNIC isolation SOTA
+
+
+<!-- END REPORT-SLIDE DETAILED ADDENDUM -->

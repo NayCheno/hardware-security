@@ -1,0 +1,461 @@
+direction: Arm CCA 细粒度隔离与部署模型
+story_version: 1
+slides:
+- slide_id: d04-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: Arm CCA 细粒度隔离与部署模型 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。
+  - 固定三篇主讲材料；`liu2025lesstrust` 作为 intra-process 辅助材料，不计入三篇主讲。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - 'Shelter: CCA 用户态隔离'
+        - 开创/基础入口
+        - E1 / 基础证据
+      - - 'RContainer: CCA 安全容器'
+        - 代表性改进
+        - E1 / 同行评审改进证据
+      - - 'NanoZone: CCA 细粒度内存保护'
+        - 当前 SOTA/补充边界
+        - E3 / 草案/未批准规范
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d04-primary-1-summary
+  paper_key: zhang2023shelter
+  slide_type: summary
+  claim: 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment
+  narrative:
+  - 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment
+  - Shelter is the entry peer-reviewed system for moving CCA from VM Realms to user-space isola。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` summary slide metadata.
+  - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 基础证据
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-1-background
+  paper_key: zhang2023shelter
+  slide_type: background
+  claim: Realm 机制不必只服务 VM
+  narrative:
+  - Realm 机制不必只服务 VM
+  - 进程内敏感代码同样需要小 TCB、host-untrusted 的隔离边界
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` background slide metadata.
+  - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Arm CCA 细粒度隔离与部署模型
+      - - 传统瓶颈
+        - 从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。
+      - - 本文入口
+        - 'Shelter: CCA 用户态隔离'
+      - - 证据限制
+        - E1 / 基础证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-1-solution
+  paper_key: zhang2023shelter
+  slide_type: solution
+  claim: 把 CCA primitives 封装成用户态隔离模型，让应用 compartment 在不完全信任 OS/host 的前提下运行敏感逻辑
+  narrative:
+  - 把 CCA primitives 封装成用户态隔离模型，让应用 compartment 在不完全信任 OS/host 的前提下运行敏感逻辑
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` solution slide metadata.
+  - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - User-space compartment over Arm CCA
+      - Realm-backed isolation boundary
+      - Runtime and OS integration path for fine-grained protection
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-1-experiments
+  paper_key: zhang2023shelter
+  slide_type: experiments
+  claim: USENIX Security 论文提供原型与开销评估；数值只在本地 PDF 或官方来源核验后使用
+  narrative:
+  - USENIX Security 论文提供原型与开销评估；数值只在本地 PDF 或官方来源核验后使用
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` experiments slide metadata.
+  - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'Shelter: CCA 用户态隔离'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 基础证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-1-evaluation
+  paper_key: zhang2023shelter
+  slide_type: evaluation
+  claim: 开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口
+  narrative:
+  - 设计优势：开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。
+  - 局限性：系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。
+  - 商业化潜力：对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。
+  - 证据边界：E1 / Foundational；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` evaluation slide metadata.
+  - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。
+      - - 主要局限
+        - 系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。
+      - - 商业落地
+        - 对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-2-summary
+  paper_key: zhou2025rcontainer
+  slide_type: summary
+  claim: 把 Arm CCA 扩展到安全容器架构，面向云原生场景重构容器隔离边界
+  narrative:
+  - 把 Arm CCA 扩展到安全容器架构，面向云原生场景重构容器隔离边界
+  - RContainer is a peer-reviewed SOTA system for CCA-backed cloud-native container deployment.
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhou2025rcontainer` summary slide metadata.
+  - 'reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf; source_url: https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 同行评审改进证据
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-2-background
+  paper_key: zhou2025rcontainer
+  slide_type: background
+  claim: 容器共享内核带来部署效率，但传统容器边界难以抵御高权限 host/内核路径的泄露风险
+  narrative:
+  - 容器共享内核带来部署效率，但传统容器边界难以抵御高权限 host/内核路径的泄露风险
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhou2025rcontainer` background slide metadata.
+  - 'reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf; source_url: https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Arm CCA 细粒度隔离与部署模型
+      - - 传统瓶颈
+        - 从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。
+      - - 本文入口
+        - 'RContainer: CCA 安全容器'
+      - - 证据限制
+        - E1 / 同行评审改进证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-2-solution
+  paper_key: zhou2025rcontainer
+  slide_type: solution
+  claim: 利用 CCA 硬件 primitives 为容器 workload 建立更强机密性边界，同时保留容器化部署模型
+  narrative:
+  - 利用 CCA 硬件 primitives 为容器 workload 建立更强机密性边界，同时保留容器化部署模型
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhou2025rcontainer` solution slide metadata.
+  - 'reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf; source_url: https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - CCA-backed secure container boundary
+      - Container lifecycle and Realm lifecycle mapping
+      - Runtime/orchestration integration considerations
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-2-experiments
+  paper_key: zhou2025rcontainer
+  slide_type: experiments
+  claim: NDSS 系统论文提供原型评估
+  narrative:
+  - NDSS 系统论文提供原型评估
+  - 本报告 不复制未核对的具体性能数字
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhou2025rcontainer` experiments slide metadata.
+  - 'reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf; source_url: https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'RContainer: CCA 安全容器'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 同行评审改进证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-2-evaluation
+  paper_key: zhou2025rcontainer
+  slide_type: evaluation
+  claim: 贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload
+  narrative:
+  - 设计优势：贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload。
+  - 局限性：容器生态、编排系统和 CCA lifecycle 的耦合复杂，生产部署需要额外工程证据。
+  - 商业化潜力：商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
+  - 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `zhou2025rcontainer` evaluation slide metadata.
+  - 'reference/arm-confidential-computing/rcontainer-secure-container-architecture-through-arm-cca/paper.pdf; source_url: https://www.ndss-symposium.org/ndss-paper/rcontainer-a-secure-container-architecture-through-extending-arm-cca-hardware-primitives/; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 贴近云原生落地，把 CCA 从 confidential VM 推向容器 workload。
+      - - 主要局限
+        - 容器生态、编排系统和 CCA lifecycle 的耦合复杂，生产部署需要额外工程证据。
+      - - 商业落地
+        - 商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-3-summary
+  paper_key: liu2025nanozone
+  slide_type: summary
+  claim: 探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题
+  narrative:
+  - 探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题
+  - NanoZone is retained as a draft SOTA item for fine-grained CCA memory protection, with evid。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `liu2025nanozone` summary slide metadata.
+  - 'reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2506.07034; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E3 / 草案/未批准规范
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-3-background
+  paper_key: liu2025nanozone
+  slide_type: background
+  claim: 只用 Realm/VM 粒度会在管理成本、保护域数量和应用内敏感数据隔离之间形成矛盾
+  narrative:
+  - 只用 Realm/VM 粒度会在管理成本、保护域数量和应用内敏感数据隔离之间形成矛盾
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `liu2025nanozone` background slide metadata.
+  - 'reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2506.07034; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Arm CCA 细粒度隔离与部署模型
+      - - 传统瓶颈
+        - 从 VM 级 Realm 扩展到用户态、容器、进程内与移动/Android 部署。
+      - - 本文入口
+        - 'NanoZone: CCA 细粒度内存保护'
+      - - 证据限制
+        - E3 / 草案/未批准规范
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-3-solution
+  paper_key: liu2025nanozone
+  slide_type: solution
+  claim: 研究 CCA granule/lifecycle 能否支撑更小保护域，并用辅助材料 `liu2025lesstrust` 对照进程内信任收缩问题
+  narrative:
+  - 研究 CCA granule/lifecycle 能否支撑更小保护域，并用辅助材料 `liu2025lesstrust` 对照进程内信任收缩问题
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `liu2025nanozone` solution slide metadata.
+  - 'reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2506.07034; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Fine-grained memory protection over CCA
+      - Granule/lifecycle scaling pressure
+      - Intra-process isolation comparison with less-trust management
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-3-experiments
+  paper_key: liu2025nanozone
+  slide_type: experiments
+  claim: arXiv 预印本提供设计与评估线索
+  narrative:
+  - arXiv 预印本提供设计与评估线索
+  - draft/not ratified 状态下只作为前沿方向证据，不能写成同行评议共识或成熟生产证据
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `liu2025nanozone` experiments slide metadata.
+  - 'reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2506.07034; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'NanoZone: CCA 细粒度内存保护'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E3 / 草案/未批准规范
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-primary-3-evaluation
+  paper_key: liu2025nanozone
+  slide_type: evaluation
+  claim: 直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿
+  narrative:
+  - 设计优势：直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿。
+  - 局限性：预印本尚不能代表同行评议共识或硬件/OS 生态成熟度。
+  - 商业化潜力：若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
+  - 证据边界：E3 / Draft-not-ratified；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml `liu2025nanozone` evaluation slide metadata.
+  - 'reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2506.07034; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 直接回应 CCA 保护粒度和可扩展性问题，适合作为细粒度隔离前沿。
+      - - 主要局限
+        - 预印本尚不能代表同行评议共识或硬件/OS 生态成熟度。
+      - - 商业落地
+        - 若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E3
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d04-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: Arm CCA 细粒度隔离与部署模型 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - 'Shelter: CCA 用户态隔离：开创/基础入口，E1 / 基础证据。'
+  - 'RContainer: CCA 安全容器：代表性改进，E1 / 同行评审改进证据。'
+  - 'NanoZone: CCA 细粒度内存保护：当前 SOTA/补充边界，E3 / 草案/未批准规范。'
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/04-arm-cca-deployment/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - 'Shelter: CCA 用户态隔离'
+        - 开创/基础入口
+        - Shelter is the entry peer-reviewed system for moving CCA from VM Realms t。
+      - - 'RContainer: CCA 安全容器'
+        - 代表性改进
+        - RContainer is a peer-reviewed SOTA system for CCA-backed cloud-native con。
+      - - 'NanoZone: CCA 细粒度内存保护'
+        - 当前 SOTA/补充边界
+        - NanoZone is retained as a draft SOTA item for fine-grained CCA memory pro。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

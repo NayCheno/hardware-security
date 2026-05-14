@@ -1,296 +1,788 @@
 \section{Confidential I/O protocol、trusted device interface、network endpoint}
 
-\begin{frame}[t]{Confidential I/O protocol、trusted device interface、network endpoint：方向开场}
-\DeckKicker{13-confidential-io-protocol-device-endpoint}
-\ClaimLine{把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。}
+\begin{frame}[t,shrink=6]{Confidential I/O protocol、trusted device interface、network endpoint：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Confidential I/O protocol、trusted device interface、network endpoint 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；TLS+RA 作为 endpoint/channel-binding 主证据，FOLIO、SEV-TIO、TDISP/TDISP XT 和 BlueField DPU evidence 为 auxiliary/contrast。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / spec}{SPDM device identity and measurement}{E0 / Spec-standard SOTA}
-\PrimaryCard{Primary 2 / spec}{CoVE-IO and TDISP trusted-device lifecycle}{E3 / Draft-not-ratified}
-\PrimaryCard{Primary 3 / system}{Separate but Together: TLS channel binding with remote attestation}{E1 / Peer-reviewed endpoint channel-binding evidence}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
+  \item 固定三篇主讲材料；TLS+RA 作为 endpoint/channel-binding 主证据，FOLIO、SEV-TIO、TDISP/TDISP XT 和 BlueField DPU evidence 为 auxiliary/contrast。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item dmtf\_spdm\_2025: spec；E0；local\_pdf\_verified
-  \item riscv\_cove\_io\_2026: spec；E3；local\_pdf\_verified
-  \item weinhold2025tlsra: system；E1；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+SPDM device identity and measurement & 开创/基础入口 & E0 / Spec-standard SOTA \\
+CoVE-IO and TDISP trusted-device lifecycle & 代表性改进 & E3 / 草案/未批准规范 \\
+Separate but Together: TLS channel binding with remote attestat。 & 当前 SOTA/补充边界 & E1 / Peer-reviewed endpoint channel-binding evidence \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{SPDM device identity and measurement}
-{dmtf\_spdm\_2025}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{SPDM 定义 device/component identity、measurement、capability negotiation、cert。}
-{\begin{itemize}
-  \item SPDM 定义 device/component identity、measurement、capability negotiation、certificate/challenge 和 key exchange
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{SPDM device identity and measurement}
-{dmtf\_spdm\_2025}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态}
-{\begin{itemize}
-  \item Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{SPDM device identity and measurement}
-{dmtf\_spdm\_2025}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{通过 requester/responder 协议、certificate chain、measurement blocks、transcript。}
-{\begin{itemize}
-  \item 通过 requester/responder 协议、certificate chain、measurement blocks、transcript 和 secured session 建立 device trust control plane
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Device certificate and measurement retrieval
-  \item Challenge-response and transcript binding
-  \item Key exchange for secured control messages
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{SPDM device identity and measurement}
-{dmtf\_spdm\_2025}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 它证明协议语义，不证明设备内部隔离、DMA、interrupt 或 data path 已安全
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{SPDM device identity and measurement}
-{dmtf\_spdm\_2025}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-ev。}
-{是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。}
-{单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。}
-{适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update policy。}
-
-\PaperSlide
-{内容摘要}
-{CoVE-IO and TDISP trusted-device lifecycle}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、truste。}
-{\begin{itemize}
-  \item CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 CoVE ABI
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E3 / Draft-not-ratified
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{CoVE-IO and TDISP trusted-device lifecycle}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery。}
-{\begin{itemize}
-  \item TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery 和 PCIe/CXL link 放到同一边界
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{CoVE-IO and TDISP trusted-device lifecycle}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle}
-{\begin{itemize}
-  \item 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle
-  \item TDISP/TDISP XT 只作为公开 metadata 辅助，不推断 gated normative rules
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item TDI/TDM/DSM and TSM/RDSM lifecycle
-  \item SPDM plus TDISP plus PCIe IDE composition
-  \item IOMMU/IOPMP/AIA trusted DMA and interrupt substrate
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{CoVE-IO and TDISP trusted-device lifecycle}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item CoVE-IO 是 draft，TDISP/TDISP XT PDF member-gated，只能写 public metadata 和 high-level lifecycle role
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E3 draft/preprint, not ratified
-  \item 成熟度：draft/preprint, not ratified
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{CoVE-IO and TDISP trusted-device lifecycle}
-{riscv\_cove\_io\_2026}
-{E3 / Draft-not-ratified}
-{local\_pdf\_verified}
-{给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口}
-{给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。}
-{v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。}
-{指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 revocation。}
-
-\PaperSlide
-{内容摘要}
-{Separate but Together: TLS channel binding with remote attestation}
-{weinhold2025tlsra}
-{E1 / Peer-reviewed endpoint channel-binding evidence}
-{local\_pdf\_verified}
-{TLS+RA binds an application secure channel to an attested TEE endpoint, anchoring endpoint/channel-binding evidence.}
-{\begin{itemize}
-  \item Binds an application secure channel to an attested TEE endpoint
-  \item Anchors endpoint/channel-binding evidence
-\end{itemize}}
-{Evidence position}
-{\begin{itemize}
-  \item slot: primary\_3
-  \item type: system
-  \item evidence: E1 / Peer-reviewed endpoint channel-binding evidence
-  \item source: local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Separate but Together: TLS channel binding with remote attestation}
-{weinhold2025tlsra}
-{E1 / Peer-reviewed endpoint channel-binding evidence}
-{local\_pdf\_verified}
-{SPDM and TDISP can identify device/control-plane state, but they do not prove where an application TLS channel terminates.}
-{\begin{itemize}
-  \item SPDM and TDISP identify device/control-plane state
-  \item Application TLS needs binding to attestation evidence and workload identity
-\end{itemize}}
-{Problem boundary}
-{\begin{itemize}
-  \item TEE endpoint identity
-  \item TLS transcript binding
-  \item verifier/relying-party policy
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Separate but Together: TLS channel binding with remote attestation}
-{weinhold2025tlsra}
-{E1 / Peer-reviewed endpoint channel-binding evidence}
-{local\_pdf\_verified}
-{Integrate remote-attestation evidence into the TLS handshake or certificate path so the channel and TEE state are verified together.}
-{\begin{itemize}
-  \item Integrate remote-attestation evidence into TLS
-  \item Bind channel endpoint, TEE measurement, and verifier policy
-\end{itemize}}
-{Mechanism view}
-{\begin{itemize}
-  \item TLS endpoint and attestation binding
-  \item certificate/evidence composition
-  \item relying-party verification policy
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Separate but Together: TLS channel binding with remote attestation}
-{weinhold2025tlsra}
-{E1 / Peer-reviewed endpoint channel-binding evidence}
-{local\_pdf\_verified}
-{USENIX ATC 2025 peer-reviewed system paper provides a TLS+RA prototype and evaluation.}
-{\begin{itemize}
-  \item USENIX ATC 2025 peer-reviewed prototype and evaluation
-  \item Supports endpoint/channel binding, not SPDM/TDISP device identity or DMA protection
-\end{itemize}}
-{Evidence strength}
-{\begin{itemize}
-  \item type: E1 peer-reviewed primary paper
-  \item maturity: peer-reviewed primary paper
-  \item PDF: local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Separate but Together: TLS channel binding with remote attestation}
-{weinhold2025tlsra}
-{E1 / Peer-reviewed endpoint channel-binding evidence}
-{local\_pdf\_verified}
-{Fits the protocol/device-endpoint primary slot better than FOLIO, which is a trusted-I/O contrast paper.}
-{Fits the protocol/device-endpoint primary slot better than FOLIO, which is a trusted-I/O contrast paper.}
-{TLS+RA does not solve device assignment, TDISP state, IDE link protection, or IOMMU/IOPMP policy.}
-{Useful for confidential service onboarding and key release; risks remain in certificates, evidence profiles, and verifier UX.}
-
-\begin{frame}[t]{Confidential I/O protocol、trusted device interface、network endpoint：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{SPDM device identity and measurement：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} SPDM 定义 device/component identity、measurement、capability negotiation、cert。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item SPDM device identity and measurement
-  \item CoVE-IO and TDISP trusted-device lifecycle
-  \item Separate but Together: TLS channel binding with remote attestation
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item SPDM 定义 device/component identity、measurement、capability negotiation、certificate/challenge。
+  \item SPDM is the first-party specification foundation for device identity, measurement, and secu。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。
-  \item 给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
-  \item 单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。
-  \item v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update policy。
-  \item 指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 revocation。
-  \item Useful for confidential service onboarding and key release; risks remain in certificates, evidence profiles, and verifier UX.
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / Spec-standard SOTA \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPDM device identity and measurement：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Confidential I/O protocol、trusted device interface、network endpoint \\
+传统瓶颈 & 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。 \\
+本文入口 & SPDM device identity and measurement \\
+证据限制 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPDM device identity and measurement：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 通过 requester/responder 协议、certificate chain、measurement blocks、transcript。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 通过 requester/responder 协议、certificate chain、measurement blocks、transcript 和 secured session。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Device certificate and measurement retrieval
+  \item 02. Challenge-response and transcript binding
+  \item 03. Key exchange for secured control messages
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPDM device identity and measurement：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；SPDM device identity and measurement 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：SPDM is the first-party specification foundation for device identity, measurement, an。
+  \item 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & SPDM device identity and measurement & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / Spec-standard SOTA \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPDM device identity and measurement：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：SPDM device identity and measurement 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。
+  \item 局限性：单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。
+  \item 商业化潜力：适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update polic。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence。 \\
+主要局限 & 单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware。 \\
+商业落地 & 适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{CoVE-IO and TDISP trusted-device lifecycle：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、truste。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 CoVE ABI
+  \item RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-I/O track.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E3 / 草案/未批准规范 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{CoVE-IO and TDISP trusted-device lifecycle：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery 和 PCIe/CXL link 放。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Confidential I/O protocol、trusted device interface、network endpoint \\
+传统瓶颈 & 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。 \\
+本文入口 & CoVE-IO and TDISP trusted-device lifecycle \\
+证据限制 & E3 / 草案/未批准规范 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{CoVE-IO and TDISP trusted-device lifecycle：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle
+  \item TDISP/TDISP XT 只作为公开 metadata 辅助，不推断 gated normative rules
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. TDI/TDM/DSM and TSM/RDSM lifecycle
+  \item 02. SPDM plus TDISP plus PCIe IDE composition
+  \item 03. IOMMU/IOPMP/AIA trusted DMA and interrupt substrate
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{CoVE-IO and TDISP trusted-device lifecycle：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；CoVE-IO and TDISP trusted-device lifecycle 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-I/O track.
+  \item 证据等级：E3 / Draft-not-ratified；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & CoVE-IO and TDISP trusted-device lifecycle & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E3 / 草案/未批准规范 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{CoVE-IO and TDISP trusted-device lifecycle：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：CoVE-IO and TDISP trusted-device lifecycle 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
+  \item 局限性：v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
+  \item 商业化潜力：指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 rev。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。 \\
+主要局限 & v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。 \\
+商业落地 & 指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI。 \\
+讲稿定位 & 代表性改进; 证据强度 E3 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Separate but Together: TLS channel binding with remote attestation：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / Peer-reviewed endpoint channel-binding evidence}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} TLS+RA binds an application secure channel to an attested TEE endpoint, anchoring endpoint/channel-binding evid。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Binds an application secure channel to an attested TEE endpoint
+  \item Anchors endpoint/channel-binding evidence
+  \item Peer-reviewed endpoint/channel-binding evidence for integrating remote attestation into TLS.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / Peer-reviewed endpoint channel-binding evidence \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Separate but Together: TLS channel binding with remote attestation：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / Peer-reviewed endpoint channel-binding evidence}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} SPDM and TDISP can identify device/control-plane state, but they do not prove where an application TLS channel。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item SPDM and TDISP identify device/control-plane state
+  \item Application TLS needs binding to attestation evidence and workload identity
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Confidential I/O protocol、trusted device interface、network endpoint \\
+传统瓶颈 & 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。 \\
+本文入口 & Separate but Together: TLS channel binding with remote attestat。 \\
+证据限制 & E1 / Peer-reviewed endpoint channel-binding evidence \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Separate but Together: TLS channel binding with remote attestation：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / Peer-reviewed endpoint channel-binding evidence}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} Integrate remote-attestation evidence into the TLS handshake or certificate path so the channel and TEE state a。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Integrate remote-attestation evidence into TLS
+  \item Bind channel endpoint, TEE measurement, and verifier policy
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. TLS endpoint and attestation binding
+  \item 02. certificate/evidence composition
+  \item 03. relying-party verification policy
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Separate but Together: TLS channel binding with remote attestation：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / Peer-reviewed endpoint channel-binding evidence}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} USENIX ATC 2025 peer-reviewed system paper provides a TLS+RA prototype and evaluation.\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item USENIX ATC 2025 peer-reviewed prototype and evaluation
+  \item Supports endpoint/channel binding, not SPDM/TDISP device identity or DMA protection
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Separate but Together: TLS channel binding with remote attestat。 & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / Peer-reviewed endpoint channel-binding evidence \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Separate but Together: TLS channel binding with remote attestation：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / Peer-reviewed endpoint channel-binding evidence}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} Fits the protocol/device-endpoint 主讲定位 better than FOLIO, which is a trusted-I/O contrast paper.\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：Fits the protocol/device-endpoint 主讲定位 better than FOLIO, which is a trusted-I/O cont。
+  \item 局限性：TLS+RA does not solve device assignment, TDISP state, IDE link protection, or IOMMU/I。
+  \item 商业化潜力：Useful for confidential service onboarding and key release; risks remain in certifica。
+  \item 证据边界：E1 / Peer-reviewed endpoint channel-binding evidence；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & Fits the protocol/device-endpoint 主讲定位 better than FOLIO, which is a trusted-I/。 \\
+主要局限 & TLS+RA does not solve device assignment, TDISP state, IDE link protection, or I。 \\
+商业落地 & Useful for confidential service onboarding and key release; risks remain in cer。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Confidential I/O protocol、trusted device interface、network endpoint：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Confidential I/O protocol、trusted device interface、network endpoint 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item SPDM device identity and measurement：开创/基础入口，E0 / Spec-standard SOTA。
+  \item CoVE-IO and TDISP trusted-device lifecycle：代表性改进，E3 / 草案/未批准规范。
+  \item Separate but Together: TLS channel binding with remote attestat。：当前 SOTA/补充边界，E1 / Peer-reviewed endpoint channel-binding evidence。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+SPDM device identity and measurement & 开创/基础入口 & SPDM is the first-party specification foundation for device identity, mea。 \\
+CoVE-IO and TDISP trusted-device lifecycle & 代表性改进 & RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-。 \\
+Separate but Together: TLS channel binding with remote attestat。 & 当前 SOTA/补充边界 & Peer-reviewed endpoint/channel-binding evidence for integrating remote at。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

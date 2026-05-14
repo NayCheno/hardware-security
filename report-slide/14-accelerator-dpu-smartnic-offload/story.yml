@@ -1,0 +1,460 @@
+direction: Accelerator / DPU / SmartNIC confidential offload
+story_version: 1
+slides:
+- slide_id: d14-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: Accelerator / DPU / SmartNIC confidential offload 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CCA accelerator。
+  - 固定三篇主讲材料；`sang2025portal`、`deng2022strongbox`、`nvidia_bluefield_operation_2025` 作为辅助对比，不计入三篇主讲。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - 'HETEE: rack-scale heterogeneous TEE'
+        - 开创/基础入口
+        - E1 / 基础证据 peer-reviewed
+      - - CloudScale confidential computing with heterogeneous devices
+        - 代表性改进
+        - E1 / 同行评审改进证据
+      - - CAGE confidential accelerator workflow for Arm CCA
+        - 当前 SOTA/补充边界
+        - E1 / 同行评审改进证据
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d14-primary-1-summary
+  paper_key: zhu2020hetee
+  slide_type: summary
+  claim: HETEE 用 rack-level security controller 与 PCIe fabric 动态隔离 GPU/FPGA/TPU 等。
+  narrative:
+  - HETEE 用 rack-level security controller 与 PCIe fabric 动态隔离 GPU/FPGA/TPU 等 accelerator
+  - HETEE is a foundational peer-reviewed work for heterogeneous CPU-accelerator TEEs.
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `zhu2020hetee` summary slide metadata.
+  - 'reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/paper.pdf; source_url: https://ieeexplore.ieee.org/document/9152787; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 基础证据 peer-reviewed
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational peer-reviewed 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-1-background
+  paper_key: zhu2020hetee
+  slide_type: background
+  claim: CPU TEE 不能天然保护 accelerator offload path，敏感数据进入 GPU、driver、PCIe fabric 或 r。
+  narrative:
+  - CPU TEE 不能天然保护 accelerator offload path，敏感数据进入 GPU、driver、PCIe fabric 或 remote resource poo。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `zhu2020hetee` background slide metadata.
+  - 'reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/paper.pdf; source_url: https://ieeexplore.ieee.org/document/9152787; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Accelerator / DPU / SmartNIC confidential offload
+      - - 传统瓶颈
+        - 从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CC。
+      - - 本文入口
+        - 'HETEE: rack-scale heterogeneous TEE'
+      - - 证据限制
+        - E1 / 基础证据 peer-reviewed
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational peer-reviewed 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-1-solution
+  paper_key: zhu2020hetee
+  slide_type: solution
+  claim: Security Controller 作为 thin TCB 管理 accelerator assignment、加密认证、remote att。
+  narrative:
+  - Security Controller 作为 thin TCB 管理 accelerator assignment、加密认证、remote attestation、secure cl。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `zhu2020hetee` solution slide metadata.
+  - 'reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/paper.pdf; source_url: https://ieeexplore.ieee.org/document/9152787; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Rack-level Security Controller
+      - PCIe ExpressFabric accelerator assignment
+      - Remote attestation and secure cleanup lifecycle
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational peer-reviewed 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-1-experiments
+  paper_key: zhu2020hetee
+  slide_type: experiments
+  claim: 真实硬件原型
+  narrative:
+  - 真实硬件原型
+  - 论文报告 ResNet152 inference 最大 throughput overhead 2.17%，training 最大 overhead 0.95%
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `zhu2020hetee` experiments slide metadata.
+  - 'reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/paper.pdf; source_url: https://ieeexplore.ieee.org/document/9152787; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'HETEE: rack-scale heterogeneous TEE'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 基础证据 peer-reviewed
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational peer-reviewed 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-1-evaluation
+  paper_key: zhu2020hetee
+  slide_type: evaluation
+  claim: accelerator confidential offload 的 foundational baseline，说明 CPU TEE 边界可以被。
+  narrative:
+  - 设计优势：accelerator confidential offload 的 foundational baseline，说明 CPU TEE 边界可以被 rack-level。
+  - 局限性：早于 SPDM/TDISP/CoVE-IO，不能当作 modern trusted I/O 标准或 vendor DPU attestation proof。
+  - 商业化潜力：适合启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle 复杂度。
+  - 证据边界：E1 / Foundational peer-reviewed；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `zhu2020hetee` evaluation slide metadata.
+  - 'reference/accelerator-tees/enabling-rack-scale-confidential-computing-heterogeneous-tee/paper.pdf; source_url: https://ieeexplore.ieee.org/document/9152787; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - accelerator confidential offload 的 foundational baseline，说明 CPU TEE 边界可以被 rack-。
+      - - 主要局限
+        - 早于 SPDM/TDISP/CoVE-IO，不能当作 modern trusted I/O 标准或 vendor DPU attestation proof。
+      - - 商业落地
+        - 适合启发 DPU/SmartNIC security-controller 设计；风险在集中 TCB、设备固件可信和 production lifecycle。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational peer-reviewed 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-2-summary
+  paper_key: dhar2024cloudscale
+  slide_type: summary
+  claim: CloudScale 用 cloud-scale Security Controller 桥接 TEE-enabled nodes 与 legac。
+  narrative:
+  - CloudScale 用 cloud-scale Security Controller 桥接 TEE-enabled nodes 与 legacy non-TEE DSA/NPU/。
+  - Cloud-scale acceleration work is a peer-reviewed 2024 SOTA item for confidential accelerato。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `dhar2024cloudscale` summary slide metadata.
+  - 'reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/paper.pdf; source_url: https://www.acsac.org/2024/program/final/s297.html; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 同行评审改进证据
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-2-background
+  paper_key: dhar2024cloudscale
+  slide_type: background
+  claim: 数据中心中多数 DSA 节点没有 TEE 能力
+  narrative:
+  - 数据中心中多数 DSA 节点没有 TEE 能力
+  - 用户要在 accelerator 性能与敏感数据保护之间取舍
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `dhar2024cloudscale` background slide metadata.
+  - 'reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/paper.pdf; source_url: https://www.acsac.org/2024/program/final/s297.html; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Accelerator / DPU / SmartNIC confidential offload
+      - - 传统瓶颈
+        - 从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CC。
+      - - 本文入口
+        - CloudScale confidential computing with heterogeneous devices
+      - - 证据限制
+        - E1 / 同行评审改进证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-2-solution
+  paper_key: dhar2024cloudscale
+  slide_type: solution
+  claim: SC 作为 TEE proxy 执行 access control、attestation、key exchange 和 encrypted/au。
+  narrative:
+  - SC 作为 TEE proxy 执行 access control、attestation、key exchange 和 encrypted/authenticated data p。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `dhar2024cloudscale` solution slide metadata.
+  - 'reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/paper.pdf; source_url: https://www.acsac.org/2024/program/final/s297.html; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Cloud-scale Security Controller
+      - TEE / non-TEE DSA pool attestation
+      - Encrypted and authenticated offload path
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-2-experiments
+  paper_key: dhar2024cloudscale
+  slide_type: experiments
+  claim: 论文报告 AI、Redis、file-system workloads 平均 1.5-5% overhead，并扩展到 2236 concurre。
+  narrative:
+  - 论文报告 AI、Redis、file-system workloads 平均 1.5-5% overhead，并扩展到 2236 concurrent NPUs running CN。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `dhar2024cloudscale` experiments slide metadata.
+  - 'reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/paper.pdf; source_url: https://www.acsac.org/2024/program/final/s297.html; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - CloudScale confidential computing with heterogeneous devices
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 同行评审改进证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-2-evaluation
+  paper_key: dhar2024cloudscale
+  slide_type: evaluation
+  claim: 把 accelerator TEE 从单机扩展到 cloud-scale heterogeneous DSA pool
+  narrative:
+  - 设计优势：把 accelerator TEE 从单机扩展到 cloud-scale heterogeneous DSA pool。
+  - 局限性：SC 正确性和供应链可信是硬假设；不替代 SPDM/TDISP/PCIe IDE/IOMMU 或 vendor DPU RoT。
+  - 商业化潜力：贴近云 DPU/SmartNIC/NPU resource-pool 问题；风险在多租户编排、热插拔、failure isolation 和 production att。
+  - 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `dhar2024cloudscale` evaluation slide metadata.
+  - 'reference/accelerator-tees/confidential-computing-heterogeneous-devices-cloud-scale/paper.pdf; source_url: https://www.acsac.org/2024/program/final/s297.html; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 把 accelerator TEE 从单机扩展到 cloud-scale heterogeneous DSA pool。
+      - - 主要局限
+        - SC 正确性和供应链可信是硬假设；不替代 SPDM/TDISP/PCIe IDE/IOMMU 或 vendor DPU RoT。
+      - - 商业落地
+        - 贴近云 DPU/SmartNIC/NPU resource-pool 问题；风险在多租户编排、热插拔、failure isolation 和 producti。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-3-summary
+  paper_key: wang2026cage
+  slide_type: summary
+  claim: CAGE 用 Arm CCA GPC/GPT 与 Monitor-side shadow task 保护 Realm 使用 GPU/FPGA ac。
+  narrative:
+  - CAGE 用 Arm CCA GPC/GPT 与 Monitor-side shadow task 保护 Realm 使用 GPU/FPGA accelerator 的 workfl。
+  - CAGE is a recent peer-reviewed SOTA item for GPU accelerator enclaves.
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `wang2026cage` summary slide metadata.
+  - 'reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/paper.pdf; source_url: https://ira.lib.polyu.edu.hk/handle/10397/117541; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 同行评审改进证据
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-3-background
+  paper_key: wang2026cage
+  slide_type: background
+  claim: Arm CCA 保护 Realm memory，但 untrusted accelerator driver/runtime 会处理 code、m。
+  narrative:
+  - Arm CCA 保护 Realm memory，但 untrusted accelerator driver/runtime 会处理 code、metadata、MMIO、DMA b。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `wang2026cage` background slide metadata.
+  - 'reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/paper.pdf; source_url: https://ira.lib.polyu.edu.hk/handle/10397/117541; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Accelerator / DPU / SmartNIC confidential offload
+      - - 传统瓶颈
+        - 从 rack-level accelerator TEE 走向 cloud-scale DSA/NPU/GPU pool 与 Arm CC。
+      - - 本文入口
+        - CAGE confidential accelerator workflow for Arm CCA
+      - - 证据限制
+        - E1 / 同行评审改进证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-3-solution
+  paper_key: wang2026cage
+  slide_type: solution
+  claim: 用 shadow task、Monitor verification、GPC/GPT protection 和 accelerator-speci。
+  narrative:
+  - 用 shadow task、Monitor verification、GPC/GPT protection 和 accelerator-specific cleanup，把真实 ac。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `wang2026cage` solution slide metadata.
+  - 'reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/paper.pdf; source_url: https://ira.lib.polyu.edu.hk/handle/10397/117541; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Shadow task and Monitor-side verification
+      - GPC/GPT protected accelerator buffers
+      - GPU/FPGA workflow-specific cleanup
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-3-experiments
+  paper_key: wang2026cage
+  slide_type: experiments
+  claim: 论文报告 GPU benchmark 开销 0.58%-5.31%，FPGA benchmark 开销 9.61%-16.30%，TCB 增量约。
+  narrative:
+  - 论文报告 GPU benchmark 开销 0.58%-5.31%，FPGA benchmark 开销 9.61%-16.30%，TCB 增量约 1301 LoC + 140 LoC
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `wang2026cage` experiments slide metadata.
+  - 'reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/paper.pdf; source_url: https://ira.lib.polyu.edu.hk/handle/10397/117541; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - CAGE confidential accelerator workflow for Arm CCA
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 同行评审改进证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-primary-3-evaluation
+  paper_key: wang2026cage
+  slide_type: evaluation
+  claim: 当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA
+  narrative:
+  - 设计优势：当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA。
+  - 局限性：Device identity、SPDM/TDISP、production CCA hardware、复杂多租户 accelerator scheduling 和侧信道仍。
+  - 商业化潜力：可迁移到 DPU/SmartNIC packet-processing rules、queue descriptors 和 TLS keys；风险在 TCB 增量、设备身。
+  - 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml `wang2026cage` evaluation slide metadata.
+  - 'reference/arm-confidential-computing/building-confidential-accelerator-computing-environment-arm-cca/paper.pdf; source_url: https://ira.lib.polyu.edu.hk/handle/10397/117541; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA。
+      - - 主要局限
+        - Device identity、SPDM/TDISP、production CCA hardware、复杂多租户 accelerator scheduling。
+      - - 商业落地
+        - 可迁移到 DPU/SmartNIC packet-processing rules、queue descriptors 和 TLS keys；风险在 TCB。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d14-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: Accelerator / DPU / SmartNIC confidential offload 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - 'HETEE: rack-scale heterogeneous TEE：开创/基础入口，E1 / 基础证据 peer-reviewed。'
+  - CloudScale confidential computing with heterogeneous devices：代表性改进，E1 / 同行评审改进证据。
+  - CAGE confidential accelerator workflow for Arm CCA：当前 SOTA/补充边界，E1 / 同行评审改进证据。
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/14-accelerator-dpu-smartnic-offload/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - 'HETEE: rack-scale heterogeneous TEE'
+        - 开创/基础入口
+        - HETEE is a foundational peer-reviewed work for heterogeneous CPU-accelera。
+      - - CloudScale confidential computing with heterogeneous devices
+        - 代表性改进
+        - Cloud-scale acceleration work is a peer-reviewed 2024 SOTA item for confi。
+      - - CAGE confidential accelerator workflow for Arm CCA
+        - 当前 SOTA/补充边界
+        - CAGE is a recent peer-reviewed SOTA item for GPU accelerator enclaves.
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

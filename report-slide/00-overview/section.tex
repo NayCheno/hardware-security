@@ -1,68 +1,69 @@
 
 \section{总览与证据规则}
 
-\begin{frame}[t]{重做后的 report-slide 交付形态}
-\DeckKicker{REPORT STRUCTURE}
-\ClaimLine{同一份 YAML 内容源同时生成 Beamer/PDF 与可编辑 PPTX，避免内容漂移。}
+\begin{frame}[t]{报告问题与技术路线}
+\DeckKicker{报告定位}
+\ClaimLine{本报告围绕硬件辅助隔离如何从 CPU TEE 扩展到机密虚拟机、可信 I/O 与异构设备数据路径。}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.56\textwidth}
     \begin{itemize}
-      \item 15 个小方向，每个方向固定 3 个 selection slot。
-      \item 每篇文章固定 5 页：内容摘要、研究背景、解决方案、实验结果、文章评价。
-      \item 每个 primary 独立记录 paper type、claim strength、maturity/source status。
-      \item PDF 与 PPTX 只作为交付物；可维护内容是 \texttt{papers.yml}、方向级 \texttt{story.yml} 和生成脚本。
+      \item 核心问题：平台管理者不可信，但仍掌握调度、内存、I/O 和设备资源。
+      \item 报告范围：Arm TrustZone/CCA、RISC-V TEE/CoVE、内存保护、CXL/RDMA/SPDM、DPU/GPU/SmartNIC。
+      \item 组织方式：15 个技术方向，每个方向选择 3 篇代表性材料串联技术演进。
+      \item 阅读主线：保护对象、资源管理者、证据链、设备边界和工程落地。
     \end{itemize}
   \end{column}
   \begin{column}{0.38\textwidth}
-    \VisualPanel{页数与结构}{\begin{itemize}
-      \item 45 个 primary slot
-      \item 225 页文章精讲
-      \item 每方向 1 页开场 + 1 页总结
-      \item 全 deck 约 260 页
+    \VisualPanel{报告主线}{\begin{itemize}
+      \item TEE taxonomy 与 TrustZone 谱系
+      \item Arm CCA/RME/RMM 与部署模型
+      \item RISC-V primitives、TEE 与 CoVE
+      \item Memory/I/O fabrics 与 trusted device path
+      \item Accelerator、DPU、SmartNIC 与安全存储
     \end{itemize}}
   \end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}[t]{证据等级与允许 claim}
-\DeckKicker{EVIDENCE RULES}
+\begin{frame}[t]{证据等级与结论边界}
+\DeckKicker{证据边界}
 \ClaimLine{所有机制和实验结论都必须落在证据等级允许的范围内。}
 \scriptsize
 \begin{tabularx}{\textwidth}{@{}lY@{}}
 \toprule
-标签 & Slide 中允许的表述 \\
+标签 & 报告中允许的表述 \\
 \midrule
 E0 official spec/RFC & 只写规范性机制、状态、接口和术语；没有独立实验时写“规范，无新实验”。 \\
-E1 peer-reviewed primary & 可写系统设计、实现和实验结果，但必须限定在论文 threat model 和 workload 内。 \\
-E2 SoK/Survey & 用于 taxonomy、覆盖范围和 related-work framing；机制 claim 回到原论文或规范。 \\
+E1 同行评审系统论文 & 可写系统设计、实现和实验结果，但必须限定在论文 threat model 和 workload 内。 \\
+E2 SoK/Survey & 用于 taxonomy、覆盖范围和 related-work framing；机制结论回到原论文或规范。 \\
 E3 draft/preprint & 只写 emerging direction 与草案状态；标题或证据行显式标注 draft/not ratified。 \\
-E4 industry evidence & 只支撑产品行为、部署实践或 building block；不当作普适安全证明。 \\
-E5 metadata/source-limited & 只写来源状态，不支撑强机制或性能 claim。 \\
+E4 industry evidence & 只支撑产品行为、部署实践或工程背景；不当作普适安全证明。 \\
+E5 limited public evidence & 只写来源状态和研究线索，不支撑强机制或性能结论。 \\
 \bottomrule
 \end{tabularx}
 \end{frame}
 
-\begin{frame}[t]{15 个小方向与 primary slot}
-\DeckKicker{DIRECTION INDEX}
+\begin{frame}[t]{15 个技术方向总览}
+\DeckKicker{方向索引}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.49\textwidth}
-\IndexEntry{01}{硬件辅助 TEE taxonomy}{li2024sokteechoices / boubakri2025riscvtee / sok-tee}
-\IndexEntry{02}{Arm TrustZone TEE 与漏洞谱系}{arm\_trustzone\_whitepaper / pinto2019trustzone / cerdeira2020trustzone}
-\IndexEntry{03}{Arm CCA / RME / RMM 基础架构}{li2022cca / arm\_cca\_spec / arm\_rmm\_spec}
-\IndexEntry{04}{Arm CCA 细粒度隔离与部署模型}{zhang2023shelter / zhou2025rcontainer / liu2025nanozone}
-\IndexEntry{05}{Arm CCA I/O、DMA、accelerator、interrupt}{acai2023 / bertschi2026devlore / sok-tee}
-\IndexEntry{06}{Attestation、boot、lifecycle}{seshadri2004swatt / rats\_rfc / nunes2019vrased}
-\IndexEntry{07}{RISC-V 基础安全 primitives}{riscv\_privileged / riscv\_iommu\_2023 / riscv\_aia\_2023}
-\IndexEntry{08}{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}{lee2020keystone / feng2021penglai / schrammel2023spearv}
+\IndexEntry{01}{硬件辅助 TEE taxonomy}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{02}{Arm TrustZone TEE 与漏洞谱系}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{03}{Arm CCA / RME / RMM 基础架构}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{04}{Arm CCA 细粒度隔离与部署模型}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{05}{Arm CCA I/O、DMA、accelerator、interrupt}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{06}{Attestation、boot、lifecycle}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{07}{RISC-V 基础安全 primitives}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{08}{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}{基础入口 / 代表改进 / 当前边界}
   \end{column}
   \begin{column}{0.49\textwidth}
-\IndexEntry{09}{RISC-V CoVE / AP-TEE confidential VM}{sahita2023cove / riscv\_ap\_tee\_2024 / boubakri2025riscvtee}
-\IndexEntry{10}{RISC-V CoVE-IO / TEE-I/O}{feng2024siopmp / riscv\_cove\_io\_2026 / riscv\_iommu\_2023}
-\IndexEntry{11}{Memory encryption / integrity / replay protection}{henson2014memory / rogers2007bonsai / amd\_sev\_snp}
-\IndexEntry{12}{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}{gouk2022directcxl / zhong2024cxltiers / wang2025odrp}
-\IndexEntry{13}{Confidential I/O protocol、trusted device interface、network endpoint}{dmtf\_spdm\_2025 / riscv\_cove\_io\_2026 / weinhold2025tlsra}
-\IndexEntry{14}{Accelerator / DPU / SmartNIC confidential offload}{zhu2020hetee / dhar2024cloudscale / wang2026cage}
-\IndexEntry{15}{SmartNIC / trusted NIC / secure storage data path}{zhou2024snic / giantsidi2025tnic / chrapek2026hazel}
+\IndexEntry{09}{RISC-V CoVE / AP-TEE confidential VM}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{10}{RISC-V CoVE-IO / TEE-I/O}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{11}{Memory encryption / integrity / replay protection}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{12}{Memory / I/O fabrics: CXL、PCIe IDE、RDMA}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{13}{Confidential I/O protocol、trusted device interface、network endpoint}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{14}{Accelerator / DPU / SmartNIC confidential offload}{基础入口 / 代表改进 / 当前边界}
+\IndexEntry{15}{SmartNIC / trusted NIC / secure storage data path}{基础入口 / 代表改进 / 当前边界}
   \end{column}
 \end{columns}
 \end{frame}

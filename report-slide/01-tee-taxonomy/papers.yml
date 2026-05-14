@@ -11,11 +11,11 @@ primary:
   evidence_type: E2 peer-reviewed survey/SoK
   maturity: peer-reviewed survey/SoK
   pdf_status: local_pdf_verified
-  source_url: https://dl.acm.org/doi/10.1145/3634737.3637642
+  source_url: https://doi.org/10.1145/3634737.3644993
   evidence: E2 / Peer-reviewed taxonomy anchor
   source_status: local_pdf_verified
   reference: reference/trusted-execution-environments/sok/understanding-design-choices-pitfalls-trusted-execution-environments/paper.pdf
-  title: TEE design choices and pitfalls taxonomy
+  title: "SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments"
   auxiliary:
   - schneider2022soktee
   slides:
@@ -83,7 +83,7 @@ primary:
   evidence: E2 survey / Background substrate
   source_status: local_pdf_verified
   reference: reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md
-  title: RISC-V secure enclave 与 TEE 谱系 survey
+  title: "A Survey of RISC-V Secure Enclaves and Trusted Execution Environments"
   auxiliary: []
   slides:
     summary:
@@ -146,7 +146,7 @@ primary:
   evidence: E2 / Background substrate
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf
-  title: Accelerator TEE 设计空间
+  title: "SoK: Analysis of Accelerator TEE Designs"
   auxiliary: []
   slides:
     summary:

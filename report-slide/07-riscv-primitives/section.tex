@@ -1,296 +1,790 @@
 \section{RISC-V 基础安全 primitives}
 
-\begin{frame}[t]{RISC-V 基础安全 primitives：方向开场}
-\DeckKicker{07-riscv-primitives}
-\ClaimLine{把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。}
+\begin{frame}[t,shrink=6]{RISC-V 基础安全 primitives：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} RISC-V 基础安全 primitives 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`riscv\_iopmp\_2026` 与 `manoni2026cva6cfi` 作为辅助材料，不计入三篇主讲。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / spec}{RISC-V privileged architecture}{E0 / Foundational standard substrate}
-\PrimaryCard{Primary 2 / spec}{RISC-V IOMMU}{E0 / Spec-standard SOTA}
-\PrimaryCard{Primary 3 / spec}{RISC-V Advanced Interrupt Architecture}{E0 / Spec-standard SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。
+  \item 固定三篇主讲材料；`riscv\_iopmp\_2026` 与 `manoni2026cva6cfi` 作为辅助材料，不计入三篇主讲。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item riscv\_privileged: spec；E0；local\_pdf\_verified
-  \item riscv\_iommu\_2023: spec；E0；local\_pdf\_verified
-  \item riscv\_aia\_2023: spec；E0；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+RISC-V privileged architecture & 开创/基础入口 & E0 / 基础证据 standard substrate \\
+RISC-V IOMMU & 代表性改进 & E0 / Spec-standard SOTA \\
+RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{RISC-V privileged architecture}
-{riscv\_privileged}
-{E0 / Foundational standard substrate}
-{local\_pdf\_verified}
-{定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础}
-{\begin{itemize}
-  \item 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：spec
-  \item 证据：E0 / Foundational standard substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{RISC-V privileged architecture}
-{riscv\_privileged}
-{E0 / Foundational standard substrate}
-{local\_pdf\_verified}
-{RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离。}
-{\begin{itemize}
-  \item RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离语义
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V privileged architecture}
-{riscv\_privileged}
-{E0 / Foundational standard substrate}
-{local\_pdf\_verified}
-{通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate}
-{\begin{itemize}
-  \item 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item M/S/U and virtualization privilege modes
-  \item PMP/ePMP/Smepmp memory protection substrate
-  \item Trap, translation and supervisor/guest isolation vocabulary
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V privileged architecture}
-{riscv\_privileged}
-{E0 / Foundational standard substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 只提供架构语义，不证明任一 TEE 或 confidential VM 实现
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V privileged architecture}
-{riscv\_privileged}
-{E0 / Foundational standard substrate}
-{local\_pdf\_verified}
-{所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座}
-{所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。}
-{不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。}
-{商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。}
-
-\PaperSlide
-{内容摘要}
-{RISC-V IOMMU}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限}
-{\begin{itemize}
-  \item 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V IOMMU}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{DMA 和总线 master 可绕过 CPU-side PMP/页表}
-{\begin{itemize}
-  \item DMA 和总线 master 可绕过 CPU-side PMP/页表
-  \item TEE 或 CoVE-IO 需要 I/O 侧地址转换和权限控制
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V IOMMU}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{IOMMU 把设备发起的访问纳入可配置 translation/protection 边界}
-{\begin{itemize}
-  \item IOMMU 把设备发起的访问纳入可配置 translation/protection 边界
-  \item `riscv\_iopmp\_2026` 作为 requester/memory-domain filtering 的 draft 辅助材料
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Device address translation and protection
-  \item I/O page-table and permission semantics
-  \item CoVE-IO substrate for DMA isolation discussions
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V IOMMU}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item ratified-library spec 只能支撑公开架构语义，不证明具体平台安全或性能
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V IOMMU}
-{riscv\_iommu\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate}
-{是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。}
-{IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。}
-{对服务器和加速器直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。}
-
-\PaperSlide
-{内容摘要}
-{RISC-V Advanced Interrupt Architecture}
-{riscv\_aia\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 con。}
-{\begin{itemize}
-  \item 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RISC-V Advanced Interrupt Architecture}
-{riscv\_aia\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery}
-{\begin{itemize}
-  \item Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery
-  \item runtime CFI 则是独立的控制流防护 substrate
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RISC-V Advanced Interrupt Architecture}
-{riscv\_aia\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{AIA 规范化 interrupt controller 与 MSI/virtual interrupt}
-{\begin{itemize}
-  \item AIA 规范化 interrupt controller 与 MSI/virtual interrupt
-  \item `manoni2026cva6cfi` 作为 RISC-V CFI draft implementation auxiliary
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Advanced interrupt controller architecture
-  \item MSI and virtual interrupt semantics
-  \item Trusted interrupt-delivery substrate for confidential I/O
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RISC-V Advanced Interrupt Architecture}
-{riscv\_aia\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 辅助 CFI preprint 的实现数字不作为 AIA 或 TEE 隔离证据
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RISC-V Advanced Interrupt Architecture}
-{riscv\_aia\_2023}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇}
-{为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。}
-{不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。}
-{对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。}
-
-\begin{frame}[t]{RISC-V 基础安全 primitives：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{RISC-V privileged architecture：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item RISC-V privileged architecture
-  \item RISC-V IOMMU
-  \item RISC-V Advanced Interrupt Architecture
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础
+  \item RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
-  \item 是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
-  \item 不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
-  \item IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
-  \item 对服务器和加速器直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
-  \item 对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / 基础证据 standard substrate \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V privileged architecture：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离语义
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V 基础安全 primitives \\
+传统瓶颈 & 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。 \\
+本文入口 & RISC-V privileged architecture \\
+证据限制 & E0 / 基础证据 standard substrate \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V privileged architecture：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. M/S/U and virtualization privilege modes
+  \item 02. PMP/ePMP/Smepmp memory protection substrate
+  \item 03. Trap, translation and supervisor/guest isolation vocabulary
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V privileged architecture：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V privileged architecture 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for RISC-V TEEs.
+  \item 证据等级：E0 / Foundational standard substrate；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RISC-V privileged architecture & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / 基础证据 standard substrate \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V privileged architecture：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：RISC-V privileged architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。
+  \item 局限性：不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。
+  \item 商业化潜力：商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。 \\
+主要局限 & 不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。 \\
+商业落地 & 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限
+  \item RISC-V IOMMU specification is the current standard substrate for DMA isolation and CoVE-IO.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / Spec-standard SOTA \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} DMA 和总线 master 可绕过 CPU-side PMP/页表\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item DMA 和总线 master 可绕过 CPU-side PMP/页表
+  \item TEE 或 CoVE-IO 需要 I/O 侧地址转换和权限控制
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V 基础安全 primitives \\
+传统瓶颈 & 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。 \\
+本文入口 & RISC-V IOMMU \\
+证据限制 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} IOMMU 把设备发起的访问纳入可配置 translation/protection 边界\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item IOMMU 把设备发起的访问纳入可配置 translation/protection 边界
+  \item `riscv\_iopmp\_2026` 作为 requester/memory-domain filtering 的 draft 辅助材料
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Device address translation and protection
+  \item 02. I/O page-table and permission semantics
+  \item 03. CoVE-IO substrate for DMA isolation discussions
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V IOMMU 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：RISC-V IOMMU specification is the current standard substrate for DMA isolation and Co。
+  \item 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RISC-V IOMMU & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / Spec-standard SOTA \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V IOMMU：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：RISC-V IOMMU 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。
+  \item 局限性：IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。
+  \item 商业化潜力：对服务器和异构设备直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 是 RISC-V confidential I/O 和 DMA 隔离讨论的标准 substrate。 \\
+主要局限 & IOMMU 自身不是 TEE，也不覆盖设备身份、attestation 或 interrupt ownership。 \\
+商业落地 & 对服务器和异构设备直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。 \\
+讲稿定位 & 代表性改进; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 con。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准。
+  \item RISC-V AIA specification is the current interrupt virtualization and ownership substrate.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / Spec-standard SOTA \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery
+  \item runtime CFI 则是独立的控制流防护 substrate
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V 基础安全 primitives \\
+传统瓶颈 & 把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。 \\
+本文入口 & RISC-V Advanced Interrupt Architecture \\
+证据限制 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} AIA 规范化 interrupt controller 与 MSI/virtual interrupt\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item AIA 规范化 interrupt controller 与 MSI/virtual interrupt
+  \item `manoni2026cva6cfi` 作为 RISC-V CFI draft implementation auxiliary
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Advanced interrupt controller architecture
+  \item 02. MSI and virtual interrupt semantics
+  \item 03. Trusted interrupt-delivery substrate for confidential I/O
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V Advanced Interrupt Architecture 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：RISC-V AIA specification is the current interrupt virtualization and ownership substr。
+  \item 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RISC-V Advanced Interrupt Architecture & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / Spec-standard SOTA \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：RISC-V Advanced Interrupt Architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。
+  \item 局限性：不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。
+  \item 商业化潜力：对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 为 trusted MSI、interrupt ownership 和虚拟化中断路径提供标准词汇。 \\
+主要局限 & 不定义完整 confidential I/O protocol，也不证明实现侧中断隔离正确。 \\
+商业落地 & 对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V 基础安全 primitives：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} RISC-V 基础安全 primitives 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RISC-V privileged architecture：开创/基础入口，E0 / 基础证据 standard substrate。
+  \item RISC-V IOMMU：代表性改进，E0 / Spec-standard SOTA。
+  \item RISC-V Advanced Interrupt Architecture：当前 SOTA/补充边界，E0 / Spec-standard SOTA。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+RISC-V privileged architecture & 开创/基础入口 & RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for。 \\
+RISC-V IOMMU & 代表性改进 & RISC-V IOMMU specification is the current standard substrate for DMA isol。 \\
+RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & RISC-V AIA specification is the current interrupt virtualization and owne。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

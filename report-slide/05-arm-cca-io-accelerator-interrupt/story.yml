@@ -1,0 +1,465 @@
+direction: Arm CCA I/O、DMA、accelerator、interrupt
+story_version: 1
+slides:
+- slide_id: d05-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: Arm CCA I/O、DMA、accelerator、interrupt 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+  - 固定三篇主讲材料；ACAI 和 Devlore 均保持 draft/not-ratified 状态，`sok-tee` 只作为 accelerator TEE taxonomy。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - 'ACAI: CCA accelerator execution'
+        - 开创/基础入口
+        - E3 / 草案/未批准规范
+      - - 'Devlore: device interrupt protection'
+        - 代表性改进
+        - E3 / 草案/未批准规范
+      - - Accelerator TEE SoK for CCA I/O
+        - 当前 SOTA/补充边界
+        - E2 / Background substrate
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d05-primary-1-summary
+  paper_key: acai2023
+  slide_type: summary
+  claim: 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认。
+  narrative:
+  - 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认继承机密性
+  - ACAI is the early design point for extending Arm CCA toward accelerator execution paths.
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `acai2023` summary slide metadata.
+  - 'reference/arm-confidential-computing/acai-protecting-accelerator-execution-with-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2305.15986; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E3 / 草案/未批准规范
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-1-background
+  paper_key: acai2023
+  slide_type: background
+  claim: Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器
+  narrative:
+  - Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器
+  - 如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `acai2023` background slide metadata.
+  - 'reference/arm-confidential-computing/acai-protecting-accelerator-execution-with-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2305.15986; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Arm CCA I/O、DMA、accelerator、interrupt
+      - - 传统瓶颈
+        - 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+      - - 本文入口
+        - 'ACAI: CCA accelerator execution'
+      - - 证据限制
+        - E3 / 草案/未批准规范
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-1-solution
+  paper_key: acai2023
+  slide_type: solution
+  claim: 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation。
+  narrative:
+  - 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `acai2023` solution slide metadata.
+  - 'reference/arm-confidential-computing/acai-protecting-accelerator-execution-with-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2305.15986; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - CCA-aware accelerator execution path
+      - Protected DMA and command/data movement
+      - Driver/runtime TCB boundary for offload
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-1-experiments
+  paper_key: acai2023
+  slide_type: experiments
+  claim: arXiv 系统论文提供原型/设计评估
+  narrative:
+  - arXiv 系统论文提供原型/设计评估
+  - draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果，不写成标准或生产事实
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `acai2023` experiments slide metadata.
+  - 'reference/arm-confidential-computing/acai-protecting-accelerator-execution-with-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2305.15986; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'ACAI: CCA accelerator execution'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E3 / 草案/未批准规范
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-1-evaluation
+  paper_key: acai2023
+  slide_type: evaluation
+  claim: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点
+  narrative:
+  - 设计优势：把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
+  - 局限性：预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
+  - 商业化潜力：可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
+  - 证据边界：E3 / Draft-not-ratified；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `acai2023` evaluation slide metadata.
+  - 'reference/arm-confidential-computing/acai-protecting-accelerator-execution-with-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2305.15986; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
+      - - 主要局限
+        - 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
+      - - 商业落地
+        - 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E3
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-2-summary
+  paper_key: bertschi2026devlore
+  slide_type: summary
+  claim: 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机。
+  narrative:
+  - 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机密计算边界
+  - Devlore is a recent draft on device interrupt protection for confidential VMs and CCA-like。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `bertschi2026devlore` summary slide metadata.
+  - 'reference/arm-confidential-computing/devlore-device-interrupt-protection-for-confidential-vms/paper.pdf; source_url: https://arxiv.org/abs/2408.05835; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E3 / 草案/未批准规范
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-2-background
+  paper_key: bertschi2026devlore
+  slide_type: background
+  claim: 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidentia。
+  narrative:
+  - 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `bertschi2026devlore` background slide metadata.
+  - 'reference/arm-confidential-computing/devlore-device-interrupt-protection-for-confidential-vms/paper.pdf; source_url: https://arxiv.org/abs/2408.05835; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Arm CCA I/O、DMA、accelerator、interrupt
+      - - 传统瓶颈
+        - 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+      - - 本文入口
+        - 'Devlore: device interrupt protection'
+      - - 证据限制
+        - E3 / 草案/未批准规范
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-2-solution
+  paper_key: bertschi2026devlore
+  slide_type: solution
+  claim: 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只。
+  narrative:
+  - 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只是外围控制面问题
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `bertschi2026devlore` solution slide metadata.
+  - 'reference/arm-confidential-computing/devlore-device-interrupt-protection-for-confidential-vms/paper.pdf; source_url: https://arxiv.org/abs/2408.05835; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Confidential-device interrupt ownership
+      - Interrupt delivery mediation
+      - VM/device lifecycle coupling
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-2-experiments
+  paper_key: bertschi2026devlore
+  slide_type: experiments
+  claim: 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据
+  narrative:
+  - 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据
+  - 本报告 只写机制方向和证据状态，不写未复核数字或成熟部署结论
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `bertschi2026devlore` experiments slide metadata.
+  - 'reference/arm-confidential-computing/devlore-device-interrupt-protection-for-confidential-vms/paper.pdf; source_url: https://arxiv.org/abs/2408.05835; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'Devlore: device interrupt protection'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E3 / 草案/未批准规范
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-2-evaluation
+  paper_key: bertschi2026devlore
+  slide_type: evaluation
+  claim: 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA
+  narrative:
+  - 设计优势：明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
+  - 局限性：Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
+  - 商业化潜力：对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
+  - 证据边界：E3 / Draft-not-ratified；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `bertschi2026devlore` evaluation slide metadata.
+  - 'reference/arm-confidential-computing/devlore-device-interrupt-protection-for-confidential-vms/paper.pdf; source_url: https://arxiv.org/abs/2408.05835; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。
+      - - 主要局限
+        - Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。
+      - - 商业落地
+        - 对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E3
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-3-summary
+  paper_key: sok-tee
+  slide_type: summary
+  claim: 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、r。
+  narrative:
+  - 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestati。
+  - Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runtime, a。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `sok-tee` summary slide metadata.
+  - 'reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf; source_url: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - SoK/综述
+      - - 证据等级
+        - E2 / Background substrate
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-3-background
+  paper_key: sok-tee
+  slide_type: background
+  claim: 设备 TEE 机制比 CPU TEE 更分散
+  narrative:
+  - 设备 TEE 机制比 CPU TEE 更分散
+  - 不同 accelerator 的队列、固件、驱动和本地 root 差异很大
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `sok-tee` background slide metadata.
+  - 'reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf; source_url: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Arm CCA I/O、DMA、accelerator、interrupt
+      - - 传统瓶颈
+        - 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+      - - 本文入口
+        - Accelerator TEE SoK for CCA I/O
+      - - 证据限制
+        - E2 / Background substrate
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-3-solution
+  paper_key: sok-tee
+  slide_type: solution
+  claim: 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的。
+  narrative:
+  - 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的背景基底
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `sok-tee` solution slide metadata.
+  - 'reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf; source_url: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Accelerator/device TEE design taxonomy
+      - Device identity and attestation vocabulary
+      - Memory, queue, runtime and driver TCB dimensions
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-3-experiments
+  paper_key: sok-tee
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；Accelerator TEE SoK for CCA I/O 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runt。
+  - 证据等级：E2 / Background substrate；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `sok-tee` experiments slide metadata.
+  - 'reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf; source_url: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - Accelerator TEE SoK for CCA I/O
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E2 / Background substrate
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-primary-3-evaluation
+  paper_key: sok-tee
+  slide_type: evaluation
+  claim: 评价：Accelerator TEE SoK for CCA I/O 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
+  - 局限性：不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。
+  - 商业化潜力：有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml `sok-tee` evaluation slide metadata.
+  - 'reference/accelerator-tees/sok/analysis-accelerator-tee-designs/paper.pdf; source_url: https://www.ndss-symposium.org/wp-content/uploads/2026-f1424-paper.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。
+      - - 主要局限
+        - 不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。
+      - - 商业落地
+        - 有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E2
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d05-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: Arm CCA I/O、DMA、accelerator、interrupt 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - 'ACAI: CCA accelerator execution：开创/基础入口，E3 / 草案/未批准规范。'
+  - 'Devlore: device interrupt protection：代表性改进，E3 / 草案/未批准规范。'
+  - Accelerator TEE SoK for CCA I/O：当前 SOTA/补充边界，E2 / Background substrate。
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/05-arm-cca-io-accelerator-interrupt/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - 'ACAI: CCA accelerator execution'
+        - 开创/基础入口
+        - ACAI is the early design point for extending Arm CCA toward accelerator e。
+      - - 'Devlore: device interrupt protection'
+        - 代表性改进
+        - Devlore is a recent draft on device interrupt protection for confidential。
+      - - Accelerator TEE SoK for CCA I/O
+        - 当前 SOTA/补充边界
+        - Accelerator TEE SoK provides current taxonomy for device identity, memory。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

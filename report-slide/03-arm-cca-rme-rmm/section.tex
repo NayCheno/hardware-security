@@ -1,292 +1,784 @@
 \section{Arm CCA / RME / RMM 基础架构}
 
-\begin{frame}[t]{Arm CCA / RME / RMM 基础架构：方向开场}
-\DeckKicker{03-arm-cca-rme-rmm}
-\ClaimLine{围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。}
+\begin{frame}[t,shrink=6]{Arm CCA / RME / RMM 基础架构：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Arm CCA / RME / RMM 基础架构 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`wu2024rmm` 作为 RMM verification auxiliary，不计入三篇主讲。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{Arm Confidential Computing Architecture}{E1 / Foundational}
-\PrimaryCard{Primary 2 / spec}{Arm CCA 架构规范}{E0 / Spec-standard SOTA}
-\PrimaryCard{Primary 3 / spec}{Realm Management Monitor 规范}{E0 / Spec-standard SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。
+  \item 固定三篇主讲材料；`wu2024rmm` 作为 RMM verification auxiliary，不计入三篇主讲。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item li2022cca: system；E1；local\_pdf\_verified
-  \item arm\_cca\_spec: spec；E0；source\_verified\_pdf\_unavailable
-  \item arm\_rmm\_spec: spec；E0；source\_verified\_pdf\_unavailable
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+Arm Confidential Computing Architecture & 开创/基础入口 & E1 / 基础证据 \\
+Arm CCA 架构规范 & 代表性改进 & E0 / Spec-standard SOTA \\
+Realm Management Monitor 规范 & 当前 SOTA/补充边界 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{Arm Confidential Computing Architecture}
-{li2022cca}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{提出并验证 Arm CCA 的核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle}
-{\begin{itemize}
-  \item 提出并验证 Arm CCA 的核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Foundational
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{Arm Confidential Computing Architecture}
-{li2022cca}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{云场景下 host 仍需管理资源，但不应看到 tenant workload 数据}
-{\begin{itemize}
-  \item 云场景下 host 仍需管理资源，但不应看到 tenant workload 数据
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Arm Confidential Computing Architecture}
-{li2022cca}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm}
-{\begin{itemize}
-  \item 把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Realm world and host/tenant separation
-  \item Granule ownership and GPT/GPC
-  \item RMM-mediated lifecycle and attestation path
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Arm Confidential Computing Architecture}
-{li2022cca}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{OSDI 系统论文提供设计验证和原型评估}
-{\begin{itemize}
-  \item OSDI 系统论文提供设计验证和原型评估
-  \item 本阶段只记录可核对的证据类型，定量细节在 slide rewrite 中回引本地 PDF
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Arm Confidential Computing Architecture}
-{li2022cca}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清}
-{Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清。}
-{论文原型不等同于后续完整规范或量产实现。}
-{商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。}
-
-\PaperSlide
-{内容摘要}
-{Arm CCA 架构规范}
-{arm\_cca\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义}
-{\begin{itemize}
-  \item 给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：source\_verified\_pdf\_unavailable
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Arm CCA 架构规范}
-{arm\_cca\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{研究论文需要落到稳定的硬件/固件 ABI 和平台行为}
-{\begin{itemize}
-  \item 研究论文需要落到稳定的硬件/固件 ABI 和平台行为
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Arm CCA 架构规范}
-{arm\_cca\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{规范化 CCA/RME 相关对象、状态、接口和安全语义}
-{\begin{itemize}
-  \item 规范化 CCA/RME 相关对象、状态、接口和安全语义
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Realm security state and PAS ownership
-  \item Memory delegation, RIPAS and lifecycle vocabulary
-  \item Attestation and platform interface semantics
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Arm CCA 架构规范}
-{arm\_cca\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 只写公开规范语义，不写不可见或未下载 PDF 的细节
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：source\_verified\_pdf\_unavailable
-\end{itemize}}
-
-\PaperEvalSlide
-{Arm CCA 架构规范}
-{arm\_cca\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{写 CCA 机制和状态语义时最权威}
-{写 CCA 机制和状态语义时最权威。}
-{不是性能、可用性或具体实现正确性的证据。}
-{商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。}
-
-\PaperSlide
-{内容摘要}
-{Realm Management Monitor 规范}
-{arm\_rmm\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle}
-{\begin{itemize}
-  \item RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：source\_verified\_pdf\_unavailable
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Realm Management Monitor 规范}
-{arm\_rmm\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{RMM 位于 CCA TCB 核心，状态机或内存管理错误会破坏 Realm 安全}
-{\begin{itemize}
-  \item RMM 位于 CCA TCB 核心，状态机或内存管理错误会破坏 Realm 安全
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Realm Management Monitor 规范}
-{arm\_rmm\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestati。}
-{\begin{itemize}
-  \item 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item RMI/RSI interface boundary
-  \item Realm and REC lifecycle
-  \item Granule state transition and measurement hooks
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Realm Management Monitor 规范}
-{arm\_rmm\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 只写公开 RMM/RMI/RSI lifecycle 概念
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：source\_verified\_pdf\_unavailable
-\end{itemize}}
-
-\PaperEvalSlide
-{Realm Management Monitor 规范}
-{arm\_rmm\_spec}
-{E0 / Spec-standard SOTA}
-{source\_verified\_pdf\_unavailable}
-{能把 RMM 作为 CCA TCB 核心讲清}
-{能把 RMM 作为 CCA TCB 核心讲清。}
-{不证明任一 RMM 实现正确，且本地 PDF 不可用时不能写不可见细节。}
-{落地依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 能否检查关键状态。}
-
-\begin{frame}[t]{Arm CCA / RME / RMM 基础架构：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{Arm Confidential Computing Architecture：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 提出并验证 Arm CCA 的核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item Arm Confidential Computing Architecture
-  \item Arm CCA 架构规范
-  \item Realm Management Monitor 规范
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 提出并验证 Arm CCA 的核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle
+  \item OSDI 2022 paper is the foundational peer-reviewed system treatment of Arm CCA, RME, and RMM.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清。
-  \item 写 CCA 机制和状态语义时最权威。
-  \item 论文原型不等同于后续完整规范或量产实现。
-  \item 不是性能、可用性或具体实现正确性的证据。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。
-  \item 商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。
-  \item 落地依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 能否检查关键状态。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / 基础证据 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm Confidential Computing Architecture：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 云场景下 host 仍需管理资源，但不应看到 tenant workload 数据\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 云场景下 host 仍需管理资源，但不应看到 tenant workload 数据
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Arm CCA / RME / RMM 基础架构 \\
+传统瓶颈 & 围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。 \\
+本文入口 & Arm Confidential Computing Architecture \\
+证据限制 & E1 / 基础证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm Confidential Computing Architecture：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把资源管理和数据可见性分离，用硬件 granule ownership 和 RMM lifecycle 管理 Realm
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Realm world and host/tenant separation
+  \item 02. Granule ownership and GPT/GPC
+  \item 03. RMM-mediated lifecycle and attestation path
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm Confidential Computing Architecture：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} OSDI 系统论文提供设计验证和原型评估\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item OSDI 系统论文提供设计验证和原型评估
+  \item 本阶段只记录可核对的证据类型，定量细节在 页面重写 中回引本地 PDF
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Arm Confidential Computing Architecture & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / 基础证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm Confidential Computing Architecture：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清。
+  \item 局限性：论文原型不等同于后续完整规范或量产实现。
+  \item 商业化潜力：商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。
+  \item 证据边界：E1 / Foundational；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & Arm CCA 主线入口，能把 Realm/RME/RMM 的安全边界讲清。 \\
+主要局限 & 论文原型不等同于后续完整规范或量产实现。 \\
+商业落地 & 商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA 架构规范：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义
+  \item First-party Arm CCA specification defines the current Realm model and standard evidence bas。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / Spec-standard SOTA \\
+来源状态 & 公开来源已核验，PDF 暂缺 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA 架构规范：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 研究论文需要落到稳定的硬件/固件 ABI 和平台行为\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 研究论文需要落到稳定的硬件/固件 ABI 和平台行为
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Arm CCA / RME / RMM 基础架构 \\
+传统瓶颈 & 围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。 \\
+本文入口 & Arm CCA 架构规范 \\
+证据限制 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA 架构规范：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 规范化 CCA/RME 相关对象、状态、接口和安全语义\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 规范化 CCA/RME 相关对象、状态、接口和安全语义
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Realm security state and PAS ownership
+  \item 02. Memory delegation, RIPAS and lifecycle vocabulary
+  \item 03. Attestation and platform interface semantics
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA 架构规范：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；Arm CCA 架构规范 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：First-party Arm CCA specification defines the current Realm model and standard eviden。
+  \item 证据等级：E0 / Spec-standard SOTA；来源状态：公开来源已核验，PDF 暂缺。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Arm CCA 架构规范 & 公开来源已核验，PDF 暂缺 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / Spec-standard SOTA \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA 架构规范：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 评价：Arm CCA 架构规范 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：写 CCA 机制和状态语义时最权威。
+  \item 局限性：不是性能、可用性或具体实现正确性的证据。
+  \item 商业化潜力：商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 写 CCA 机制和状态语义时最权威。 \\
+主要局限 & 不是性能、可用性或具体实现正确性的证据。 \\
+商业落地 & 商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。 \\
+讲稿定位 & 代表性改进; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Realm Management Monitor 规范：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle
+  \item First-party RMM specification defines Realm management and lifecycle semantics for CCA syst。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / Spec-standard SOTA \\
+来源状态 & 公开来源已核验，PDF 暂缺 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Realm Management Monitor 规范：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} RMM 位于 CCA TCB 核心，状态机或内存管理错误会破坏 Realm 安全\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RMM 位于 CCA TCB 核心，状态机或内存管理错误会破坏 Realm 安全
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Arm CCA / RME / RMM 基础架构 \\
+传统瓶颈 & 围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线。 \\
+本文入口 & Realm Management Monitor 规范 \\
+证据限制 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Realm Management Monitor 规范：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestati。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. RMI/RSI interface boundary
+  \item 02. Realm and REC lifecycle
+  \item 03. Granule state transition and measurement hooks
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Realm Management Monitor 规范：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；Realm Management Monitor 规范 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：First-party RMM specification defines Realm management and lifecycle semantics for CC。
+  \item 证据等级：E0 / Spec-standard SOTA；来源状态：公开来源已核验，PDF 暂缺。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Realm Management Monitor 规范 & 公开来源已核验，PDF 暂缺 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / Spec-standard SOTA \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Realm Management Monitor 规范：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：公开来源已核验，PDF 暂缺}
+{\large\bfseries\color{Ink} 评价：Realm Management Monitor 规范 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：能把 RMM 作为 CCA TCB 核心讲清。
+  \item 局限性：不证明任一 RMM 实现正确，且本地 PDF 不可用时不能写不可见细节。
+  \item 商业化潜力：落地依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 能否检查关键状态。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 能把 RMM 作为 CCA TCB 核心讲清。 \\
+主要局限 & 不证明任一 RMM 实现正确，且本地 PDF 不可用时不能写不可见细节。 \\
+商业落地 & 落地依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 能否检查关键状态。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm CCA / RME / RMM 基础架构：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Arm CCA / RME / RMM 基础架构 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Arm Confidential Computing Architecture：开创/基础入口，E1 / 基础证据。
+  \item Arm CCA 架构规范：代表性改进，E0 / Spec-standard SOTA。
+  \item Realm Management Monitor 规范：当前 SOTA/补充边界，E0 / Spec-standard SOTA。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+Arm Confidential Computing Architecture & 开创/基础入口 & OSDI 2022 paper is the foundational peer-reviewed system treatment of Arm。 \\
+Arm CCA 架构规范 & 代表性改进 & First-party Arm CCA specification defines the current Realm model and sta。 \\
+Realm Management Monitor 规范 & 当前 SOTA/补充边界 & First-party RMM specification defines Realm management and lifecycle sema。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

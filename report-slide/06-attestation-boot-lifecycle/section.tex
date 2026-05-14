@@ -1,293 +1,783 @@
 \section{Attestation、boot、lifecycle}
 
-\begin{frame}[t]{Attestation、boot、lifecycle：方向开场}
-\DeckKicker{06-attestation-boot-lifecycle}
-\ClaimLine{区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。}
+\begin{frame}[t,shrink=6]{Attestation、boot、lifecycle：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Attestation、boot、lifecycle 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；`rats\_rfc` 主讲 attestation architecture，`eat\_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{SWATT: 软件 attestation 早期代表}{E1 / Foundational}
-\PrimaryCard{Primary 2 / spec}{RATS 架构}{E0 / Spec-standard SOTA}
-\PrimaryCard{Primary 3 / system}{VRASED verified RA co-design}{E1 / Peer-reviewed SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。
+  \item 固定三篇主讲材料；`rats\_rfc` 主讲 attestation architecture，`eat\_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item seshadri2004swatt: system；E1；local\_pdf\_verified
-  \item rats\_rfc: spec；E0；local\_pdf\_verified
-  \item nunes2019vrased: system；E1；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+SWATT: 软件 attestation 早期代表 & 开创/基础入口 & E1 / 基础证据 \\
+RATS 架构 & 代表性改进 & E0 / Spec-standard SOTA \\
+VRASED verified RA co-design & 当前 SOTA/补充边界 & E1 / 同行评审改进证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容}
-{\begin{itemize}
-  \item 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Foundational
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态}
-{\begin{itemize}
-  \item 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum}
-{\begin{itemize}
-  \item 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Software-only remote attestation
-  \item Timing-sensitive memory checksum
-  \item Verifier/prover challenge-response model
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{论文在嵌入式节点场景评估}
-{\begin{itemize}
-  \item 论文在嵌入式节点场景评估
-  \item 安全性强依赖 timing、硬件和网络假设
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{SWATT: 软件 attestation 早期代表}
-{seshadri2004swatt}
-{E1 / Foundational}
-{local\_pdf\_verified}
-{历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因}
-{历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。}
-{面对现代强对手和复杂 SoC/TEE 时适用性有限。}
-{现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。}
-
-\PaperSlide
-{内容摘要}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{定义 attester、verifier、relying party、evidence、endorsements、reference values。}
-{\begin{itemize}
-  \item 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：spec
-  \item 证据：E0 / Spec-standard SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。}
-{\begin{itemize}
-  \item 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{RATS 规范化 evidence 生成、传递、评估角色与拓扑}
-{\begin{itemize}
-  \item RATS 规范化 evidence 生成、传递、评估角色与拓扑
-  \item `eat\_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Attester/verifier/relying-party roles
-  \item Evidence, endorsements, reference values and appraisal policy
-  \item Attestation results and freshness vocabulary
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 不能替代平台机制、token 格式实现或 CCA/CoVE 证据语义
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E0 official standard/specification
-  \item 成熟度：official standard/specification
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{RATS 架构}
-{rats\_rfc}
-{E0 / Spec-standard SOTA}
-{local\_pdf\_verified}
-{是跨平台 attestation 术语和 verifier policy 的权威基线}
-{是跨平台 attestation 术语和 verifier policy 的权威基线。}
-{不证明任一平台测量链充分，也不定义完整 token claim encoding。}
-{标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。}
-
-\PaperSlide
-{内容摘要}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。}
-{\begin{itemize}
-  \item 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明}
-{\begin{itemize}
-  \item RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性}
-{\begin{itemize}
-  \item 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Hardware/software RA root co-design
-  \item Formal verification of security sub-properties
-  \item MSP430/Basys3 FPGA implementation
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{USENIX Security 2019 peer-reviewed paper}
-{\begin{itemize}
-  \item USENIX Security 2019 peer-reviewed paper
-  \item reports prototype and verification evidence for simple embedded devices.
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{VRASED verified RA co-design}
-{nunes2019vrased}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{证据强，结合形式化验证、硬件/软件 co-design 和真实原型}
-{证据强，结合形式化验证、硬件/软件 co-design 和真实原型。}
-{目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。}
-{适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。}
-
-\begin{frame}[t]{Attestation、boot、lifecycle：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item SWATT: 软件 attestation 早期代表
-  \item RATS 架构
-  \item VRASED verified RA co-design
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 提出软件 attestation 的早期代表方法，用 timing-sensitive checksum 让远程 verifier 检查设备内存内容
+  \item SWATT is the classic starting point for remote software attestation problem framing.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
-  \item 是跨平台 attestation 术语和 verifier policy 的权威基线。
-  \item 面对现代强对手和复杂 SoC/TEE 时适用性有限。
-  \item 不证明任一平台测量链充分，也不定义完整 token claim encoding。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
-  \item 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
-  \item 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / 基础证据 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 低端嵌入式设备缺少硬件 root of trust，但仍需要远程确认代码完整性和启动状态
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Attestation、boot、lifecycle \\
+传统瓶颈 & 区分 secure boot、launch attestation、runtime/control-flow evidence、evide。 \\
+本文入口 & SWATT: 软件 attestation 早期代表 \\
+证据限制 & E1 / 基础证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 用严格时间假设约束 prover 计算能力，使篡改设备难以伪造完整内存 checksum
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Software-only remote attestation
+  \item 02. Timing-sensitive memory checksum
+  \item 03. Verifier/prover challenge-response model
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 论文在嵌入式节点场景评估\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 论文在嵌入式节点场景评估
+  \item 安全性强依赖 timing、硬件和网络假设
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & SWATT: 软件 attestation 早期代表 & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / 基础证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SWATT: 软件 attestation 早期代表：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。
+  \item 局限性：面对现代强对手和复杂 SoC/TEE 时适用性有限。
+  \item 商业化潜力：现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
+  \item 证据边界：E1 / Foundational；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。 \\
+主要局限 & 面对现代强对手和复杂 SoC/TEE 时适用性有限。 \\
+商业落地 & 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 定义 attester、verifier、relying party、evidence、endorsements、reference values。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation resul。
+  \item RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & 规范/标准材料 \\
+证据等级 & E0 / Spec-standard SOTA \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Attestation、boot、lifecycle \\
+传统瓶颈 & 区分 secure boot、launch attestation、runtime/control-flow evidence、evide。 \\
+本文入口 & RATS 架构 \\
+证据限制 & E0 / Spec-standard SOTA \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} RATS 规范化 evidence 生成、传递、评估角色与拓扑\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RATS 规范化 evidence 生成、传递、评估角色与拓扑
+  \item `eat\_rfc` 辅助说明实体状态和安全属性 结论s 的 token 编码
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Attester/verifier/relying-party roles
+  \item 02. Evidence, endorsements, reference values and appraisal policy
+  \item 03. Attestation results and freshness vocabulary
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RATS 架构 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.
+  \item 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & RATS 架构 & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E0 / Spec-standard SOTA \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RATS 架构：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：RATS 架构 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：是跨平台 attestation 术语和 verifier policy 的权威基线。
+  \item 局限性：不证明任一平台测量链充分，也不定义完整 token 结论 encoding。
+  \item 商业化潜力：标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 是跨平台 attestation 术语和 verifier policy 的权威基线。 \\
+主要局限 & 不证明任一平台测量链充分，也不定义完整 token 结论 encoding。 \\
+商业落地 & 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。 \\
+讲稿定位 & 代表性改进; 证据强度 E0 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
+  \item VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software re。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / 同行评审改进证据 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RA 安全性依赖硬件隔离、软件 routine 和协议共同成立，但早期方案缺少实现级机器可检查证明
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Attestation、boot、lifecycle \\
+传统瓶颈 & 区分 secure boot、launch attestation、runtime/control-flow evidence、evide。 \\
+本文入口 & VRASED verified RA co-design \\
+证据限制 & E1 / 同行评审改进证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 用少量硬件扩展保护 attestation 代码、密钥和内存访问，并形式化验证整体 RA 安全属性
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Hardware/software RA root co-design
+  \item 02. Formal verification of security sub-properties
+  \item 03. MSP430/Basys3 FPGA implementation
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} USENIX Security 2019 peer-reviewed paper\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item USENIX Security 2019 peer-reviewed paper
+  \item reports prototype and verification evidence for simple embedded devices.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & VRASED verified RA co-design & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / 同行评审改进证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{VRASED verified RA co-design：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 证据强，结合形式化验证、硬件/软件 co-design 和真实原型\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：证据强，结合形式化验证、硬件/软件 co-design 和真实原型。
+  \item 局限性：目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。
+  \item 商业化潜力：适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准化。
+  \item 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 证据强，结合形式化验证、硬件/软件 co-design 和真实原型。 \\
+主要局限 & 目标是 simple embedded devices，不是 cloud CVM、CCA Realm 或 CoVE TVM evidence profile。 \\
+商业落地 & 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Attestation、boot、lifecycle：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Attestation、boot、lifecycle 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item SWATT: 软件 attestation 早期代表：开创/基础入口，E1 / 基础证据。
+  \item RATS 架构：代表性改进，E0 / Spec-standard SOTA。
+  \item VRASED verified RA co-design：当前 SOTA/补充边界，E1 / 同行评审改进证据。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+SWATT: 软件 attestation 早期代表 & 开创/基础入口 & SWATT is the classic starting point for remote software attestation probl。 \\
+RATS 架构 & 代表性改进 & RFC 9334 defines the current RATS architecture for cross-TEE remote attes。 \\
+VRASED verified RA co-design & 当前 SOTA/补充边界 & VRASED is the strongest peer-reviewed verified RA co-design anchor for ha。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

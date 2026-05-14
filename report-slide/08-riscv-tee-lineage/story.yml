@@ -1,0 +1,462 @@
+direction: 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V'
+story_version: 1
+slides:
+- slide_id: d08-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。'
+  narrative:
+  - 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。
+  - 固定三篇主讲材料；不引入辅助材料，直接呈现 RISC-V enclave lineage。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - 'Keystone: 开源 RISC-V TEE 框架'
+        - 开创/基础入口
+        - E1 / 基础证据
+      - - 'Penglai: scalable enclave memory protection'
+        - 代表性改进
+        - E1 / 同行评审改进证据
+      - - 'SPEAR-V: low-overhead RISC-V enclave primitive'
+        - 当前 SOTA/补充边界
+        - E1 / 同行评审改进证据
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d08-primary-1-summary
+  paper_key: lee2020keystone
+  slide_type: summary
+  claim: 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
+  narrative:
+  - 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
+  - EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE framework paper.
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `lee2020keystone` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf; source_url: https://www.shwetashinde.org/publications/keystone_eurosys20.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 基础证据
+      - - 来源状态
+        - 作者公开 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-1-background
+  paper_key: lee2020keystone
+  slide_type: background
+  claim: 商业 TEE 难定制、难验证
+  narrative:
+  - 商业 TEE 难定制、难验证
+  - RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `lee2020keystone` background slide metadata.
+  - 'reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf; source_url: https://www.shwetashinde.org/publications/keystone_eurosys20.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V'
+      - - 传统瓶颈
+        - 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata prim。
+      - - 本文入口
+        - 'Keystone: 开源 RISC-V TEE 框架'
+      - - 证据限制
+        - E1 / 基础证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-1-solution
+  paper_key: lee2020keystone
+  slide_type: solution
+  claim: 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
+  narrative:
+  - 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `lee2020keystone` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf; source_url: https://www.shwetashinde.org/publications/keystone_eurosys20.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - PMP-based enclave isolation
+      - Security monitor and runtime abstraction
+      - Open RISC-V TEE software/hardware co-design
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-1-experiments
+  paper_key: lee2020keystone
+  slide_type: experiments
+  claim: 论文报告 CoreMark/Beebs/RV8 等开销结果
+  narrative:
+  - 论文报告 CoreMark/Beebs/RV8 等开销结果
+  - 具体数字以本地 PDF 为准
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `lee2020keystone` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf; source_url: https://www.shwetashinde.org/publications/keystone_eurosys20.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'Keystone: 开源 RISC-V TEE 框架'
+        - 作者公开 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 基础证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-1-evaluation
+  paper_key: lee2020keystone
+  slide_type: evaluation
+  claim: RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制
+  narrative:
+  - 设计优势：RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
+  - 局限性：EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+  - 商业化潜力：开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
+  - 证据边界：E1 / Foundational；作者公开 PDF 已核验。
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `lee2020keystone` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/keystone-open-framework-architecting-tees/paper.pdf; source_url: https://www.shwetashinde.org/publications/keystone_eurosys20.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
+      - - 主要局限
+        - EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+      - - 商业落地
+        - 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-2-summary
+  paper_key: feng2021penglai
+  slide_type: summary
+  claim: 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量。
+  narrative:
+  - 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
+  - OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS after Keystone.
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `feng2021penglai` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf; source_url: https://www.usenix.org/conference/osdi21/presentation/feng; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 同行评审改进证据
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-2-background
+  paper_key: feng2021penglai
+  slide_type: background
+  claim: 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
+  narrative:
+  - 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `feng2021penglai` background slide metadata.
+  - 'reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf; source_url: https://www.usenix.org/conference/osdi21/presentation/feng; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V'
+      - - 传统瓶颈
+        - 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata prim。
+      - - 本文入口
+        - 'Penglai: scalable enclave memory protection'
+      - - 证据限制
+        - E1 / 同行评审改进证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-2-solution
+  paper_key: feng2021penglai
+  slide_type: solution
+  claim: 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
+  narrative:
+  - 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `feng2021penglai` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf; source_url: https://www.usenix.org/conference/osdi21/presentation/feng; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Scalable enclave memory protection
+      - Metadata management for enclave lifecycle
+      - Serverless/microservice-oriented enclave scaling
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-2-experiments
+  paper_key: feng2021penglai
+  slide_type: experiments
+  claim: OSDI 论文报告可支持大量 enclave 和较大安全内存
+  narrative:
+  - OSDI 论文报告可支持大量 enclave 和较大安全内存
+  - 具体指标以本地 PDF 为准
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `feng2021penglai` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf; source_url: https://www.usenix.org/conference/osdi21/presentation/feng; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'Penglai: scalable enclave memory protection'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 同行评审改进证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-2-evaluation
+  paper_key: feng2021penglai
+  slide_type: evaluation
+  claim: 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈
+  narrative:
+  - 设计优势：系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
+  - 局限性：需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
+  - 商业化潜力：适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
+  - 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `feng2021penglai` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/penglai-scalable-memory-protection/paper.pdf; source_url: https://www.usenix.org/conference/osdi21/presentation/feng; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
+      - - 主要局限
+        - 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
+      - - 商业落地
+        - 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-3-summary
+  paper_key: schrammel2023spearv
+  slide_type: summary
+  claim: 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox。
+  narrative:
+  - 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
+  - SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-attestation focus.
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `schrammel2023spearv` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf; source_url: https://doi.org/10.1145/3579856.3590264; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / 同行评审改进证据
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-3-background
+  paper_key: schrammel2023spearv
+  slide_type: background
+  claim: RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
+  narrative:
+  - RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `schrammel2023spearv` background slide metadata.
+  - 'reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf; source_url: https://doi.org/10.1145/3579856.3590264; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V'
+      - - 传统瓶颈
+        - 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata prim。
+      - - 本文入口
+        - 'SPEAR-V: low-overhead RISC-V enclave primitive'
+      - - 证据限制
+        - E1 / 同行评审改进证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-3-solution
+  paper_key: schrammel2023spearv
+  slide_type: solution
+  claim: 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotec。
+  narrative:
+  - 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `schrammel2023spearv` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf; source_url: https://doi.org/10.1145/3579856.3590264; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Tag/metadata enclave primitive
+      - Bidirectional sandbox and nested isolation
+      - Low-overhead protected/unprotected transitions
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-3-experiments
+  paper_key: schrammel2023spearv
+  slide_type: experiments
+  claim: AsiaCCS 论文报告 protected/unprotected 场景低开销
+  narrative:
+  - AsiaCCS 论文报告 protected/unprotected 场景低开销
+  - 具体数值以本地 PDF 为准
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `schrammel2023spearv` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf; source_url: https://doi.org/10.1145/3579856.3590264; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'SPEAR-V: low-overhead RISC-V enclave primitive'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / 同行评审改进证据
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-primary-3-evaluation
+  paper_key: schrammel2023spearv
+  slide_type: evaluation
+  claim: 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进
+  narrative:
+  - 设计优势：机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
+  - 局限性：Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
+  - 商业化潜力：若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
+  - 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml `schrammel2023spearv` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/spear-v-secure-practical-enclave-architecture-risc-v/paper.pdf; source_url: https://doi.org/10.1145/3579856.3590264; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
+      - - 主要局限
+        - Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
+      - - 商业落地
+        - 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d08-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: 'RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。'
+  narrative:
+  - 'Keystone: 开源 RISC-V TEE 框架：开创/基础入口，E1 / 基础证据。'
+  - 'Penglai: scalable enclave memory protection：代表性改进，E1 / 同行评审改进证据。'
+  - 'SPEAR-V: low-overhead RISC-V enclave primitive：当前 SOTA/补充边界，E1 / 同行评审改进证据。'
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/08-riscv-tee-lineage/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - 'Keystone: 开源 RISC-V TEE 框架'
+        - 开创/基础入口
+        - EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE f。
+      - - 'Penglai: scalable enclave memory protection'
+        - 代表性改进
+        - OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS afte。
+      - - 'SPEAR-V: low-overhead RISC-V enclave primitive'
+        - 当前 SOTA/补充边界
+        - SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-att。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

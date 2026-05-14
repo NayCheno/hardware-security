@@ -1,291 +1,784 @@
 \section{Arm TrustZone TEE 与漏洞谱系}
 
-\begin{frame}[t]{Arm TrustZone TEE 与漏洞谱系：方向开场}
-\DeckKicker{02-trustzone-lineage}
-\ClaimLine{把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。}
+\begin{frame}[t,shrink=6]{Arm TrustZone TEE 与漏洞谱系：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Arm TrustZone TEE 与漏洞谱系 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；TrustZone 白皮书、survey 和漏洞 SoK 只支撑历史背景、生态和迁移动机。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / vendor}{Arm TrustZone 白皮书}{E4 / Foundational industry evidence}
-\PrimaryCard{Primary 2 / sok}{Demystifying Arm TrustZone}{E2 / Background substrate}
-\PrimaryCard{Primary 3 / sok}{TrustZone-assisted TEE 漏洞 SoK}{E2 / Peer-reviewed SoK}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。
+  \item 固定三篇主讲材料；TrustZone 白皮书、survey 和漏洞 SoK 只支撑历史背景、生态和迁移动机。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item arm\_trustzone\_whitepaper: vendor；E4；local\_pdf\_verified
-  \item pinto2019trustzone: sok；E2；local\_pdf\_verified
-  \item cerdeira2020trustzone: sok；E2；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+Arm TrustZone 白皮书 & 开创/基础入口 & E4 / 基础产业证据 \\
+Demystifying Arm TrustZone & 代表性改进 & E2 / Background substrate \\
+TrustZone-assisted TEE 漏洞 SoK & 当前 SOTA/补充边界 & E2 / Peer-reviewed SoK \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{Arm TrustZone 白皮书}
-{arm\_trustzone\_whitepaper}
-{E4 / Foundational industry evidence}
-{local\_pdf\_verified}
-{介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型}
-{\begin{itemize}
-  \item 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：vendor
-  \item 证据：E4 / Foundational industry evidence
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{Arm TrustZone 白皮书}
-{arm\_trustzone\_whitepaper}
-{E4 / Foundational industry evidence}
-{local\_pdf\_verified}
-{移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来}
-{\begin{itemize}
-  \item 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Arm TrustZone 白皮书}
-{arm\_trustzone\_whitepaper}
-{E4 / Foundational industry evidence}
-{local\_pdf\_verified}
-{在处理器、互连和外设路径传播安全状态，形成双世界系统}
-{\begin{itemize}
-  \item 在处理器、互连和外设路径传播安全状态，形成双世界系统
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Secure world / Non-secure world
-  \item NS bit and SoC security state propagation
-  \item Secure monitor and trusted service boundary
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Arm TrustZone 白皮书}
-{arm\_trustzone\_whitepaper}
-{E4 / Foundational industry evidence}
-{local\_pdf\_verified}
-{白皮书/industry evidence，无独立实验}
-{\begin{itemize}
-  \item 白皮书/industry evidence，无独立实验
-  \item 只支撑 TrustZone 基础模型
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E4 industry/vendor evidence
-  \item 成熟度：industry/vendor evidence
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Arm TrustZone 白皮书}
-{arm\_trustzone\_whitepaper}
-{E4 / Foundational industry evidence}
-{local\_pdf\_verified}
-{历史基础价值高，能解释 Arm TEE 的双世界起点}
-{历史基础价值高，能解释 Arm TEE 的双世界起点。}
-{不代表 CCA/RME/RMM 或 confidential VM threat model。}
-{已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。}
-
-\PaperSlide
-{内容摘要}
-{Demystifying Arm TrustZone}
-{pinto2019trustzone}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作}
-{\begin{itemize}
-  \item 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：sok
-  \item 证据：E2 / Background substrate
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Demystifying Arm TrustZone}
-{pinto2019trustzone}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一}
-{\begin{itemize}
-  \item TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Demystifying Arm TrustZone}
-{pinto2019trustzone}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map}
-{\begin{itemize}
-  \item 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item TEE OS and trusted applications
-  \item Hardware-assisted virtualization use cases
-  \item IoT and mobile deployment patterns
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Demystifying Arm TrustZone}
-{pinto2019trustzone}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{规范/Survey，无新实验；只支撑背景和生态分类}
-{\begin{itemize}
-  \item 规范/Survey，无新实验；只支撑背景和生态分类
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Demystifying Arm TrustZone}
-{pinto2019trustzone}
-{E2 / Background substrate}
-{local\_pdf\_verified}
-{适合写 TrustZone 背景和生态谱系}
-{适合写 TrustZone 背景和生态谱系。}
-{对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。}
-{有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。}
-
-\PaperSlide
-{内容摘要}
-{TrustZone-assisted TEE 漏洞 SoK}
-{cerdeira2020trustzone}
-{E2 / Peer-reviewed SoK}
-{local\_pdf\_verified}
-{归纳 TrustZone-assisted TEE 的主流漏洞类型和根因}
-{\begin{itemize}
-  \item 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：sok
-  \item 证据：E2 / Peer-reviewed SoK
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{TrustZone-assisted TEE 漏洞 SoK}
-{cerdeira2020trustzone}
-{E2 / Peer-reviewed SoK}
-{local\_pdf\_verified}
-{TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞}
-{\begin{itemize}
-  \item TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{TrustZone-assisted TEE 漏洞 SoK}
-{cerdeira2020trustzone}
-{E2 / Peer-reviewed SoK}
-{local\_pdf\_verified}
-{按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界}
-{\begin{itemize}
-  \item 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Trusted application and TEE OS attack surface
-  \item Secure monitor / driver interface risk
-  \item Vulnerability taxonomy and root-cause grouping
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{TrustZone-assisted TEE 漏洞 SoK}
-{cerdeira2020trustzone}
-{E2 / Peer-reviewed SoK}
-{local\_pdf\_verified}
-{规范/Survey，无新实验}
-{\begin{itemize}
-  \item 规范/Survey，无新实验
-  \item 证据基础是 SoK/漏洞 taxonomy，不证明 CCA 安全性
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E2 peer-reviewed survey/SoK
-  \item 成熟度：peer-reviewed survey/SoK
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{TrustZone-assisted TEE 漏洞 SoK}
-{cerdeira2020trustzone}
-{E2 / Peer-reviewed SoK}
-{local\_pdf\_verified}
-{能支撑“为什么需要更强 CCA threat model”的历史动机}
-{能支撑“为什么需要更强 CCA threat model”的历史动机。}
-{不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。}
-{可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。}
-
-\begin{frame}[t]{Arm TrustZone TEE 与漏洞谱系：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{Arm TrustZone 白皮书：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E4 / 基础产业证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item Arm TrustZone 白皮书
-  \item Demystifying Arm TrustZone
-  \item TrustZone-assisted TEE 漏洞 SoK
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型
+  \item First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for thi。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item 历史基础价值高，能解释 Arm TEE 的双世界起点。
-  \item 适合写 TrustZone 背景和生态谱系。
-  \item 不代表 CCA/RME/RMM 或 confidential VM threat model。
-  \item 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
-  \item 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
-  \item 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 厂商白皮书 \\
+证据等级 & E4 / 基础产业证据 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / 基础产业证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm TrustZone 白皮书：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E4 / 基础产业证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 移动和嵌入式平台需要把安全服务从普通 OS 中隔离出来
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Arm TrustZone TEE 与漏洞谱系 \\
+传统瓶颈 & 把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。 \\
+本文入口 & Arm TrustZone 白皮书 \\
+证据限制 & E4 / 基础产业证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / 基础产业证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm TrustZone 白皮书：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E4 / 基础产业证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 在处理器、互连和外设路径传播安全状态，形成双世界系统\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 在处理器、互连和外设路径传播安全状态，形成双世界系统
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Secure world / Non-secure world
+  \item 02. NS bit and SoC security state propagation
+  \item 03. Secure monitor and trusted service boundary
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / 基础产业证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm TrustZone 白皮书：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E4 / 基础产业证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 白皮书/industry evidence，无独立实验\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 白皮书/industry evidence，无独立实验
+  \item 只支撑 TrustZone 基础模型
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Arm TrustZone 白皮书 & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E4 / 基础产业证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / 基础产业证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm TrustZone 白皮书：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E4 / 基础产业证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 历史基础价值高，能解释 Arm TEE 的双世界起点\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：历史基础价值高，能解释 Arm TEE 的双世界起点。
+  \item 局限性：不代表 CCA/RME/RMM 或 confidential VM threat model。
+  \item 商业化潜力：已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
+  \item 证据边界：E4 / Foundational industry evidence；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 历史基础价值高，能解释 Arm TEE 的双世界起点。 \\
+主要局限 & 不代表 CCA/RME/RMM 或 confidential VM threat model。 \\
+商业落地 & 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E4 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / 基础产业证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Demystifying Arm TrustZone：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作
+  \item Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE lineage.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & SoK/综述 \\
+证据等级 & E2 / Background substrate \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Demystifying Arm TrustZone：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Arm TrustZone TEE 与漏洞谱系 \\
+传统瓶颈 & 把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。 \\
+本文入口 & Demystifying Arm TrustZone \\
+证据限制 & E2 / Background substrate \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Demystifying Arm TrustZone：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. TEE OS and trusted applications
+  \item 02. Hardware-assisted virtualization use cases
+  \item 03. IoT and mobile deployment patterns
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Demystifying Arm TrustZone：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；Demystifying Arm TrustZone 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE linea。
+  \item 证据等级：E2 / Background substrate；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Demystifying Arm TrustZone & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E2 / Background substrate \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Demystifying Arm TrustZone：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：Demystifying Arm TrustZone 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：适合写 TrustZone 背景和生态谱系。
+  \item 局限性：对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM 结论。
+  \item 商业化潜力：有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 适合写 TrustZone 背景和生态谱系。 \\
+主要局限 & 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM 结论。 \\
+商业落地 & 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。 \\
+讲稿定位 & 代表性改进; 证据强度 E2 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TrustZone-assisted TEE 漏洞 SoK：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E2 / Peer-reviewed SoK}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 归纳 TrustZone-assisted TEE 的主流漏洞类型和根因
+  \item S\&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narrative.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & SoK/综述 \\
+证据等级 & E2 / Peer-reviewed SoK \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TrustZone-assisted TEE 漏洞 SoK：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E2 / Peer-reviewed SoK}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item TrustZone TEE 暴露接口复杂、TCB 变大，真实系统反复出现漏洞
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & Arm TrustZone TEE 与漏洞谱系 \\
+传统瓶颈 & 把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。 \\
+本文入口 & TrustZone-assisted TEE 漏洞 SoK \\
+证据限制 & E2 / Peer-reviewed SoK \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TrustZone-assisted TEE 漏洞 SoK：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E2 / Peer-reviewed SoK}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 按漏洞面、接口、权限边界和实现缺陷建立 taxonomy，解释为什么后续 CCA 需要更强边界
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Trusted application and TEE OS attack surface
+  \item 02. Secure monitor / driver interface risk
+  \item 03. Vulnerability taxonomy and root-cause grouping
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TrustZone-assisted TEE 漏洞 SoK：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E2 / Peer-reviewed SoK}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；TrustZone-assisted TEE 漏洞 SoK 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  \item 可支撑：S\&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narrative.
+  \item 证据等级：E2 / Peer-reviewed SoK；来源状态：本地 PDF 已核验。
+  \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & TrustZone-assisted TEE 漏洞 SoK & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E2 / Peer-reviewed SoK \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{TrustZone-assisted TEE 漏洞 SoK：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E2 / Peer-reviewed SoK}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 评价：TrustZone-assisted TEE 漏洞 SoK 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：能支撑“为什么需要更强 CCA threat model”的历史动机。
+  \item 局限性：不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。
+  \item 商业化潜力：可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
+  \item 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 能支撑“为什么需要更强 CCA threat model”的历史动机。 \\
+主要局限 & 不能替代 CCA/RME/RMM 机制分析，也不能直接推出 Realm 安全结论。 \\
+商业落地 & 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E2 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Arm TrustZone TEE 与漏洞谱系：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} Arm TrustZone TEE 与漏洞谱系 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Arm TrustZone 白皮书：开创/基础入口，E4 / 基础产业证据。
+  \item Demystifying Arm TrustZone：代表性改进，E2 / Background substrate。
+  \item TrustZone-assisted TEE 漏洞 SoK：当前 SOTA/补充边界，E2 / Peer-reviewed SoK。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+Arm TrustZone 白皮书 & 开创/基础入口 & First-party Arm TrustZone whitepaper is the strongest foundational mechan。 \\
+Demystifying Arm TrustZone & 代表性改进 & Systematic survey of TrustZone-assisted TEEs for mature mobile and embedd。 \\
+TrustZone-assisted TEE 漏洞 SoK & 当前 SOTA/补充边界 & S\&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narra。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

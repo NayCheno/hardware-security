@@ -1,293 +1,781 @@
 \section{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V}
 
-\begin{frame}[t]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：方向开场}
-\DeckKicker{08-riscv-tee-lineage}
-\ClaimLine{从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。}
+\begin{frame}[t,shrink=6]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：方向开场}
+\DeckKicker{方向开场}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.56\textwidth}
-    \textbf{三篇主讲选择规则}\par
-    \SmallLead{固定三篇 primary；不引入辅助材料，直接呈现 RISC-V enclave lineage。}
-    \vspace{2mm}
-\PrimaryCard{Primary 1 / system}{Keystone: 开源 RISC-V TEE 框架}{E1 / Foundational}
-\PrimaryCard{Primary 2 / system}{Penglai: scalable enclave memory protection}{E1 / Peer-reviewed SOTA}
-\PrimaryCard{Primary 3 / system}{SPEAR-V: low-overhead RISC-V enclave primitive}{E1 / Peer-reviewed SOTA}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。
+  \item 固定三篇主讲材料；不引入辅助材料，直接呈现 RISC-V enclave lineage。
+  \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.38\textwidth}
-    \VisualPanel{证据边界}{\begin{itemize}
-  \item lee2020keystone: system；E1；author\_hosted\_eurosys\_pdf\_verified
-  \item feng2021penglai: system；E1；local\_pdf\_verified
-  \item schrammel2023spearv: system；E1；local\_pdf\_verified
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{三篇主讲材料的分工}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{证据边界} \\
+\midrule
+Keystone: 开源 RISC-V TEE 框架 & 开创/基础入口 & E1 / 基础证据 \\
+Penglai: scalable enclave memory protection & 代表性改进 & E1 / 同行评审改进证据 \\
+SPEAR-V: low-overhead RISC-V enclave primitive & 当前 SOTA/补充边界 & E1 / 同行评审改进证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
 \end{frame}
 
-\PaperSlide
-{内容摘要}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave}
-{\begin{itemize}
-  \item 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_1
-  \item 类型：system
-  \item 证据：E1 / Foundational
-  \item 来源：author\_hosted\_eurosys\_pdf\_verified
-\end{itemize}}
 
-\PaperSlide
-{研究背景}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{商业 TEE 难定制、难验证}
-{\begin{itemize}
-  \item 商业 TEE 难定制、难验证
-  \item RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架}
-{\begin{itemize}
-  \item 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item PMP-based enclave isolation
-  \item Security monitor and runtime abstraction
-  \item Open RISC-V TEE software/hardware co-design
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{论文报告 CoreMark/Beebs/RV8 等开销结果}
-{\begin{itemize}
-  \item 论文报告 CoreMark/Beebs/RV8 等开销结果
-  \item 具体数字以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：author\_hosted\_eurosys\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Keystone: 开源 RISC-V TEE 框架}
-{lee2020keystone}
-{E1 / Foundational}
-{author\_hosted\_eurosys\_pdf\_verified}
-{RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制}
-{RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。}
-{EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。}
-{开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。}
-
-\PaperSlide
-{内容摘要}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量。}
-{\begin{itemize}
-  \item 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_2
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存}
-{\begin{itemize}
-  \item 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化}
-{\begin{itemize}
-  \item 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Scalable enclave memory protection
-  \item Metadata management for enclave lifecycle
-  \item Serverless/microservice-oriented enclave scaling
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{OSDI 论文报告可支持大量 enclave 和较大安全内存}
-{\begin{itemize}
-  \item OSDI 论文报告可支持大量 enclave 和较大安全内存
-  \item 具体指标以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{Penglai: scalable enclave memory protection}
-{feng2021penglai}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈}
-{系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。}
-{需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。}
-{适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。}
-
-\PaperSlide
-{内容摘要}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox。}
-{\begin{itemize}
-  \item 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
-\end{itemize}}
-{证据定位}
-{\begin{itemize}
-  \item 槽位：primary\_3
-  \item 类型：system
-  \item 证据：E1 / Peer-reviewed SOTA
-  \item 来源：local\_pdf\_verified
-\end{itemize}}
-
-\PaperSlide
-{研究背景}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive}
-{\begin{itemize}
-  \item RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
-\end{itemize}}
-{问题边界}
-{\begin{itemize}
-  \item 保护对象
-  \item 攻击/管理边界
-  \item 现有方法缺口
-\end{itemize}}
-
-\PaperSlide
-{解决方案}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotec。}
-{\begin{itemize}
-  \item 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
-\end{itemize}}
-{关键机制}
-{\begin{itemize}
-  \item Tag/metadata enclave primitive
-  \item Bidirectional sandbox and nested isolation
-  \item Low-overhead protected/unprotected transitions
-\end{itemize}}
-
-\PaperSlide
-{实验结果}
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{AsiaCCS 论文报告 protected/unprotected 场景低开销}
-{\begin{itemize}
-  \item AsiaCCS 论文报告 protected/unprotected 场景低开销
-  \item 具体数值以本地 PDF 为准
-\end{itemize}}
-{证据强度}
-{\begin{itemize}
-  \item 类型：E1 peer-reviewed primary work
-  \item 成熟度：peer-reviewed primary work
-  \item PDF：local\_pdf\_verified
-\end{itemize}}
-
-\PaperEvalSlide
-{SPEAR-V: low-overhead RISC-V enclave primitive}
-{schrammel2023spearv}
-{E1 / Peer-reviewed SOTA}
-{local\_pdf\_verified}
-{机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进}
-{机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。}
-{Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。}
-{若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。}
-
-\begin{frame}[t]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：技术演进总结}
-\DeckKicker{DIRECTION TAKEAWAY}
-\ClaimLine{三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。}
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：作者公开 PDF 已核验}
+{\large\bfseries\color{Ink} 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave\par}\vspace{1.8mm}
 \begin{columns}[T,totalwidth=\textwidth]
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{技术演进}{\begin{itemize}
-  \item Keystone: 开源 RISC-V TEE 框架
-  \item Penglai: scalable enclave memory protection
-  \item SPEAR-V: low-overhead RISC-V enclave primitive
-\end{itemize}}
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 开源 RISC-V TEE 框架，用 PMP、security monitor 和 runtime abstraction 构建 enclave
+  \item EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE framework paper.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{优点与缺口}{\begin{itemize}
-  \item RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
-  \item 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
-  \item EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
-  \item 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
-\end{itemize}}
-  \end{column}
-  \begin{column}{0.31\textwidth}
-    \VisualPanel{商业化适配}{\begin{itemize}
-  \item 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
-  \item 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
-  \item 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
-\end{itemize}}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 开创/基础入口 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / 基础证据 \\
+来源状态 & 作者公开 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
   \end{column}
 \end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：作者公开 PDF 已核验}
+{\large\bfseries\color{Ink} 商业 TEE 难定制、难验证\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 商业 TEE 难定制、难验证
+  \item RISC-V 提供开放硬件/软件协同机会，需要可研究、可裁剪的 enclave baseline
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V \\
+传统瓶颈 & 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata prim。 \\
+本文入口 & Keystone: 开源 RISC-V TEE 框架 \\
+证据限制 & E1 / 基础证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：作者公开 PDF 已核验}
+{\large\bfseries\color{Ink} 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 把 PMP region、security monitor、runtime 和 host ABI 组合成可扩展的开源 TEE 框架
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. PMP-based enclave isolation
+  \item 02. Security monitor and runtime abstraction
+  \item 03. Open RISC-V TEE software/hardware co-design
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：作者公开 PDF 已核验}
+{\large\bfseries\color{Ink} 论文报告 CoreMark/Beebs/RV8 等开销结果\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 论文报告 CoreMark/Beebs/RV8 等开销结果
+  \item 具体数字以本地 PDF 为准
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Keystone: 开源 RISC-V TEE 框架 & 作者公开 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / 基础证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Keystone: 开源 RISC-V TEE 框架：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / 基础证据}{来源状态：作者公开 PDF 已核验}
+{\large\bfseries\color{Ink} RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。
+  \item 局限性：EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。
+  \item 商业化潜力：开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。
+  \item 证据边界：E1 / Foundational；作者公开 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。 \\
+主要局限 & EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。 \\
+商业落地 & 开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。 \\
+讲稿定位 & 开创/基础入口; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 基础证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
+  \item OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS after Keystone.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 代表性改进 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / 同行评审改进证据 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 传统 PMP region 数量有限，难以支撑大量 enclave、动态生命周期和更大的受保护内存
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V \\
+传统瓶颈 & 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata prim。 \\
+本文入口 & Penglai: scalable enclave memory protection \\
+证据限制 & E1 / 同行评审改进证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 引入更可扩展的内存保护和 metadata 管理机制，把 RISC-V enclave 从少量静态隔离推进到云端规模化
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Scalable enclave memory protection
+  \item 02. Metadata management for enclave lifecycle
+  \item 03. Serverless/microservice-oriented enclave scaling
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} OSDI 论文报告可支持大量 enclave 和较大安全内存\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item OSDI 论文报告可支持大量 enclave 和较大安全内存
+  \item 具体指标以本地 PDF 为准
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & Penglai: scalable enclave memory protection & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / 同行评审改进证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{Penglai: scalable enclave memory protection：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。
+  \item 局限性：需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。
+  \item 商业化潜力：适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。
+  \item 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 系统贡献强，直接解决 PMP-based enclave 在规模上的瓶颈。 \\
+主要局限 & 需要硬件修改和生态配套，不等同于 RISC-V ratified confidential-computing standard。 \\
+商业落地 & 适合云原生 enclave 服务方向；风险在硬件采纳、标准化和云平台管理接口。 \\
+讲稿定位 & 代表性改进; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：内容摘要}
+\DeckKicker{内容摘要}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
+  \item SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-attestation focus.
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{证据定位}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{字段} & \textbf{内容} \\
+\midrule
+论文定位 & 当前 SOTA/补充边界 \\
+材料类型 & 系统论文 \\
+证据等级 & E1 / 同行评审改进证据 \\
+来源状态 & 本地 PDF 已核验 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：研究背景}
+\DeckKicker{研究背景}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item RISC-V enclave 需要更灵活、低开销、可抵抗部分 controlled-channel 风险的硬件 primitive
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{问题边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{说明} \\
+\midrule
+保护对象 & RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V \\
+传统瓶颈 & 从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata prim。 \\
+本文入口 & SPEAR-V: low-overhead RISC-V enclave primitive \\
+证据限制 & E1 / 同行评审改进证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：解决方案}
+\DeckKicker{解决方案}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotec。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{核心设计拆解}
+      \scriptsize \begin{itemize}
+  \item 01. Tag/metadata enclave primitive
+  \item 02. Bidirectional sandbox and nested isolation
+  \item 03. Low-overhead protected/unprotected transitions
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：实验结果}
+\DeckKicker{实验结果}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} AsiaCCS 论文报告 protected/unprotected 场景低开销\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item AsiaCCS 论文报告 protected/unprotected 场景低开销
+  \item 具体数值以本地 PDF 为准
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{实验/证据边界}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{对象} & \textbf{可支撑} & \textbf{边界} \\
+\midrule
+数据/来源 & SPEAR-V: low-overhead RISC-V enclave primitive & 本地 PDF 已核验 \\
+Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
+指标/对象 & 只使用当前来源可证明的信息 & E1 / 同行评审改进证据 \\
+使用边界 & 可进入本方向演进图 & 不能替代更强证据 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{SPEAR-V: low-overhead RISC-V enclave primitive：文章评价}
+\DeckKicker{文章评价}
+\SlideMeta{证据等级}{E1 / 同行评审改进证据}{来源状态：本地 PDF 已核验}
+{\large\bfseries\color{Ink} 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item 设计优势：机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。
+  \item 局限性：Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。
+  \item 商业化潜力：若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。
+  \item 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{文章评价}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+\textbf{维度} & \textbf{判断} \\
+\midrule
+设计优势 & 机制设计清晰，展示 RISC-V enclave primitive 可沿 tag/metadata 路线演进。 \\
+主要局限 & Peer-reviewed 系统证据不等同于 RISC-V 标准或量产硬件采纳。 \\
+商业落地 & 若硬件供应商采纳，适合细粒度隔离和嵌入式/边缘 TEE；风险在 ISA 扩展标准化和工具链支持。 \\
+讲稿定位 & 当前 SOTA/补充边界; 证据强度 E1 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / 同行评审改进证据 的证据等级使用，不外推到未验证平台。}}
+\end{frame}
+
+
+\begin{frame}[t,shrink=6]{RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V：方向总结}
+\DeckKicker{方向总结}
+\SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
+{\large\bfseries\color{Ink} RISC-V TEE lineage: Sanctum / Keystone / Penglai / SPEAR-V 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.45\textwidth}
+    \fcolorbox{Rule}{Paper}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{内容说明}
+      \scriptsize \begin{itemize}
+  \item Keystone: 开源 RISC-V TEE 框架：开创/基础入口，E1 / 基础证据。
+  \item Penglai: scalable enclave memory protection：代表性改进，E1 / 同行评审改进证据。
+  \item SPEAR-V: low-overhead RISC-V enclave primitive：当前 SOTA/补充边界，E1 / 同行评审改进证据。
+  \item 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+\end{itemize}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \fcolorbox{Rule}{Panel}{%
+  \begin{minipage}[t]{0.97\linewidth}
+    \vspace{1.1mm}
+    \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
+      \PanelTitle{本方向方法对比}
+      \scriptsize {\tiny
+\begin{tabularx}{\linewidth}{@{}YYY@{}}
+\toprule
+\textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
+\midrule
+Keystone: 开源 RISC-V TEE 框架 & 开创/基础入口 & EuroSys 2020 Keystone is the foundational public RISC-V open-source TEE f。 \\
+Penglai: scalable enclave memory protection & 代表性改进 & OSDI 2021 Penglai is a peer-reviewed SOTA scalable RISC-V enclave OS afte。 \\
+SPEAR-V: low-overhead RISC-V enclave primitive & 当前 SOTA/补充边界 & SPEAR-V is a peer-reviewed SOTA RISC-V TEE system with SoC and remote-att。 \\
+\bottomrule
+\end{tabularx}
+}
+    \end{minipage}
+    \vspace{1mm}
+  \end{minipage}}
+  \end{column}
+\end{columns}
+\vspace{1mm}
+{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
 \end{frame}

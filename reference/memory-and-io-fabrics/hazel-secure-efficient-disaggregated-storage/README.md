@@ -97,3 +97,202 @@ Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 f
 
 Hazel 是 confidential storage data path 的重要新增相关工作；但应标注 arXiv 状态，并补充底层设备身份/attestation 组合。
 <!-- END PAPER REVIEW -->
+
+<!-- BEGIN REPORT-SLIDE DETAILED ADDENDUM -->
+
+## Report-Slide Detailed Addendum
+
+### 所属方向
+
+- Direction: `15-smartnic-trusted-nic-storage` - SmartNIC / Trusted NIC / Secure Storage Data Path
+- Paper key: `chrapek2026hazel`
+- Role: draft SOTA secure disaggregated storage data path
+- Evidence base: Hazel Figure 1 overview; Figure 2 algorithm overheads; Figure 3 control path; Figure 4 data path; Figure 11 IO500; Figure 12 YCSB; Figure 13 ML.
+- Boundary: Hazel 是 preprint；未完整闭环 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity。
+
+### 1. 完整题目 / 作者 / 会议
+
+- 完整题目: Hazel: Secure and Efficient Disaggregated Storage
+- 作者: Chrapek et al.
+- 会议/来源: arXiv / preprint, 2026
+- Title evidence: README metadata; Hazel PDF title page.
+
+### 2. 内容摘要
+
+### 2.1 Slide-ready summary
+
+**Claim:** Hazel 的贡献是把 secure storage data path 的三个目标放到一个 NVMe-oF + DPU 原型里。
+
+- 动机: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以兼顾性能、扩展性和 replay freshness。
+- 工作: counter leasing 控制 path、NVMe metadata 封装、Hazel Merkle Tree、IV/metadata cache、BlueField-3 crypto offload。
+- 数据: synthetic/IO500/YCSB/ML 评估；IO500 平均 overhead 6.3%，YCSB p99 latency 平均 2.2%，多数应用 1%-2% overhead。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: Hazel 的贡献是把 secure storage data path 的三个目标放到一个 NVMe-oF + DPU 原型里。第一步解释为什么需要这一页: 动机: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以兼顾性能、扩展性和 replay freshness。第二步说明论文或规范实际做了什么: 工作: counter leasing 控制 path、NVMe metadata 封装、Hazel Merkle Tree、IV/metadata cache、BlueField-3 crypto offload。第三步收束到证据边界: 数据: synthetic/IO500/YCSB/ML 评估；IO500 平均 overhead 6.3%，YCSB p99 latency 平均 2.2%，多数应用 1%-2% overhead。引用时只把 Hazel Figure 1-Figure 4; Figure 11-Figure 13 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Figure 1-Figure 4; Figure 11-Figure 13.
+
+- Proof object: flow - Hazel: TEE requests storage -> KBS leases counters -> DPU offloads crypto -> NVMe metadata carries tags -> HMT verifies freshness -> data returns
+
+
+### 3. 研究背景
+
+### 3.1 Slide-ready background
+
+**Claim:** 背景问题是远端存储不只要加密，还要防篡改和旧数据回放。
+
+- dm-crypt 只给 confidentiality。
+- dm-integrity/dm-x 会带来 IOPS/latency/throughput 开销。
+- NVMe-oF/JBOF 场景中 host CPU 和 network path 都可能成为瓶颈。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 背景问题是远端存储不只要加密，还要防篡改和旧数据回放。第一步解释为什么需要这一页: dm-crypt 只给 confidentiality。第二步说明论文或规范实际做了什么: dm-integrity/dm-x 会带来 IOPS/latency/throughput 开销。第三步收束到证据边界: NVMe-oF/JBOF 场景中 host CPU 和 network path 都可能成为瓶颈。引用时只把 Hazel Section 2; Figure 2 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Section 2; Figure 2.
+
+- Proof object: matrix - storage security: Confidentiality = encryption; Integrity = MAC/AEAD; Freshness = counter/tree; Attestability = TEE/DPU evidence; Performance = DPU offload + metadata cache
+
+
+### 4. 关键点核心思想
+
+### 4.1 Slide-ready core insight
+
+**Claim:** 核心洞察: 让 freshness/control path 慢而少，让 data path 快而 offloaded。
+
+- KBS/TEE 负责 counter leasing 和 key/control。
+- DPU 负责 line-rate crypto 和 NVMe-oF path。
+- HMT/metadata cache 让 reads 尽量不走昂贵 tree path。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 核心洞察: 让 freshness/control path 慢而少，让 data path 快而 offloaded。第一步解释为什么需要这一页: KBS/TEE 负责 counter leasing 和 key/control。第二步说明论文或规范实际做了什么: DPU 负责 line-rate crypto 和 NVMe-oF path。第三步收束到证据边界: HMT/metadata cache 让 reads 尽量不走昂贵 tree path。引用时只把 Hazel Figure 3-Figure 5 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Figure 3-Figure 5.
+
+- Proof object: cards - Hazel ingredients: counter leasing; NVMe metadata; Hazel Merkle Tree; metadata cache; BlueField-3 offload
+
+
+### 5. 架构总览
+
+### 5.1 Slide-ready architecture
+
+**Claim:** 架构总览: Hazel control path 建 trust/key/counter，data path 走 DPU/NVMe-oF 并把安全 metadata 放进 sector layout。
+
+- Figure 3 是 control path: cluster manager、TEE、KBS、Hazel service。
+- Figure 4 是 data path 和 SSD sector layout。
+- Figure 5 是 HMT 设计。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 架构总览: Hazel control path 建 trust/key/counter，data path 走 DPU/NVMe-oF 并把安全 metadata 放进 sector layout。第一步解释为什么需要这一页: Figure 3 是 control path: cluster manager、TEE、KBS、Hazel service。第二步说明论文或规范实际做了什么: Figure 4 是 data path 和 SSD sector layout。第三步收束到证据边界: Figure 5 是 HMT 设计。引用时只把 Hazel Figure 3-Figure 5 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Figure 3-Figure 5.
+
+- Proof object: matrix - 组件: TEE/KBS = counter/key control; Hazel service = local trusted service; DPU/BF3 = crypto offload; NVMe metadata = security tags; HMT = freshness tree
+
+
+### 6. 核心方法拆解
+
+#### 方法 1: Counter Leasing
+
+**Claim:** Hazel 不为每次 I/O 找 KBS，而是租一段 counter range，降低 control path 频率。
+
+- KBS 管 keys/counters。
+- Lease range 可覆盖大量 writes。
+- 租约错误会影响 freshness，所以必须由 TEE/KBS policy 管。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: Hazel 不为每次 I/O 找 KBS，而是租一段 counter range，降低 control path 频率。第一步解释为什么需要这一页: KBS 管 keys/counters。第二步说明论文或规范实际做了什么: Lease range 可覆盖大量 writes。第三步收束到证据边界: 租约错误会影响 freshness，所以必须由 TEE/KBS policy 管。引用时只把 Hazel Section 3.2; Figure 3 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Section 3.2; Figure 3.
+
+- Proof object: flow - counter lease: TEE starts -> mutual attestation -> KBS leases counters -> Hazel uses range -> renew/revoke -> audit state
+
+#### 方法 2: NVMe Metadata Encapsulation
+
+**Claim:** Hazel 利用 NVMe metadata 携带安全信息，不重写整个 NVMe-oF 协议。
+
+- Sector layout 放置 counter/MAC/metadata。
+- DPU 在 data path 做 crypto/check。
+- 这降低协议改造成本，也保留高性能 storage path。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: Hazel 利用 NVMe metadata 携带安全信息，不重写整个 NVMe-oF 协议。第一步解释为什么需要这一页: Sector layout 放置 counter/MAC/metadata。第二步说明论文或规范实际做了什么: DPU 在 data path 做 crypto/check。第三步收束到证据边界: 这降低协议改造成本，也保留高性能 storage path。引用时只把 Hazel Figure 4 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Figure 4.
+
+- Proof object: matrix - sector layout: Data = encrypted payload; Counter/IV = freshness input; MAC/tag = integrity; Metadata = NVMe extension; DPU = offload processing
+
+#### 方法 3: Hazel Merkle Tree
+
+**Claim:** HMT 用 in-memory IV cache、batch update 和 eventual consistency 降低 freshness 开销。
+
+- Tree 完全在磁盘上会造成不确定 latency。
+- 全树在内存中又浪费 DRAM。
+- HMT 选择 cache/batch/EC，在性能和 freshness timing 间取舍。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: HMT 用 in-memory IV cache、batch update 和 eventual consistency 降低 freshness 开销。第一步解释为什么需要这一页: Tree 完全在磁盘上会造成不确定 latency。第二步说明论文或规范实际做了什么: 全树在内存中又浪费 DRAM。第三步收束到证据边界: HMT 选择 cache/batch/EC，在性能和 freshness timing 间取舍。引用时只把 Hazel Figure 5-Figure 7 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Figure 5-Figure 7.
+
+- Proof object: flow - HMT: write data -> update metadata cache -> batch tree updates -> eventual consistency -> read verifies freshness when needed
+
+#### 方法 4: DPU Offload Boundary
+
+**Claim:** Hazel 借助 BlueField-3 降低 CPU overhead，但 DPU 自身 trust 需要额外证明。
+
+- 论文讨论 TDISP/IDE 作为相关工作/未来 trust basis。
+- 当前 preprint 没把 DPU attestation 与 storage endpoint identity 全闭环。
+- 商业部署必须补 SPDM/TDISP/NVMe endpoint evidence。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: Hazel 借助 BlueField-3 降低 CPU overhead，但 DPU 自身 trust 需要额外证明。第一步解释为什么需要这一页: 论文讨论 TDISP/IDE 作为相关工作/未来 trust basis。第二步说明论文或规范实际做了什么: 当前 preprint 没把 DPU attestation 与 storage endpoint identity 全闭环。第三步收束到证据边界: 商业部署必须补 SPDM/TDISP/NVMe endpoint evidence。引用时只把 Hazel related work and threat model; README boundary 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel related work and threat model; README boundary.
+
+- Proof object: cards - deployment gaps: DPU attestation; SPDM/TDISP; NVMe-oF endpoint identity; crash consistency; KBS operations
+
+
+### 7. 实验环境和数据 / 证据基础
+
+### 7.1 Slide-ready evidence environment
+
+**Claim:** 实验环境与数据: NVMe-oF + BlueField-3 原型，synthetic、IO500、YCSB、ML training。
+
+- 硬件: 高性能 PCIe SSD 与 NVIDIA BlueField-3 DPU。
+- Benchmarks: synthetic read/write patterns、IO500、YCSB/RocksDB、ResNet50/UNet3D ML pipeline。
+- 指标: throughput、IOPS、latency、CPU usage、p99 latency。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 实验环境与数据: NVMe-oF + BlueField-3 原型，synthetic、IO500、YCSB、ML training。第一步解释为什么需要这一页: 硬件: 高性能 PCIe SSD 与 NVIDIA BlueField-3 DPU。第二步说明论文或规范实际做了什么: Benchmarks: synthetic read/write patterns、IO500、YCSB/RocksDB、ResNet50/UNet3D ML pipeline。第三步收束到证据边界: 指标: throughput、IOPS、latency、CPU usage、p99 latency。引用时只把 Hazel implementation/evaluation Section 4-5; Figure 11-Figure 13 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel implementation/evaluation Section 4-5; Figure 11-Figure 13.
+
+- Proof object: matrix - 实验设置: Storage = NVMe-oF / SSD; Offload = BlueField-3; Benchmarks = synthetic/IO500/YCSB/ML; Metrics = throughput/latency/CPU; Status = preprint
+
+
+### 8. 性能 / Claim Strength
+
+### 8.1 Slide-ready performance
+
+**Claim:** 性能结论: Hazel 在常见大读写/应用路径开销低，但小随机 freshness 路径仍是弱点。
+
+- Figure 11: IO500 overhead mostly below 10%，average 6.3%。
+- Figure 12: YCSB p99 latency average 2.2%，throughput average 0.6%。
+- Figure 13/文本: ML training freshness overhead 约 1%-2%；随机小 I/O freshness path 可显著变差。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 性能结论: Hazel 在常见大读写/应用路径开销低，但小随机 freshness 路径仍是弱点。第一步解释为什么需要这一页: Figure 11: IO500 overhead mostly below 10%，average 6.3%。第二步说明论文或规范实际做了什么: Figure 12: YCSB p99 latency average 2.2%，throughput average 0.6%。第三步收束到证据边界: Figure 13/文本: ML training freshness overhead 约 1%-2%；随机小 I/O freshness path 可显著变差。引用时只把 Hazel Figure 11-Figure 13; evaluation text 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel Figure 11-Figure 13; evaluation text.
+
+- Proof object: bars - key numbers: IO500 avg overhead 6.3%; YCSB p99 latency avg 2.2%; YCSB throughput avg 0.6%; ML freshness overhead 1%-2%
+
+
+### 9. 文章评价
+
+### 9.1 Slide-ready evaluation
+
+**Claim:** 评价: Hazel 是 secure disaggregated storage 的强 draft SOTA，但必须标注 preprint 与 endpoint trust 缺口。
+
+- 优势: 把 confidentiality/integrity/freshness/DPU offload 集成进一个 storage prototype。
+- 局限: preprint；DPU attestation、SPDM/TDISP、crash consistency 与 production KBS 运维仍需强化。
+- 商业化潜力: 云 confidential storage、NVMe-oF/JBOF、DPU offload；落地风险在小随机 I/O 和证据闭环。
+
+**讲解稿:** 讲解时先把本页结论落到一句话: 评价: Hazel 是 secure disaggregated storage 的强 draft SOTA，但必须标注 preprint 与 endpoint trust 缺口。第一步解释为什么需要这一页: 优势: 把 confidentiality/integrity/freshness/DPU offload 集成进一个 storage prototype。第二步说明论文或规范实际做了什么: 局限: preprint；DPU attestation、SPDM/TDISP、crash consistency 与 production KBS 运维仍需强化。第三步收束到证据边界: 商业化潜力: 云 confidential storage、NVMe-oF/JBOF、DPU offload；落地风险在小随机 I/O 和证据闭环。引用时只把 Hazel conclusion and README evaluation 作为支撑范围，不把 survey/spec 的归纳扩展成未验证的一手机制或性能结论。
+
+**Evidence refs:** Hazel conclusion and README evaluation.
+
+- Proof object: matrix - 评价: 优势 = full storage data-path prototype; 局限 = preprint / endpoint gaps; 商业化 = confidential storage; 本方向角色 = storage-path SOTA
+
+
+<!-- END REPORT-SLIDE DETAILED ADDENDUM -->

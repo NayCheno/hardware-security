@@ -1,0 +1,467 @@
+direction: Memory encryption / integrity / replay protection
+story_version: 1
+slides:
+- slide_id: d11-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: Memory encryption / integrity / replay protection 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
+  - 固定三篇主讲材料；`riscv_ap_tee_2024` 作为 AP-TEE/CoVE lifecycle auxiliary，不计入三篇主讲。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - 'Memory Encryption: A Survey of Existing Techniques'
+        - 开创/基础入口
+        - E2 / Background substrate
+      - - Bonsai Merkle Trees for memory integrity and freshness
+        - 代表性改进
+        - E1 / Peer-reviewed mechanism anchor
+      - - AMD SEV-SNP industry memory-integrity evidence
+        - 当前 SOTA/补充边界
+        - E4 / Industry evidence
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d11-primary-1-summary
+  paper_key: henson2014memory
+  slide_type: summary
+  claim: 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡
+  narrative:
+  - 综述 memory encryption 的威胁模型、技术路线和性能/安全权衡
+  - Henson 2014 is the background starting point for secure memory encryption, integrity, and r。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `henson2014memory` summary slide metadata.
+  - 'reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf; source_url: https://doi.org/10.1145/2566673; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - SoK/综述
+      - - 证据等级
+        - E2 / Background substrate
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-1-background
+  paper_key: henson2014memory
+  slide_type: background
+  claim: Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文
+  narrative:
+  - Full disk encryption 不能保护运行时 DRAM、bus 和 DMA 路径上的明文
+  - access control 与 encryption/integrity/replay 是不同问题
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `henson2014memory` background slide metadata.
+  - 'reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf; source_url: https://doi.org/10.1145/2566673; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Memory encryption / integrity / replay protection
+      - - 传统瓶颈
+        - 避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
+      - - 本文入口
+        - 'Memory Encryption: A Survey of Existing Techniques'
+      - - 证据限制
+        - E2 / Background substrate
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-1-solution
+  paper_key: henson2014memory
+  slide_type: solution
+  claim: 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encry。
+  narrative:
+  - 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authenticati。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `henson2014memory` solution slide metadata.
+  - 'reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf; source_url: https://doi.org/10.1145/2566673; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Off-chip memory confidentiality threat model
+      - Memory authentication and integrity taxonomy
+      - Counter/freshness/replay-protection tradeoff
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-1-experiments
+  paper_key: henson2014memory
+  slide_type: experiments
+  claim: '规范/Survey，无新实验；Memory Encryption: A Survey of Existing Techniques 只支撑术语、taxonomy、接口语义或证据边界。'
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：Henson 2014 is the background starting point for secure memory encryption, integrity。
+  - 证据等级：E2 / Background substrate；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `henson2014memory` experiments slide metadata.
+  - 'reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf; source_url: https://doi.org/10.1145/2566673; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'Memory Encryption: A Survey of Existing Techniques'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E2 / Background substrate
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-1-evaluation
+  paper_key: henson2014memory
+  slide_type: evaluation
+  claim: '评价：Memory Encryption: A Survey of Existing Techniques 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。'
+  narrative:
+  - 设计优势：最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
+  - 局限性：2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
+  - 商业化潜力：可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `henson2014memory` evaluation slide metadata.
+  - 'reference/architecture-and-platform-security/sok/memory-encryption-survey-existing-techniques/paper.pdf; source_url: https://doi.org/10.1145/2566673; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 最适合给本方向提供概念边界，防止把 PMP/GPT/IOPMP 写成 encryption。
+      - - 主要局限
+        - 2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE。
+      - - 商业落地
+        - 可作为架构设计 checklist；风险是单独引用会遗漏现代 confidential VM ownership metadata。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E2
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-2-summary
+  paper_key: rogers2007bonsai
+  slide_type: summary
+  claim: Bonsai Merkle Trees use counter/tree metadata to detect tamper and replay, anchoring memory freshness evidence.
+  narrative:
+  - Counter/tree metadata detects tamper and replay
+  - Provides peer-reviewed evidence for memory integrity and freshness
+  - Peer-reviewed Bonsai Merkle Tree mechanism anchor for memory integrity, freshness, and repl。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `rogers2007bonsai` summary slide metadata.
+  - 'reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/paper.pdf; source_url: https://doi.org/10.1109/MICRO.2007.16; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / Peer-reviewed mechanism anchor
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed mechanism anchor 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-2-background
+  paper_key: rogers2007bonsai
+  slide_type: background
+  claim: Encryption alone cannot detect stale or modified memory values returned by an untrusted memory system.
+  narrative:
+  - Encryption alone cannot detect stale or modified memory values
+  - Freshness requires integrity trees, counters, or authenticated roots
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `rogers2007bonsai` background slide metadata.
+  - 'reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/paper.pdf; source_url: https://doi.org/10.1109/MICRO.2007.16; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Memory encryption / integrity / replay protection
+      - - 传统瓶颈
+        - 避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
+      - - 本文入口
+        - Bonsai Merkle Trees for memory integrity and freshness
+      - - 证据限制
+        - E1 / Peer-reviewed mechanism anchor
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed mechanism anchor 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-2-solution
+  paper_key: rogers2007bonsai
+  slide_type: solution
+  claim: Address-independent seed encryption and Bonsai Merkle Trees reduce secure-processor integrity-tree overhead.
+  narrative:
+  - Address-independent seed encryption reduces OS friction
+  - Bonsai Merkle Trees authenticate counter metadata and root state
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `rogers2007bonsai` solution slide metadata.
+  - 'reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/paper.pdf; source_url: https://doi.org/10.1109/MICRO.2007.16; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - AISE counter-mode seed
+      - BMT over encryption counters
+      - root MAC for replay/tamper detection
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed mechanism anchor 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-2-experiments
+  paper_key: rogers2007bonsai
+  slide_type: experiments
+  claim: MICRO 2007 peer-reviewed paper reports secure-processor simulation results and reduced memory-integrity overhea。
+  narrative:
+  - MICRO 2007 peer-reviewed secure-processor simulation
+  - Historical performance numbers are lineage evidence, not direct CCA/SEV-SNP product compari。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `rogers2007bonsai` experiments slide metadata.
+  - 'reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/paper.pdf; source_url: https://doi.org/10.1109/MICRO.2007.16; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - Bonsai Merkle Trees for memory integrity and freshness
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / Peer-reviewed mechanism anchor
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed mechanism anchor 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-2-evaluation
+  paper_key: rogers2007bonsai
+  slide_type: evaluation
+  claim: Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechani。
+  narrative:
+  - 设计优势：Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integ。
+  - 局限性：Secure-processor lineage is not the same as a modern confidential-VM product; deploym。
+  - 商业化潜力：Useful for memory-controller integrity-tree design; productization depends on metadat。
+  - 证据边界：E1 / Peer-reviewed mechanism anchor；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `rogers2007bonsai` evaluation slide metadata.
+  - 'reference/architecture-and-platform-security/address-independent-seed-encryption-bonsai-merkle-trees/paper.pdf; source_url: https://doi.org/10.1109/MICRO.2007.16; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - Moves the section anchor from vendor/spec contrast back to peer-reviewed memory。
+      - - 主要局限
+        - Secure-processor lineage is not the same as a modern confidential-VM product; d。
+      - - 商业落地
+        - Useful for memory-controller integrity-tree design; productization depends on m。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed mechanism anchor 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-3-summary
+  paper_key: amd_sev_snp
+  slide_type: summary
+  claim: SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-contro。
+  narrative:
+  - SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-controlled metadata 风险
+  - AMD SEV-SNP remains industry evidence for modern VM memory-integrity deployment, but not th。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `amd_sev_snp` summary slide metadata.
+  - 'reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf; source_url: https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - 厂商白皮书
+      - - 证据等级
+        - E4 / Industry evidence
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Industry evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-3-background
+  paper_key: amd_sev_snp
+  slide_type: background
+  claim: 早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和。
+  narrative:
+  - 早期 encrypted VM 面临 nested page table、reverse map metadata、replay/alias 和 malicious hypervis。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `amd_sev_snp` background slide metadata.
+  - 'reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf; source_url: https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Memory encryption / integrity / replay protection
+      - - 传统瓶颈
+        - 避免把 access control、ownership、encryption、integrity、freshness/replay 混写。
+      - - 本文入口
+        - AMD SEV-SNP industry memory-integrity evidence
+      - - 证据限制
+        - E4 / Industry evidence
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Industry evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-3-solution
+  paper_key: amd_sev_snp
+  slide_type: solution
+  claim: 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted。
+  narrative:
+  - 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted VM lifecycle 结合
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `amd_sev_snp` solution slide metadata.
+  - 'reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf; source_url: https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Secure Nested Paging
+      - Reverse Map Table / memory ownership metadata
+      - Integrity-oriented VM isolation controls
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Industry evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-3-experiments
+  paper_key: amd_sev_snp
+  slide_type: experiments
+  claim: 厂商技术材料，无独立学术实验
+  narrative:
+  - 厂商技术材料，无独立学术实验
+  - 只能作为产业机制和部署 evidence
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `amd_sev_snp` experiments slide metadata.
+  - 'reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf; source_url: https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - AMD SEV-SNP industry memory-integrity evidence
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E4 / Industry evidence
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Industry evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-primary-3-evaluation
+  paper_key: amd_sev_snp
+  slide_type: evaluation
+  claim: 展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的。
+  narrative:
+  - 设计优势：展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。
+  - 局限性：Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。
+  - 商业化潜力：具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
+  - 证据边界：E4 / Industry evidence；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml `amd_sev_snp` evaluation slide metadata.
+  - 'reference/architecture-and-platform-security/amd-sev-snp-strengthening-vm-isolation/paper.pdf; source_url: https://docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。
+      - - 主要局限
+        - Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。
+      - - 商业落地
+        - 具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E4
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Industry evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d11-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: Memory encryption / integrity / replay protection 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - 'Memory Encryption: A Survey of Existing Techniques：开创/基础入口，E2 / Background substrate。'
+  - Bonsai Merkle Trees for memory integrity and freshness：代表性改进，E1 / Peer-reviewed mechanism anchor。
+  - AMD SEV-SNP industry memory-integrity evidence：当前 SOTA/补充边界，E4 / Industry evidence。
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/11-memory-encryption-integrity-replay/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - 'Memory Encryption: A Survey of Existing Techniques'
+        - 开创/基础入口
+        - Henson 2014 is the background starting point for secure memory encryption。
+      - - Bonsai Merkle Trees for memory integrity and freshness
+        - 代表性改进
+        - Peer-reviewed Bonsai Merkle Tree mechanism anchor for memory integrity, f。
+      - - AMD SEV-SNP industry memory-integrity evidence
+        - 当前 SOTA/补充边界
+        - AMD SEV-SNP remains industry evidence for modern VM memory-integrity depl。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

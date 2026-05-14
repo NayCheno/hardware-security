@@ -1,0 +1,469 @@
+direction: Confidential I/O protocol、trusted device interface、network endpoint
+story_version: 1
+slides:
+- slide_id: d13-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: Confidential I/O protocol、trusted device interface、network endpoint 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
+  - 固定三篇主讲材料；TLS+RA 作为 endpoint/channel-binding 主证据，FOLIO、SEV-TIO、TDISP/TDISP XT 和 BlueField DPU evidence 为 auxiliary/contrast。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - SPDM device identity and measurement
+        - 开创/基础入口
+        - E0 / Spec-standard SOTA
+      - - CoVE-IO and TDISP trusted-device lifecycle
+        - 代表性改进
+        - E3 / 草案/未批准规范
+      - - 'Separate but Together: TLS channel binding with remote attestat。'
+        - 当前 SOTA/补充边界
+        - E1 / Peer-reviewed endpoint channel-binding evidence
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d13-primary-1-summary
+  paper_key: dmtf_spdm_2025
+  slide_type: summary
+  claim: SPDM 定义 device/component identity、measurement、capability negotiation、cert。
+  narrative:
+  - SPDM 定义 device/component identity、measurement、capability negotiation、certificate/challenge。
+  - SPDM is the first-party specification foundation for device identity, measurement, and secu。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `dmtf_spdm_2025` summary slide metadata.
+  - 'reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf; source_url: https://www.dmtf.org/dsp/DSP0274; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 规范/标准材料
+      - - 证据等级
+        - E0 / Spec-standard SOTA
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-1-background
+  paper_key: dmtf_spdm_2025
+  slide_type: background
+  claim: Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态
+  narrative:
+  - Confidential workload 使用真实设备时，不能只相信 host 枚举出的 PCIe requester ID、VF 配置或驱动状态
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `dmtf_spdm_2025` background slide metadata.
+  - 'reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf; source_url: https://www.dmtf.org/dsp/DSP0274; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Confidential I/O protocol、trusted device interface、network endpoint
+      - - 传统瓶颈
+        - 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
+      - - 本文入口
+        - SPDM device identity and measurement
+      - - 证据限制
+        - E0 / Spec-standard SOTA
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-1-solution
+  paper_key: dmtf_spdm_2025
+  slide_type: solution
+  claim: 通过 requester/responder 协议、certificate chain、measurement blocks、transcript。
+  narrative:
+  - 通过 requester/responder 协议、certificate chain、measurement blocks、transcript 和 secured session。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `dmtf_spdm_2025` solution slide metadata.
+  - 'reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf; source_url: https://www.dmtf.org/dsp/DSP0274; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - Device certificate and measurement retrieval
+      - Challenge-response and transcript binding
+      - Key exchange for secured control messages
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-1-experiments
+  paper_key: dmtf_spdm_2025
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；SPDM device identity and measurement 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：SPDM is the first-party specification foundation for device identity, measurement, an。
+  - 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `dmtf_spdm_2025` experiments slide metadata.
+  - 'reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf; source_url: https://www.dmtf.org/dsp/DSP0274; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - SPDM device identity and measurement
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E0 / Spec-standard SOTA
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-1-evaluation
+  paper_key: dmtf_spdm_2025
+  slide_type: evaluation
+  claim: 评价：SPDM device identity and measurement 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence 底座。
+  - 局限性：单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware 隔离正确。
+  - 商业化潜力：适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update polic。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `dmtf_spdm_2025` evaluation slide metadata.
+  - 'reference/memory-and-io-fabrics/security-protocol-and-data-model-spdm-specification/paper.pdf; source_url: https://www.dmtf.org/dsp/DSP0274; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同 device-evidence。
+      - - 主要局限
+        - 单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device firmware。
+      - - 商业落地
+        - 适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware update。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E0
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-2-summary
+  paper_key: riscv_cove_io_2026
+  slide_type: summary
+  claim: CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、truste。
+  narrative:
+  - CoVE-IO 把 TVM trusted I/O 拆成 TDI/TDM/DSM、SPDM、TDISP、PCIe IDE、IOMMU、trusted MSI 和 CoVE ABI
+  - RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-I/O track.
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `riscv_cove_io_2026` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 规范/标准材料
+      - - 证据等级
+        - E3 / 草案/未批准规范
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-2-background
+  paper_key: riscv_cove_io_2026
+  slide_type: background
+  claim: TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery。
+  narrative:
+  - TVM/Realm 使用设备时，需要把 device interface identity、DMA/MMIO、interrupt delivery 和 PCIe/CXL link 放。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `riscv_cove_io_2026` background slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Confidential I/O protocol、trusted device interface、network endpoint
+      - - 传统瓶颈
+        - 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
+      - - 本文入口
+        - CoVE-IO and TDISP trusted-device lifecycle
+      - - 证据限制
+        - E3 / 草案/未批准规范
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-2-solution
+  paper_key: riscv_cove_io_2026
+  slide_type: solution
+  claim: 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle
+  narrative:
+  - 用 CoVE-IO draft 描述 RISC-V confidential I/O lifecycle
+  - TDISP/TDISP XT 只作为公开 metadata 辅助，不推断 gated normative rules
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `riscv_cove_io_2026` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - TDI/TDM/DSM and TSM/RDSM lifecycle
+      - SPDM plus TDISP plus PCIe IDE composition
+      - IOMMU/IOPMP/AIA trusted DMA and interrupt substrate
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-2-experiments
+  paper_key: riscv_cove_io_2026
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；CoVE-IO and TDISP trusted-device lifecycle 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-I/O track.
+  - 证据等级：E3 / Draft-not-ratified；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `riscv_cove_io_2026` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - CoVE-IO and TDISP trusted-device lifecycle
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E3 / 草案/未批准规范
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-2-evaluation
+  paper_key: riscv_cove_io_2026
+  slide_type: evaluation
+  claim: 评价：CoVE-IO and TDISP trusted-device lifecycle 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
+  - 局限性：v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
+  - 商业化潜力：指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI 和 rev。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `riscv_cove_io_2026` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-cove-io-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee-io/releases/tag/v0.3.0; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 给 RISC-V TVM trusted I/O 提供最完整的公开 draft 架构入口。
+      - - 主要局限
+        - v0.3.0 未 ratified，TDISP/XT 规范不可公开复核，不能写成 production CoVE-IO stack。
+      - - 商业落地
+        - 指向 vendor NIC/DPU/accelerator assignment；风险在 SPDM证书、TDISP state、IDE key、ATS/PRI。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E3
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-3-summary
+  paper_key: weinhold2025tlsra
+  slide_type: summary
+  claim: TLS+RA binds an application secure channel to an attested TEE endpoint, anchoring endpoint/channel-binding evid。
+  narrative:
+  - Binds an application secure channel to an attested TEE endpoint
+  - Anchors endpoint/channel-binding evidence
+  - Peer-reviewed endpoint/channel-binding evidence for integrating remote attestation into TLS.
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `weinhold2025tlsra` summary slide metadata.
+  - 'reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/paper.pdf; source_url: https://www.usenix.org/conference/atc25/presentation/weinhold; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E1 / Peer-reviewed endpoint channel-binding evidence
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-3-background
+  paper_key: weinhold2025tlsra
+  slide_type: background
+  claim: SPDM and TDISP can identify device/control-plane state, but they do not prove where an application TLS channel。
+  narrative:
+  - SPDM and TDISP identify device/control-plane state
+  - Application TLS needs binding to attestation evidence and workload identity
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `weinhold2025tlsra` background slide metadata.
+  - 'reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/paper.pdf; source_url: https://www.usenix.org/conference/atc25/presentation/weinhold; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - Confidential I/O protocol、trusted device interface、network endpoint
+      - - 传统瓶颈
+        - 把 SPDM/TDISP/PCIe IDE/attested TLS 与 trusted device lifecycle 组合起来写。
+      - - 本文入口
+        - 'Separate but Together: TLS channel binding with remote attestat。'
+      - - 证据限制
+        - E1 / Peer-reviewed endpoint channel-binding evidence
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-3-solution
+  paper_key: weinhold2025tlsra
+  slide_type: solution
+  claim: Integrate remote-attestation evidence into the TLS handshake or certificate path so the channel and TEE state a。
+  narrative:
+  - Integrate remote-attestation evidence into TLS
+  - Bind channel endpoint, TEE measurement, and verifier policy
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `weinhold2025tlsra` solution slide metadata.
+  - 'reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/paper.pdf; source_url: https://www.usenix.org/conference/atc25/presentation/weinhold; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - TLS endpoint and attestation binding
+      - certificate/evidence composition
+      - relying-party verification policy
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-3-experiments
+  paper_key: weinhold2025tlsra
+  slide_type: experiments
+  claim: USENIX ATC 2025 peer-reviewed system paper provides a TLS+RA prototype and evaluation.
+  narrative:
+  - USENIX ATC 2025 peer-reviewed prototype and evaluation
+  - Supports endpoint/channel binding, not SPDM/TDISP device identity or DMA protection
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `weinhold2025tlsra` experiments slide metadata.
+  - 'reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/paper.pdf; source_url: https://www.usenix.org/conference/atc25/presentation/weinhold; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - 'Separate but Together: TLS channel binding with remote attestat。'
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E1 / Peer-reviewed endpoint channel-binding evidence
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-primary-3-evaluation
+  paper_key: weinhold2025tlsra
+  slide_type: evaluation
+  claim: Fits the protocol/device-endpoint 主讲定位 better than FOLIO, which is a trusted-I/O contrast paper.
+  narrative:
+  - 设计优势：Fits the protocol/device-endpoint 主讲定位 better than FOLIO, which is a trusted-I/O cont。
+  - 局限性：TLS+RA does not solve device assignment, TDISP state, IDE link protection, or IOMMU/I。
+  - 商业化潜力：Useful for confidential service onboarding and key release; risks remain in certifica。
+  - 证据边界：E1 / Peer-reviewed endpoint channel-binding evidence；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml `weinhold2025tlsra` evaluation slide metadata.
+  - 'reference/attestation/separate-but-together-integrating-remote-attestation-into-tls/paper.pdf; source_url: https://www.usenix.org/conference/atc25/presentation/weinhold; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - Fits the protocol/device-endpoint 主讲定位 better than FOLIO, which is a trusted-I/。
+      - - 主要局限
+        - TLS+RA does not solve device assignment, TDISP state, IDE link protection, or I。
+      - - 商业落地
+        - Useful for confidential service onboarding and key release; risks remain in cer。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E1
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed endpoint channel-binding evidence 的证据等级使用，不外推到未验证平台。
+- slide_id: d13-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: Confidential I/O protocol、trusted device interface、network endpoint 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - SPDM device identity and measurement：开创/基础入口，E0 / Spec-standard SOTA。
+  - CoVE-IO and TDISP trusted-device lifecycle：代表性改进，E3 / 草案/未批准规范。
+  - 'Separate but Together: TLS channel binding with remote attestat。：当前 SOTA/补充边界，E1 / Peer-reviewed endpoint channel-binding evidence。'
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/13-confidential-io-protocol-device-endpoint/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - SPDM device identity and measurement
+        - 开创/基础入口
+        - SPDM is the first-party specification foundation for device identity, mea。
+      - - CoVE-IO and TDISP trusted-device lifecycle
+        - 代表性改进
+        - RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V TEE-。
+      - - 'Separate but Together: TLS channel binding with remote attestat。'
+        - 当前 SOTA/补充边界
+        - Peer-reviewed endpoint/channel-binding evidence for integrating remote at。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

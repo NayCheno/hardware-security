@@ -1,0 +1,4 @@
+interface:
+  display_name: "PPT Skill"
+  short_description: "Create research-grade slide reports"
+  default_prompt: "Use $ppt-skill to turn this research topic and paper list into a Chinese slide-by-slide academic PPT report."

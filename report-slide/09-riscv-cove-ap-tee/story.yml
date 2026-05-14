@@ -1,0 +1,467 @@
+direction: RISC-V CoVE / AP-TEE confidential VM
+story_version: 1
+slides:
+- slide_id: d09-00-direction-intro
+  paper_key: direction
+  slide_type: direction_intro
+  claim: RISC-V CoVE / AP-TEE confidential VM 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。
+  narrative:
+  - 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+  - 固定三篇主讲材料；survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。
+  - 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
+  - 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml direction metadata and primary selection slots.
+  - survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.
+  proof_object:
+    type: comparison_matrix
+    title: 三篇主讲材料的分工
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 证据边界
+      rows:
+      - - RISC-V CoVE reference architecture
+        - 开创/基础入口
+        - E3 / 基础证据 public preprint
+      - - RISC-V AP-TEE / CoVE TVM 规范草案
+        - 代表性改进
+        - E3 / 草案/未批准规范
+      - - RISC-V TEE 谱系辅助材料
+        - 当前 SOTA/补充边界
+        - E2 survey / Background substrate
+  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+- slide_id: d09-primary-1-summary
+  paper_key: sahita2023cove
+  slide_type: summary
+  claim: 提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、n。
+  narrative:
+  - 提出 RISC-V CoVE confidential computing 参考架构方向，明确 confidential VM 需要的 ISA、non-ISA、SoC 与 platf。
+  - CoVE 2023 is the early mainline design material for RISC-V confidential VMs.
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `sahita2023cove` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf; source_url: https://arxiv.org/abs/2304.06167; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 开创/基础入口
+      - - 材料类型
+        - 系统论文
+      - - 证据等级
+        - E3 / 基础证据 public preprint
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Foundational public preprint 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-1-background
+  paper_key: sahita2023cove
+  slide_type: background
+  claim: 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lin。
+  narrative:
+  - 多租户 confidential VM 需要降低 tenant 对 host/hypervisor 的信任，并区别于单进程 enclave lineage
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `sahita2023cove` background slide metadata.
+  - 'reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf; source_url: https://arxiv.org/abs/2304.06167; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - RISC-V CoVE / AP-TEE confidential VM
+      - - 传统瓶颈
+        - 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+      - - 本文入口
+        - RISC-V CoVE reference architecture
+      - - 证据限制
+        - E3 / 基础证据 public preprint
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Foundational public preprint 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-1-solution
+  paper_key: sahita2023cove
+  slide_type: solution
+  claim: 用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform suppo。
+  narrative:
+  - 用 CoVE reference architecture 描述 TVM 所需的硬件、固件、hypervisor 和 platform support
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `sahita2023cove` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf; source_url: https://arxiv.org/abs/2304.06167; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - RISC-V confidential VM reference architecture
+      - ISA/non-ISA/SoC/platform requirement split
+      - Host/hypervisor trust reduction for TVM
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Foundational public preprint 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-1-experiments
+  paper_key: sahita2023cove
+  slide_type: experiments
+  claim: 架构论文/position-style，无完整系统实验
+  narrative:
+  - 架构论文/position-style，无完整系统实验
+  - 具体 ABI/state details 需要 AP-TEE draft
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `sahita2023cove` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf; source_url: https://arxiv.org/abs/2304.06167; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - RISC-V CoVE reference architecture
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E3 / 基础证据 public preprint
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Foundational public preprint 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-1-evaluation
+  paper_key: sahita2023cove
+  slide_type: evaluation
+  claim: CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型
+  narrative:
+  - 设计优势：CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。
+  - 局限性：不提供完整 ABI、状态机或 ratified standard 语义。
+  - 商业化潜力：对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
+  - 证据边界：E3 / Foundational public preprint；本地 PDF 已核验。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `sahita2023cove` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/cove-towards-confidential-computing-on-risc-v-platforms/paper.pdf; source_url: https://arxiv.org/abs/2304.06167; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - CoVE confidential VM 入口材料，能把 RISC-V 从 enclave lineage 推向 TVM 模型。
+      - - 主要局限
+        - 不提供完整 ABI、状态机或 ratified standard 语义。
+      - - 商业落地
+        - 对开放 confidential VM 生态有方向价值；风险在标准未定、平台支持和 verifier ecosystem。
+      - - 讲稿定位
+        - 开创/基础入口; 证据强度 E3
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Foundational public preprint 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-2-summary
+  paper_key: riscv_ap_tee_2024
+  slide_type: summary
+  claim: 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memo。
+  narrative:
+  - 定义 RISC-V AP-TEE/CoVE TVM lifecycle 和 SBI ABI，包括 TVM、TSM、COVH/COVG 与 memory lifecycle
+  - AP-TEE draft is the current standards-track source for RISC-V confidential VM semantics.
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `riscv_ap_tee_2024` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 代表性改进
+      - - 材料类型
+        - 规范/标准材料
+      - - 证据等级
+        - E3 / 草案/未批准规范
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-2-background
+  paper_key: riscv_ap_tee_2024
+  slide_type: background
+  claim: CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm。
+  narrative:
+  - CoVE 需要标准化 TVM、TSM、memory lifecycle、attestation 和 host/guest 调用界面，才能与 Arm CCA/RMM 同层比较
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `riscv_ap_tee_2024` background slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - RISC-V CoVE / AP-TEE confidential VM
+      - - 传统瓶颈
+        - 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+      - - 本文入口
+        - RISC-V AP-TEE / CoVE TVM 规范草案
+      - - 证据限制
+        - E3 / 草案/未批准规范
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-2-solution
+  paper_key: riscv_ap_tee_2024
+  slide_type: solution
+  claim: 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/re结论/sh。
+  narrative:
+  - 给出 TSM、TSM-driver、Supervisor Domains、COVH/COVG、memory donation/re结论/share 等 draft 规范语义
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `riscv_ap_tee_2024` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - TVM/TSM lifecycle and SBI ABI
+      - COVH/COVG host/guest interface split
+      - Memory donation, re结论 and sharing semantics
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-2-experiments
+  paper_key: riscv_ap_tee_2024
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；RISC-V AP-TEE / CoVE TVM 规范草案 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：AP-TEE draft is the current standards-track source for RISC-V confidential VM semanti。
+  - 证据等级：E3 / Draft-not-ratified；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `riscv_ap_tee_2024` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - RISC-V AP-TEE / CoVE TVM 规范草案
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E3 / 草案/未批准规范
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-2-evaluation
+  paper_key: riscv_ap_tee_2024
+  slide_type: evaluation
+  claim: 评价：RISC-V AP-TEE / CoVE TVM 规范草案 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。
+  - 局限性：v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。
+  - 商业化潜力：商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `riscv_ap_tee_2024` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/risc-v-ap-tee-specification/paper.pdf; source_url: https://github.com/riscv-non-isa/riscv-ap-tee/releases/tag/v0.7; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 当前最关键的 RISC-V CCA 对照材料，直接定义 TVM/TSM lifecycle。
+      - - 主要局限
+        - v0.7 RC2 仍是 draft，状态机和 ABI 可能变化。
+      - - 商业落地
+        - 商业潜力在开放 confidential VM stack；风险在标准收敛、firmware/OS support 和兼容迁移。
+      - - 讲稿定位
+        - 代表性改进; 证据强度 E3
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-3-summary
+  paper_key: boubakri2025riscvtee
+  slide_type: summary
+  claim: 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trus。
+  narrative:
+  - 把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtim。
+  - Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave sys。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `boubakri2025riscvtee` summary slide metadata.
+  - 'reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md; source_url: https://www.mdpi.com/2079-9292/14/21/4171; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 证据定位
+    data:
+      columns:
+      - 字段
+      - 内容
+      rows:
+      - - 论文定位
+        - 当前 SOTA/补充边界
+      - - 材料类型
+        - SoK/综述
+      - - 证据等级
+        - E2 survey / Background substrate
+      - - 来源状态
+        - 本地 PDF 已核验
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-3-background
+  paper_key: boubakri2025riscvtee
+  slide_type: background
+  claim: RISC-V TEE 论文和规范发展快，survey 可减少分类断裂
+  narrative:
+  - RISC-V TEE 论文和规范发展快，survey 可减少分类断裂
+  - 即使本地 PDF 已核验，机制细节仍要回到原始论文/spec
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `boubakri2025riscvtee` background slide metadata.
+  - 'reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md; source_url: https://www.mdpi.com/2079-9292/14/21/4171; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 问题边界
+    data:
+      columns:
+      - 维度
+      - 说明
+      rows:
+      - - 保护对象
+        - RISC-V CoVE / AP-TEE confidential VM
+      - - 传统瓶颈
+        - 把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。
+      - - 本文入口
+        - RISC-V TEE 谱系辅助材料
+      - - 证据限制
+        - E2 survey / Background substrate
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-3-solution
+  paper_key: boubakri2025riscvtee
+  slide_type: solution
+  claim: 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类
+  narrative:
+  - 按 secure enclave、TEE mechanism、memory/I/O/attestation support 分类
+  - 机制 结论 必须回引 CoVE paper 和 AP-TEE spec
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `boubakri2025riscvtee` solution slide metadata.
+  - 'reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md; source_url: https://www.mdpi.com/2079-9292/14/21/4171; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: mechanism_flow
+    title: 核心设计拆解
+    data:
+      stages:
+      - RISC-V enclave and TEE taxonomy
+      - Pre-CoVE versus CoVE/AP-TEE classification
+      - Survey bridge for representative systems
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-3-experiments
+  paper_key: boubakri2025riscvtee
+  slide_type: experiments
+  claim: 规范/Survey，无新实验；RISC-V TEE 谱系辅助材料 只支撑术语、taxonomy、接口语义或证据边界。
+  narrative:
+  - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
+  - 可支撑：Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older encla。
+  - 证据等级：E2 survey / Background substrate；来源状态：本地 PDF 已核验。
+  - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `boubakri2025riscvtee` experiments slide metadata.
+  - 'reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md; source_url: https://www.mdpi.com/2079-9292/14/21/4171; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: evidence_gap_matrix
+    title: 实验/证据边界
+    data:
+      columns:
+      - 对象
+      - 可支撑
+      - 边界
+      rows:
+      - - 数据/来源
+        - RISC-V TEE 谱系辅助材料
+        - 本地 PDF 已核验
+      - - Baseline/对照
+        - 以论文或规范原文为准
+        - 不跨材料外推
+      - - 指标/对象
+        - 只使用当前来源可证明的信息
+        - E2 survey / Background substrate
+      - - 使用边界
+        - 可进入本方向演进图
+        - 不能替代更强证据
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-primary-3-evaluation
+  paper_key: boubakri2025riscvtee
+  slide_type: evaluation
+  claim: 评价：RISC-V TEE 谱系辅助材料 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
+  narrative:
+  - 设计优势：有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
+  - 局限性：Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。
+  - 商业化潜力：适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。
+  - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml `boubakri2025riscvtee` evaluation slide metadata.
+  - 'reference/risc-v-confidential-computing/a-survey-of-risc-v-secure-enclaves-and-trusted-execution-environments/README.md; source_url: https://www.mdpi.com/2079-9292/14/21/4171; local README/PDF Section evidence as recorded in the reference entry.'
+  proof_object:
+    type: comparison_matrix
+    title: 文章评价
+    data:
+      columns:
+      - 维度
+      - 判断
+      rows:
+      - - 设计优势
+        - 有助于横向定位 Keystone/Penglai/SPEAR-V 与 CoVE/AP-TEE。
+      - - 主要局限
+        - Survey 不能替代原始机制论文或官方规范，尤其不能承载性能或安全证明细节。
+      - - 商业落地
+        - 适合产品路线图分类；风险在 survey 分类滞后和不同 threat model 被误合并。
+      - - 讲稿定位
+        - 当前 SOTA/补充边界; 证据强度 E2 survey
+  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 survey / Background substrate 的证据等级使用，不外推到未验证平台。
+- slide_id: d09-16-direction-summary
+  paper_key: direction
+  slide_type: direction_summary
+  claim: RISC-V CoVE / AP-TEE confidential VM 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。
+  narrative:
+  - RISC-V CoVE reference architecture：开创/基础入口，E3 / 基础证据 public preprint。
+  - RISC-V AP-TEE / CoVE TVM 规范草案：代表性改进，E3 / 草案/未批准规范。
+  - RISC-V TEE 谱系辅助材料：当前 SOTA/补充边界，E2 survey / Background substrate。
+  - 本方向结论：先用三篇主讲材料建立演进关系，再用证据等级控制机制、实验和商业化结论。
+  evidence_refs:
+  - report-slide/09-riscv-cove-ap-tee/papers.yml primary selection and evaluation fields.
+  - survey/evidence_ledger.md Evidence Classes and Boundary Records.
+  proof_object:
+    type: comparison_matrix
+    title: 本方向方法对比
+    data:
+      columns:
+      - 论文
+      - 定位
+      - 选择理由
+      rows:
+      - - RISC-V CoVE reference architecture
+        - 开创/基础入口
+        - CoVE 2023 is the early mainline design material for RISC-V confidential V。
+      - - RISC-V AP-TEE / CoVE TVM 规范草案
+        - 代表性改进
+        - AP-TEE draft is the current standards-track source for RISC-V confidentia。
+      - - RISC-V TEE 谱系辅助材料
+        - 当前 SOTA/补充边界
+        - Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against。
+  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。

@@ -170,7 +170,7 @@ slides:
   - "论文提出 Intel Flat Memory Mode：在 memory controller 内以 cache-line 粒度管理 local DRAM 与 CXL memory。"
   - "硬件 tiering 避免 hypervisor/OS 用 page-table 扫描、PTE poisoning 或 instruction sampling 追踪 hotness。"
   - "Memstrata 是轻量 multi-tenant allocator，用 slowdown estimator 和 dedicated local pages 缓解 outlier VM。"
-  - "在本 survey 中，它说明 fabric memory 与 VM resource management 的冲突，但仍不是 confidential boundary 证明。"
+  - "在本报告中，它说明 fabric memory 与 VM resource management 的冲突，但仍不是 confidential boundary 证明。"
   evidence_refs:
   - "CXL-Tiers p.1 abstract: combines hardware-managed tiering with software-managed performance isolation."
   - "CXL-Tiers p.3 Section 3 and Fig.3-Fig.4: Intel Flat Memory Mode design."
@@ -297,7 +297,7 @@ slides:
       - ["最强证据", "真实 CXL prototype + 115 workloads + multi-VM 实验"]
       - ["商业场景", "云 VM memory expansion、DRAM cost/carbon reduction、tail-performance control"]
       - ["安全缺口", "不覆盖 IDE/SPDM/TDISP、attestation、ownership lifecycle"]
-      - ["对本 deck 的作用", "支撑 fabric memory resource-management 问题，不支撑 confidential I/O 安全证明"]
+      - ["对本报告的作用", "支撑 fabric memory resource-management 问题，不支撑 confidential I/O 安全证明"]
   source_note: "评价基于 CXL-Tiers conclusion/discussion 和本仓库 background-substrate 证据边界。"
 
 - slide_id: d12-11-odrp-summary
@@ -463,4 +463,4 @@ slides:
       - ["CXL-Tiers", "VM tiering / performance isolation", "confidential ownership 与 host placement policy 一致性"]
       - ["ODRP", "remote paging utilization / MNode CPU", "attested RNIC/DPU、encrypted link、buffer revocation"]
       - ["后续组合", "CXL/RDMA fabric 可作为高性能底座", "必须接 SPDM/TDISP/CCA/CoVE 证据链"]
-  source_note: "总结页使用三篇论文实验结果与 evidence ledger 的 claim-strength 边界。"
+  source_note: "总结页使用三篇论文实验结果与证据等级边界。"
