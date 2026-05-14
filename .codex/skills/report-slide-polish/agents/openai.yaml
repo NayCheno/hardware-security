@@ -1,0 +1,4 @@
+interface:
+  display_name: "Report Slide Polish"
+  short_description: "Polish and build local report-slide decks"
+  default_prompt: "Use $report-slide-polish to polish the local hardware-security report-slide deck and build out/report.pdf and out/report.pptx."

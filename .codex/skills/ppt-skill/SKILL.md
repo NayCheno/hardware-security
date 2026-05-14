@@ -9,6 +9,8 @@ description: Generate research-grade Chinese academic PPT slide-report plans fro
 
 Produce a research-oriented technical evolution slide report, not a generic literature review. The default output is Chinese, slide-by-slide PPT copy with citations and visual layout guidance. If the user asks for an actual `.pptx`, compose this skill with the presentation/deck-generation skill and use this skill as the content contract.
 
+In this hardware-security repository, when the task moves from planning slide content to editing and building the local `report-slide` artifacts, compose this skill with `$report-slide-polish`. Keep this skill responsible for the research narrative and evidence-backed content; let `$report-slide-polish` govern local source edits, `uv` build commands, unified `out/` deliverables, and PDF/PPTX QA.
+
 Treat every claim as evidence-bound. Do not invent papers, venues, authors, benchmarks, CVEs, datasets, SOTA status, code availability, or experimental numbers.
 
 ## Input Resolution
