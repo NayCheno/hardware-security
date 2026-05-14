@@ -13,12 +13,16 @@
 # Python/tool caches
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .cache/
 .venv/
 venv/
+
+# Unified build outputs
+out/
 
 # LaTeX build artifacts for survey sources.
 # Keep reference/**/paper.pdf tracked as library assets.

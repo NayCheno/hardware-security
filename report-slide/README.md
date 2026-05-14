@@ -10,6 +10,23 @@ intentionally ignored by Git and should not be committed.
 
 ## Build
 
+Prefer the repository-root `uv` entrypoint:
+
+```bash
+uv run build report
+uv run build report-pdf
+uv run build report-pptx
+```
+
+The normalized deliverables are copied to:
+
+```text
+out/report.pdf
+out/report.pptx
+```
+
+The legacy local command still works when running from this directory:
+
 ```bash
 cd report-slide
 make
@@ -23,7 +40,7 @@ For validation only:
 python tools/validate_content.py
 ```
 
-For the editable PPTX:
+For the editable PPTX without the root `uv` wrapper:
 
 ```bash
 node pptx/build.mjs
