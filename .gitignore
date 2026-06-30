@@ -22,7 +22,7 @@ __pycache__/
 venv/
 
 # Unified build outputs
-out/
+# out/
 
 # LaTeX build artifacts for survey sources.
 # Keep reference/**/paper.pdf tracked as library assets.
