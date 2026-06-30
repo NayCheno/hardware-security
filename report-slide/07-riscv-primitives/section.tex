@@ -3,7 +3,7 @@
 \begin{frame}[t,shrink=6]{RISC-V 基础安全 primitives：方向开场}
 \DeckKicker{方向开场}
 \SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
-{\large\bfseries\color{Ink} RISC-V 基础安全 primitives 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} RISC-V 基础安全 primitives 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -43,15 +43,14 @@ RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & E0 / Spec-st
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
+\SourceFootnote{来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V privileged architecture：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 定义 RISC-V privilege modes、PMP、virtualization、trap/translation 和相关保护基础\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -90,15 +89,14 @@ RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & E0 / Spec-st
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V privileged architecture｜证据等级：E0 / 基础证据 standard substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V privileged architecture：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} RISC-V 安全系统需要从标准 privilege/translation/memory-control 机制出发，TEE 论文不能跳过底层隔离。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -136,15 +134,14 @@ RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & E0 / Spec-st
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V privileged architecture｜证据等级：E0 / 基础证据 standard substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V privileged architecture：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 通过 M/S/U/HS/VS modes、PMP/ePMP/Smepmp、trap/translation 机制组合隔离 substrate\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -175,15 +172,14 @@ RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & E0 / Spec-st
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V privileged architecture｜证据等级：E0 / 基础证据 standard substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V privileged architecture：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V privileged architecture 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V privileged architecture 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -224,15 +220,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V privileged architecture｜证据等级：E0 / 基础证据 standard substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V privileged architecture：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E0 / 基础证据 standard substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：RISC-V privileged architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：RISC-V privileged architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -273,15 +268,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / 基础证据 standard substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V privileged architecture｜证据等级：E0 / 基础证据 standard substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V IOMMU：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 定义 RISC-V I/O translation/protection 架构，用于约束设备地址转换和访问权限\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -320,15 +314,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V IOMMU：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} DMA 和总线 master 可绕过 CPU-side PMP/页表\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} DMA 和总线 master 可绕过 CPU-side PMP/页表\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -367,15 +360,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V IOMMU：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} IOMMU 把设备发起的访问纳入可配置 translation/protection 边界\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} IOMMU 把设备发起的访问纳入可配置 translation/protection 边界\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -407,15 +399,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V IOMMU：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V IOMMU 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V IOMMU 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -425,7 +416,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
   \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  \item 可支撑：RISC-V IOMMU specification is the current standard substrate for DMA isolation and Co。
+  \item 可支撑：RISC-V IOMMU specification is the current standard substrate for DMA isolation and...
   \item 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
   \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
 \end{itemize}
@@ -456,15 +447,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V IOMMU：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：RISC-V IOMMU 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：RISC-V IOMMU 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -505,15 +495,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 con。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -552,15 +541,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Confidential I/O 不只需要 DMA 隔离，也需要可信 interrupt/MSI delivery\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -599,15 +587,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} AIA 规范化 interrupt controller 与 MSI/virtual interrupt\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} AIA 规范化 interrupt controller 与 MSI/virtual interrupt\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -639,15 +626,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V Advanced Interrupt Architecture 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；RISC-V Advanced Interrupt Architecture 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -657,7 +643,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
   \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  \item 可支撑：RISC-V AIA specification is the current interrupt virtualization and ownership substr。
+  \item 可支撑：RISC-V AIA specification is the current interrupt virtualization and ownership...
   \item 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
   \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
 \end{itemize}
@@ -688,15 +674,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V Advanced Interrupt Architecture：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E0 / Spec-standard SOTA}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：RISC-V Advanced Interrupt Architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：RISC-V Advanced Interrupt Architecture 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -737,15 +722,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{RISC-V 基础安全 primitives：方向总结}
 \DeckKicker{方向总结}
 \SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
-{\large\bfseries\color{Ink} RISC-V 基础安全 primitives 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} RISC-V 基础安全 primitives 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -774,9 +758,9 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
 \toprule
 \textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
 \midrule
-RISC-V privileged architecture & 开创/基础入口 & RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for。 \\
-RISC-V IOMMU & 代表性改进 & RISC-V IOMMU specification is the current standard substrate for DMA isol。 \\
-RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & RISC-V AIA specification is the current interrupt virtualization and owne。 \\
+RISC-V privileged architecture & 开创/基础入口 & RISC-V privileged ISA defines PMP, traps, modes, and paging substrate... \\
+RISC-V IOMMU & 代表性改进 & RISC-V IOMMU specification is the current standard substrate for DMA... \\
+RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & RISC-V AIA specification is the current interrupt virtualization and... \\
 \bottomrule
 \end{tabularx}
 }
@@ -785,6 +769,5 @@ RISC-V Advanced Interrupt Architecture & 当前 SOTA/补充边界 & RISC-V AIA s
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
+\SourceFootnote{来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge}
 \end{frame}

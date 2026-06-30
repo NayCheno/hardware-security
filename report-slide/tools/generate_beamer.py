@@ -113,7 +113,9 @@ def source_note_for_display(value: Any) -> str:
         "claim 强度保持",
     )
     if not text or any(term in text for term in internal_terms):
-        text = "论文原文、官方规范或公开材料；具体结论受证据等级和原文实验范围约束。"
+        text = "来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge"
+    elif not text.startswith("来源：") and not text.startswith("Source:"):
+        text = f"来源：{text}"
     return text
 
 
@@ -194,7 +196,7 @@ def proof_metric_bars(data: dict[str, Any]) -> str:
             rf"\textbf{{{latex_escape(metric.get('label'))}}}\hfill "
             rf"\textcolor{{Accent}}{{\bfseries {latex_escape(metric.get('value'))}}}\par"
             rf"\textcolor{{Accent}}{{\rule{{{width:.2f}\linewidth}}{{1.1mm}}}}\par"
-            rf"{{\tiny\textcolor{{Muted}}{{{latex_escape(metric.get('note'))}}}}}\par\vspace{{1.4mm}}"
+            rf"{{\tiny\textcolor{{Muted}}{{{latex_escape(metric.get('note'))}}}}}\par\vspace{{0.8mm}}"
         )
     return "\n".join(rows)
 
@@ -272,6 +274,10 @@ def authored_panel(title: Any, body: str, *, fill: str = "Paper") -> str:
   \end{{minipage}}}}"""
 
 
+def source_footnote(value: Any) -> str:
+    return rf"\SourceFootnote{{{latex_escape(value)}}}"
+
+
 def authored_label(slide_type: str) -> str:
     return {
         "direction_intro": "方向开场",
@@ -296,7 +302,7 @@ def render_authored_slide(data: dict[str, Any], slide: dict[str, Any]) -> str:
     return rf"""\begin{{frame}}[t,shrink=6]{{{latex_escape(title)}：{latex_escape(label)}}}
 \DeckKicker{{{latex_escape(label)}}}
 \SlideMeta{{{latex_escape(meta_key)}}}{{{latex_escape(evidence)}}}{{{latex_escape(source)}}}
-{{\large\bfseries\color{{Ink}} {latex_escape(slide.get("claim"))}\par}}\vspace{{1.8mm}}
+{{\large\bfseries\color{{Ink}} {latex_escape(slide.get("claim"))}\par}}\vspace{{1.2mm}}
 \begin{{columns}}[T,totalwidth=\textwidth]
   \begin{{column}}{{0.45\textwidth}}
     {authored_panel("内容说明", latex_itemize(narrative), fill="Paper")}
@@ -305,8 +311,7 @@ def render_authored_slide(data: dict[str, Any], slide: dict[str, Any]) -> str:
     {render_proof_object(proof)}
   \end{{column}}
 \end{{columns}}
-\vspace{{1mm}}
-{{\tiny\textcolor{{Muted}}{{引用依据：{latex_escape(source_note_for_display(slide.get("source_note")))}}}}}
+{source_footnote(source_note_for_display(slide.get("source_note")))}
 \end{{frame}}
 """
 
@@ -322,67 +327,86 @@ def render_authored_direction(data: dict[str, Any]) -> str:
 
 
 def render_overview(directions: list[dict[str, Any]]) -> str:
-    rows = []
-    for index, direction in enumerate(directions, start=1):
-        rows.append(rf"\IndexEntry{{{index:02d}}}{{{latex_escape(direction.get('direction'))}}}{{基础入口 / 代表改进 / 当前边界}}")
-    left_rows = "\n".join(rows[:8])
-    right_rows = "\n".join(rows[8:])
-
+    grouped_rows = [
+        ["TEE 基础与 Arm 路线", "01-05", "TEE taxonomy；TrustZone；Arm CCA/RME/RMM；部署与 I/O 边界"],
+        ["Attestation 与 RISC-V 基础", "06-10", "RATS/boot/lifecycle；RISC-V primitives；TEE lineage；CoVE/AP-TEE；CoVE-IO"],
+        ["Memory / Fabric / Protocol", "11-13", "Memory encryption/integrity；CXL/PCIe IDE/RDMA；SPDM/TDISP/TLS+RA"],
+        ["Accelerator / DPU / SmartNIC", "14-15", "GPU/FPGA/DPU confidential offload；trusted NIC；secure storage path"],
+        ["全局总结", "结尾", "证据边界、研究空白、工程落地优先级"],
+    ]
+    group_table = "\n".join(
+        rf"{latex_escape(row[0])} & \textcolor{{Accent}}{{\bfseries {latex_escape(row[1])}}} & {latex_escape(row[2])} \\"
+        for row in grouped_rows
+    )
+    route_items = latex_itemize(
+        [
+            "TEE taxonomy -> Arm CCA / RISC-V CoVE",
+            "Memory ownership -> I/O fabric -> trusted device interface",
+            "SPDM / TDISP / IDE -> DPU / SmartNIC / storage endpoint",
+            "端到端 evidence chain 约束实验与部署结论",
+        ]
+    )
     return rf"""
 \section{{总览与证据规则}}
 
 \begin{{frame}}[t]{{报告问题与技术路线}}
 \DeckKicker{{报告定位}}
-\ClaimLine{{本报告围绕硬件辅助隔离如何从 CPU TEE 扩展到机密虚拟机、可信 I/O 与异构设备数据路径。}}
+\SlideMeta{{证据等级}}{{Method}}{{来源：报告结构与 primary ledger}}
+\ClaimLine{{平台管理者不可信，但仍掌握 CPU 调度、内存、I/O 和设备资源。}}
 \begin{{columns}}[T,totalwidth=\textwidth]
-  \begin{{column}}{{0.56\textwidth}}
-    \begin{{itemize}}
-      \item 核心问题：平台管理者不可信，但仍掌握调度、内存、I/O 和设备资源。
-      \item 报告范围：Arm TrustZone/CCA、RISC-V TEE/CoVE、内存保护、CXL/RDMA/SPDM、DPU/GPU/SmartNIC。
-      \item 组织方式：15 个技术方向，每个方向选择 3 篇代表性材料串联技术演进。
-      \item 阅读主线：保护对象、资源管理者、证据链、设备边界和工程落地。
-    \end{{itemize}}
-  \end{{column}}
-  \begin{{column}}{{0.38\textwidth}}
-    \VisualPanel{{报告主线}}{{\begin{{itemize}}
-      \item TEE taxonomy 与 TrustZone 谱系
-      \item Arm CCA/RME/RMM 与部署模型
-      \item RISC-V primitives、TEE 与 CoVE
-      \item Memory/I/O fabrics 与 trusted device path
-      \item Accelerator、DPU、SmartNIC 与安全存储
+  \begin{{column}}{{0.31\textwidth}}
+    \OverviewPanel{{核心问题}}{{\begin{{itemize}}
+      \item 管理者仍控制 CPU 调度、页表、DMA、interrupt 和设备分配。
+      \item 机密计算要把“谁能访问数据”从软件约定下沉到硬件与证明链。
     \end{{itemize}}}}
   \end{{column}}
+  \begin{{column}}{{0.31\textwidth}}
+    \OverviewPanel{{报告范围}}{{\begin{{itemize}}
+      \item Arm TrustZone / CCA / RME / RMM。
+      \item RISC-V primitives、TEE lineage、CoVE / AP-TEE。
+      \item Memory、CXL、PCIe IDE、SPDM、DPU、SmartNIC。
+    \end{{itemize}}}}
+  \end{{column}}
+  \begin{{column}}{{0.31\textwidth}}
+    \OverviewPanel{{阅读主线}}{{{route_items}}}
+  \end{{column}}
 \end{{columns}}
+\SourceFootnote{{来源：report-slide 15 directions / 45 primary materials｜证据等级：方法论}}
 \end{{frame}}
 
 \begin{{frame}}[t]{{证据等级与结论边界}}
 \DeckKicker{{证据边界}}
+\SlideMeta{{证据等级}}{{E0-E5}}{{来源：survey evidence classes}}
 \ClaimLine{{所有机制和实验结论都必须落在证据等级允许的范围内。}}
 \scriptsize
-\begin{{tabularx}}{{\textwidth}}{{@{{}}lY@{{}}}}
+\begin{{tabularx}}{{\textwidth}}{{@{{}}lYY@{{}}}}
 \toprule
-标签 & 报告中允许的表述 \\
+标签 & 可支撑什么 & 不能支撑什么 \\
 \midrule
-E0 official spec/RFC & 只写规范性机制、状态、接口和术语；没有独立实验时写“规范，无新实验”。 \\
-E1 同行评审系统论文 & 可写系统设计、实现和实验结果，但必须限定在论文 threat model 和 workload 内。 \\
-E2 SoK/Survey & 用于 taxonomy、覆盖范围和 related-work framing；机制结论回到原论文或规范。 \\
-E3 draft/preprint & 只写 emerging direction 与草案状态；标题或证据行显式标注 draft/not ratified。 \\
-E4 industry evidence & 只支撑产品行为、部署实践或工程背景；不当作普适安全证明。 \\
-E5 limited public evidence & 只写来源状态和研究线索，不支撑强机制或性能结论。 \\
+E0 Spec & 规范机制、接口、术语、状态；规范，无新实验 & 性能、安全证明或部署效果 \\
+E1 System Paper & 系统设计、实现、实验数字 & 论文 threat model / workload 之外的泛化 \\
+E2 SoK / Survey & taxonomy、覆盖范围、相关工作框架 & 一手机制实验或产品结论 \\
+E3 Draft & 前沿方向、草案状态；draft / not ratified & 已批准标准或量产状态 \\
+E4 Industry & 产品行为、部署实践、工程背景 & 普适安全证明 \\
+E5 Limited & 来源状态和研究线索 & 强机制、性能或成熟度结论 \\
 \bottomrule
 \end{{tabularx}}
+\SourceFootnote{{来源：survey evidence classes 与 report-slide evidence ledger｜证据等级：方法论}}
 \end{{frame}}
 
 \begin{{frame}}[t]{{15 个技术方向总览}}
 \DeckKicker{{方向索引}}
-\begin{{columns}}[T,totalwidth=\textwidth]
-  \begin{{column}}{{0.49\textwidth}}
-{left_rows}
-  \end{{column}}
-  \begin{{column}}{{0.49\textwidth}}
-{right_rows}
-  \end{{column}}
-\end{{columns}}
+\SlideMeta{{证据等级}}{{Method}}{{来源：report-slide direction manifest}}
+\ClaimLine{{15 个方向按保护对象、资源管理者、证据链和设备边界组织。}}
+\scriptsize
+\begin{{tabularx}}{{\textwidth}}{{@{{}}l l Y@{{}}}}
+\toprule
+组 & 方向 & 覆盖范围 \\
+\midrule
+{group_table}
+\bottomrule
+\end{{tabularx}}
+\SourceFootnote{{来源：report-slide direction list｜证据等级：方向综述}}
 \end{{frame}}
 """
 

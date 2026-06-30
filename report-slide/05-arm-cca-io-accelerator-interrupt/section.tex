@@ -3,7 +3,7 @@
 \begin{frame}[t,shrink=6]{Arm CCA I/O、DMA、accelerator、interrupt：方向开场}
 \DeckKicker{方向开场}
 \SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
-{\large\bfseries\color{Ink} Arm CCA I/O、DMA、accelerator、interrupt 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Arm CCA I/O、DMA、accelerator、interrupt 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -12,7 +12,7 @@
     \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
-  \item 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+  \item 把设备访问、DMA、interrupt ownership 与 accelerator workflowow 纳入 CCA 边界。
   \item 固定三篇主讲材料；ACAI 和 Devlore 均保持 draft/not-ratified 状态，`sok-tee` 只作为 accelerator TEE taxonomy。
   \item 先讲方向痛点和设计轴，再逐篇说明贡献、限制、证据强度和可落地条件。
   \item 对规范、Survey、draft、vendor evidence 保持显式标注，避免把背景材料写成一手系统证明。
@@ -43,15 +43,14 @@ Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & E2 / Background sub
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。}}
+\SourceFootnote{来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 研究如何用 Arm CCA 保护 accelerator execution，说明 CPU Realm 之外的 offload path 不能默认。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -90,15 +89,14 @@ Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & E2 / Background sub
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：ACAI: CCA accelerator execution｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -126,7 +124,7 @@ Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & E2 / Background sub
 \textbf{维度} & \textbf{说明} \\
 \midrule
 保护对象 & Arm CCA I/O、DMA、accelerator、interrupt \\
-传统瓶颈 & 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。 \\
+传统瓶颈 & 把设备访问、DMA、interrupt ownership 与 accelerator workflowow 纳入 CCA 边界。 \\
 本文入口 & ACAI: CCA accelerator execution \\
 证据限制 & E3 / 草案/未批准规范 \\
 \bottomrule
@@ -137,15 +135,14 @@ Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & E2 / Background sub
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：ACAI: CCA accelerator execution｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -176,15 +173,14 @@ Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & E2 / Background sub
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：ACAI: CCA accelerator execution｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} arXiv 系统论文提供原型/设计评估\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} arXiv 系统论文提供原型/设计评估\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -223,15 +219,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：ACAI: CCA accelerator execution｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{ACAI: CCA accelerator execution：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflowow，是本方向的入口设计点\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -240,7 +235,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
     \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
-  \item 设计优势：把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
+  \item 设计优势：把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflowow，是本方向的入口设计点。
   \item 局限性：预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
   \item 商业化潜力：可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
   \item 证据边界：E3 / Draft-not-ratified；本地 PDF 已核验。
@@ -260,7 +255,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
 \toprule
 \textbf{维度} & \textbf{判断} \\
 \midrule
-设计优势 & 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。 \\
+设计优势 & 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflowow，是本方向的入口设计点。 \\
 主要局限 & 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。 \\
 商业落地 & 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。 \\
 讲稿定位 & 开创/基础入口; 证据强度 E3 \\
@@ -272,15 +267,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：ACAI: CCA accelerator execution｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Devlore: device interrupt protection：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -290,7 +284,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
   \item 关注 confidential VM 的 device interrupt protection，把 interrupt delivery 纳入机密计算边界
-  \item Devlore is a recent draft on device interrupt protection for confidential VMs and CCA-like。
+  \item Devlore is a recent draft on device interrupt protection for confidential VMs and...
 \end{itemize}
     \end{minipage}
     \vspace{1mm}
@@ -319,15 +313,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Devlore: device interrupt protection｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Devlore: device interrupt protection：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidentia。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -354,7 +347,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
 \textbf{维度} & \textbf{说明} \\
 \midrule
 保护对象 & Arm CCA I/O、DMA、accelerator、interrupt \\
-传统瓶颈 & 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。 \\
+传统瓶颈 & 把设备访问、DMA、interrupt ownership 与 accelerator workflowow 纳入 CCA 边界。 \\
 本文入口 & Devlore: device interrupt protection \\
 证据限制 & E3 / 草案/未批准规范 \\
 \bottomrule
@@ -365,15 +358,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Devlore: device interrupt protection｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Devlore: device interrupt protection：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 将 interrupt delivery、device ownership 与 confidential boundary 绑定，使设备事件不再只。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -404,15 +396,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Devlore: device interrupt protection｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Devlore: device interrupt protection：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -451,15 +442,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Devlore: device interrupt protection｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Devlore: device interrupt protection：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E3 / 草案/未批准规范}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -500,15 +490,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / 草案/未批准规范 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Devlore: device interrupt protection｜证据等级：E3 / 草案/未批准规范}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、r。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -517,8 +506,8 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
     \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
-  \item 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestati。
-  \item Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runtime, a。
+  \item 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与。
+  \item Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runtime...
 \end{itemize}
     \end{minipage}
     \vspace{1mm}
@@ -547,15 +536,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 设备 TEE 机制比 CPU TEE 更分散\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 设备 TEE 机制比 CPU TEE 更分散\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -583,7 +571,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
 \textbf{维度} & \textbf{说明} \\
 \midrule
 保护对象 & Arm CCA I/O、DMA、accelerator、interrupt \\
-传统瓶颈 & 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。 \\
+传统瓶颈 & 把设备访问、DMA、interrupt ownership 与 accelerator workflowow 纳入 CCA 边界。 \\
 本文入口 & Accelerator TEE SoK for CCA I/O \\
 证据限制 & E2 / Background substrate \\
 \bottomrule
@@ -594,15 +582,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -633,15 +620,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 规范/Survey，无新实验；Accelerator TEE SoK for CCA I/O 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 规范/Survey，无新实验；Accelerator TEE SoK for CCA I/O 只支撑术语、taxonomy、接口语义或证据边界。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -651,7 +637,7 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
       \PanelTitle{内容说明}
       \scriptsize \begin{itemize}
   \item 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  \item 可支撑：Accelerator TEE SoK provides current taxonomy for device identity, memory paths, runt。
+  \item 可支撑：Accelerator TEE SoK provides current taxonomy for device identity, memory paths...
   \item 证据等级：E2 / Background substrate；来源状态：本地 PDF 已核验。
   \item 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
 \end{itemize}
@@ -682,15 +668,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Accelerator TEE SoK for CCA I/O：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：Accelerator TEE SoK for CCA I/O 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：Accelerator TEE SoK for CCA I/O 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -731,15 +716,14 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。}}
+\SourceFootnote{来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{Arm CCA I/O、DMA、accelerator、interrupt：方向总结}
 \DeckKicker{方向总结}
 \SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
-{\large\bfseries\color{Ink} Arm CCA I/O、DMA、accelerator、interrupt 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Arm CCA I/O、DMA、accelerator、interrupt 的结论是：三篇主讲材料共同给出技术演进，但仍要用证据等级约束每个结论。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -768,9 +752,9 @@ Baseline/对照 & 以论文或规范原文为准 & 不跨材料外推 \\
 \toprule
 \textbf{论文} & \textbf{定位} & \textbf{选择理由} \\
 \midrule
-ACAI: CCA accelerator execution & 开创/基础入口 & ACAI is the early design point for extending Arm CCA toward accelerator e。 \\
-Devlore: device interrupt protection & 代表性改进 & Devlore is a recent draft on device interrupt protection for confidential。 \\
-Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & Accelerator TEE SoK provides current taxonomy for device identity, memory。 \\
+ACAI: CCA accelerator execution & 开创/基础入口 & ACAI is the early design point for extending Arm CCA toward accelerator... \\
+Devlore: device interrupt protection & 代表性改进 & Devlore is a recent draft on device interrupt protection for... \\
+Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & Accelerator TEE SoK provides current taxonomy for device identity... \\
 \bottomrule
 \end{tabularx}
 }
@@ -779,6 +763,5 @@ Accelerator TEE SoK for CCA I/O & 当前 SOTA/补充边界 & Accelerator TEE SoK
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：总结页综合三篇主讲材料的选择理由、评价字段和证据等级。}}
+\SourceFootnote{来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge}
 \end{frame}

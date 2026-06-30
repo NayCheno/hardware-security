@@ -31,7 +31,7 @@ slides:
       - - RISC-V Advanced Interrupt Architecture
         - 当前 SOTA/补充边界
         - E0 / Spec-standard SOTA
-  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
 - slide_id: d07-primary-1-summary
   paper_key: riscv_privileged
   slide_type: summary
@@ -58,7 +58,7 @@ slides:
         - E0 / 基础证据 standard substrate
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V privileged architecture｜证据等级：E0 / Foundational standard substrate
 - slide_id: d07-primary-1-background
   paper_key: riscv_privileged
   slide_type: background
@@ -84,7 +84,7 @@ slides:
         - RISC-V privileged architecture
       - - 证据限制
         - E0 / 基础证据 standard substrate
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V privileged architecture｜证据等级：E0 / Foundational standard substrate
 - slide_id: d07-primary-1-solution
   paper_key: riscv_privileged
   slide_type: solution
@@ -102,7 +102,7 @@ slides:
       - M/S/U and virtualization privilege modes
       - PMP/ePMP/Smepmp memory protection substrate
       - Trap, translation and supervisor/guest isolation vocabulary
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V privileged architecture｜证据等级：E0 / Foundational standard substrate
 - slide_id: d07-primary-1-experiments
   paper_key: riscv_privileged
   slide_type: experiments
@@ -136,7 +136,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V privileged architecture｜证据等级：E0 / Foundational standard substrate
 - slide_id: d07-primary-1-evaluation
   paper_key: riscv_privileged
   slide_type: evaluation
@@ -165,7 +165,7 @@ slides:
         - 商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。
       - - 讲稿定位
         - 开创/基础入口; 证据强度 E0
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Foundational standard substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V privileged architecture｜证据等级：E0 / Foundational standard substrate
 - slide_id: d07-primary-2-summary
   paper_key: riscv_iommu_2023
   slide_type: summary
@@ -192,7 +192,7 @@ slides:
         - E0 / Spec-standard SOTA
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-2-background
   paper_key: riscv_iommu_2023
   slide_type: background
@@ -219,7 +219,7 @@ slides:
         - RISC-V IOMMU
       - - 证据限制
         - E0 / Spec-standard SOTA
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-2-solution
   paper_key: riscv_iommu_2023
   slide_type: solution
@@ -238,14 +238,14 @@ slides:
       - Device address translation and protection
       - I/O page-table and permission semantics
       - CoVE-IO substrate for DMA isolation discussions
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-2-experiments
   paper_key: riscv_iommu_2023
   slide_type: experiments
   claim: 规范/Survey，无新实验；RISC-V IOMMU 只支撑术语、taxonomy、接口语义或证据边界。
   narrative:
   - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  - 可支撑：RISC-V IOMMU specification is the current standard substrate for DMA isolation and Co。
+  - 可支撑：RISC-V IOMMU specification is the current standard substrate for DMA isolation and...
   - 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
   - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
   evidence_refs:
@@ -272,7 +272,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-2-evaluation
   paper_key: riscv_iommu_2023
   slide_type: evaluation
@@ -301,11 +301,11 @@ slides:
         - 对服务器和异构设备直通很关键；风险在设备生态、固件配置和 verifier 无法直接观察配置完整性。
       - - 讲稿定位
         - 代表性改进; 证据强度 E0
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V IOMMU｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-3-summary
   paper_key: riscv_aia_2023
   slide_type: summary
-  claim: 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 con。
+  claim: 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义
   narrative:
   - 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准。
   - RISC-V AIA specification is the current interrupt virtualization and ownership substrate.
@@ -328,7 +328,7 @@ slides:
         - E0 / Spec-standard SOTA
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-3-background
   paper_key: riscv_aia_2023
   slide_type: background
@@ -355,7 +355,7 @@ slides:
         - RISC-V Advanced Interrupt Architecture
       - - 证据限制
         - E0 / Spec-standard SOTA
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-3-solution
   paper_key: riscv_aia_2023
   slide_type: solution
@@ -374,14 +374,14 @@ slides:
       - Advanced interrupt controller architecture
       - MSI and virtual interrupt semantics
       - Trusted interrupt-delivery substrate for confidential I/O
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-3-experiments
   paper_key: riscv_aia_2023
   slide_type: experiments
   claim: 规范/Survey，无新实验；RISC-V Advanced Interrupt Architecture 只支撑术语、taxonomy、接口语义或证据边界。
   narrative:
   - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  - 可支撑：RISC-V AIA specification is the current interrupt virtualization and ownership substr。
+  - 可支撑：RISC-V AIA specification is the current interrupt virtualization and ownership...
   - 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。
   - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
   evidence_refs:
@@ -408,7 +408,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-primary-3-evaluation
   paper_key: riscv_aia_2023
   slide_type: evaluation
@@ -437,7 +437,7 @@ slides:
         - 对直通设备和 SmartNIC/DPU 中断路径有基础价值；风险在平台实现、IOMMU/IOPMP 组合和审计可见性。
       - - 讲稿定位
         - 当前 SOTA/补充边界; 证据强度 E0
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d07-16-direction-summary
   paper_key: direction
   slide_type: direction_summary
@@ -461,11 +461,11 @@ slides:
       rows:
       - - RISC-V privileged architecture
         - 开创/基础入口
-        - RISC-V privileged ISA defines PMP, traps, modes, and paging substrate for。
+        - RISC-V privileged ISA defines PMP, traps, modes, and paging substrate...
       - - RISC-V IOMMU
         - 代表性改进
-        - RISC-V IOMMU specification is the current standard substrate for DMA isol。
+        - RISC-V IOMMU specification is the current standard substrate for DMA...
       - - RISC-V Advanced Interrupt Architecture
         - 当前 SOTA/补充边界
-        - RISC-V AIA specification is the current interrupt virtualization and owne。
-  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。
+        - RISC-V AIA specification is the current interrupt virtualization and...
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述

@@ -1,0 +1,298 @@
+pageType: table_of_contents
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-sep
+    elementType: shape
+    shapeName: rect
+    bounds: [0, 40, 1280, 2]
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: toc-title
+    elementType: text
+    bounds: [60, 50, 200, 40]
+    content:
+      style: "$title"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>目录</p>
+
+  - elementId: card-bg-1
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [2000]
+    bounds: [84, 130, 260, 420]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card-bg-2
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [2000]
+    bounds: [368, 130, 260, 420]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card-bg-3
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [2000]
+    bounds: [652, 130, 260, 420]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card-bg-4
+    elementType: shape
+    shapeName: roundRect
+    adjustments: [2000]
+    bounds: [936, 130, 260, 420]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card-num-1
+    elementType: text
+    bounds: [104, 160, 80, 45]
+    content:
+      style: "$kpi"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>01</p>
+
+  - elementId: card-title-1
+    elementType: text
+    bounds: [104, 215, 220, 30]
+    content:
+      fontSize: 20
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>输入源点识别</p>
+
+  - elementId: card-sub-1
+    elementType: text
+    bounds: [104, 250, 220, 22]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>Source</p>
+
+  - elementId: card-sep-1
+    elementType: shape
+    shapeName: rect
+    bounds: [104, 285, 220, 1]
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card-papers-1
+    elementType: text
+    bounds: [104, 300, 220, 135]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 2.2
+      align: [left, top]
+      text: |
+        <p>SaTC</p>
+        <p>HermeScan</p>
+        <p>LARA</p>
+
+  - elementId: card-num-2
+    elementType: text
+    bounds: [388, 160, 80, 45]
+    content:
+      style: "$kpi"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>02</p>
+
+  - elementId: card-title-2
+    elementType: text
+    bounds: [388, 215, 220, 30]
+    content:
+      fontSize: 20
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>复杂后端数据流</p>
+
+  - elementId: card-sub-2
+    elementType: text
+    bounds: [388, 250, 220, 22]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>Propagation</p>
+
+  - elementId: card-sep-2
+    elementType: shape
+    shapeName: rect
+    bounds: [388, 285, 220, 1]
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card-papers-2
+    elementType: text
+    bounds: [388, 300, 220, 135]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 2.2
+      align: [left, top]
+      text: |
+        <p>KARONTE</p>
+        <p>MangoDFA</p>
+        <p>OctopusTaint</p>
+
+  - elementId: card-num-3
+    elementType: text
+    bounds: [672, 160, 80, 45]
+    content:
+      style: "$kpi"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>03</p>
+
+  - elementId: card-title-3
+    elementType: text
+    bounds: [672, 215, 220, 30]
+    content:
+      fontSize: 20
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>隐藏接口发现</p>
+
+  - elementId: card-sub-3
+    elementType: text
+    bounds: [672, 250, 220, 22]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>Sink</p>
+
+  - elementId: card-sep-3
+    elementType: shape
+    shapeName: rect
+    bounds: [672, 285, 220, 1]
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card-papers-3
+    elementType: text
+    bounds: [672, 300, 220, 135]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 2.2
+      align: [left, top]
+      text: |
+        <p>IoTScope</p>
+        <p>EAGLEYE</p>
+        <p>PANGOLIN</p>
+
+  - elementId: card-num-4
+    elementType: text
+    bounds: [956, 160, 80, 45]
+    content:
+      style: "$kpi"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>04</p>
+
+  - elementId: card-title-4
+    elementType: text
+    bounds: [956, 215, 220, 30]
+    content:
+      fontSize: 20
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>漏洞验证与PoC生成</p>
+
+  - elementId: card-sub-4
+    elementType: text
+    bounds: [956, 250, 220, 22]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>Verification</p>
+
+  - elementId: card-sep-4
+    elementType: shape
+    shapeName: rect
+    bounds: [956, 285, 220, 1]
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card-papers-4
+    elementType: text
+    bounds: [956, 300, 220, 135]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 2.2
+      align: [left, top]
+      text: |
+        <p>NÜWA</p>
+        <p>LABRADOR</p>
+        <p>FirmAgent</p>

@@ -169,7 +169,7 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestati。
+      claim: 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态
       points:
       - 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态
       visual:

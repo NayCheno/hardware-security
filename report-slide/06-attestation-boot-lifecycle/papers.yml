@@ -1,7 +1,6 @@
 direction: Attestation、boot、lifecycle
 focus: 区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。
-selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA
-  作为 runtime-attestation lineage auxiliary。
+selection_rule: 固定三篇 primary；`rats_rfc` 主讲 attestation architecture，`eat_rfc` 作为 token-format auxiliary；C-FLAT/LO-FAT/PDRIMA 作为 runtime-attestation lineage auxiliary。
 primary:
 - key: seshadri2004swatt
   role: foundational
@@ -84,7 +83,7 @@ primary:
   - eat_rfc
   slides:
     summary:
-      claim: 定义 attester、verifier、relying party、evidence、endorsements、reference values。
+      claim: 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
       points:
       - 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
       visual:
@@ -95,7 +94,7 @@ primary:
         - 证据：E0 / Spec-standard SOTA
         - 来源：local_pdf_verified
     background:
-      claim: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。
+      claim: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
       points:
       - 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
       visual:
@@ -148,7 +147,7 @@ primary:
   auxiliary: []
   slides:
     summary:
-      claim: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。
+      claim: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
       points:
       - 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
       visual:

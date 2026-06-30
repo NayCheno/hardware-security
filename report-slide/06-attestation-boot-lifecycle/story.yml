@@ -31,7 +31,7 @@ slides:
       - - VRASED verified RA co-design
         - 当前 SOTA/补充边界
         - E1 / 同行评审改进证据
-  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
 - slide_id: d06-primary-1-summary
   paper_key: seshadri2004swatt
   slide_type: summary
@@ -58,7 +58,7 @@ slides:
         - E1 / 基础证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：SWATT: 软件 attestation 早期代表｜证据等级：E1 / Foundational'
 - slide_id: d06-primary-1-background
   paper_key: seshadri2004swatt
   slide_type: background
@@ -79,12 +79,12 @@ slides:
       - - 保护对象
         - Attestation、boot、lifecycle
       - - 传统瓶颈
-        - 区分 secure boot、launch attestation、runtime/control-flow evidence、evide。
+        - 区分 secure boot、launch attestation、runtime/control-flow evidence...
       - - 本文入口
         - 'SWATT: 软件 attestation 早期代表'
       - - 证据限制
         - E1 / 基础证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：SWATT: 软件 attestation 早期代表｜证据等级：E1 / Foundational'
 - slide_id: d06-primary-1-solution
   paper_key: seshadri2004swatt
   slide_type: solution
@@ -102,7 +102,7 @@ slides:
       - Software-only remote attestation
       - Timing-sensitive memory checksum
       - Verifier/prover challenge-response model
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：SWATT: 软件 attestation 早期代表｜证据等级：E1 / Foundational'
 - slide_id: d06-primary-1-experiments
   paper_key: seshadri2004swatt
   slide_type: experiments
@@ -134,7 +134,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：SWATT: 软件 attestation 早期代表｜证据等级：E1 / Foundational'
 - slide_id: d06-primary-1-evaluation
   paper_key: seshadri2004swatt
   slide_type: evaluation
@@ -163,13 +163,13 @@ slides:
         - 现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。
       - - 讲稿定位
         - 开创/基础入口; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：SWATT: 软件 attestation 早期代表｜证据等级：E1 / Foundational'
 - slide_id: d06-primary-2-summary
   paper_key: rats_rfc
   slide_type: summary
-  claim: 定义 attester、verifier、relying party、evidence、endorsements、reference values。
+  claim: 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation results 和 appraisal policy
   narrative:
-  - 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation resul。
+  - 定义 attester、verifier、relying party、evidence、endorsements、reference values、attestation...
   - RFC 9334 defines the current RATS architecture for cross-TEE remote attestation.
   evidence_refs:
   - report-slide/06-attestation-boot-lifecycle/papers.yml `rats_rfc` summary slide metadata.
@@ -190,11 +190,11 @@ slides:
         - E0 / Spec-standard SOTA
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RATS 架构｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d06-primary-2-background
   paper_key: rats_rfc
   slide_type: background
-  claim: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/。
+  claim: 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
   narrative:
   - 多平台 attestation 需要统一角色、消息、freshness 和 verifier policy 词汇，否则 CCA、CoVE、DPU/NIC evidence 难以对齐
   evidence_refs:
@@ -211,19 +211,19 @@ slides:
       - - 保护对象
         - Attestation、boot、lifecycle
       - - 传统瓶颈
-        - 区分 secure boot、launch attestation、runtime/control-flow evidence、evide。
+        - 区分 secure boot、launch attestation、runtime/control-flow evidence...
       - - 本文入口
         - RATS 架构
       - - 证据限制
         - E0 / Spec-standard SOTA
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RATS 架构｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d06-primary-2-solution
   paper_key: rats_rfc
   slide_type: solution
   claim: RATS 规范化 evidence 生成、传递、评估角色与拓扑
   narrative:
   - RATS 规范化 evidence 生成、传递、评估角色与拓扑
-  - '`eat_rfc` 辅助说明实体状态和安全属性 结论s 的 token 编码'
+  - '`eat_rfc` 辅助说明实体状态和安全属性 claims 的 token 编码'
   evidence_refs:
   - report-slide/06-attestation-boot-lifecycle/papers.yml `rats_rfc` solution slide metadata.
   - 'reference/attestation/remote-attestation-procedures-rats-architecture/paper.pdf; source_url: https://www.rfc-editor.org/info/rfc9334; local README/PDF Section evidence as recorded in the reference entry.'
@@ -235,7 +235,7 @@ slides:
       - Attester/verifier/relying-party roles
       - Evidence, endorsements, reference values and appraisal policy
       - Attestation results and freshness vocabulary
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RATS 架构｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d06-primary-2-experiments
   paper_key: rats_rfc
   slide_type: experiments
@@ -269,14 +269,14 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RATS 架构｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d06-primary-2-evaluation
   paper_key: rats_rfc
   slide_type: evaluation
   claim: 评价：RATS 架构 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
   narrative:
   - 设计优势：是跨平台 attestation 术语和 verifier policy 的权威基线。
-  - 局限性：不证明任一平台测量链充分，也不定义完整 token 结论 encoding。
+  - 局限性：不证明任一平台测量链充分，也不定义完整 token claim encoding。
   - 商业化潜力：标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
   - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
   evidence_refs:
@@ -293,19 +293,19 @@ slides:
       - - 设计优势
         - 是跨平台 attestation 术语和 verifier policy 的权威基线。
       - - 主要局限
-        - 不证明任一平台测量链充分，也不定义完整 token 结论 encoding。
+        - 不证明任一平台测量链充分，也不定义完整 token claim encoding。
       - - 商业落地
         - 标准化落地潜力强；风险在平台 evidence profile、endorsement 分发和 verifier policy 运维复杂。
       - - 讲稿定位
         - 代表性改进; 证据强度 E0
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：RATS 架构｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d06-primary-3-summary
   paper_key: nunes2019vrased
   slide_type: summary
-  claim: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation ro。
+  claim: 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
   narrative:
   - 设计并验证面向 simple embedded devices 的 hardware/software remote attestation root
-  - VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software re。
+  - VRASED is the strongest peer-reviewed verified RA co-design anchor for hardware/software...
   evidence_refs:
   - report-slide/06-attestation-boot-lifecycle/papers.yml `nunes2019vrased` summary slide metadata.
   - 'reference/attestation/vrased-verified-hardware-software-co-design-remote-attestation/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity19/presentation/de-oliveira-nunes; local README/PDF Section evidence as recorded in the reference entry.'
@@ -325,7 +325,7 @@ slides:
         - E1 / 同行评审改进证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：VRASED verified RA co-design｜证据等级：E1 / Peer-reviewed SOTA
 - slide_id: d06-primary-3-background
   paper_key: nunes2019vrased
   slide_type: background
@@ -346,12 +346,12 @@ slides:
       - - 保护对象
         - Attestation、boot、lifecycle
       - - 传统瓶颈
-        - 区分 secure boot、launch attestation、runtime/control-flow evidence、evide。
+        - 区分 secure boot、launch attestation、runtime/control-flow evidence...
       - - 本文入口
         - VRASED verified RA co-design
       - - 证据限制
         - E1 / 同行评审改进证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：VRASED verified RA co-design｜证据等级：E1 / Peer-reviewed SOTA
 - slide_id: d06-primary-3-solution
   paper_key: nunes2019vrased
   slide_type: solution
@@ -369,7 +369,7 @@ slides:
       - Hardware/software RA root co-design
       - Formal verification of security sub-properties
       - MSP430/Basys3 FPGA implementation
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：VRASED verified RA co-design｜证据等级：E1 / Peer-reviewed SOTA
 - slide_id: d06-primary-3-experiments
   paper_key: nunes2019vrased
   slide_type: experiments
@@ -401,7 +401,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：VRASED verified RA co-design｜证据等级：E1 / Peer-reviewed SOTA
 - slide_id: d06-primary-3-evaluation
   paper_key: nunes2019vrased
   slide_type: evaluation
@@ -430,7 +430,7 @@ slides:
         - 适合可审计 MCU/IoT RoT 和 attestation IP；风险在 proof maintenance、toolchain 和 profile 标准。
       - - 讲稿定位
         - 当前 SOTA/补充边界; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：VRASED verified RA co-design｜证据等级：E1 / Peer-reviewed SOTA
 - slide_id: d06-16-direction-summary
   paper_key: direction
   slide_type: direction_summary
@@ -454,11 +454,11 @@ slides:
       rows:
       - - 'SWATT: 软件 attestation 早期代表'
         - 开创/基础入口
-        - SWATT is the classic starting point for remote software attestation probl。
+        - SWATT is the classic starting point for remote software attestation...
       - - RATS 架构
         - 代表性改进
-        - RFC 9334 defines the current RATS architecture for cross-TEE remote attes。
+        - RFC 9334 defines the current RATS architecture for cross-TEE remote...
       - - VRASED verified RA co-design
         - 当前 SOTA/补充边界
-        - VRASED is the strongest peer-reviewed verified RA co-design anchor for ha。
-  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。
+        - VRASED is the strongest peer-reviewed verified RA co-design anchor for...
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述

@@ -1,0 +1,351 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [640, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE & BADGE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 880, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>EAGLEYE — 路由Token推断与LLM模式学习</p>
+
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1050, 58, 170, 28]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: badge-text
+    elementType: text
+    bounds: [1050, 58, 170, 28]
+    content:
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>NDSS 2025</p>
+
+  # ===== LEFT COLUMN: 内容摘要 & 研究背景 =====
+  - elementId: left-bar-1
+    elementType: shape
+    bounds: [60, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-1
+    elementType: text
+    bounds: [72, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>内容摘要</p>
+
+  - elementId: left-body-1
+    elementType: text
+    bounds: [60, 142, 360, 190]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>基于路由Token推断的IoT隐藏接口发现框架。分析公开请求识别路由Token，利用LLM从固件代码推断隐藏Token，指导定向Fuzzing。在13台设备发现79个隐藏接口，是IoTScope的25倍。</p>
+
+  - elementId: left-bar-2
+    elementType: shape
+    bounds: [60, 348, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-2
+    elementType: text
+    bounds: [72, 346, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>研究背景</p>
+
+  - elementId: left-body-2
+    elementType: text
+    bounds: [60, 382, 360, 230]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>现有扫描器存在Frontend Bias，假设所有后端接口在前端有迹可循，但隐藏接口在HTML/JS中零引用。静态分析难以定义Source和Sink，缺乏明确代码模式。Fuzzing因接口未知无法设定目标，随机变异难触发特定路径。</p>
+
+  # ===== MIDDLE COLUMN: 核心洞察 & 解决方案 =====
+  - elementId: mid-bar-1
+    elementType: shape
+    bounds: [440, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-1
+    elementType: text
+    bounds: [452, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>核心洞察</p>
+
+  - elementId: mid-body-1
+    elementType: text
+    bounds: [440, 142, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>公开接口与隐藏接口共享同一套底层路由机制。将寻找隐藏接口转化为寻找隐藏路由Token问题，覆盖URI、Header、Body、Query中的Token。通过分析公开请求中的路由Token，利用LLM模式学习能力推断隐藏Token，显著压缩搜索空间。</p>
+
+  - elementId: mid-bar-2
+    elementType: shape
+    bounds: [440, 400, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-2
+    elementType: text
+    bounds: [452, 398, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>解决方案</p>
+
+  - elementId: mid-body-2
+    elementType: text
+    bounds: [440, 434, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>1. Token比对：收集公开请求，按语法结构分解，差异比对找出变化字段作为路由Token。2. LLM模式学习：提取公开Token代码上下文，让LLM分析相似特征推断隐藏Token，迭代自校正。3. 定向Fuzzing：以公开请求为模板，用隐藏路由表替换Token，处理多级依赖，从响应推断参数。</p>
+
+  # ===== RIGHT COLUMN: 关键数据 =====
+  - elementId: right-bar
+    elementType: shape
+    bounds: [820, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: right-subtitle
+    elementType: text
+    bounds: [832, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>关键数据</p>
+
+  # Card 1
+  - elementId: card1-bg
+    elementType: shape
+    bounds: [840, 150, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card1-num
+    elementType: text
+    bounds: [860, 165, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>79</p>
+
+  - elementId: card1-label
+    elementType: text
+    bounds: [860, 215, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>个隐藏接口</p>
+
+  # Card 2
+  - elementId: card2-bg
+    elementType: shape
+    bounds: [840, 290, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card2-num
+    elementType: text
+    bounds: [860, 305, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>25</p>
+
+  - elementId: card2-label
+    elementType: text
+    bounds: [860, 355, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>倍于IoTScope</p>
+
+  # Card 3
+  - elementId: card3-bg
+    elementType: shape
+    bounds: [840, 430, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card3-num
+    elementType: text
+    bounds: [860, 445, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>29</p>
+
+  - elementId: card3-label
+    elementType: text
+    bounds: [860, 495, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>个未知漏洞</p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>23 / 37</p>

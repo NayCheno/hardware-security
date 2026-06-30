@@ -41,10 +41,9 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encry。
+      claim: 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot 的边界
       points:
-      - 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot
-        的边界
+      - 按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation、secure boot 的边界
       visual:
         title: 关键机制
         items:
@@ -133,17 +132,14 @@ primary:
     evaluation:
       claim: Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.
       strengths: Moves the section anchor from vendor/spec contrast back to peer-reviewed memory-integrity and freshness mechanisms.
-      limitations: Secure-processor lineage is not the same as a modern confidential-VM product; deployment claims still need
-        SEV-SNP, TDX, CCA, or CoVE evidence.
-      commercialization: Useful for memory-controller integrity-tree design; productization depends on metadata storage, root
-        protection, and performance budget.
+      limitations: Secure-processor lineage is not the same as a modern confidential-VM product; deployment claims still need SEV-SNP, TDX, CCA, or CoVE evidence.
+      commercialization: Useful for memory-controller integrity-tree design; productization depends on metadata storage, root protection, and performance budget.
 - key: amd_sev_snp
   role: industry_evidence
   selection_slot: primary_3
   paper_type: vendor
   claim_strength: E4
-  selection_reason: AMD SEV-SNP remains industry evidence for modern VM memory-integrity deployment, but not the sole mechanism
-    proof.
+  selection_reason: AMD SEV-SNP remains industry evidence for modern VM memory-integrity deployment, but not the sole mechanism proof.
   evidence_type: E4 industry/vendor evidence
   maturity: industry/vendor evidence
   pdf_status: local_pdf_verified
@@ -155,7 +151,7 @@ primary:
   auxiliary: []
   slides:
     summary:
-      claim: SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-contro。
+      claim: SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-controlled metadata 风险
       points:
       - SEV-SNP 在 encrypted VM 基础上加入 secure nested paging 与完整性相关保护，减少 host-controlled metadata 风险
       visual:
@@ -176,7 +172,7 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted。
+      claim: 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted VM lifecycle 结合
       points:
       - 引入 secure nested paging、RMP 等机制，把 memory ownership/validation 与 encrypted VM lifecycle 结合
       visual:
@@ -207,8 +203,7 @@ auxiliary:
   evidence: E0 / Spec contrast
   source_status: source_verified_pdf_unavailable
   reference: reference/arm-confidential-computing/arm-cca-specification/README.md
-  use: 'Contrast only: Arm CCA defines Realm ownership/lifecycle/access-control concepts, not a peer-reviewed memory-integrity/freshness
-    mechanism anchor.'
+  use: 'Contrast only: Arm CCA defines Realm ownership/lifecycle/access-control concepts, not a peer-reviewed memory-integrity/freshness mechanism anchor.'
 - key: suh2003aegis
   role: Foundational secure-processor lineage
   evidence: E1 / Peer-reviewed mechanism anchor

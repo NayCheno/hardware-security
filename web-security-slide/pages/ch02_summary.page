@@ -1,0 +1,495 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [320, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 1160, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>维度二总结：Propagation 技术演进</p>
+
+  # ===== CARD 1: KARONTE =====
+  - elementId: card1-bg
+    elementType: shape
+    bounds: [60, 120, 360, 520]
+    shapeName: roundRect
+    adjustments: [6000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card1-accent
+    elementType: shape
+    bounds: [80, 140, 60, 4]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: card1-title
+    elementType: text
+    bounds: [80, 156, 320, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>KARONTE</strong></p>
+
+  - elementId: card1-conf
+    elementType: text
+    bounds: [80, 196, 200, 22]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>IEEE S&P 2020</p>
+
+  - elementId: card1-line
+    elementType: shape
+    bounds: [80, 228, 320, 1]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card1-sub1
+    elementType: text
+    bounds: [80, 240, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>核心贡献</strong></p>
+
+  - elementId: card1-body1
+    elementType: text
+    bounds: [80, 270, 320, 120]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>首次提出多二进制IPC数据流抽象。通过BDG建模与跨进程污点分析，将固件分散程序连接为全局数据流网络，使跨进程漏洞可被静态分析捕获。</p>
+
+  - elementId: card1-sub2
+    elementType: text
+    bounds: [80, 400, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>关键数据</strong></p>
+
+  - elementId: card1-body2
+    elementType: text
+    bounds: [80, 430, 320, 60]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>53固件 | 46 0-day | 告警722→2</p>
+
+  - elementId: card1-sub3
+    elementType: text
+    bounds: [80, 500, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>局限性</strong></p>
+
+  - elementId: card1-body3
+    elementType: text
+    bounds: [80, 530, 320, 80]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>符号执行开销重；边界二进制过滤漏报；CPF覆盖不全导致BDG断裂</p>
+
+  # ===== CARD 2: MangoDFA =====
+  - elementId: card2-bg
+    elementType: shape
+    bounds: [440, 120, 360, 520]
+    shapeName: roundRect
+    adjustments: [6000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card2-accent
+    elementType: shape
+    bounds: [460, 140, 60, 4]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: card2-title
+    elementType: text
+    bounds: [460, 156, 320, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>MangoDFA</strong></p>
+
+  - elementId: card2-conf
+    elementType: text
+    bounds: [460, 196, 200, 22]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>USENIX Security 2024</p>
+
+  - elementId: card2-line
+    elementType: shape
+    bounds: [460, 228, 320, 1]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card2-sub1
+    elementType: text
+    bounds: [460, 240, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>核心贡献</strong></p>
+
+  - elementId: card2-body1
+    elementType: text
+    bounds: [460, 270, 320, 120]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>富表达式混合值域、Sink-to-Source反向分析与Assumed Nonimpact策略，实现全固件覆盖的大规模污点分析，解决边界过滤导致的系统性漏报。</p>
+
+  - elementId: card2-sub2
+    elementType: text
+    bounds: [460, 400, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>关键数据</strong></p>
+
+  - elementId: card2-body2
+    elementType: text
+    bounds: [460, 430, 320, 60]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>770,374二进制 | 10,834 TruPoCs | 38.12s/个</p>
+
+  - elementId: card2-sub3
+    elementType: text
+    bounds: [460, 500, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>局限性</strong></p>
+
+  - elementId: card2-body3
+    elementType: text
+    bounds: [460, 530, 320, 80]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>TruPoC≠真实PoC；复杂业务逻辑覆盖有限；告警需配套去重排序</p>
+
+  # ===== CARD 3: OctopusTaint =====
+  - elementId: card3-bg
+    elementType: shape
+    bounds: [820, 120, 360, 520]
+    shapeName: roundRect
+    adjustments: [6000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card3-accent
+    elementType: shape
+    bounds: [840, 140, 60, 4]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: card3-title
+    elementType: text
+    bounds: [840, 156, 320, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>OctopusTaint</strong></p>
+
+  - elementId: card3-conf
+    elementType: text
+    bounds: [840, 196, 200, 22]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>ACM CCS 2024</p>
+
+  - elementId: card3-line
+    elementType: shape
+    bounds: [840, 228, 320, 1]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$rule"
+
+  - elementId: card3-sub1
+    elementType: text
+    bounds: [840, 240, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>核心贡献</strong></p>
+
+  - elementId: card3-body1
+    elementType: text
+    bounds: [840, 270, 320, 120]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>AIL增强RDA、净化检查、NVRAM路径拼接与新污点源发现，形成底层到上层的完整误报/漏报处理链条，召回率远高于同类RDA工具。</p>
+
+  - elementId: card3-sub2
+    elementType: text
+    bounds: [840, 400, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>关键数据</strong></p>
+
+  - elementId: card3-body2
+    elementType: text
+    bounds: [840, 430, 320, 60]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>49 0-day | 1,542固件 | 快24% | 召回83%</p>
+
+  - elementId: card3-sub3
+    elementType: text
+    bounds: [840, 500, 320, 26]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>局限性</strong></p>
+
+  - elementId: card3-body3
+    elementType: text
+    bounds: [840, 530, 320, 80]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>依赖angr/AIL/DDG底层质量；对反编译和中间表示质量要求高</p>
+
+  # ===== EVOLUTION SUMMARY =====
+  - elementId: evo-bg
+    elementType: shape
+    bounds: [60, 646, 1160, 40]
+    shapeName: roundRect
+    adjustments: [6000]
+    fill:
+      type: solid
+      color: "$soft"
+
+  - elementId: evo-text
+    elementType: text
+    bounds: [80, 646, 1120, 40]
+    content:
+      fontSize: 16
+      color: "$primary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>技术演进路径：<strong>多二进制IPC建模（BDG）</strong>  →  <strong>Sink-to-Source + 富表达式（全固件覆盖）</strong>  →  <strong>RDA + AIL 底层优化（高精度召回）</strong></p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>19 / 37</p>

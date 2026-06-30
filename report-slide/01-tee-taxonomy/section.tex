@@ -3,7 +3,7 @@
 \begin{frame}[t,shrink=6]{硬件辅助 TEE taxonomy：方向开场}
 \DeckKicker{方向开场}
 \SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
-{\large\bfseries\color{Ink} 01 的任务不是罗列 SGX、SEV、TrustZone、CCA、CoVE，而是建立一张能解释 protected object、resource manager、evidence chain 和 device boundary 的总分类图。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 01 的任务不是罗列 SGX、SEV、TrustZone、CCA、CoVE，而是建立一张能解释 protected object、resource manager、evidence chain 和 device boundary 的总分类图。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -44,15 +44,14 @@ Device boundary & 数据离开 CPU TEE 后是否仍有身份、隔离和加密 &
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：本页用三篇 SoK/Survey 建立方向边界，不把它们当作一手机制证据。}}
+\SourceFootnote{来源：本页用三篇 SoK/Survey 建立方向边界，不把它们当作一手机制证据。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E2 / Peer-reviewed taxonomy anchor}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} Li 2024 的核心贡献是 TRAF：把 TEE 生命周期和 CPU/memory/I/O runtime event 映射到四种 resource-management mode。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Li 2024 的核心贡献是 TRAF：把 TEE 生命周期和 CPU/memory/I/O runtime event 映射到四种 resource-management mode。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -89,15 +88,14 @@ Device boundary & 数据离开 CPU TEE 后是否仍有身份、隔离和加密 &
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：机制图按 Li 2024 Figure 2-Figure 5 重绘。}}
+\SourceFootnote{来源：机制图按 Li 2024 Figure 2-Figure 5 重绘。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E2 / Peer-reviewed taxonomy anchor}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} TEE 的根本矛盾是：host 被 threat model 视为不可信，却仍必须管理调度、页表、I/O 和实例生命周期。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} TEE 的根本矛盾是：host 被 threat model 视为不可信，却仍必须管理调度、页表、I/O 和实例生命周期。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -137,15 +135,14 @@ Evidence boundary & attestation/spec/paper & 决定 verifier 可以相信什么 
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：背景页强调 threat model 和 evidence boundary，避免把 SoK 写成平台安全证明。}}
+\SourceFootnote{来源：背景页强调 threat model 和 evidence boundary，避免把 SoK 写成平台安全证明。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E2 / Peer-reviewed taxonomy anchor}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} TRAF 的妙处是把“TEE 安不安全”转成“这个 runtime event 由谁管理、谁校验、谁承担 TCB 成本”。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} TRAF 的妙处是把“TEE 安不安全”转成“这个 runtime event 由谁管理、谁校验、谁承担 TCB 成本”。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -186,15 +183,14 @@ Instance-assisted & TEE instance runtime & 减少 host 观察面 & runtime 复�
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：矩阵按 Figure 4 和 Section 4 的 CPU/memory/I/O event 说明重绘。}}
+\SourceFootnote{来源：矩阵按 Figure 4 和 Section 4 的 CPU/memory/I/O event 说明重绘。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E2 / Peer-reviewed taxonomy anchor}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 这是一篇 SoK，无新实验；它能支撑 taxonomy、coverage 和 pitfall framing，不能单独支撑某个平台的安全或性能结论。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 这是一篇 SoK，无新实验；它能支撑 taxonomy、coverage 和 pitfall framing，不能单独支撑某个平台的安全或性能结论。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -235,15 +231,14 @@ SoK status & 研究框架 & 新系统实验 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：实验页保守表述：SoK，无新实验。}}
+\SourceFootnote{来源：实验页保守表述：SoK，无新实验。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Understanding Design Choices and Pitfalls of Trusted Execution Environments：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E2 / Peer-reviewed taxonomy anchor}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：Li 2024 是 01 最适合的主线语言；作为 SoK，无新实验，落地价值在 checklist，而不是直接给平台背书。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：Li 2024 是 01 最适合的主线语言；作为 SoK，无新实验，落地价值在 checklist，而不是直接给平台背书。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -284,15 +279,14 @@ SoK status & 研究框架 & 新系统实验 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：论文原文、官方规范或公开材料；具体结论受证据等级和原文实验范围约束。}}
+\SourceFootnote{来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{A Survey of RISC-V Secure Enclaves and Trusted Execution Environments：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} Boubakri 2025 的作用是把 RISC-V TEE 从 PMP/monitor enclave 串到 CoVE/AP-TEE confidential VM 谱系。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Boubakri 2025 的作用是把 RISC-V TEE 从 PMP/monitor enclave 串到 CoVE/AP-TEE confidential VM 谱系。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -325,15 +319,14 @@ SoK status & 研究框架 & 新系统实验 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：时间线按 Boubakri 2025 Figure 1 和 Table 1 重绘。}}
+\SourceFootnote{来源：时间线按 Boubakri 2025 Figure 1 和 Table 1 重绘。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{A Survey of RISC-V Secure Enclaves and Trusted Execution Environments：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} RISC-V TEE 的背景瓶颈是 substrate 丰富但成熟度不齐：PMP/ePMP、privilege stack、MMU、H-extension、MTT/TSM 并不自动组成可量产平台。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} RISC-V TEE 的背景瓶颈是 substrate 丰富但成熟度不齐：PMP/ePMP、privilege stack、MMU、H-extension、MTT/TSM 并不自动组成可量产平台。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -370,15 +363,14 @@ SoK status & 研究框架 & 新系统实验 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：机制链条按 Section 2.2、CoVE 和 AP-TEE 小节抽象，不替代规范细节。}}
+\SourceFootnote{来源：机制链条按 Section 2.2、CoVE 和 AP-TEE 小节抽象，不替代规范细节。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{A Survey of RISC-V Secure Enclaves and Trusted Execution Environments：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 这篇 survey 的核心用法是分层：primitive stack 决定隔离基础，system lineage 决定保护对象，open challenges 决定落地缺口。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 这篇 survey 的核心用法是分层：primitive stack 决定隔离基础，system lineage 决定保护对象，open challenges 决定落地缺口。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -419,15 +411,14 @@ Open challenges & Section 4 & 连接后续标准化和商业落地判断 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：三层读法把 survey 内容转成 PPT 结构，不引入原文之外的机制结论。}}
+\SourceFootnote{来源：三层读法把 survey 内容转成 PPT 结构，不引入原文之外的机制结论。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{A Survey of RISC-V Secure Enclaves and Trusted Execution Environments：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 这是一篇 Survey，无新实验；它能支撑 RISC-V TEE 谱系和差距图，不能支撑单个系统的安全证明或数值结论。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 这是一篇 Survey，无新实验；它能支撑 RISC-V TEE 谱系和差距图，不能支撑单个系统的安全证明或数值结论。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -468,15 +459,14 @@ open challenges & 单系统采购判断 & 与厂商/实现证据结合 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：实验页保守表述：Survey，无新实验。}}
+\SourceFootnote{来源：实验页保守表述：Survey，无新实验。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{A Survey of RISC-V Secure Enclaves and Trusted Execution Environments：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E2 survey / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：Boubakri 2025 是很好的 RISC-V 地图；作为 Survey，无新实验，正确用法是辅助定位，不是证据终点。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：Boubakri 2025 是很好的 RISC-V 地图；作为 Survey，无新实验，正确用法是辅助定位，不是证据终点。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -517,15 +507,14 @@ open challenges & 单系统采购判断 & 与厂商/实现证据结合 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：评价结合 Section 4、conclusion 与本仓库 E2 survey 边界。}}
+\SourceFootnote{来源：评价结合 Section 4、conclusion 与本仓库 E2 survey 边界。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Analysis of Accelerator TEE Designs：内容摘要}
 \DeckKicker{内容摘要}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} Wang/Huang 2026 的贡献是把 TEE taxonomy 从 CPU/enclave/CVM 推到 GPU、NPU、TPU、FPGA、DPU/SmartNIC 等 accelerator path。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Wang/Huang 2026 的贡献是把 TEE taxonomy 从 CPU/enclave/CVM 推到 GPU、NPU、TPU、FPGA、DPU/SmartNIC 等 accelerator path。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -549,25 +538,24 @@ open challenges & 单系统采购判断 & 与厂商/实现证据结合 \\
     \vspace{1.1mm}
     \hspace{1.4mm}\begin{minipage}{0.92\linewidth}
       \PanelTitle{Corpus statistics}
-      \scriptsize \textbf{studies analyzed}\hfill \textcolor{Accent}{\bfseries 51}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Table I corpus}}\par\vspace{1.4mm}
-\textbf{proposed since 2022}\hfill \textcolor{Accent}{\bfseries 41/51}\par\textcolor{Accent}{\rule{0.80\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{1.4mm}
-\textbf{rely on CPU TEE}\hfill \textcolor{Accent}{\bfseries 42/51}\par\textcolor{Accent}{\rule{0.82\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{1.4mm}
-\textbf{specific CPU architecture}\hfill \textcolor{Accent}{\bfseries 40/51}\par\textcolor{Accent}{\rule{0.78\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{1.4mm}
-\textbf{single accelerator type}\hfill \textcolor{Accent}{\bfseries 43/51}\par\textcolor{Accent}{\rule{0.84\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{1.4mm}
+      \scriptsize \textbf{studies analyzed}\hfill \textcolor{Accent}{\bfseries 51}\par\textcolor{Accent}{\rule{0.95\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{Table I corpus}}\par\vspace{0.8mm}
+\textbf{proposed since 2022}\hfill \textcolor{Accent}{\bfseries 41/51}\par\textcolor{Accent}{\rule{0.80\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{0.8mm}
+\textbf{rely on CPU TEE}\hfill \textcolor{Accent}{\bfseries 42/51}\par\textcolor{Accent}{\rule{0.82\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{0.8mm}
+\textbf{specific CPU architecture}\hfill \textcolor{Accent}{\bfseries 40/51}\par\textcolor{Accent}{\rule{0.78\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{0.8mm}
+\textbf{single accelerator type}\hfill \textcolor{Accent}{\bfseries 43/51}\par\textcolor{Accent}{\rule{0.84\linewidth}{1.1mm}}\par{\tiny\textcolor{Muted}{motivation}}\par\vspace{0.8mm}
     \end{minipage}
     \vspace{1mm}
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：统计数字来自 SoK corpus，不等同于某个系统的测量结果。}}
+\SourceFootnote{来源：统计数字来自 SoK corpus，不等同于某个系统的测量结果。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Analysis of Accelerator TEE Designs：研究背景}
 \DeckKicker{研究背景}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} CPU TEE 只保护 CPU-side execution/memory；一旦 workload offload，敏感数据和控制状态会跨过 device memory、DMA/MMIO、I/O link 和 firmware。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} CPU TEE 只保护 CPU-side execution/memory；一旦 workload offload，敏感数据和控制状态会跨过 device memory、DMA/MMIO、I/O link 和 firmware。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -604,15 +592,14 @@ open challenges & 单系统采购判断 & 与厂商/实现证据结合 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：攻击面流程按 Figure 2 重绘，避免给出可执行攻击步骤。}}
+\SourceFootnote{来源：攻击面流程按 Figure 2 重绘，避免给出可执行攻击步骤。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Analysis of Accelerator TEE Designs：解决方案}
 \DeckKicker{解决方案}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} Accelerator TEE 至少同时回答三件事：谁能访问设备路径，数据在哪些位置被保护，远程 verifier 如何确认设备身份和配置。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} Accelerator TEE 至少同时回答三件事：谁能访问设备路径，数据在哪些位置被保护，远程 verifier 如何确认设备身份和配置。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -653,15 +640,14 @@ Attestation & HRoT、endorser、reference values & 说明 verifier 如何信任�
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：矩阵综合 Figure 1、Table III、Figure 3、Figure 5/6。}}
+\SourceFootnote{来源：矩阵综合 Figure 1、Table III、Figure 3、Figure 5/6。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Analysis of Accelerator TEE Designs：实验结果}
 \DeckKicker{实验结果}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 这是一篇 SoK，无新 end-to-end 系统实验；它的价值是 corpus、taxonomy tables 和设备侧 checklist，而不是替代具体 accelerator TEE 论文或规范。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 这是一篇 SoK，无新 end-to-end 系统实验；它的价值是 corpus、taxonomy tables 和设备侧 checklist，而不是替代具体 accelerator TEE 论文或规范。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -702,15 +688,14 @@ TCB/compatibility lens & 通用性能结论 & 标为 SoK 示例分析 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：实验页保守表述：SoK，无新实验。}}
+\SourceFootnote{来源：实验页保守表述：SoK，无新实验。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{SoK: Analysis of Accelerator TEE Designs：文章评价}
 \DeckKicker{文章评价}
 \SlideMeta{证据等级}{E2 / Background substrate}{来源状态：本地 PDF 已核验}
-{\large\bfseries\color{Ink} 评价：这篇 SoK 让 01 看到 device path；作为 SoK，无新实验，商业价值高但必须接上厂商 HRoT、标准接口和云编排证据。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 评价：这篇 SoK 让 01 看到 device path；作为 SoK，无新实验，商业价值高但必须接上厂商 HRoT、标准接口和云编排证据。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -751,15 +736,14 @@ TCB/compatibility lens & 通用性能结论 & 标为 SoK 示例分析 \\
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：评价结合 TCB/compatibility tables 与 conclusion，不扩展为具体产品判断。}}
+\SourceFootnote{来源：评价结合 TCB/compatibility tables 与 conclusion，不扩展为具体产品判断。}
 \end{frame}
 
 
 \begin{frame}[t,shrink=6]{硬件辅助 TEE taxonomy：方向总结}
 \DeckKicker{方向总结}
 \SlideMeta{证据等级}{方向综述}{来源状态：公开材料综合}
-{\large\bfseries\color{Ink} 01 的最终结论：TEE taxonomy 应从 CPU runtime 分工开始，向 RISC-V open-ISA lineage 和 accelerator/device path 扩展，最后用证据等级控制结论强度。\par}\vspace{1.8mm}
+{\large\bfseries\color{Ink} 01 的最终结论：TEE taxonomy 应从 CPU runtime 分工开始，向 RISC-V open-ISA lineage 和 accelerator/device path 扩展，最后用证据等级控制结论强度。\par}\vspace{1.2mm}
 \begin{columns}[T,totalwidth=\textwidth]
   \begin{column}{0.45\textwidth}
     \fcolorbox{Rule}{Paper}{%
@@ -800,6 +784,5 @@ Wang/Huang 2026 & accelerator TEE: access/memory/attestation/TCB & 不能替代 
   \end{minipage}}
   \end{column}
 \end{columns}
-\vspace{1mm}
-{\tiny\textcolor{Muted}{引用依据：总结页把三篇 SoK/Survey 的互补关系和证据边界放在同一矩阵中。}}
+\SourceFootnote{来源：总结页把三篇 SoK/Survey 的互补关系和证据边界放在同一矩阵中。}
 \end{frame}

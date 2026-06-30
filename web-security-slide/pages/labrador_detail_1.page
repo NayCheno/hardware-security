@@ -1,0 +1,351 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [960, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE & BADGE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 880, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>LABRADOR — 响应反馈导向的黑盒定向Fuzzing</p>
+
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1050, 58, 170, 28]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: badge-text
+    elementType: text
+    bounds: [1050, 58, 170, 28]
+    content:
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>IEEE S&P 2024</p>
+
+  # ===== LEFT COLUMN: 内容摘要 & 研究背景 =====
+  - elementId: left-bar-1
+    elementType: shape
+    bounds: [60, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-1
+    elementType: text
+    bounds: [72, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>内容摘要</p>
+
+  - elementId: left-body-1
+    elementType: text
+    bounds: [60, 142, 360, 190]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>基于响应反馈的黑盒IoT设备定向Fuzzing框架。通过解析网络响应近似恢复执行轨迹，定义IO面向距离度量引导变异策略。在14台企业级设备发现79个0-day含61个CVE。</p>
+
+  - elementId: left-bar-2
+    elementType: shape
+    bounds: [60, 348, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-2
+    elementType: text
+    bounds: [72, 346, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>研究背景</p>
+
+  - elementId: left-body-2
+    elementType: text
+    bounds: [60, 382, 360, 230]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>真实IoT设备无法插桩，传统白盒覆盖率反馈不可用。黑盒Fuzzing缺少覆盖率和目标距离反馈，随机变异效率极低。需要利用网络响应这一唯一可见信息推断内部执行状态。</p>
+
+  # ===== MIDDLE COLUMN: 核心洞察 & 解决方案 =====
+  - elementId: mid-bar-1
+    elementType: shape
+    bounds: [440, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-1
+    elementType: text
+    bounds: [452, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>核心洞察</p>
+
+  - elementId: mid-body-1
+    elementType: text
+    bounds: [440, 142, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>网络响应字符串蕴含执行轨迹信息。响应差异（长度、内容、状态码变化）可近似推断程序内部路径走向。将响应解析为执行轨迹，建立输入到响应变化的距离度量，指导Fuzzer向Sink靠近。</p>
+
+  - elementId: mid-bar-2
+    elementType: shape
+    bounds: [440, 400, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-2
+    elementType: text
+    bounds: [452, 398, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>解决方案</p>
+
+  - elementId: mid-body-2
+    elementType: text
+    bounds: [440, 434, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>1. 响应执行轨迹推断（RTI）：解析响应字符串序列，推断代码执行路径。2. IO面向距离度量（IODM）：基于响应差异定义输入到目标Sink的距离。3. 距离引导变异策略：优先变异能缩小IODM的字段，使Fuzzer高效逼近漏洞触发点。</p>
+
+  # ===== RIGHT COLUMN: 关键数据 =====
+  - elementId: right-bar
+    elementType: shape
+    bounds: [820, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: right-subtitle
+    elementType: text
+    bounds: [832, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>关键数据</p>
+
+  # Card 1
+  - elementId: card1-bg
+    elementType: shape
+    bounds: [840, 150, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card1-num
+    elementType: text
+    bounds: [860, 165, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>79</p>
+
+  - elementId: card1-label
+    elementType: text
+    bounds: [860, 215, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>个0-day漏洞</p>
+
+  # Card 2
+  - elementId: card2-bg
+    elementType: shape
+    bounds: [840, 290, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card2-num
+    elementType: text
+    bounds: [860, 305, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>44×</p>
+
+  - elementId: card2-label
+    elementType: text
+    bounds: [860, 355, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>于SNIPUZZ/BOOFUZZ</p>
+
+  # Card 3
+  - elementId: card3-bg
+    elementType: shape
+    bounds: [840, 430, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card3-num
+    elementType: text
+    bounds: [860, 445, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>61</p>
+
+  - elementId: card3-label
+    elementType: text
+    bounds: [860, 495, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>个CVE编号</p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>31 / 37</p>

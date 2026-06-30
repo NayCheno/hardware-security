@@ -149,7 +149,7 @@ primary:
   - manoni2026cva6cfi
   slides:
     summary:
-      claim: 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 con。
+      claim: 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义
       points:
       - 定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义
       visual:

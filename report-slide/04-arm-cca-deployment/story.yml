@@ -31,14 +31,14 @@ slides:
       - - 'NanoZone: CCA 细粒度内存保护'
         - 当前 SOTA/补充边界
         - E3 / 草案/未批准规范
-  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
 - slide_id: d04-primary-1-summary
   paper_key: zhang2023shelter
   slide_type: summary
   claim: 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment
   narrative:
   - 用 Arm CCA 支持用户态隔离，把 Realm 能力从 VM 级机密计算推进到 user-space compartment
-  - Shelter is the entry peer-reviewed system for moving CCA from VM Realms to user-space isola。
+  - Shelter is the entry peer-reviewed system for moving CCA from VM Realms to user-space...
   evidence_refs:
   - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` summary slide metadata.
   - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
@@ -58,7 +58,7 @@ slides:
         - E1 / 基础证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Shelter: CCA 用户态隔离｜证据等级：E1 / Foundational'
 - slide_id: d04-primary-1-background
   paper_key: zhang2023shelter
   slide_type: background
@@ -85,7 +85,7 @@ slides:
         - 'Shelter: CCA 用户态隔离'
       - - 证据限制
         - E1 / 基础证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Shelter: CCA 用户态隔离｜证据等级：E1 / Foundational'
 - slide_id: d04-primary-1-solution
   paper_key: zhang2023shelter
   slide_type: solution
@@ -103,13 +103,13 @@ slides:
       - User-space compartment over Arm CCA
       - Realm-backed isolation boundary
       - Runtime and OS integration path for fine-grained protection
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Shelter: CCA 用户态隔离｜证据等级：E1 / Foundational'
 - slide_id: d04-primary-1-experiments
   paper_key: zhang2023shelter
   slide_type: experiments
-  claim: USENIX Security 论文提供原型与开销评估；数值只在本地 PDF 或官方来源核验后使用
+  claim: USENIX Security 论文提供原型与开销评估；待补证据：需要核对原文 Table/Figure 后再写入具体数值
   narrative:
-  - USENIX Security 论文提供原型与开销评估；数值只在本地 PDF 或官方来源核验后使用
+  - USENIX Security 论文提供原型与开销评估；待补证据：需要核对原文 Table/Figure 后再写入具体数值
   evidence_refs:
   - report-slide/04-arm-cca-deployment/papers.yml `zhang2023shelter` experiments slide metadata.
   - 'reference/arm-confidential-computing/shelter-extending-arm-cca-with-isolation-in-user-space/paper.pdf; source_url: https://www.usenix.org/conference/usenixsecurity23/presentation/zhang-yiming; local README/PDF Section evidence as recorded in the reference entry.'
@@ -134,7 +134,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Shelter: CCA 用户态隔离｜证据等级：E1 / Foundational'
 - slide_id: d04-primary-1-evaluation
   paper_key: zhang2023shelter
   slide_type: evaluation
@@ -163,7 +163,7 @@ slides:
         - 对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。
       - - 讲稿定位
         - 开创/基础入口; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Shelter: CCA 用户态隔离｜证据等级：E1 / Foundational'
 - slide_id: d04-primary-2-summary
   paper_key: zhou2025rcontainer
   slide_type: summary
@@ -190,7 +190,7 @@ slides:
         - E1 / 同行评审改进证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：RContainer: CCA 安全容器｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d04-primary-2-background
   paper_key: zhou2025rcontainer
   slide_type: background
@@ -216,7 +216,7 @@ slides:
         - 'RContainer: CCA 安全容器'
       - - 证据限制
         - E1 / 同行评审改进证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：RContainer: CCA 安全容器｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d04-primary-2-solution
   paper_key: zhou2025rcontainer
   slide_type: solution
@@ -234,7 +234,7 @@ slides:
       - CCA-backed secure container boundary
       - Container lifecycle and Realm lifecycle mapping
       - Runtime/orchestration integration considerations
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：RContainer: CCA 安全容器｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d04-primary-2-experiments
   paper_key: zhou2025rcontainer
   slide_type: experiments
@@ -266,7 +266,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：RContainer: CCA 安全容器｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d04-primary-2-evaluation
   paper_key: zhou2025rcontainer
   slide_type: evaluation
@@ -295,14 +295,14 @@ slides:
         - 商业潜力高，适合云平台安全容器服务；风险在 Kubernetes/runtime 改造、调试可观测性和租户迁移成本。
       - - 讲稿定位
         - 代表性改进; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：RContainer: CCA 安全容器｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d04-primary-3-summary
   paper_key: liu2025nanozone
   slide_type: summary
   claim: 探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题
   narrative:
   - 探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题
-  - NanoZone is retained as a draft SOTA item for fine-grained CCA memory protection, with evid。
+  - NanoZone is retained as a draft SOTA item for fine-grained CCA memory protection, with...
   evidence_refs:
   - report-slide/04-arm-cca-deployment/papers.yml `liu2025nanozone` summary slide metadata.
   - 'reference/arm-confidential-computing/nanozone-scalable-efficient-secure-memory-protection-for-arm-cca/paper.pdf; source_url: https://arxiv.org/abs/2506.07034; local README/PDF Section evidence as recorded in the reference entry.'
@@ -322,7 +322,7 @@ slides:
         - E3 / 草案/未批准规范
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：NanoZone: CCA 细粒度内存保护｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d04-primary-3-background
   paper_key: liu2025nanozone
   slide_type: background
@@ -348,7 +348,7 @@ slides:
         - 'NanoZone: CCA 细粒度内存保护'
       - - 证据限制
         - E3 / 草案/未批准规范
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：NanoZone: CCA 细粒度内存保护｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d04-primary-3-solution
   paper_key: liu2025nanozone
   slide_type: solution
@@ -366,7 +366,7 @@ slides:
       - Fine-grained memory protection over CCA
       - Granule/lifecycle scaling pressure
       - Intra-process isolation comparison with less-trust management
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：NanoZone: CCA 细粒度内存保护｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d04-primary-3-experiments
   paper_key: liu2025nanozone
   slide_type: experiments
@@ -398,7 +398,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：NanoZone: CCA 细粒度内存保护｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d04-primary-3-evaluation
   paper_key: liu2025nanozone
   slide_type: evaluation
@@ -427,7 +427,7 @@ slides:
         - 若硬件和 runtime 成本可控，可服务插件沙箱、密钥处理和多租户组件隔离；风险在 ABI 稳定性和开发复杂度。
       - - 讲稿定位
         - 当前 SOTA/补充边界; 证据强度 E3
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：NanoZone: CCA 细粒度内存保护｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d04-16-direction-summary
   paper_key: direction
   slide_type: direction_summary
@@ -451,11 +451,11 @@ slides:
       rows:
       - - 'Shelter: CCA 用户态隔离'
         - 开创/基础入口
-        - Shelter is the entry peer-reviewed system for moving CCA from VM Realms t。
+        - Shelter is the entry peer-reviewed system for moving CCA from VM Realms...
       - - 'RContainer: CCA 安全容器'
         - 代表性改进
-        - RContainer is a peer-reviewed SOTA system for CCA-backed cloud-native con。
+        - RContainer is a peer-reviewed SOTA system for CCA-backed cloud-native...
       - - 'NanoZone: CCA 细粒度内存保护'
         - 当前 SOTA/补充边界
-        - NanoZone is retained as a draft SOTA item for fine-grained CCA memory pro。
-  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。
+        - NanoZone is retained as a draft SOTA item for fine-grained CCA memory...
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述

@@ -1,0 +1,83 @@
+pageType: final
+background:
+  type: solid
+  color: "$primary"
+elements:
+  - elementId: center-line
+    elementType: shape
+    bounds: [540, 160, 200, 4]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: main-title
+    elementType: text
+    bounds: [140, 180, 1000, 60]
+    content:
+      style: "$coverTitle"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>总结与展望</p>
+
+  - elementId: subtitle
+    elementType: text
+    bounds: [190, 260, 900, 40]
+    content:
+      style: "$coverSubtitle"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web安全研究已形成全链路技术体系</p>
+
+  - elementId: summary-box
+    elementType: shape
+    bounds: [140, 320, 1000, 220]
+    shapeName: roundRect
+    adjustments: [6000]
+    fill:
+      type: solid
+      color: "#FFFFFF10"
+    border:
+      style: solid
+      width: 1
+      color: "#FFFFFF30"
+
+  - elementId: summary-text
+    elementType: text
+    bounds: [180, 340, 920, 180]
+    content:
+      fontSize: 18
+      color: "#E2E8F0"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.8
+      align: [left, top]
+      text: |
+        <p>• 完整链路：Source识别 → Propagation追踪 → Sink发现 → Verification闭环</p>
+        <p>• 技术演进：硬编码匹配 → LLM语义理解 → 智能Token推断 → 约束一致性+Agent闭环</p>
+        <p>• 未来方向：大模型驱动自动化漏洞分析、多语言混合架构通用化、真实设备高可信验证</p>
+
+  - elementId: thanks
+    elementType: text
+    bounds: [340, 580, 600, 40]
+    content:
+      fontSize: 22
+      color: "#FFFFFF"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>感谢聆听</p>
+
+  - elementId: author-info
+    elementType: text
+    bounds: [340, 630, 600, 30]
+    content:
+      fontSize: 16
+      color: "#94A3B8"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>罗夏朴 | 香港理工大学 电子计算学系 | 2025</p>

@@ -1,5 +1,5 @@
 direction: Arm CCA I/O、DMA、accelerator、interrupt
-focus: 把设备访问、DMA、interrupt ownership 与 accelerator workflow 纳入 CCA 边界。
+focus: 把设备访问、DMA、interrupt ownership 与 accelerator workflowow 纳入 CCA 边界。
 selection_rule: 固定三篇 primary；ACAI 和 Devlore 均保持 draft/not-ratified 状态，`sok-tee` 只作为 accelerator TEE taxonomy。
 primary:
 - key: acai2023
@@ -41,7 +41,7 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation。
+      claim: 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面
       points:
       - 以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面
       visual:
@@ -62,8 +62,8 @@ primary:
         - 成熟度：draft/preprint, not ratified
         - PDF：local_pdf_verified
     evaluation:
-      claim: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点
-      strengths: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。
+      claim: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflowow，是本方向的入口设计点
+      strengths: 把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflowow，是本方向的入口设计点。
       limitations: 预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。
       commercialization: 可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。
 - key: bertschi2026devlore
@@ -94,7 +94,7 @@ primary:
         - 证据：E3 / Draft-not-ratified
         - 来源：local_pdf_verified
     background:
-      claim: 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidentia。
+      claim: 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机
       points:
       - 即便 DMA 受控，设备 interrupt 仍可能泄露 timing/ownership 信息，或被 host 用来破坏 confidential VM 的状态机
       visual:
@@ -146,7 +146,7 @@ primary:
   auxiliary: []
   slides:
     summary:
-      claim: 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、r。
+      claim: 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题
       points:
       - 为 accelerator/device TEE 提供 taxonomy，帮助组织 GPU/NPU/DPU/SmartNIC 的身份、内存路径、runtime 与 attestation 问题
       visual:

@@ -1,0 +1,351 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [640, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE & BADGE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 880, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>PANGOLIN — 多语言接口规格恢复与语义Fuzzing</p>
+
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1050, 58, 170, 28]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: badge-text
+    elementType: text
+    bounds: [1050, 58, 170, 28]
+    content:
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>USENIX Security 2026</p>
+
+  # ===== LEFT COLUMN: 内容摘要 & 研究背景 =====
+  - elementId: left-bar-1
+    elementType: shape
+    bounds: [60, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-1
+    elementType: text
+    bounds: [72, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>内容摘要</p>
+
+  - elementId: left-body-1
+    elementType: text
+    bounds: [60, 142, 360, 190]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>LLM驱动的多语言IoT固件Fuzzing框架。分析API分发和跨语言调用链恢复入口映射与参数规格，结合设备响应进行语义感知Fuzzing。12台设备发现68个未知漏洞，是LABRADOR的2.96倍。</p>
+
+  - elementId: left-bar-2
+    elementType: shape
+    bounds: [60, 348, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-2
+    elementType: text
+    bounds: [72, 346, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>研究背景</p>
+
+  - elementId: left-body-2
+    elementType: text
+    bounds: [60, 382, 360, 230]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>现代IoT固件Web后端采用C/C++、Lua、Python混合架构，参数以JSON、字典、列表、结构体等层级形式跨语言传递。EAGLEYE已能推断隐藏接口，但仅发现路由Token仍不够，必须恢复接口分发方式和参数解析逻辑才能触发深层路径。</p>
+
+  # ===== MIDDLE COLUMN: 核心洞察 & 解决方案 =====
+  - elementId: mid-bar-1
+    elementType: shape
+    bounds: [440, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-1
+    elementType: text
+    bounds: [452, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>核心洞察</p>
+
+  - elementId: mid-body-1
+    elementType: text
+    bounds: [440, 142, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>①公开与隐藏接口共享后端分发逻辑，复用同一套dispatch函数和注册表；②接口有效性依赖参数规格，URL只是入口，真正决定深层逻辑的是参数名、位置、类型、层级和约束；③LLM能理解跨语言代码语义但可能产生错误规格，设备响应中的缺参数、格式错误等信息可反向修正。</p>
+
+  - elementId: mid-bar-2
+    elementType: shape
+    bounds: [440, 400, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-2
+    elementType: text
+    bounds: [452, 398, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>解决方案</p>
+
+  - elementId: mid-body-2
+    elementType: text
+    bounds: [440, 434, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>1. 预处理：脚本切片，二进制反汇编回填上下文。2. 入口映射：定位dispatch函数，构建树结构路径，LLM恢复入口。3. MCG：构建多语言调用图，恢复参数位置、数据结构、语义约束。4. 语义Fuzzing：根据响应反馈修正参数规格，按后端语义驱动变异。</p>
+
+  # ===== RIGHT COLUMN: 关键数据 =====
+  - elementId: right-bar
+    elementType: shape
+    bounds: [820, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: right-subtitle
+    elementType: text
+    bounds: [832, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>关键数据</p>
+
+  # Card 1
+  - elementId: card1-bg
+    elementType: shape
+    bounds: [840, 150, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card1-num
+    elementType: text
+    bounds: [860, 165, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>68</p>
+
+  - elementId: card1-label
+    elementType: text
+    bounds: [860, 215, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>个未知漏洞</p>
+
+  # Card 2
+  - elementId: card2-bg
+    elementType: shape
+    bounds: [840, 290, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card2-num
+    elementType: text
+    bounds: [860, 305, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>2.96</p>
+
+  - elementId: card2-label
+    elementType: text
+    bounds: [860, 355, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>倍于LABRADOR</p>
+
+  # Card 3
+  - elementId: card3-bg
+    elementType: shape
+    bounds: [840, 430, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card3-num
+    elementType: text
+    bounds: [860, 445, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>45</p>
+
+  - elementId: card3-label
+    elementType: text
+    bounds: [860, 495, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>个隐藏接口漏洞</p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>25 / 37</p>

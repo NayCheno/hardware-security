@@ -31,7 +31,7 @@ slides:
       - - 'Hazel: secure disaggregated storage data path'
         - 当前 SOTA/补充边界
         - E3 / 草案/未批准规范
-  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
 - slide_id: d15-primary-1-summary
   paper_key: zhou2024snic
   slide_type: summary
@@ -41,7 +41,7 @@ slides:
   - sNIC is the foundational peer-reviewed systems paper for cloud SmartNIC isolation.
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `zhou2024snic` summary slide metadata.
-  - 'reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  - 'reference/memory-and-io-fabrics/SmartNIC-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
   proof_object:
     type: comparison_matrix
     title: 证据定位
@@ -58,7 +58,7 @@ slides:
         - E1 / 同行评审改进证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：S-NIC: SmartNIC function isolation｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-1-background
   paper_key: zhou2024snic
   slide_type: background
@@ -67,7 +67,7 @@ slides:
   - SmartNIC/DPU 上运行 packet processing、DPI、NAT、storage offload 后，NIC OS 和其他租户函数可能泄漏或篡改 state
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `zhou2024snic` background slide metadata.
-  - 'reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  - 'reference/memory-and-io-fabrics/SmartNIC-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
   proof_object:
     type: comparison_matrix
     title: 问题边界
@@ -79,21 +79,21 @@ slides:
       - - 保护对象
         - SmartNIC / trusted NIC / secure storage data path
       - - 传统瓶颈
-        - 把 NIC-local root、secure offload、resource management 与 confidential st。
+        - 把 NIC-local root、secure offload、resource management 与 confidential...
       - - 本文入口
         - 'S-NIC: SmartNIC function isolation'
       - - 证据限制
         - E1 / 同行评审改进证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：S-NIC: SmartNIC function isolation｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-1-solution
   paper_key: zhou2024snic
   slide_type: solution
-  claim: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualizatio。
+  claim: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和。
   narrative:
-  - 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bu。
+  - 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation...
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `zhou2024snic` solution slide metadata.
-  - 'reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  - 'reference/memory-and-io-fabrics/SmartNIC-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
   proof_object:
     type: mechanism_flow
     title: 核心设计拆解
@@ -102,7 +102,7 @@ slides:
       - Virtual SmartNIC launch/destroy lifecycle
       - Memory denylist, locked TLB, and DMA isolation
       - Cache partitioning, accelerator virtualization, and bus arbitration
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：S-NIC: SmartNIC function isolation｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-1-experiments
   paper_key: zhou2024snic
   slide_type: experiments
@@ -111,7 +111,7 @@ slides:
   - 论文报告硬件面积约 +8.89%，功耗约 +11.45%，function throughput worst-case 下降小于 1.7%
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `zhou2024snic` experiments slide metadata.
-  - 'reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  - 'reference/memory-and-io-fabrics/SmartNIC-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
   proof_object:
     type: evidence_gap_matrix
     title: 实验/证据边界
@@ -133,7 +133,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：S-NIC: SmartNIC function isolation｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-1-evaluation
   paper_key: zhou2024snic
   slide_type: evaluation
@@ -141,11 +141,11 @@ slides:
   narrative:
   - 设计优势：为 secure vNIC/vSwitch/offload 提供清晰的 NIC-local resource ownership baseline。
   - 局限性：没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。
-  - 商业化潜力：可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor attes。
+  - 商业化潜力：可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor...
   - 证据边界：E1 / Peer-reviewed SOTA；本地 PDF 已核验。
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `zhou2024snic` evaluation slide metadata.
-  - 'reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
+  - 'reference/memory-and-io-fabrics/SmartNIC-security-isolation-cloud-snic/paper.pdf; source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf; local README/PDF Section evidence as recorded in the reference entry.'
   proof_object:
     type: comparison_matrix
     title: 文章评价
@@ -159,16 +159,16 @@ slides:
       - - 主要局限
         - 没有真实 production NIC silicon，也不是完整 VM/Realm trusted I/O 或 SPDM/TDISP lifecycle。
       - - 商业落地
-        - 可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和 vendor。
+        - 可指导 DPU tenant network-function isolation；落地风险在资源利用率、function chaining 和。
       - - 讲稿定位
         - 开创/基础入口; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：S-NIC: SmartNIC function isolation｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-2-summary
   paper_key: giantsidi2025tnic
   slide_type: summary
-  claim: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable aut。
+  claim: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation
   narrative:
-  - TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-。
+  - TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和。
   - TNIC is a peer-reviewed ASPLOS 2025 SOTA trusted NIC system.
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `giantsidi2025tnic` summary slide metadata.
@@ -189,7 +189,7 @@ slides:
         - E1 / 同行评审改进证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：TNIC: trusted NIC architecture｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-2-background
   paper_key: giantsidi2025tnic
   slide_type: background
@@ -210,12 +210,12 @@ slides:
       - - 保护对象
         - SmartNIC / trusted NIC / secure storage data path
       - - 传统瓶颈
-        - 把 NIC-local root、secure offload、resource management 与 confidential st。
+        - 把 NIC-local root、secure offload、resource management 与 confidential...
       - - 本文入口
         - 'TNIC: trusted NIC architecture'
       - - 证据限制
         - E1 / 同行评审改进证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：TNIC: trusted NIC architecture｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-2-solution
   paper_key: giantsidi2025tnic
   slide_type: solution
@@ -234,7 +234,7 @@ slides:
       - NIC-level silicon root-of-trust
       - Transferable authentication and non-equivocation
       - Tamarin-verified protocol core and kernel-bypass stack
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：TNIC: trusted NIC architecture｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-2-experiments
   paper_key: giantsidi2025tnic
   slide_type: experiments
@@ -265,7 +265,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：TNIC: trusted NIC architecture｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-2-evaluation
   paper_key: giantsidi2025tnic
   slide_type: evaluation
@@ -294,13 +294,13 @@ slides:
         - 可成为 SmartNIC local root 的学术蓝图；风险在 silicon provisioning、证书链和云厂商互操作。
       - - 讲稿定位
         - 代表性改进; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Peer-reviewed SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：TNIC: trusted NIC architecture｜证据等级：E1 / Peer-reviewed SOTA'
 - slide_id: d15-primary-3-summary
   paper_key: chrapek2026hazel
   slide_type: summary
-  claim: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 fres。
+  claim: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销
   narrative:
-  - Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueFiel。
+  - Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用。
   - Hazel is retained as a draft SOTA item for trusted NIC and secure storage data paths.
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `chrapek2026hazel` summary slide metadata.
@@ -321,11 +321,11 @@ slides:
         - E3 / 草案/未批准规范
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Hazel: secure disaggregated storage data path｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d15-primary-3-background
   paper_key: chrapek2026hazel
   slide_type: background
-  claim: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 r。
+  claim: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
   narrative:
   - confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
   evidence_refs:
@@ -342,18 +342,18 @@ slides:
       - - 保护对象
         - SmartNIC / trusted NIC / secure storage data path
       - - 传统瓶颈
-        - 把 NIC-local root、secure offload、resource management 与 confidential st。
+        - 把 NIC-local root、secure offload、resource management 与 confidential...
       - - 本文入口
         - 'Hazel: secure disaggregated storage data path'
       - - 证据限制
         - E3 / 草案/未批准规范
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Hazel: secure disaggregated storage data path｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d15-primary-3-solution
   paper_key: chrapek2026hazel
   slide_type: solution
-  claim: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual c。
+  claim: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload
   narrative:
-  - counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU c。
+  - counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU...
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `chrapek2026hazel` solution slide metadata.
   - 'reference/memory-and-io-fabrics/hazel-secure-efficient-disaggregated-storage/paper.pdf; source_url: https://arxiv.org/abs/2510.18756; local README/PDF Section evidence as recorded in the reference entry.'
@@ -365,13 +365,13 @@ slides:
       - Counter leasing and KBS/TEE-assisted control path
       - NVMe metadata plus Hazel Merkle Tree freshness
       - BlueField-3 crypto offload for NVMe-oF data path
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Hazel: secure disaggregated storage data path｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d15-primary-3-experiments
   paper_key: chrapek2026hazel
   slide_type: experiments
   claim: arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.。
   narrative:
-  - arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99 latenc。
+  - arXiv preprint 提供 NVMe-oF storage 原型评估，报告常见路径 1%-2% overhead，IO500 平均约 6.3%，YCSB p99...
   - 小随机 freshness I/O 是弱点
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `chrapek2026hazel` experiments slide metadata.
@@ -397,7 +397,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Hazel: secure disaggregated storage data path｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d15-primary-3-evaluation
   paper_key: chrapek2026hazel
   slide_type: evaluation
@@ -405,7 +405,7 @@ slides:
   narrative:
   - 设计优势：把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。
   - 局限性：仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity 完整闭环。
-  - 商业化潜力：接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint ev。
+  - 商业化潜力：接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpoint...
   - 证据边界：E3 / Draft-not-ratified；本地 PDF 已核验。
   evidence_refs:
   - report-slide/15-smartnic-trusted-nic-storage/papers.yml `chrapek2026hazel` evaluation slide metadata.
@@ -421,12 +421,12 @@ slides:
       - - 设计优势
         - 把 confidential computing 的 storage data path、freshness 和 DPU offload 放到同一系统原型中。
       - - 主要局限
-        - 仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint identity。
+        - 仍是 preprint；没有把 BlueField DPU attestation、SPDM/TDISP/NVMe-oF endpoint...
       - - 商业落地
-        - 接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production endpo。
+        - 接近云上 confidential storage 需求；风险在 crash consistency、KBS/DPU 运维和 production...
       - - 讲稿定位
         - 当前 SOTA/补充边界; 证据强度 E3
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E3 / Draft-not-ratified 的证据等级使用，不外推到未验证平台。
+  source_note: '来源：Hazel: secure disaggregated storage data path｜证据等级：E3 / Draft-not-ratified'
 - slide_id: d15-16-direction-summary
   paper_key: direction
   slide_type: direction_summary
@@ -450,11 +450,11 @@ slides:
       rows:
       - - 'S-NIC: SmartNIC function isolation'
         - 开创/基础入口
-        - sNIC is the foundational peer-reviewed systems paper for cloud SmartNIC i。
+        - sNIC is the foundational peer-reviewed systems paper for cloud SmartNIC...
       - - 'TNIC: trusted NIC architecture'
         - 代表性改进
         - TNIC is a peer-reviewed ASPLOS 2025 SOTA trusted NIC system.
       - - 'Hazel: secure disaggregated storage data path'
         - 当前 SOTA/补充边界
-        - Hazel is retained as a draft SOTA item for trusted NIC and secure storage。
-  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。
+        - Hazel is retained as a draft SOTA item for trusted NIC and secure...
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述

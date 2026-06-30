@@ -31,14 +31,14 @@ slides:
       - - TrustZone-assisted TEE 漏洞 SoK
         - 当前 SOTA/补充边界
         - E2 / Peer-reviewed SoK
-  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
 - slide_id: d02-primary-1-summary
   paper_key: arm_trustzone_whitepaper
   slide_type: summary
   claim: 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型
   narrative:
   - 介绍 Secure/Non-secure world、NS bit 和 SoC 级隔离的基本模型
-  - First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for thi。
+  - First-party Arm TrustZone whitepaper is the strongest foundational mechanism source for...
   evidence_refs:
   - report-slide/02-trustzone-lineage/papers.yml `arm_trustzone_whitepaper` summary slide metadata.
   - 'reference/trusted-execution-environments/arm-security-technology-trustzone/README.md; source_url: https://documentation-service.arm.com/static/5f212796500e883ab8e74531; local README/PDF Section evidence as recorded in the reference entry.'
@@ -58,7 +58,7 @@ slides:
         - E4 / 基础产业证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Foundational industry evidence 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm TrustZone 白皮书｜证据等级：E4 / Foundational industry evidence
 - slide_id: d02-primary-1-background
   paper_key: arm_trustzone_whitepaper
   slide_type: background
@@ -84,7 +84,7 @@ slides:
         - Arm TrustZone 白皮书
       - - 证据限制
         - E4 / 基础产业证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Foundational industry evidence 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm TrustZone 白皮书｜证据等级：E4 / Foundational industry evidence
 - slide_id: d02-primary-1-solution
   paper_key: arm_trustzone_whitepaper
   slide_type: solution
@@ -102,7 +102,7 @@ slides:
       - Secure world / Non-secure world
       - NS bit and SoC security state propagation
       - Secure monitor and trusted service boundary
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Foundational industry evidence 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm TrustZone 白皮书｜证据等级：E4 / Foundational industry evidence
 - slide_id: d02-primary-1-experiments
   paper_key: arm_trustzone_whitepaper
   slide_type: experiments
@@ -134,7 +134,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Foundational industry evidence 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm TrustZone 白皮书｜证据等级：E4 / Foundational industry evidence
 - slide_id: d02-primary-1-evaluation
   paper_key: arm_trustzone_whitepaper
   slide_type: evaluation
@@ -163,7 +163,7 @@ slides:
         - 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
       - - 讲稿定位
         - 开创/基础入口; 证据强度 E4
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E4 / Foundational industry evidence 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm TrustZone 白皮书｜证据等级：E4 / Foundational industry evidence
 - slide_id: d02-primary-2-summary
   paper_key: pinto2019trustzone
   slide_type: summary
@@ -190,7 +190,7 @@ slides:
         - E2 / Background substrate
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Demystifying Arm TrustZone｜证据等级：E2 / Background substrate
 - slide_id: d02-primary-2-background
   paper_key: pinto2019trustzone
   slide_type: background
@@ -216,7 +216,7 @@ slides:
         - Demystifying Arm TrustZone
       - - 证据限制
         - E2 / Background substrate
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Demystifying Arm TrustZone｜证据等级：E2 / Background substrate
 - slide_id: d02-primary-2-solution
   paper_key: pinto2019trustzone
   slide_type: solution
@@ -234,14 +234,14 @@ slides:
       - TEE OS and trusted applications
       - Hardware-assisted virtualization use cases
       - IoT and mobile deployment patterns
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Demystifying Arm TrustZone｜证据等级：E2 / Background substrate
 - slide_id: d02-primary-2-experiments
   paper_key: pinto2019trustzone
   slide_type: experiments
   claim: 规范/Survey，无新实验；Demystifying Arm TrustZone 只支撑术语、taxonomy、接口语义或证据边界。
   narrative:
   - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  - 可支撑：Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE linea。
+  - 可支撑：Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE...
   - 证据等级：E2 / Background substrate；来源状态：本地 PDF 已核验。
   - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
   evidence_refs:
@@ -268,14 +268,14 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Demystifying Arm TrustZone｜证据等级：E2 / Background substrate
 - slide_id: d02-primary-2-evaluation
   paper_key: pinto2019trustzone
   slide_type: evaluation
   claim: 评价：Demystifying Arm TrustZone 适合做 taxonomy/规范入口；规范/Survey，无新实验，不能替代一手系统证据。
   narrative:
   - 设计优势：适合写 TrustZone 背景和生态谱系。
-  - 局限性：对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM 结论。
+  - 局限性：对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
   - 商业化潜力：有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
   - 规范/Survey，无新实验；具体平台结论转到一手材料核验。
   evidence_refs:
@@ -292,12 +292,12 @@ slides:
       - - 设计优势
         - 适合写 TrustZone 背景和生态谱系。
       - - 主要局限
-        - 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM 结论。
+        - 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
       - - 商业落地
         - 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
       - - 讲稿定位
         - 代表性改进; 证据强度 E2
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Background substrate 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Demystifying Arm TrustZone｜证据等级：E2 / Background substrate
 - slide_id: d02-primary-3-summary
   paper_key: cerdeira2020trustzone
   slide_type: summary
@@ -324,7 +324,7 @@ slides:
         - E2 / Peer-reviewed SoK
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：TrustZone-assisted TEE 漏洞 SoK｜证据等级：E2 / Peer-reviewed SoK
 - slide_id: d02-primary-3-background
   paper_key: cerdeira2020trustzone
   slide_type: background
@@ -350,7 +350,7 @@ slides:
         - TrustZone-assisted TEE 漏洞 SoK
       - - 证据限制
         - E2 / Peer-reviewed SoK
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：TrustZone-assisted TEE 漏洞 SoK｜证据等级：E2 / Peer-reviewed SoK
 - slide_id: d02-primary-3-solution
   paper_key: cerdeira2020trustzone
   slide_type: solution
@@ -368,7 +368,7 @@ slides:
       - Trusted application and TEE OS attack surface
       - Secure monitor / driver interface risk
       - Vulnerability taxonomy and root-cause grouping
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：TrustZone-assisted TEE 漏洞 SoK｜证据等级：E2 / Peer-reviewed SoK
 - slide_id: d02-primary-3-experiments
   paper_key: cerdeira2020trustzone
   slide_type: experiments
@@ -402,7 +402,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：TrustZone-assisted TEE 漏洞 SoK｜证据等级：E2 / Peer-reviewed SoK
 - slide_id: d02-primary-3-evaluation
   paper_key: cerdeira2020trustzone
   slide_type: evaluation
@@ -431,7 +431,7 @@ slides:
         - 可用于安全审计和迁移评估；落地条件是缩小 TCB、规范接口并建立持续漏洞治理。
       - - 讲稿定位
         - 当前 SOTA/补充边界; 证据强度 E2
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E2 / Peer-reviewed SoK 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：TrustZone-assisted TEE 漏洞 SoK｜证据等级：E2 / Peer-reviewed SoK
 - slide_id: d02-16-direction-summary
   paper_key: direction
   slide_type: direction_summary
@@ -455,11 +455,11 @@ slides:
       rows:
       - - Arm TrustZone 白皮书
         - 开创/基础入口
-        - First-party Arm TrustZone whitepaper is the strongest foundational mechan。
+        - First-party Arm TrustZone whitepaper is the strongest foundational...
       - - Demystifying Arm TrustZone
         - 代表性改进
-        - Systematic survey of TrustZone-assisted TEEs for mature mobile and embedd。
+        - Systematic survey of TrustZone-assisted TEEs for mature mobile and...
       - - TrustZone-assisted TEE 漏洞 SoK
         - 当前 SOTA/补充边界
-        - S&P 2020 SoK anchors the TrustZone vulnerability and attack-surface narra。
-  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。
+        - S&P 2020 SoK anchors the TrustZone vulnerability and attack-surface...
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述

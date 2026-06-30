@@ -54,7 +54,7 @@ primary:
       claim: 论文报告 CoreMark/Beebs/RV8 等开销结果
       points:
       - 论文报告 CoreMark/Beebs/RV8 等开销结果
-      - 具体数字以本地 PDF 为准
+      - 待补证据：需要核对原文 Table/Figure 后再写入具体数字
       visual:
         title: 证据强度
         items:
@@ -83,7 +83,7 @@ primary:
   auxiliary: []
   slides:
     summary:
-      claim: 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量。
+      claim: 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
       points:
       - 面向大规模 enclave 的 scalable memory protection，回应 serverless/microservice 对大量动态 enclave 的需求
       visual:
@@ -117,7 +117,7 @@ primary:
       claim: OSDI 论文报告可支持大量 enclave 和较大安全内存
       points:
       - OSDI 论文报告可支持大量 enclave 和较大安全内存
-      - 具体指标以本地 PDF 为准
+      - 待补证据：需要核对原文 Table/Figure 后再写入具体指标
       visual:
         title: 证据强度
         items:
@@ -146,7 +146,7 @@ primary:
   auxiliary: []
   slides:
     summary:
-      claim: 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox。
+      claim: 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
       points:
       - 提出低开销、实用的 RISC-V enclave primitive，用 tag/metadata primitive 支持双向 sandbox 和嵌套隔离
       visual:
@@ -167,7 +167,7 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotec。
+      claim: 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
       points:
       - 用 tag/metadata primitive 替代仅靠 PMP region 的隔离表达，支持更细粒度的 protected/unprotected 交互
       visual:
@@ -180,7 +180,7 @@ primary:
       claim: AsiaCCS 论文报告 protected/unprotected 场景低开销
       points:
       - AsiaCCS 论文报告 protected/unprotected 场景低开销
-      - 具体数值以本地 PDF 为准
+      - 待补证据：需要核对原文 Table/Figure 后再写入具体数值
       visual:
         title: 证据强度
         items:

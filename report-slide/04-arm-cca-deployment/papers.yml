@@ -51,9 +51,9 @@ primary:
         - Realm-backed isolation boundary
         - Runtime and OS integration path for fine-grained protection
     experiments:
-      claim: USENIX Security 论文提供原型与开销评估；具体数值需回引本地 PDF
+      claim: USENIX Security 论文提供原型与开销评估；待补证据：需要核对原文 Table/Figure 后再写入具体数值
       points:
-      - USENIX Security 论文提供原型与开销评估；具体数值需回引本地 PDF
+      - USENIX Security 论文提供原型与开销评估；待补证据：需要核对原文 Table/Figure 后再写入具体数值
       visual:
         title: 证据强度
         items:

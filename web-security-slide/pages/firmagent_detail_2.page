@@ -1,0 +1,278 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [960, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE & BADGE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 880, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>FirmAgent — 实验结果与文章评价</p>
+
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1050, 58, 170, 28]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: badge-text
+    elementType: text
+    bounds: [1050, 58, 170, 28]
+    content:
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>NDSS 2026</p>
+
+  # ===== EXPERIMENTAL RESULTS =====
+  - elementId: results-bar
+    elementType: shape
+    bounds: [60, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: results-subtitle
+    elementType: text
+    bounds: [72, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>实验结果</p>
+
+  - elementId: results-table
+    elementType: table
+    bounds: [60, 148, 600, 240]
+    columnWidths: [0.5, 0.5]
+    rowHeights: [0.15, 0.17, 0.17, 0.17, 0.17, 0.17]
+    style: "$default"
+    rows:
+      - - content: {text: "评估指标"}
+        - content: {text: "数值"}
+      - - content: {text: "测试固件"}
+        - content: {text: "14款 (7厂商)"}
+      - - content: {text: "真实漏洞"}
+        - content: {text: "182个 (140 0-day)"}
+      - - content: {text: "漏洞类型"}
+        - content: {text: "45 CMDi + 137 BOF"}
+      - - content: {text: "检测精度"}
+        - content: {text: "91% (vs HermeScan 33%)"}
+      - - content: {text: "PoC直接触发率"}
+        - content: {text: "167/182 = 91.8%"}
+
+  - elementId: results-note
+    elementType: text
+    bounds: [700, 148, 520, 240]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p><strong>与现有方法对比</strong></p>
+        <p>发现漏洞数量是HermeScan的2.6倍，精度从33%提升至91%。所有基线工具报告的漏洞均被完全覆盖。140个0-day漏洞中已有17个获得CVE编号。</p>
+
+  # ===== ARTICLE EVALUATION =====
+  - elementId: eval-bar
+    elementType: shape
+    bounds: [60, 410, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: eval-subtitle
+    elementType: text
+    bounds: [72, 408, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>文章评价</p>
+
+  # Evaluation: 优势
+  - elementId: eval1-bar
+    elementType: shape
+    bounds: [60, 452, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$success"
+
+  - elementId: eval1-subtitle
+    elementType: text
+    bounds: [72, 450, 348, 28]
+    content:
+      fontSize: 18
+      color: "$success"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>优势</strong></p>
+
+  - elementId: eval1-body
+    elementType: text
+    bounds: [60, 486, 360, 180]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>Fuzzing真实可达性与LLM语义推理深度结合，形成漏洞发现-验证-利用闭环。反编译修复和净化检查有效抑制误报。</p>
+
+  # Evaluation: 局限
+  - elementId: eval2-bar
+    elementType: shape
+    bounds: [440, 452, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$risk"
+
+  - elementId: eval2-subtitle
+    elementType: text
+    bounds: [452, 450, 348, 28]
+    content:
+      fontSize: 18
+      color: "$risk"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>局限</strong></p>
+
+  - elementId: eval2-body
+    elementType: text
+    bounds: [440, 486, 360, 180]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>依赖仿真、QEMU插桩、反编译和LLM，多重因素导致PoC生成失败概率高。任何一个环节出错都会中断整个流程。</p>
+
+  # Evaluation: 商业化
+  - elementId: eval3-bar
+    elementType: shape
+    bounds: [820, 452, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$secondary"
+
+  - elementId: eval3-subtitle
+    elementType: text
+    bounds: [832, 450, 348, 28]
+    content:
+      fontSize: 18
+      color: "$secondary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>商业化</strong></p>
+
+  - elementId: eval3-body
+    elementType: text
+    bounds: [820, 486, 360, 180]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>适合厂商内部红队或安全实验室使用，作为漏洞研究与辅助PoC生成的平台。不适合大规模自动化产品部署。</p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>34 / 37</p>

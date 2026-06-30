@@ -7,7 +7,7 @@ primary:
   selection_slot: primary_1
   paper_type: system
   claim_strength: E1 primary systems
-  selection_reason: DirectCXL is the primary systems-paper entry point for CXL memory fabric research.
+  selection_reason: DirectCXL is the primary systems-paper entry point for CXL.memory fabric research.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
   pdf_status: local_pdf_verified
@@ -23,7 +23,7 @@ primary:
   selection_slot: primary_2
   paper_type: system
   claim_strength: E1 primary systems
-  selection_reason: CXL-Tiers is a peer-reviewed OSDI 2024 SOTA system for CXL memory tiering.
+  selection_reason: CXL-Tiers is a peer-reviewed OSDI 2024 SOTA system for CXL.memory tiering.
   evidence_type: E1 peer-reviewed primary work
   maturity: peer-reviewed primary work
   pdf_status: local_pdf_verified

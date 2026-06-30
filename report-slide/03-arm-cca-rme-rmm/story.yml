@@ -31,7 +31,7 @@ slides:
       - - Realm Management Monitor 规范
         - 当前 SOTA/补充边界
         - E0 / Spec-standard SOTA
-  source_note: 本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
 - slide_id: d03-primary-1-summary
   paper_key: li2022cca
   slide_type: summary
@@ -58,7 +58,7 @@ slides:
         - E1 / 基础证据
       - - 来源状态
         - 本地 PDF 已核验
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm Confidential Computing Architecture｜证据等级：E1 / Foundational
 - slide_id: d03-primary-1-background
   paper_key: li2022cca
   slide_type: background
@@ -84,7 +84,7 @@ slides:
         - Arm Confidential Computing Architecture
       - - 证据限制
         - E1 / 基础证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm Confidential Computing Architecture｜证据等级：E1 / Foundational
 - slide_id: d03-primary-1-solution
   paper_key: li2022cca
   slide_type: solution
@@ -102,7 +102,7 @@ slides:
       - Realm world and host/tenant separation
       - Granule ownership and GPT/GPC
       - RMM-mediated lifecycle and attestation path
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm Confidential Computing Architecture｜证据等级：E1 / Foundational
 - slide_id: d03-primary-1-experiments
   paper_key: li2022cca
   slide_type: experiments
@@ -134,7 +134,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm Confidential Computing Architecture｜证据等级：E1 / Foundational
 - slide_id: d03-primary-1-evaluation
   paper_key: li2022cca
   slide_type: evaluation
@@ -163,14 +163,14 @@ slides:
         - 商业潜力强，因为机制进入 Arm 架构和 Linux/firmware 生态；风险在硬件普及、RMM 正确性和平台 attestation 集成。
       - - 讲稿定位
         - 开创/基础入口; 证据强度 E1
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E1 / Foundational 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm Confidential Computing Architecture｜证据等级：E1 / Foundational
 - slide_id: d03-primary-2-summary
   paper_key: arm_cca_spec
   slide_type: summary
   claim: 给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义
   narrative:
   - 给出 CCA 架构接口、Realm、memory ownership 和 attestation 语义
-  - First-party Arm CCA specification defines the current Realm model and standard evidence bas。
+  - First-party Arm CCA specification defines the current Realm model and standard evidence...
   evidence_refs:
   - report-slide/03-arm-cca-rme-rmm/papers.yml `arm_cca_spec` summary slide metadata.
   - 'reference/arm-confidential-computing/arm-cca-specification/README.md; source_url: https://developer.arm.com/documentation/den0125/latest; local README/PDF Section evidence as recorded in the reference entry.'
@@ -190,7 +190,7 @@ slides:
         - E0 / Spec-standard SOTA
       - - 来源状态
         - 公开来源已核验，PDF 暂缺
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm CCA 架构规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-2-background
   paper_key: arm_cca_spec
   slide_type: background
@@ -216,7 +216,7 @@ slides:
         - Arm CCA 架构规范
       - - 证据限制
         - E0 / Spec-standard SOTA
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm CCA 架构规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-2-solution
   paper_key: arm_cca_spec
   slide_type: solution
@@ -234,14 +234,14 @@ slides:
       - Realm security state and PAS ownership
       - Memory delegation, RIPAS and lifecycle vocabulary
       - Attestation and platform interface semantics
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm CCA 架构规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-2-experiments
   paper_key: arm_cca_spec
   slide_type: experiments
   claim: 规范/Survey，无新实验；Arm CCA 架构规范 只支撑术语、taxonomy、接口语义或证据边界。
   narrative:
   - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  - 可支撑：First-party Arm CCA specification defines the current Realm model and standard eviden。
+  - 可支撑：First-party Arm CCA specification defines the current Realm model and standard...
   - 证据等级：E0 / Spec-standard SOTA；来源状态：公开来源已核验，PDF 暂缺。
   - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
   evidence_refs:
@@ -268,7 +268,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm CCA 架构规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-2-evaluation
   paper_key: arm_cca_spec
   slide_type: evaluation
@@ -297,14 +297,14 @@ slides:
         - 商业价值取决于 Armv9 CCA 平台、firmware/RMM、OS 和 verifier 生态同步成熟。
       - - 讲稿定位
         - 代表性改进; 证据强度 E0
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Arm CCA 架构规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-3-summary
   paper_key: arm_rmm_spec
   slide_type: summary
   claim: RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle
   narrative:
   - RMM spec 定义 Realm 管理软件接口、RMI/RSI 角色和 lifecycle
-  - First-party RMM specification defines Realm management and lifecycle semantics for CCA syst。
+  - First-party RMM specification defines Realm management and lifecycle semantics for CCA...
   evidence_refs:
   - report-slide/03-arm-cca-rme-rmm/papers.yml `arm_rmm_spec` summary slide metadata.
   - 'reference/arm-confidential-computing/realm-management-monitor-specification/README.md; source_url: https://developer.arm.com/documentation/den0137/latest/; local README/PDF Section evidence as recorded in the reference entry.'
@@ -324,7 +324,7 @@ slides:
         - E0 / Spec-standard SOTA
       - - 来源状态
         - 公开来源已核验，PDF 暂缺
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Realm Management Monitor 规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-3-background
   paper_key: arm_rmm_spec
   slide_type: background
@@ -350,11 +350,11 @@ slides:
         - Realm Management Monitor 规范
       - - 证据限制
         - E0 / Spec-standard SOTA
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Realm Management Monitor 规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-3-solution
   paper_key: arm_rmm_spec
   slide_type: solution
-  claim: 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestati。
+  claim: 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态
   narrative:
   - 用规范接口约束 Realm creation、memory transition、measurement、run/exit 和 attestation 相关状态
   evidence_refs:
@@ -368,14 +368,14 @@ slides:
       - RMI/RSI interface boundary
       - Realm and REC lifecycle
       - Granule state transition and measurement hooks
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Realm Management Monitor 规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-3-experiments
   paper_key: arm_rmm_spec
   slide_type: experiments
   claim: 规范/Survey，无新实验；Realm Management Monitor 规范 只支撑术语、taxonomy、接口语义或证据边界。
   narrative:
   - 本页不展示独立系统实验，也不把二手归纳写成一手结果。
-  - 可支撑：First-party RMM specification defines Realm management and lifecycle semantics for CC。
+  - 可支撑：First-party RMM specification defines Realm management and lifecycle semantics for...
   - 证据等级：E0 / Spec-standard SOTA；来源状态：公开来源已核验，PDF 暂缺。
   - 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。
   evidence_refs:
@@ -402,7 +402,7 @@ slides:
       - - 使用边界
         - 可进入本方向演进图
         - 不能替代更强证据
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Realm Management Monitor 规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-primary-3-evaluation
   paper_key: arm_rmm_spec
   slide_type: evaluation
@@ -431,7 +431,7 @@ slides:
         - 落地依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 能否检查关键状态。
       - - 讲稿定位
         - 当前 SOTA/补充边界; 证据强度 E0
-  source_note: 引用依据为论文原文、官方规范或公开材料；本页结论按 E0 / Spec-standard SOTA 的证据等级使用，不外推到未验证平台。
+  source_note: 来源：Realm Management Monitor 规范｜证据等级：E0 / Spec-standard SOTA
 - slide_id: d03-16-direction-summary
   paper_key: direction
   slide_type: direction_summary
@@ -455,11 +455,11 @@ slides:
       rows:
       - - Arm Confidential Computing Architecture
         - 开创/基础入口
-        - OSDI 2022 paper is the foundational peer-reviewed system treatment of Arm。
+        - OSDI 2022 paper is the foundational peer-reviewed system treatment of...
       - - Arm CCA 架构规范
         - 代表性改进
-        - First-party Arm CCA specification defines the current Realm model and sta。
+        - First-party Arm CCA specification defines the current Realm model and...
       - - Realm Management Monitor 规范
         - 当前 SOTA/补充边界
-        - First-party RMM specification defines Realm management and lifecycle sema。
-  source_note: 总结页综合三篇主讲材料的选择理由、评价字段和证据等级。
+        - First-party RMM specification defines Realm management and lifecycle...
+  source_note: 来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述

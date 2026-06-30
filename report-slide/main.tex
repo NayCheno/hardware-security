@@ -5,8 +5,32 @@
 \author{研究型技术演进报告}
 \date{2026 年 5 月}
 \begin{document}
-\begin{frame}
-  \titlepage
+\begin{frame}[plain,t]
+\DeckKicker{Research Slide Report}
+{\Huge\bfseries\color{Ink} 硬件辅助机密计算\\与可信 I/O 安全综述\par}
+\vspace{2mm}
+{\large\color{SoftInk} Arm/RISC-V TEE、CCA/CoVE、内存与 I/O 数据路径的技术演进\par}
+\vspace{5mm}
+\begin{columns}[T,totalwidth=\textwidth]
+  \begin{column}{0.60\textwidth}
+    \SmallLead{报告类型：Research Slide Report \quad 日期：2026 年 5 月}
+    \vspace{4mm}
+    \CoverMetric{15}{技术方向}{CPU TEE 到可信设备路径}\hspace{2mm}
+    \CoverMetric{45}{代表材料}{规范、系统论文、SoK 分层引用}\par\vspace{2mm}
+    \CoverMetric{260}{页}{封面、总览、方向页与总结}\hspace{2mm}
+    \CoverMetric{E0-E5}{证据体系}{每页保留 claim boundary}
+  \end{column}
+  \begin{column}{0.34\textwidth}
+    \VisualPanel{五段式主线}{\begin{itemize}
+      \item TEE taxonomy 与 TrustZone 谱系
+      \item Arm CCA / RME / RMM 与部署模型
+      \item RISC-V primitives、TEE 与 CoVE
+      \item Memory / I/O fabrics 与 trusted device path
+      \item Accelerator、DPU、SmartNIC 与 secure storage
+    \end{itemize}}
+  \end{column}
+\end{columns}
+\SourceFootnote{来源：report-slide primary ledger 与本地 reference 记录｜证据等级：方法论 / deck metadata}
 \end{frame}
 \input{00-overview/section}
 \input{01-tee-taxonomy/section}

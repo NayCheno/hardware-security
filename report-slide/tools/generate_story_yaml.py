@@ -70,7 +70,6 @@ PLACEHOLDER_REWRITES = {
     "固定三篇 primary": "固定三篇主讲材料",
     "每篇 primary": "每篇主讲材料",
     "evidence class": "证据等级",
-    "claim": "结论",
     "当前 source": "当前来源",
     "Foundational industry evidence": "基础产业证据",
     "Peer-reviewed SOTA": "同行评审改进证据",
@@ -97,7 +96,23 @@ def shorten(value: Any, limit: int = 88) -> str:
     text = clean(value)
     if len(text) <= limit:
         return text
-    return text[: limit - 1].rstrip("，,；; ") + "。"
+    cut = text[: limit - 1].rstrip("，,；; ")
+    # Do not leave half an English token at the end of a slide sentence.
+    # Prefer cutting at a previous Chinese/English separator, then mark omission.
+    if re.search(r"[A-Za-z][A-Za-z0-9_./+-]*$", cut):
+        boundary = max(
+            cut.rfind(" "),
+            cut.rfind("，"),
+            cut.rfind("；"),
+            cut.rfind(";"),
+            cut.rfind(","),
+            cut.rfind("、"),
+        )
+        if boundary > max(24, limit // 2):
+            cut = cut[:boundary].rstrip("，,；; 、")
+    if re.search(r"[A-Za-z0-9)]$", cut):
+        return cut + "..."
+    return cut + "。"
 
 
 def no_experiment_safe(value: Any, limit: int = 88) -> str:
@@ -196,10 +211,7 @@ def evidence_refs(directory: str, paper: dict[str, Any], slide_key: str) -> list
 
 
 def source_note(paper: dict[str, Any], slide_key: str) -> str:
-    return (
-        f"引用依据为论文原文、官方规范或公开材料；本页结论按 {paper.get('evidence')} 的证据等级使用，"
-        f"不外推到未验证平台。"
-    )
+    return f"来源：{short_title(paper.get('title'))}｜证据等级：{paper.get('evidence')}"
 
 
 def proof_matrix(title: str, columns: list[str], rows: list[list[Any]]) -> dict[str, Any]:
@@ -258,7 +270,7 @@ def direction_intro(directory: str, data: dict[str, Any]) -> dict[str, Any]:
             "survey/evidence_ledger.md Slide Primary Ledger and Evidence Classes.",
         ],
         "proof_object": proof_matrix("三篇主讲材料的分工", ["论文", "定位", "证据边界"], rows),
-        "source_note": "本页综合三篇主讲材料的研究定位、证据等级和公开来源状态。",
+        "source_note": "来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述",
     }
 
 
@@ -479,7 +491,7 @@ def direction_summary(directory: str, data: dict[str, Any]) -> dict[str, Any]:
             "survey/evidence_ledger.md Evidence Classes and Boundary Records.",
         ],
         "proof_object": proof_matrix("本方向方法对比", ["论文", "定位", "选择理由"], rows),
-        "source_note": "总结页综合三篇主讲材料的选择理由、评价字段和证据等级。",
+        "source_note": "来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述",
     }
 
 

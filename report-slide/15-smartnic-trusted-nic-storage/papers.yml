@@ -14,7 +14,7 @@ primary:
   source_url: https://minlanyu.seas.harvard.edu/writeup/eurosys24.pdf
   evidence: E1 / Peer-reviewed SOTA
   source_status: local_pdf_verified
-  reference: reference/memory-and-io-fabrics/smartnic-security-isolation-cloud-snic/paper.pdf
+  reference: reference/memory-and-io-fabrics/SmartNIC-security-isolation-cloud-snic/paper.pdf
   title: 'S-NIC: SmartNIC function isolation'
   auxiliary:
   - khalilov2024osmosis
@@ -42,10 +42,9 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualizatio。
+      claim: 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics
       points:
-      - 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation
-        实现 NIC-local single-owner semantics
+      - 用 memory denylist、locked TLB、cache partitioning、accelerator virtualization、DMA isolation、bus arbitration 和 attestation 实现 NIC-local single-owner semantics
       visual:
         title: 关键机制
         items:
@@ -85,7 +84,7 @@ primary:
   - nvidia_bluefield_operation_2025
   slides:
     summary:
-      claim: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable aut。
+      claim: TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation
       points:
       - TNIC 在 NIC 级别构建 minimal silicon root-of-trust，为可信分布式系统提供 transferable authentication 和 non-equivocation
       visual:
@@ -149,7 +148,7 @@ primary:
   - nvidia_bluefield_operation_2025
   slides:
     summary:
-      claim: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 fres。
+      claim: Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销
       points:
       - Hazel 为 NVMe-oF disaggregated storage 提供 confidentiality、integrity 和 freshness，并利用 BlueField-3 offload 降低开销
       visual:
@@ -160,7 +159,7 @@ primary:
         - 证据：E3 / Draft-not-ratified
         - 来源：local_pdf_verified
     background:
-      claim: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 r。
+      claim: confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
       points:
       - confidential workload 使用远端存储时，本地 dm-crypt/dm-integrity/dm-x 难以保持性能、扩展性和 replay freshness
       visual:
@@ -170,7 +169,7 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual c。
+      claim: counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload
       points:
       - counter leasing、NVMe metadata、Hazel Merkle Tree、metadata cache、eventual consistency 和 DPU crypto offload
       visual:
@@ -201,11 +200,10 @@ auxiliary:
   evidence: E4 / Industry evidence
   source_status: local_pdf_verified
   reference: reference/accelerator-tees/nvidia-bluefield-operation-ftpm-over-optee/paper.pdf
-  use: 辅助说明 vendor NIC/DPU attestation 与 OP-TEE/fTPM building blocks；保留 fTPM TA testing/development-key 限制，不写成 complete production
-    DPU TEE。
+  use: 辅助说明 vendor NIC/DPU attestation 与 OP-TEE/fTPM building blocks；保留 fTPM TA testing/development-key 限制，不写成 complete production DPU TEE。
 - key: khalilov2024osmosis
   role: Peer-reviewed background substrate / USENIX ATC 2024
   evidence: E1 / Peer-reviewed background substrate
   source_status: local_pdf_verified
-  reference: reference/memory-and-io-fabrics/osmosis-enabling-multi-tenancy-datacenter-smartnics/paper.pdf
+  reference: reference/memory-and-io-fabrics/osmosis-enabling-multi-tenancy-datacenter-SmartNICs/paper.pdf
   use: 辅助说明 SmartNIC multi-tenancy、resource scheduling 和 QoS；不能引用为 confidential I/O、TEE、SPDM、TDISP 或 attestation evidence。

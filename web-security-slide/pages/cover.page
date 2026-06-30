@@ -1,0 +1,72 @@
+pageType: cover
+background:
+  type: solid
+  color: "#1E293B"
+elements:
+  - elementId: right-panel
+    elementType: shape
+    shapeName: rect
+    bounds: [640, 0, 640, 720]
+    fill:
+      type: gradient
+      gradientType: linear
+      angle: 0
+      stops:
+        - {position: 0, color: "#1E293B"}
+        - {position: 1, color: "#334155"}
+
+  - elementId: deco-circle-1
+    elementType: shape
+    shapeName: ellipse
+    bounds: [800, 180, 280, 280]
+    fill:
+      type: solid
+      color: "#FFFFFF08"
+
+  - elementId: deco-circle-2
+    elementType: shape
+    shapeName: ellipse
+    bounds: [980, 380, 180, 180]
+    fill:
+      type: solid
+      color: "#FFFFFF05"
+
+  - elementId: accent-bar
+    elementType: shape
+    shapeName: rect
+    bounds: [60, 195, 60, 4]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: cover-title
+    elementType: text
+    bounds: [60, 210, 545, 55]
+    content:
+      style: "$coverTitle"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>网络设备的Web服务安全研究</p>
+
+  - elementId: cover-subtitle
+    elementType: text
+    bounds: [60, 280, 520, 35]
+    content:
+      style: "$coverSubtitle"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>从污点源识别到漏洞验证的全链路技术演进</p>
+
+  - elementId: cover-author
+    elementType: text
+    bounds: [60, 620, 520, 25]
+    content:
+      fontSize: 14
+      color: "#CBD5E1"
+      fontFamily: "QuattrocentoSans, MiSans"
+      wrap: false
+      align: [left, middle]
+      text: |
+        <p>作者：罗夏朴 | 香港理工大学 电子计算学系 | 2025</p>

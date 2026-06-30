@@ -1,0 +1,353 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [320, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE & BADGE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 880, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>KARONTE — 多二进制交互与BDG建模</p>
+
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1080, 58, 140, 28]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: badge-text
+    elementType: text
+    bounds: [1080, 58, 140, 28]
+    content:
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>IEEE S&P 2020</p>
+
+  # ===== LEFT COLUMN: 内容摘要 & 研究背景 =====
+  - elementId: left-bar-1
+    elementType: shape
+    bounds: [60, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-1
+    elementType: text
+    bounds: [72, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>内容摘要</p>
+
+  - elementId: left-body-1
+    elementType: text
+    bounds: [60, 142, 360, 190]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>面向多二进制固件交互的跨进程数据流建模与漏洞检测。将跨进程通信抽象为数据键上的Setter/Getter关系，构建二进制依赖图（BDG）并进行跨二进制污点传播。</p>
+
+  - elementId: left-bar-2
+    elementType: shape
+    bounds: [60, 348, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: left-subtitle-2
+    elementType: text
+    bounds: [72, 346, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>研究背景</p>
+
+  - elementId: left-body-2
+    elementType: text
+    bounds: [60, 382, 360, 230]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>IoT固件漏洞常跨多个二进制传播。攻击者通过Web入口注入数据，但漏洞实际触发在深层组件。单二进制分析无法捕获通过环境变量、文件、Socket等IPC传递的攻击输入。</p>
+
+  # ===== MIDDLE COLUMN: 核心洞察 & 解决方案 =====
+  - elementId: mid-bar-1
+    elementType: shape
+    bounds: [440, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-1
+    elementType: text
+    bounds: [452, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>核心洞察</p>
+
+  - elementId: mid-body-1
+    elementType: text
+    bounds: [440, 142, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>尽管固件架构复杂，二进制文件之间的通信必然依赖有限的IPC范式。任何跨进程通信均依赖特定的"数据键"（环境变量名、文件路径等）。通过静态提取数据键及其操作语义，可重构组件间数据依赖关系。</p>
+
+  - elementId: mid-bar-2
+    elementType: shape
+    bounds: [440, 400, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: mid-subtitle-2
+    elementType: text
+    bounds: [452, 398, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>解决方案</p>
+
+  - elementId: mid-body-2
+    elementType: text
+    bounds: [440, 434, 360, 250]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>1. 边界二进制与CPF：识别暴露二进制，抽象IPC机制提取数据键。</p>
+        <p>2. BDG构建与污点分析：跨二进制约束感知的静态污点传播。</p>
+        <p>3. 不安全交互检测：评估安全违规并输出漏洞警报。</p>
+
+  # ===== RIGHT COLUMN: 关键数据 =====
+  - elementId: right-bar
+    elementType: shape
+    bounds: [820, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: right-subtitle
+    elementType: text
+    bounds: [832, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>关键数据</p>
+
+  # Card 1
+  - elementId: card1-bg
+    elementType: shape
+    bounds: [840, 150, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card1-num
+    elementType: text
+    bounds: [860, 165, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>53</p>
+
+  - elementId: card1-label
+    elementType: text
+    bounds: [860, 215, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>固件样本</p>
+
+  # Card 2
+  - elementId: card2-bg
+    elementType: shape
+    bounds: [840, 290, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card2-num
+    elementType: text
+    bounds: [860, 305, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>46</p>
+
+  - elementId: card2-label
+    elementType: text
+    bounds: [860, 355, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>0-day 漏洞</p>
+
+  # Card 3
+  - elementId: card3-bg
+    elementType: shape
+    bounds: [840, 430, 340, 120]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$panel"
+    border:
+      style: solid
+      width: 1
+      color: "$rule"
+
+  - elementId: card3-num
+    elementType: text
+    bounds: [860, 445, 300, 42]
+    content:
+      style: "$kpi"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>722 → 2</p>
+
+  - elementId: card3-label
+    elementType: text
+    bounds: [860, 495, 300, 24]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>平均告警数（降低两个数量级）</p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>13 / 37</p>

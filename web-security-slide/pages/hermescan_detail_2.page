@@ -1,0 +1,284 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== NAV BAR =====
+  - elementId: nav-bg
+    elementType: shape
+    bounds: [0, 0, 1280, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+
+  - elementId: nav-active
+    elementType: shape
+    bounds: [0, 0, 320, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: nav-t1
+    elementType: text
+    bounds: [0, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度一: Source</p>
+
+  - elementId: nav-t2
+    elementType: text
+    bounds: [320, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度二: Propagation</p>
+
+  - elementId: nav-t3
+    elementType: text
+    bounds: [640, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度三: Sink</p>
+
+  - elementId: nav-t4
+    elementType: text
+    bounds: [960, 0, 320, 40]
+    content:
+      style: "$nav"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>维度四: Verification</p>
+
+  - elementId: nav-line
+    elementType: shape
+    bounds: [0, 40, 1280, 2]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  # ===== TITLE & BADGE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 54, 880, 40]
+    content:
+      style: "$title"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>HermeScan — 实验结果与文章评价</p>
+
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1050, 58, 170, 28]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: badge-text
+    elementType: text
+    bounds: [1050, 58, 170, 28]
+    content:
+      style: "$badge"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>NDSS 2024</p>
+
+  # ===== EXPERIMENTAL RESULTS =====
+  - elementId: results-bar
+    elementType: shape
+    bounds: [60, 108, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: results-subtitle
+    elementType: text
+    bounds: [72, 106, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>实验结果</p>
+
+  - elementId: results-table
+    elementType: table
+    bounds: [60, 148, 700, 240]
+    columnWidths: [0.28, 0.24, 0.24, 0.24]
+    rowHeights: [0.18, 0.205, 0.205, 0.205, 0.205]
+    style: "$default"
+    rows:
+      - - content: {text: "指标"}
+        - content: {text: "HermeScan"}
+        - content: {text: "SaTC"}
+        - content: {text: "KARONTE"}
+      - - content: {text: "漏洞发现数"}
+        - content: {text: "163"}
+        - content: {text: "32"}
+        - content: {text: "0"}
+      - - content: {text: "TPR"}
+        - content: {text: "81%"}
+        - content: {text: "42%"}
+        - content: {text: "0%"}
+      - - content: {text: "平均速度"}
+        - content: {text: "1h7m/样本"}
+        - content: {text: "7.5x 慢"}
+        - content: {text: "3.8x 慢"}
+      - - content: {text: "N-day 发现"}
+        - content: {text: "204"}
+        - content: {text: "138"}
+        - content: {text: "—"}
+
+  - elementId: results-note
+    elementType: text
+    bounds: [800, 148, 420, 240]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p><strong>关键发现</strong></p>
+        <p>30个最新固件上发现163个漏洞，其中87个未知、76个已知未修补。</p>
+        <p>N-day数据集上发现204个已知漏洞，TPR达79%。</p>
+
+  # ===== ARTICLE EVALUATION =====
+  - elementId: eval-bar
+    elementType: shape
+    bounds: [60, 410, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: eval-subtitle
+    elementType: text
+    bounds: [72, 408, 348, 28]
+    content:
+      style: "$subtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>文章评价</p>
+
+  - elementId: eval1-bar
+    elementType: shape
+    bounds: [60, 452, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$success"
+
+  - elementId: eval1-subtitle
+    elementType: text
+    bounds: [72, 450, 348, 28]
+    content:
+      fontSize: 18
+      color: "$success"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>优势</strong></p>
+
+  - elementId: eval1-body
+    elementType: text
+    bounds: [60, 486, 360, 160]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>系统性补齐了Source模糊匹配、跨库CFG与轻量数据流三类关键缺口。适合大规模固件扫描，作为高速静态引擎具有工程价值。</p>
+
+  - elementId: eval2-bar
+    elementType: shape
+    bounds: [440, 452, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$risk"
+
+  - elementId: eval2-subtitle
+    elementType: text
+    bounds: [452, 450, 348, 28]
+    content:
+      fontSize: 18
+      color: "$risk"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>局限</strong></p>
+
+  - elementId: eval2-body
+    elementType: text
+    bounds: [440, 486, 360, 160]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>① RDA路径不敏感特性仍可能带来误报；② BERT相似度可能引入语义噪声。</p>
+
+  - elementId: eval3-bar
+    elementType: shape
+    bounds: [820, 452, 4, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$secondary"
+
+  - elementId: eval3-subtitle
+    elementType: text
+    bounds: [832, 450, 348, 28]
+    content:
+      fontSize: 18
+      color: "$secondary"
+      fontFamily: "QuattrocentoSans, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>商业化</strong></p>
+
+  - elementId: eval3-body
+    elementType: text
+    bounds: [820, 486, 360, 160]
+    content:
+      style: "$body"
+      align: [left, top]
+      text: |
+        <p>适合作为固件安全平台的高速静态引擎。但在Source识别方面，建议参考同一类目的后续技术。</p>
+
+  # ===== FOOTER =====
+  - elementId: footer-left
+    elementType: text
+    bounds: [60, 690, 400, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>网络设备Web服务安全研究</p>
+
+  - elementId: footer-right
+    elementType: text
+    bounds: [1100, 690, 120, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      wrap: false
+      text: |
+        <p>8 / 37</p>

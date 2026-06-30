@@ -1,0 +1,79 @@
+pageType: chapter
+background:
+  type: solid
+  color: "#1E293B"
+elements:
+  - elementId: right-panel
+    elementType: shape
+    bounds: [853, 0, 427, 720]
+    shapeName: rect
+    fill:
+      type: gradient
+      gradientType: linear
+      angle: 0
+      stops:
+        - {position: 0, color: "#1E293B"}
+        - {position: 1, color: "#0F172A"}
+
+  - elementId: ch-num
+    elementType: text
+    bounds: [60, 140, 500, 160]
+    content:
+      style: "$chapterNum"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>02</p>
+
+  - elementId: accent-line
+    elementType: shape
+    bounds: [60, 320, 60, 4]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+
+  - elementId: ch-title
+    elementType: text
+    bounds: [60, 340, 740, 48]
+    content:
+      style: "$chapterTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>复杂后端数据流（Propagation）</p>
+
+  - elementId: ch-subtitle
+    elementType: text
+    bounds: [60, 400, 740, 32]
+    content:
+      style: "$chapterSubtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>从单体分析到跨边界追踪</p>
+
+  - elementId: ch-intro
+    elementType: text
+    bounds: [60, 460, 740, 100]
+    content:
+      fontSize: 18
+      color: "#CBD5E1"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.6
+      align: [left, top]
+      text: |
+        <p>核心痛点：即便定位输入点后，数据在后端往往不是被单一程序处理。现代固件高度解耦，数据流追踪面临规模爆炸与路径截断。</p>
+        <p>技术演进：跨进程建模 → Sink-to-Source + 富表达式 → RDA + AIL 底层优化</p>
+
+  - elementId: ch-papers
+    elementType: text
+    bounds: [60, 600, 740, 60]
+    content:
+      fontSize: 14
+      color: "#94A3B8"
+      fontFamily: "QuattrocentoSans, MiSans"
+      lineHeight: 1.6
+      align: [left, top]
+      text: |
+        <p>KARONTE (IEEE S&P 2020)  →  MangoDFA (USENIX Security 2024)  →  OctopusTaint (ACM CCS 2024)</p>

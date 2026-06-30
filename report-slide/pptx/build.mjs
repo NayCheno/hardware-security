@@ -11,19 +11,36 @@ const SLIDE_ROOT = path.join(ROOT, "report-slide");
 const DEFAULT_OUT = path.join(SLIDE_ROOT, "output", "hardware-security-report-slide.pptx");
 const SLIDE_SIZE = { width: 1280, height: 720 };
 const STYLE = {
-  bg: "#FFFFFF",
-  ink: "#111827",
-  soft: "#4B5563",
-  muted: "#667085",
-  accent: "#B42318",
-  accentSoft: "#FEE4E2",
-  panel: "#F8FAFC",
-  rule: "#D0D5DD",
-  deep: "#101828",
-  gold: "#B54708",
-  green: "#027A48",
+  bg: "#FAFBFC",
+  bgWarm: "#F0F4F8",
+  ink: "#0F172A",
+  inkDeep: "#1E293B",
+  soft: "#475569",
+  muted: "#64748B",
+  accent: "#2563EB",
+  accentDeep: "#1E40AF",
+  accentSoft: "#DBEAFE",
+  accentGlow: "#EFF6FF",
+  secondary: "#0891B2",
+  secondarySoft: "#CFFAFE",
+  panel: "#FFFFFF",
+  panelWarm: "#F8FAFC",
+  rule: "#CBD5E1",
+  ruleLight: "#E2E8F0",
+  deep: "#0F172A",
+  gold: "#F59E0B",
+  goldSoft: "#FEF3C7",
+  green: "#059669",
+  greenSoft: "#D1FAE5",
+  risk: "#DC2626",
+  riskSoft: "#FEE2E2",
   body: "Microsoft YaHei",
-  display: "Georgia",
+  display: "Aptos",
+  directionColors: [
+    "#2563EB", "#0891B2", "#059669", "#8B5CF6", "#D946EF",
+    "#F59E0B", "#EF4444", "#EC4899", "#14B8A6", "#3B82F6",
+    "#6366F1", "#8B5CF6", "#A855F7", "#D946EF", "#F43F5E",
+  ],
 };
 
 function parseArgs(argv) {
@@ -59,7 +76,10 @@ async function importArtifactTool() {
 
 function loadDeck() {
   const script = path.join(SLIDE_ROOT, "tools", "export_content_json.py");
-  const result = spawnSync("python", [script], { cwd: ROOT, encoding: "utf8" });
+  // Use .venv python if available, fallback to system python
+  const venvPython = path.join(ROOT, ".venv", "Scripts", "python.exe");
+  const pythonPath = fsSync.existsSync(venvPython) ? venvPython : "python";
+  const result = spawnSync(pythonPath, [script], { cwd: ROOT, encoding: "utf8", shell: true });
   if (result.status !== 0) {
     throw new Error(["Failed to export report-slide YAML as JSON.", result.stdout, result.stderr].filter(Boolean).join("\n"));
   }
@@ -100,62 +120,176 @@ function bg(slide) {
   addShape(slide, 0, 0, SLIDE_SIZE.width, SLIDE_SIZE.height, STYLE.bg);
 }
 
+function bgGradient(slide, color) {
+  addShape(slide, 0, 0, SLIDE_SIZE.width, SLIDE_SIZE.height, STYLE.bg);
+  // Add subtle gradient overlay at top
+  addShape(slide, 0, 0, SLIDE_SIZE.width, 180, color || "#EFF6FF", {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+}
+
+function leftAccentBar(slide, color) {
+  addShape(slide, 0, 0, 5, SLIDE_SIZE.height, color || STYLE.accent);
+}
+
 function rule(slide, x, y, w, color = STYLE.rule, h = 1) {
   addShape(slide, x, y, w, h, color);
 }
 
-function kicker(slide, label, x = 58, y = 46) {
-  addShape(slide, x, y + 5, 18, 10, STYLE.accent);
-  addText(slide, String(label || "").toUpperCase(), x + 30, y, 520, 18, {
-    size: 10,
+function kicker(slide, label, x = 64, y = 50, color) {
+  const c = color || STYLE.accent;
+  addShape(slide, x, y + 4, 20, 12, c);
+  addText(slide, String(label || "").toUpperCase(), x + 34, y, 520, 18, {
+    size: 11,
     color: STYLE.muted,
     bold: true,
   });
 }
 
-function title(slide, value, x = 58, y = 82, w = 900, h = 90, size = 36) {
+function kickerBadge(slide, label, x = 64, y = 50, color) {
+  const c = color || STYLE.accent;
+  const w = (String(label || "").length * 7.5) + 32;
+  addShape(slide, x, y, w, 24, c, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  addText(slide, String(label || "").toUpperCase(), x + 12, y + 5, w - 24, 14, {
+    size: 9.5,
+    color: "#FFFFFF",
+    bold: true,
+    align: "center",
+    valign: "middle",
+  });
+}
+
+function title(slide, value, x = 64, y = 88, w = 900, h = 90, size = 36) {
   addText(slide, value, x, y, w, h, {
     size,
-    color: STYLE.ink,
+    color: STYLE.inkDeep,
     bold: true,
     face: STYLE.body,
   });
 }
 
-function meta(slide, paper, y = 151) {
-  addText(slide, `证据等级：${publicEvidence(paper.evidence)}   来源状态：${publicSourceStatus(paper.source_status)}`, 58, y, 1060, 20, {
-    size: 10,
-    color: STYLE.muted,
+function subtitle(slide, value, x = 64, y = 140, w = 900, h = 40, size = 18) {
+  addText(slide, value, x, y, w, h, {
+    size,
+    color: STYLE.soft,
+    bold: false,
+    face: STYLE.body,
   });
 }
 
-function footer(slide, page, label) {
-  rule(slide, 58, 682, 1164, STYLE.rule, 1);
-  addText(slide, label, 58, 690, 900, 16, { size: 8.5, color: STYLE.muted });
-  addText(slide, String(page).padStart(3, "0"), 1160, 686, 64, 18, {
-    size: 12,
+function meta(slide, paper, y = 151) {
+  addText(slide, `来源状态：${publicSourceStatus(paper.source_status)}`, 58, y, 760, 20, {
+    size: 10,
     color: STYLE.muted,
+  });
+  evidenceBadge(slide, publicEvidence(paper.evidence), 958, y - 4);
+}
+
+function footer(slide, page, label, directionIndex, totalDirections) {
+  rule(slide, 64, 680, 1152, STYLE.ruleLight, 1);
+  const dirText = directionIndex !== undefined && totalDirections
+    ? `${String(directionIndex).padStart(2, "0")} / ${String(totalDirections).padStart(2, "0")} 方向`
+    : "";
+  const fullLabel = dirText ? `${label}  |  ${dirText}` : label;
+  addText(slide, fullLabel, 64, 688, 900, 18, { size: 9, color: STYLE.muted });
+  addText(slide, String(page).padStart(3, "0"), 1152, 684, 64, 20, {
+    size: 13,
+    color: STYLE.accent,
     face: STYLE.display,
     bold: true,
     align: "right",
   });
 }
 
+function globalProgress(slide, directionIndex, totalDirections) {
+  if (directionIndex === undefined || !totalDirections) return;
+  const barW = 160;
+  const barH = 4;
+  const x = 1050;
+  const y = 692;
+  addShape(slide, x, y, barW, barH, STYLE.ruleLight, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  const progress = barW * (directionIndex / totalDirections);
+  const color = STYLE.directionColors[(directionIndex - 1) % STYLE.directionColors.length] || STYLE.accent;
+  addShape(slide, x, y, progress, barH, color, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+}
+
 function panel(slide, x, y, w, h, heading, options = {}) {
   addShape(slide, x, y, w, h, options.fill || STYLE.panel, {
-    line: { style: "solid", fill: options.line || STYLE.rule, width: 1 },
+    line: { style: "solid", fill: options.line || STYLE.ruleLight, width: 1 },
   });
-  addText(slide, heading, x + 18, y + 16, w - 36, 18, {
-    size: 10,
-    color: options.headingColor || STYLE.accent,
+  const headingColor = options.headingColor || STYLE.accent;
+  addShape(slide, x, y + 2, 4, 20, headingColor, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  addText(slide, heading, x + 18, y + 14, w - 36, 20, {
+    size: 11,
+    color: headingColor,
     bold: true,
   });
+}
+
+function shadowPanel(slide, x, y, w, h, heading, options = {}) {
+  // Subtle shadow panel with top accent bar
+  addShape(slide, x + 1, y + 2, w, h, "#E2E8F0", {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  addShape(slide, x, y, w, h, options.fill || STYLE.panel, {
+    line: { style: "solid", fill: options.line || STYLE.ruleLight, width: 1 },
+  });
+  if (heading) {
+    const headingColor = options.headingColor || STYLE.accent;
+    addShape(slide, x, y, w, 4, headingColor, {
+      line: { style: "solid", fill: "#00000000", width: 0 },
+    });
+    addText(slide, heading, x + 18, y + 16, w - 36, 20, {
+      size: 11,
+      color: headingColor,
+      bold: true,
+    });
+  }
 }
 
 function asList(value) {
   if (Array.isArray(value)) return value.filter(Boolean).map(String);
   if (typeof value === "string" && value.trim()) return [value.trim()];
   return [];
+}
+
+function evidenceBadge(slide, value, x = 960, y = 48, w = 224) {
+  const colorMap = {
+    "E0": STYLE.accentDeep,
+    "E1": STYLE.accent,
+    "E2": STYLE.green,
+    "E3": STYLE.gold,
+    "E4": STYLE.muted,
+    "E5": STYLE.risk,
+  };
+  let badgeColor = STYLE.accentSoft;
+  let textColor = STYLE.accent;
+  const text = String(value || "");
+  for (const [key, color] of Object.entries(colorMap)) {
+    if (text.includes(key)) {
+      badgeColor = color + "20"; // 20% opacity hex
+      textColor = color;
+      break;
+    }
+  }
+  addShape(slide, x, y, w, 28, badgeColor, {
+    line: { style: "solid", fill: textColor + "40", width: 1 },
+  });
+  addText(slide, value, x + 12, y + 7, w - 24, 12, {
+    size: 9,
+    color: textColor,
+    bold: true,
+    align: "center",
+    valign: "middle",
+  });
 }
 
 function publicSourceStatus(value) {
@@ -230,17 +364,22 @@ function sanitizeSourceNote(note) {
     "claim 强度保持",
   ];
   if (!text || internalTerms.some((term) => text.includes(term))) {
-    return "论文原文、官方规范或公开材料；具体结论受证据等级和原文实验范围约束。";
+    return "来源：论文原文、官方规范或公开材料｜证据等级：见本页 badge";
   }
+  if (!text.startsWith("来源：") && !text.startsWith("Source:")) return `来源：${text}`;
   return text;
 }
 
 function bulletList(slide, items, x, y, w, options = {}) {
   const size = options.size ?? 16;
   const gap = options.gap ?? 50;
+  const bulletColor = options.bulletColor || STYLE.accent;
   asList(items).slice(0, options.limit ?? 5).forEach((item, index) => {
     const yy = y + index * gap;
-    addShape(slide, x, yy + 7, 8, 8, index % 2 ? STYLE.gold : STYLE.accent);
+    const bc = Array.isArray(bulletColor) ? bulletColor[index % bulletColor.length] : bulletColor;
+    addShape(slide, x, yy + 8, 7, 7, bc, {
+      line: { style: "solid", fill: "#00000000", width: 0 },
+    });
     addText(slide, item, x + 20, yy, w - 20, gap - 6, {
       size,
       color: options.color || STYLE.ink,
@@ -286,25 +425,112 @@ function visualStack(slide, heading, items, x, y, w, h, mode = "stack") {
   });
 }
 
+function sectionDivider(presentation, direction, directionIndex, totalDirections, page) {
+  const slide = presentation.slides.add();
+  const color = STYLE.directionColors[(directionIndex - 1) % STYLE.directionColors.length] || STYLE.accent;
+  
+  // Full background
+  addShape(slide, 0, 0, SLIDE_SIZE.width, SLIDE_SIZE.height, STYLE.bg);
+  
+  // Left color block (1/3 width)
+  addShape(slide, 0, 0, 420, SLIDE_SIZE.height, color, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  
+  // Direction number on left block
+  addText(slide, String(directionIndex).padStart(2, "0"), 56, 220, 300, 140, {
+    size: 96,
+    color: "#FFFFFF",
+    face: STYLE.display,
+    bold: true,
+  });
+  
+  // Direction label on left block
+  addText(slide, "DIRECTION", 60, 370, 300, 28, {
+    size: 14,
+    color: "#FFFFFFCC",
+    bold: true,
+  });
+  
+  // Direction name on right
+  addText(slide, direction.direction, 480, 260, 740, 60, {
+    size: 38,
+    color: STYLE.inkDeep,
+    bold: true,
+    face: STYLE.body,
+  });
+  
+  // Focus description
+  addText(slide, direction.focus || "", 480, 340, 700, 80, {
+    size: 17,
+    color: STYLE.soft,
+    bold: false,
+  });
+  
+  // Primary papers list
+  if (direction.primary && direction.primary.length > 0) {
+    addText(slide, "主讲材料", 480, 450, 200, 24, {
+      size: 12,
+      color: color,
+      bold: true,
+    });
+    direction.primary.forEach((paper, index) => {
+      const yy = 486 + index * 38;
+      addShape(slide, 480, yy + 10, 10, 10, color, {
+        line: { style: "solid", fill: "#00000000", width: 0 },
+      });
+      addText(slide, paper.title || "", 502, yy, 680, 28, {
+        size: 13,
+        color: STYLE.ink,
+        bold: true,
+      });
+      addText(slide, publicEvidence(paper.evidence) || "", 502, yy + 22, 300, 18, {
+        size: 9,
+        color: STYLE.muted,
+      });
+    });
+  }
+  
+  // Global progress
+  globalProgress(slide, directionIndex, totalDirections);
+  
+  // Footer
+  footer(slide, page, `方向开场 | ${direction.direction}`, directionIndex, totalDirections);
+  return slide;
+}
+
 function coverSlide(presentation, deck) {
   const slide = presentation.slides.add();
   bg(slide);
-  addShape(slide, 58, 54, 6, 58, STYLE.accent);
-  addText(slide, "硬件安全研究综述", 80, 55, 420, 18, { size: 10, color: STYLE.muted, bold: true });
-  addText(slide, "Arm/RISC-V TEE、CCA/CoVE、内存与 I/O 数据路径的技术演进", 80, 84, 820, 24, { size: 14, color: STYLE.soft });
-  title(slide, "硬件辅助机密计算\n与可信 I/O 安全综述", 58, 172, 760, 170, 48);
-  addText(slide, "面向体系结构、系统安全与云基础设施的研究型技术演进报告", 62, 378, 760, 30, {
-    size: 19,
+  
+  // Top accent bar
+  addShape(slide, 0, 0, SLIDE_SIZE.width, 6, STYLE.accent, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  
+  // Left vertical accent
+  addShape(slide, 0, 0, 8, SLIDE_SIZE.height, STYLE.accent, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  
+  addText(slide, "RESEARCH SLIDE REPORT", 64, 60, 420, 18, { size: 11, color: STYLE.muted, bold: true });
+  addText(slide, "Arm/RISC-V TEE、CCA/CoVE、内存与 I/O 数据路径的技术演进", 64, 90, 820, 26, { size: 15, color: STYLE.soft });
+  
+  title(slide, "硬件辅助机密计算\n与可信 I/O 安全综述", 64, 180, 760, 170, 52);
+  addText(slide, "面向体系结构、系统安全与云基础设施的研究型技术演进报告", 68, 390, 760, 34, {
+    size: 20,
     color: STYLE.soft,
     bold: true,
   });
-  metricRail(slide, 60, 530, [
+  
+  metricRail(slide, 64, 550, [
     ["15", "技术方向", "覆盖 CPU TEE 到可信设备路径"],
     ["45", "代表材料", "规范、系统论文与 SoK 分层引用"],
-    ["225", "论文精讲页", "摘要/背景/方案/实验/评价"],
-    ["5", "分析维度", "痛点、方法、证据、局限与落地"],
+    ["260", "页", "封面、总览、方向页与总结"],
+    ["E0-E5", "证据体系", "每页保留 claim boundary"],
   ]);
-  visualStack(slide, "报告主线", ["TEE 分类", "Arm CCA", "RISC-V CoVE", "内存与 I/O", "DPU / SmartNIC"], 820, 190, 340, 292);
+  
+  visualStack(slide, "报告主线", ["TEE 分类", "Arm CCA", "RISC-V CoVE", "内存与 I/O", "DPU / SmartNIC"], 840, 210, 360, 300);
   footer(slide, 1, "硬件安全研究综述");
   return slide;
 }
@@ -330,20 +556,25 @@ function overviewSlides(presentation, deck, pageStart) {
   const one = presentation.slides.add();
   bg(one);
   kicker(one, "报告定位");
-  title(one, "本报告关注硬件辅助隔离如何扩展到机密虚拟机、可信 I/O 与异构设备数据路径。", 58, 86, 980, 92, 32);
-  bulletList(one, [
-    "核心问题：平台管理者不可信，但仍掌握调度、内存、I/O 与设备资源。",
-    "报告范围：Arm TrustZone/CCA、RISC-V TEE/CoVE、内存保护、CXL/RDMA/SPDM、DPU/GPU/SmartNIC。",
-    "组织方式：15 个技术方向，每个方向选择 3 篇代表性材料串联技术演进。",
-    "阅读主线：保护对象、资源管理者、证据链、设备边界和工程落地。",
-  ], 78, 230, 620, { gap: 58, size: 18 });
-  visualStack(one, "报告主线", ["TEE taxonomy 与 TrustZone 谱系", "Arm CCA/RME/RMM 与部署模型", "RISC-V primitives、TEE 与 CoVE", "Memory/I/O fabrics 与 trusted device path", "Accelerator、DPU、SmartNIC 与安全存储"], 780, 210, 350, 320);
+  evidenceBadge(one, "Method", 960, 44);
+  title(one, "平台管理者不可信，但仍掌握 CPU 调度、内存、I/O 和设备资源。", 58, 86, 980, 88, 32);
+  const positionCards = [
+    ["核心问题", ["host 仍控制调度、页表、DMA、interrupt 与设备分配。", "机密计算要把访问控制下沉到硬件边界与证明链。"]],
+    ["报告范围", ["Arm TrustZone / CCA / RME / RMM。", "RISC-V primitives、TEE lineage、CoVE / AP-TEE。", "Memory、CXL、PCIe IDE、SPDM、DPU、SmartNIC。"]],
+    ["阅读主线", ["TEE taxonomy -> Arm CCA / RISC-V CoVE。", "Memory ownership -> I/O fabric -> trusted device interface。", "SPDM / TDISP / IDE -> DPU / SmartNIC / storage endpoint。"]],
+  ];
+  positionCards.forEach((card, index) => {
+    const x = 72 + index * 386;
+    panel(one, x, 236, 332, 280, card[0], { fill: "#FFFFFF" });
+    bulletList(one, card[1], x + 24, 294, 280, { gap: 56, size: 14.2, limit: 4 });
+  });
   footer(one, page++, "总览 | 报告定位");
   slides.push(one);
 
   const two = presentation.slides.add();
   bg(two);
   kicker(two, "证据边界");
+  evidenceBadge(two, "E0-E5", 960, 44);
   title(two, "所有机制和实验结论都必须落在证据等级允许的范围内。", 58, 86, 900, 86, 34);
   const evidence = [
     ["E0", "规范性机制、状态、接口和术语；没有独立实验时写“规范，无新实验”。"],
@@ -354,9 +585,19 @@ function overviewSlides(presentation, deck, pageStart) {
   ];
   evidence.forEach((row, index) => {
     const yy = 210 + index * 74;
-    addText(two, row[0], 84, yy, 86, 38, { size: 24, color: index % 2 ? STYLE.gold : STYLE.accent, face: STYLE.display, bold: true });
-    rule(two, 180, yy + 52, 850, index % 2 ? "#FEDF89" : "#FDA29B", 2);
-    addText(two, row[1], 202, yy + 2, 780, 42, { size: 15, color: STYLE.ink });
+    const badgeColors = [STYLE.accentDeep, STYLE.accent, STYLE.green, STYLE.gold, STYLE.muted];
+    const barColors = [STYLE.accentSoft, STYLE.accentSoft, STYLE.greenSoft, STYLE.goldSoft, "#F1F5F9"];
+    const badgeColor = badgeColors[index] || STYLE.accent;
+    const barColor = barColors[index] || STYLE.accentSoft;
+    
+    addShape(two, 72, yy - 4, 1080, 64, "#FFFFFF", {
+      line: { style: "solid", fill: STYLE.ruleLight, width: 1 },
+    });
+    addShape(two, 72, yy - 4, 4, 64, badgeColor, {
+      line: { style: "solid", fill: "#00000000", width: 0 },
+    });
+    addText(two, row[0], 96, yy + 4, 86, 38, { size: 24, color: badgeColor, face: STYLE.display, bold: true });
+    addText(two, row[1], 210, yy + 10, 880, 42, { size: 15, color: STYLE.ink });
   });
   footer(two, page++, "总览 | 证据边界");
   slides.push(two);
@@ -364,46 +605,59 @@ function overviewSlides(presentation, deck, pageStart) {
   const three = presentation.slides.add();
   bg(three);
   kicker(three, "方向索引");
+  evidenceBadge(three, "Method", 960, 44);
   title(three, "15 个技术方向按保护对象、资源管理者、证据链和设备边界展开。", 58, 84, 940, 70, 32);
-  deck.forEach((direction, index) => {
-    const col = index < 8 ? 0 : 1;
-    const row = col === 0 ? index : index - 8;
-    const x = col === 0 ? 72 : 666;
-    const y = 184 + row * 58;
-    addText(three, String(index + 1).padStart(2, "0"), x, y, 42, 24, {
-      size: 17,
-      color: index % 2 ? STYLE.gold : STYLE.accent,
-      face: STYLE.display,
-      bold: true,
+  const groups = [
+    ["TEE 基础与 Arm 路线", "01-05", "TEE taxonomy；TrustZone；Arm CCA/RME/RMM；部署与 I/O 边界"],
+    ["Attestation 与 RISC-V 基础", "06-10", "RATS/boot/lifecycle；RISC-V primitives；TEE lineage；CoVE/AP-TEE；CoVE-IO"],
+    ["Memory / Fabric / Protocol", "11-13", "Memory encryption/integrity；CXL/PCIe IDE/RDMA；SPDM/TDISP/TLS+RA"],
+    ["Accelerator / DPU / SmartNIC", "14-15", "GPU/FPGA/DPU confidential offload；trusted NIC；secure storage path"],
+    ["全局总结", "结尾", "证据边界、研究空白、工程落地优先级"],
+  ];
+  groups.forEach((group, index) => {
+    const y = 202 + index * 72;
+    addShape(three, 72, y - 10, 1080, 56, index % 2 ? "#FFFFFF" : STYLE.panel, {
+      line: { style: "solid", fill: STYLE.rule, width: 1 },
     });
-    addText(three, direction.direction, x + 52, y - 2, 480, 22, { size: 12.5, color: STYLE.ink, bold: true });
-    addText(three, direction.primary.map((p) => shortTitle(p.title, 26)).join(" / "), x + 52, y + 22, 480, 18, { size: 8.6, color: STYLE.muted });
+    addText(three, group[0], 96, y, 230, 24, { size: 13.4, color: STYLE.ink, bold: true });
+    addText(three, group[1], 350, y - 2, 90, 26, { size: 18, color: STYLE.accent, bold: true, align: "center" });
+    addText(three, group[2], 472, y, 620, 28, { size: 11.2, color: STYLE.soft });
   });
   footer(three, page++, "总览 | 方向索引");
   slides.push(three);
   return { slides, nextPage: page };
 }
 
-function directionIntro(presentation, direction, page) {
+function directionIntro(presentation, direction, page, directionIndex, totalDirections) {
   const slide = presentation.slides.add();
+  const color = STYLE.directionColors[(directionIndex - 1) % STYLE.directionColors.length] || STYLE.accent;
   bg(slide);
+  leftAccentBar(slide, color);
+  
   kicker(slide, "方向开场");
-  title(slide, `${direction.direction}：方向开场`, 58, 82, 990, 54, 31);
-  addText(slide, direction.focus, 60, 154, 820, 58, { size: 17, color: STYLE.soft, bold: true });
-  panel(slide, 64, 252, 630, 268, "三篇主讲选择规则", { fill: "#FFFFFF" });
-  addText(slide, direction.selection_rule, 88, 292, 580, 54, { size: 13.5, color: STYLE.soft });
+  title(slide, `${direction.direction}：方向开场`, 64, 82, 990, 54, 31);
+  addText(slide, direction.focus, 66, 154, 820, 58, { size: 17, color: STYLE.soft, bold: true });
+  
+  shadowPanel(slide, 64, 252, 640, 280, "三篇主讲选择规则", { fill: "#FFFFFF", headingColor: color });
+  addText(slide, direction.selection_rule, 88, 292, 590, 54, { size: 13.5, color: STYLE.soft });
   direction.primary.forEach((paper, index) => {
-    const yy = 370 + index * 46;
-    addText(slide, `主讲 ${index + 1}`, 88, yy, 78, 24, { size: 11, color: STYLE.accent, bold: true });
-    addText(slide, paper.title, 178, yy - 2, 330, 28, { size: 13, color: STYLE.ink, bold: true });
-    addText(slide, publicEvidence(paper.evidence), 520, yy, 140, 22, { size: 9.5, color: STYLE.muted });
+    const yy = 370 + index * 48;
+    addShape(slide, 88, yy + 8, 8, 8, color, {
+      line: { style: "solid", fill: "#00000000", width: 0 },
+    });
+    addText(slide, `主讲 ${index + 1}`, 108, yy, 78, 24, { size: 11, color: color, bold: true });
+    addText(slide, paper.title, 198, yy - 2, 340, 28, { size: 13, color: STYLE.ink, bold: true });
+    addText(slide, publicEvidence(paper.evidence), 548, yy, 140, 22, { size: 9.5, color: STYLE.muted });
   });
+  
   visualStack(slide, "证据边界", direction.primary.map((paper) => `${shortTitle(paper.title, 32)}：${publicEvidence(paper.evidence)}；${publicSourceStatus(paper.source_status)}`), 768, 246, 364, 314);
-  footer(slide, page, `方向开场 | ${direction.direction}`);
+  
+  globalProgress(slide, directionIndex, totalDirections);
+  footer(slide, page, `方向开场 | ${direction.direction}`, directionIndex, totalDirections);
   return slide;
 }
 
-function paperSlide(presentation, direction, paper, slideKey, page) {
+function paperSlide(presentation, direction, paper, slideKey, page, directionIndex, totalDirections) {
   const slide = presentation.slides.add();
   const labels = {
     summary: "内容摘要",
@@ -412,60 +666,92 @@ function paperSlide(presentation, direction, paper, slideKey, page) {
     experiments: "实验结果",
   };
   const data = paper.slides[slideKey];
+  const color = STYLE.directionColors[(directionIndex - 1) % STYLE.directionColors.length] || STYLE.accent;
+  
+  // Page type colors
+  const typeColors = {
+    summary: STYLE.accent,
+    background: STYLE.muted,
+    solution: STYLE.green,
+    experiments: STYLE.gold,
+  };
+  const typeColor = typeColors[slideKey] || color;
+  
   bg(slide);
+  leftAccentBar(slide, typeColor);
+  
   kicker(slide, labels[slideKey]);
-  title(slide, `${paper.title}：${labels[slideKey]}`, 58, 82, 1020, 54, 28);
+  title(slide, `${paper.title}：${labels[slideKey]}`, 64, 82, 1020, 54, 26);
   meta(slide, paper, 144);
-  addText(slide, data.claim, 58, 176, 900, 52, { size: 21, color: STYLE.ink, bold: true });
-  panel(slide, 64, 272, 650, 300, "讲解要点", { fill: "#FFFFFF" });
-  bulletList(slide, data.points, 90, 324, 590, { size: 16, gap: 58, limit: 4 });
+  addText(slide, data.claim, 64, 176, 900, 52, { size: 20, color: STYLE.inkDeep, bold: true });
+  
+  shadowPanel(slide, 64, 272, 650, 300, "讲解要点", { fill: "#FFFFFF", headingColor: typeColor });
+  bulletList(slide, data.points, 90, 324, 590, { size: 15, gap: 56, limit: 4, bulletColor: typeColor });
+  
   const mode = slideKey === "solution" ? "flow" : "stack";
   visualStack(slide, data.visual.title, data.visual.items, 780, 252, 360, 320, mode);
-  footer(slide, page, `${direction.direction} | ${labels[slideKey]}`);
+  
+  globalProgress(slide, directionIndex, totalDirections);
+  footer(slide, page, `${direction.direction} | ${labels[slideKey]}`, directionIndex, totalDirections);
   return slide;
 }
 
-function evaluationSlide(presentation, direction, paper, page) {
+function evaluationSlide(presentation, direction, paper, page, directionIndex, totalDirections) {
   const slide = presentation.slides.add();
   const data = paper.slides.evaluation;
+  const color = STYLE.directionColors[(directionIndex - 1) % STYLE.directionColors.length] || STYLE.accent;
+  
   bg(slide);
+  leftAccentBar(slide, color);
   kicker(slide, "文章评价");
-  title(slide, `${paper.title}：文章评价`, 58, 82, 1020, 54, 28);
+  title(slide, `${paper.title}：文章评价`, 64, 82, 1020, 54, 26);
   meta(slide, paper, 144);
-  addText(slide, data.claim, 58, 176, 900, 52, { size: 21, color: STYLE.ink, bold: true });
+  addText(slide, data.claim, 64, 176, 900, 52, { size: 20, color: STYLE.inkDeep, bold: true });
+  
   const cards = [
-    ["优点", data.strengths, STYLE.green],
-    ["不足", data.limitations, STYLE.accent],
-    ["商业落地", data.commercialization, STYLE.gold],
+    ["优点", data.strengths, STYLE.green, STYLE.greenSoft],
+    ["不足", data.limitations, STYLE.risk, STYLE.riskSoft],
+    ["商业落地", data.commercialization, STYLE.gold, STYLE.goldSoft],
   ];
   cards.forEach((card, index) => {
     const x = 72 + index * 376;
-    addShape(slide, x, 272, 326, 274, "#FFFFFF", { line: { style: "solid", fill: STYLE.rule, width: 1 } });
-    addShape(slide, x, 272, 326, 8, card[2]);
-    addText(slide, card[0], x + 22, 300, 260, 24, { size: 15, color: card[2], bold: true });
-    addText(slide, card[1], x + 22, 344, 282, 132, { size: 14, color: STYLE.ink });
+    // Shadow
+    addShape(slide, x + 1, 273, 326, 274, "#E2E8F0", { line: { style: "solid", fill: "#00000000", width: 0 } });
+    addShape(slide, x, 272, 326, 274, "#FFFFFF", { line: { style: "solid", fill: STYLE.ruleLight, width: 1 } });
+    addShape(slide, x, 272, 326, 6, card[2]);
+    addText(slide, card[0], x + 22, 298, 260, 24, { size: 15, color: card[2], bold: true });
+    addText(slide, card[1], x + 22, 342, 282, 132, { size: 14, color: STYLE.ink });
   });
-  footer(slide, page, `${direction.direction} | 文章评价`);
+  
+  globalProgress(slide, directionIndex, totalDirections);
+  footer(slide, page, `${direction.direction} | 文章评价`, directionIndex, totalDirections);
   return slide;
 }
 
-function directionSummary(presentation, direction, page) {
+function directionSummary(presentation, direction, page, directionIndex, totalDirections) {
   const slide = presentation.slides.add();
+  const color = STYLE.directionColors[(directionIndex - 1) % STYLE.directionColors.length] || STYLE.accent;
+  
   bg(slide);
+  leftAccentBar(slide, color);
   kicker(slide, "方向总结");
-  title(slide, `${direction.direction}：技术演进总结`, 58, 82, 1020, 54, 28);
-  addText(slide, "三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。", 58, 160, 880, 36, {
+  title(slide, `${direction.direction}：技术演进总结`, 64, 82, 1020, 54, 26);
+  addText(slide, "三篇材料共同回答本方向从基础机制到当前证据边界的演进关系。", 64, 160, 880, 36, {
     size: 20,
-    color: STYLE.ink,
+    color: STYLE.inkDeep,
     bold: true,
   });
+  
   const titles = direction.primary.map((paper) => paper.title);
   const gap = direction.primary.flatMap((paper) => [paper.slides.evaluation.strengths, paper.slides.evaluation.limitations]).slice(0, 4);
   const commercial = direction.primary.map((paper) => paper.slides.evaluation.commercialization);
+  
   visualStack(slide, "技术演进", titles, 70, 252, 330, 308);
   visualStack(slide, "优点与缺口", gap, 472, 252, 330, 308);
   visualStack(slide, "商业化适配", commercial, 874, 252, 330, 308);
-  footer(slide, page, `方向总结 | ${direction.direction}`);
+  
+  globalProgress(slide, directionIndex, totalDirections);
+  footer(slide, page, `方向总结 | ${direction.direction}`, directionIndex, totalDirections);
   return slide;
 }
 
@@ -487,7 +773,7 @@ function authoredLabel(slideType) {
 
 function drawSourceNote(slide, note) {
   addShape(slide, 64, 610, 1086, 42, "#FFFFFF", { line: { style: "solid", fill: STYLE.rule, width: 1 } });
-  addText(slide, `引用依据：${sanitizeSourceNote(note)}`, 80, 620, 1054, 20, { size: 8.4, color: STYLE.muted });
+  addText(slide, sanitizeSourceNote(note), 80, 620, 1054, 20, { size: 8.2, color: STYLE.muted });
 }
 
 function drawAuthoredPanel(slide, x, y, w, h, heading) {
@@ -621,7 +907,7 @@ function drawAuthoredProof(slide, proof, x, y, w, h) {
   return drawFlowVisual(slide, proof, x, y, w, h);
 }
 
-function authoredStorySlide(presentation, direction, storySlide, page) {
+function authoredStorySlide(presentation, direction, storySlide, page, directionIndex, totalDirections) {
   const slide = presentation.slides.add();
   const paper = paperByKey(direction, storySlide.paper_key);
   const label = authoredLabel(storySlide.slide_type);
@@ -629,33 +915,42 @@ function authoredStorySlide(presentation, direction, storySlide, page) {
   bg(slide);
   kicker(slide, label);
   title(slide, slideTitle, 58, 78, 1060, 58, paper ? 24 : 28);
-  addText(slide, paper ? `证据等级：${publicEvidence(paper.evidence)}   来源状态：${publicSourceStatus(paper.source_status)}` : "方向综述：主讲材料与公开来源综合", 58, 138, 1060, 18, {
+  addText(slide, paper ? `来源状态：${publicSourceStatus(paper.source_status)}` : "方向综述：主讲材料与公开来源综合", 58, 138, 760, 18, {
     size: 9.2,
     color: STYLE.muted,
   });
+  evidenceBadge(slide, paper ? publicEvidence(paper.evidence) : "方向综述", 958, 134);
   addText(slide, storySlide.claim, 58, 168, 1060, 58, { size: 19, color: STYLE.ink, bold: true });
   drawNarrative(slide, storySlide.narrative, 64, 260, 496, 320);
   drawAuthoredProof(slide, storySlide.proof_object || {}, 610, 236, 570, 352);
   drawSourceNote(slide, storySlide.source_note || "");
-  footer(slide, page, `${direction.direction} | ${label}`);
+  globalProgress(slide, directionIndex, totalDirections);
+  footer(slide, page, `${direction.direction} | ${label}`, directionIndex, totalDirections);
   return slide;
 }
 
-function authoredDirectionSlides(presentation, direction, pageStart) {
+function authoredDirectionSlides(presentation, direction, pageStart, directionIndex, totalDirections) {
   let page = pageStart;
   const slides = [];
   const storySlides = Array.isArray(direction._story?.slides) ? direction._story.slides : [];
   for (const storySlide of storySlides) {
-    slides.push(authoredStorySlide(presentation, direction, storySlide, page++));
+    slides.push(authoredStorySlide(presentation, direction, storySlide, page++, directionIndex, totalDirections));
   }
   return { slides, nextPage: page };
 }
 
-function finalSlide(presentation, page) {
+function finalSlide(presentation, page, totalDirections) {
   const slide = presentation.slides.add();
   bg(slide);
+  
+  // Top accent bar
+  addShape(slide, 0, 0, SLIDE_SIZE.width, 6, STYLE.accent, {
+    line: { style: "solid", fill: "#00000000", width: 0 },
+  });
+  
   kicker(slide, "全局总结");
-  title(slide, "可信执行边界正在从 CPU 内部隔离扩展到完整数据路径。", 58, 84, 920, 88, 34);
+  title(slide, "可信执行边界正在从 CPU 内部隔离扩展到完整数据路径。", 64, 84, 920, 88, 34);
+  
   visualStack(slide, "技术结论", [
     "早期 TEE 主要解决 CPU 与内存隔离。",
     "新一代机密计算必须纳入设备、DMA、interrupt 和远端 verifier。",
@@ -668,7 +963,9 @@ function finalSlide(presentation, page) {
     "异构设备与存储路径中的 TCB 划分仍缺少通用框架。",
     "未来工作应同时关注规范互操作、真实工作负载和端到端证据链。",
   ], 690, 232, 430, 310);
-  footer(slide, page, "全局总结 | 研究启示");
+  
+  globalProgress(slide, totalDirections, totalDirections);
+  footer(slide, page, "全局总结 | 研究启示", totalDirections, totalDirections);
   return slide;
 }
 
@@ -718,24 +1015,34 @@ async function main() {
     page = overview.nextPage;
   }
 
+  const totalDirections = deck.length;
+  let directionIndex = 0;
+  
   for (const direction of deck) {
+    directionIndex += 1;
+    
+    // Add section divider before each direction
+    if (!only) {
+      slides.push(sectionDivider(presentation, direction, directionIndex, totalDirections, page++));
+    }
+    
     if (direction._story?.slides) {
-      const authored = authoredDirectionSlides(presentation, direction, page);
+      const authored = authoredDirectionSlides(presentation, direction, page, directionIndex, totalDirections);
       slides.push(...authored.slides);
       page = authored.nextPage;
     } else {
-      slides.push(directionIntro(presentation, direction, page++));
+      slides.push(directionIntro(presentation, direction, page++, directionIndex, totalDirections));
       for (const paper of direction.primary) {
         for (const slideKey of ["summary", "background", "solution", "experiments"]) {
-          slides.push(paperSlide(presentation, direction, paper, slideKey, page++));
+          slides.push(paperSlide(presentation, direction, paper, slideKey, page++, directionIndex, totalDirections));
         }
-        slides.push(evaluationSlide(presentation, direction, paper, page++));
+        slides.push(evaluationSlide(presentation, direction, paper, page++, directionIndex, totalDirections));
       }
-      slides.push(directionSummary(presentation, direction, page++));
+      slides.push(directionSummary(presentation, direction, page++, directionIndex, totalDirections));
     }
   }
   if (!only) {
-    slides.push(finalSlide(presentation, page++));
+    slides.push(finalSlide(presentation, page++, totalDirections));
   }
 
   await fs.mkdir(path.dirname(out), { recursive: true });
