@@ -1,0 +1,110 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH12
+- elementId: bg-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>研究背景</strong></p>
+- elementId: bg-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>传统 memory disaggregation 的主要成本来自 page/object 软件路径，而不是单纯的链路带宽。</li>
+      <li>page-based 方案依赖虚拟内存和 swap/page-fault，有 page fault、I/O amplification 和 context switch。</li>
+      <li>object-based 方案用 key-value 或对象接口绕开部分地址转换成本，但要求应用改接口。</li>
+      <li>两类方案通常仍依赖 RDMA 或类似 DMA 协议，需要 memory region、metadata、copy 和 runtime 参与。</li>
+      </ul>
+- elementId: sep-line
+  elementType: shape
+  bounds: [60, 330, 1160, 1]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $border
+- elementId: sol-title
+  elementType: text
+  bounds: [60, 350, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>解决方案</strong></p>
+- elementId: sol-body
+  elementType: text
+  bounds: [60, 390, 1160, 260]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>CXL device 是被动内存模块：CXL controller 解析 CXL flits，将地址转换后交给内部 DRAM controllers。</li>
+      <li>host kernel 在 PCIe enumeration 后映射 BAR/HDM，CPU 访问 HDM system memory 时请求经 root port 转成 CXL flit。</li>
+      <li>CXL switch 用 virtual hierarchy 和 routing table 连接 host 与 CXL device。</li>
+      <li>runtime 用 /dev/directcxl、ioctl、cxl-namespace 和 mmap 暴露给应用。</li>
+      </ul>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：DirectCXL (ASPLOS 2022)｜证据等级：E1 / Peer-reviewed
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

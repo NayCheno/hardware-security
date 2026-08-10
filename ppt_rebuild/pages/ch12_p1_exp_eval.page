@@ -1,0 +1,109 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH12
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>64B read latency 中，RDMA 路径约 2705 cycles，DirectCXL.memory load request 约 328 cycles，论文报告 8.3x faster。</li>
+      <li>从 memory hierarchy 看，RDMA 比 DirectCXL 慢 6.2x；DirectCXL 仍比 local DRAM 慢，瓶颈主要来自 PCIe/CXL IP。</li>
+      <li>真实 workload 中，DirectCXL 相对 RDMA-based memory disaggregation 平均约 3x 性能提升。</li>
+      <li>这些数据证明的是 fabric access path 的性能差异，不证明链路加密、设备身份或多租户隔离。</li>
+      </ul>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "问题切得准，系统原型覆盖 CXL device、switch、runtime 和 workload 评估，能支撑 memory fabric substrate 的叙事。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "论文目标是性能和 disaggregation，不覆盖 CXL IDE、SPDM/TDISP、attestation、multi-tenant memory ownership 或 verifier policy。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "CXL.memory expansion/pooling 有明确数据中心价值，DirectCXL 的 namespace/runtime 思路可转化为平台管理接口。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "基础论文 / 背景系统；证据强度 E1"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：DirectCXL (ASPLOS 2022)｜证据等级：E1 / Peer-reviewed
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

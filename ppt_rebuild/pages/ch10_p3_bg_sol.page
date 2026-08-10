@@ -1,0 +1,109 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH10
+- elementId: bg-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>研究背景</strong></p>
+- elementId: bg-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>CoVE-IO 不能只靠 PMP 或 CPU page table。</li>
+      <li>设备侧 DMA 需要独立的 translation/protection 语义。</li>
+      <li>IOMMU 是设备 DMA 地址转换与保护的标准机制。</li>
+      </ul>
+- elementId: sep-line
+  elementType: shape
+  bounds: [60, 330, 1160, 1]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $border
+- elementId: sol-title
+  elementType: text
+  bounds: [60, 350, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>解决方案</strong></p>
+- elementId: sol-body
+  elementType: text
+  bounds: [60, 390, 1160, 260]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>IOMMU 控制设备可访问地址空间。</li>
+      <li>提供 Device DMA translation/protection 和 I/O page-table permission 语义。</li>
+      <li>与 CoVE-IO trusted device lifecycle 集成，作为标准支撑点。</li>
+      <li>riscv_aia_2023 作为 trusted MSI/interrupt delivery 辅助材料。</li>
+      </ul>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：RISC-V IOMMU 支撑 CoVE-IO｜证据等级：E0 / Spec-standard SOTA
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

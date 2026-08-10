@@ -1,0 +1,68 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Realm Management Monitor 规范 — 内容摘要</strong></p>
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1060, 55, 160, 30]
+    shapeName: roundRect
+    adjustments: [10000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [1060, 55, 160, 30]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E0 / Spec SOTA</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 110, 1100, 480]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心贡献：</strong>First-party RMM specification 定义 Realm management 和 lifecycle semantics，是 CCA TCB 核心。</p>
+        <p style="margin-top:12px"><strong>关键要点：</strong></p>
+        <ul>
+        <li>RMI/RSI interface boundary 的标准定义</li>
+        <li>Realm 和 REC lifecycle 的管理</li>
+        <li>Granule state transition 和 measurement hooks</li>
+        <li>Realm creation、memory transition、measurement、run/exit 约束</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Arm RMM Specification, DEN0137; developer.arm.com</p>

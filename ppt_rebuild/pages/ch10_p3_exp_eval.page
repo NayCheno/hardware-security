@@ -1,0 +1,108 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH10
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>规范/Survey，无新实验。</li>
+      <li>本页不展示独立系统实验，也不把二手归纳写成一手结果。</li>
+      <li>涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。</li>
+      </ul>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "CoVE-IO 中 DMA isolation 和 I/O translation 的标准支撑点。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "IOMMU 不是单独的 confidential I/O 方案，也不覆盖 device identity、SPDM/TDISP 或 link security。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "适合服务器设备直通与多租户 DMA 管控；风险在配置完整性、固件测量和 verifier 可见性。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "当前 SOTA/补充边界；证据强度 E0"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：RISC-V IOMMU 支撑 CoVE-IO｜证据等级：E0 / Spec-standard SOTA
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

@@ -1,0 +1,99 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 10, 120, 18]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 10, 120, 18]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH10
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 1000, 45]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>sIOPMP — 内容摘要</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 78, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: ev-badge-bg
+  elementType: shape
+  bounds: [1080, 30, 140, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $accent
+- elementId: ev-badge-text
+  elementType: text
+  bounds: [1080, 30, 140, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      E1 / Peer-reviewed
+- elementId: body
+  elementType: text
+  bounds: [60, 90, 1160, 560]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>核心论点：</strong>提出面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checking 可扩展性。</p>
+      <p>sIOPMP 是 RISC-V trusted I/O 和 DMA 保护的 peer-reviewed 机制起点。</p>
+      <p>该论文发表于 ASPLOS，提供可扩展的 I/O 保护元数据与检查机制，提高设备访问控制效率并支撑更大规模 I/O protection。</p>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：sIOPMP: scalable I/O protection for TEE｜证据等级：E1 / Peer-reviewed SOTA
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

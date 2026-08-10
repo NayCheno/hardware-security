@@ -1,0 +1,108 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH11
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>厂商技术材料，无独立学术实验。</li>
+      <li>只能作为产业机制和部署 evidence。</li>
+      <li>本地 PDF 已核验，具体平台结论转到一手材料核验。</li>
+      </ul>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "展示 memory encryption 从 confidentiality 走向 integrity/metadata protection 的商用方向。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "Vendor whitepaper 不是 peer-reviewed proof，也不证明所有 SEV-SNP 部署抵抗实现攻击或侧信道。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "具有真实云平台相关性；风险在供应商绑定、固件/微码版本和 verifier policy 透明度。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "当前 SOTA/补充边界；证据强度 E4"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：AMD SEV-SNP industry memory-integrity evidence｜证据等级：E4 / Industry evidence
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

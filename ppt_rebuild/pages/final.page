@@ -1,0 +1,61 @@
+pageType: final
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: accent-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title-text
+    elementType: text
+    bounds: [100, 120, 1080, 60]
+    content:
+      style: "$title"
+      fontSize: 40
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Key Takeaways & Research Gaps</p>
+  - elementId: divider
+    elementType: shape
+    bounds: [540, 190, 200, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: body-text
+    elementType: text
+    bounds: [140, 220, 1000, 300]
+    content:
+      style: "$body"
+      fontSize: 20
+      lineHeight: 1.6
+      align: [left, top]
+      wrap: true
+      text: |
+        <p><strong>Platform Evolution:</strong> Hardware security has shifted from isolated CPU features to platform-level protection contracts.</p>
+        <p style="margin-top:12px"><strong>Convergent Directions:</strong> Arm CCA and RISC-V CoVE represent parallel confidential computing architectures with shared challenges in memory ownership, I/O isolation, and attestation.</p>
+        <p style="margin-top:12px"><strong>Critical Gaps:</strong> Verified RMM implementations, ratified RISC-V standards, production confidential I/O protocols, and cross-architecture evidence chains remain open.</p>
+        <p style="margin-top:12px"><strong>Evidence Range:</strong> E0 (specifications) → E1 (peer-reviewed systems) → E4 (industry deployment). Stronger evidence needed for production security claims.</p>
+  - elementId: thank-you
+    elementType: text
+    bounds: [100, 560, 1080, 60]
+    content:
+      style: "$subtitle"
+      fontSize: 24
+      color: "$primary"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Thank You</p>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

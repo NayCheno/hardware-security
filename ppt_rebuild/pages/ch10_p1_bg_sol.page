@@ -1,0 +1,108 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH10
+- elementId: bg-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>研究背景</strong></p>
+- elementId: bg-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>DMA 设备可绕过 CPU memory isolation，I/O 保护是 TEE 的关键缺口。</li>
+      <li>只保护 CPU 页表或 PMP 不足以覆盖设备侧访问。</li>
+      <li>设备侧 DMA 需要独立的 access control 和 checking 语义。</li>
+      </ul>
+- elementId: sep-line
+  elementType: shape
+  bounds: [60, 330, 1160, 1]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $border
+- elementId: sol-title
+  elementType: text
+  bounds: [60, 350, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>解决方案</strong></p>
+- elementId: sol-body
+  elementType: text
+  bounds: [60, 390, 1160, 260]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>设计 scalable I/O protection metadata/checking 机制。</li>
+      <li>提高设备访问控制效率并支撑更大规模 I/O protection。</li>
+      <li>作为 TEE-oriented DMA isolation substrate，填补 RISC-V 设备侧保护空白。</li>
+      </ul>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：sIOPMP: scalable I/O protection for TEE｜证据等级：E1 / Peer-reviewed SOTA
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

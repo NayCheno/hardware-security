@@ -1,0 +1,110 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 30, 100, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 30, 100, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Confidential I/O ...</p>
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 70, 400, 36]
+    content:
+      style: "$title"
+      fontSize: 24
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>实验结果</p>
+  - elementId: exp-content
+    elementType: text
+    bounds: [60, 110, 1160, 180]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.5
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>• 本页不展示独立系统实验，也不把二手归纳写成一手结果。</p>
+        <p>• 可支撑：SPDM is the first-party specification foundation for device identity, measurement...</p>
+        <p>• 证据等级：E0 / Spec-standard SOTA；来源状态：本地 PDF 已核验。</p>
+        <p>• 涉及具体平台、协议状态或数值时，转到原始论文、官方规范或厂商材料核验。</p>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 310, 400, 36]
+    content:
+      style: "$title"
+      fontSize: 24
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>文章评价</p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 350, 1160, 320]
+    columnWidths: [0.2, 0.8]
+    rowHeights: [0.2, 0.2, 0.2, 0.2, 0.2]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              维度
+        - content:
+            text: |
+              判断
+      - - content:
+            text: |
+              - 设计优势
+        - content:
+            text: |
+              是 CoVE-IO、TDISP、PCIe IDE keying 和 vendor device attestation 的共同。
+      - - content:
+            text: |
+              - 主要局限
+        - content:
+            text: |
+              单独成功的 SPDM session 不能证明 TDI state、IOMMU/IOPMP policy、IDE link 或 device...
+      - - content:
+            text: |
+              - 商业落地
+        - content:
+            text: |
+              适合 fleet-scale device attestation；风险在证书供应链、measurement schema 和 firmware...
+      - - content:
+            text: |
+              - 讲稿定位
+        - content:
+            text: |
+              开创/基础入口; 证据强度 E0
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

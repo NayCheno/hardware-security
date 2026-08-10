@@ -1,0 +1,108 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH10
+- elementId: bg-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>研究背景</strong></p>
+- elementId: bg-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>TVM 使用真实设备时，安全边界必须覆盖设备身份、DMA/MMIO、interrupt delivery、link protection 和管理 control plane。</li>
+      <li>传统 I/O 保护只关注 access control，缺少完整的 confidential I/O lifecycle 定义。</li>
+      </ul>
+- elementId: sep-line
+  elementType: shape
+  bounds: [60, 330, 1160, 1]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $border
+- elementId: sol-title
+  elementType: text
+  bounds: [60, 350, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>解决方案</strong></p>
+- elementId: sol-body
+  elementType: text
+  bounds: [60, 390, 1160, 260]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>用 TDI/TDM/DSM 建立设备域词汇表。</li>
+      <li>SPDM/TDISP 与 PCIe IDE  linkage 实现设备身份和链路保护。</li>
+      <li>Trusted MSI 和 interrupt-path 概念覆盖中断安全。</li>
+      <li>组合描述 draft confidential I/O lifecycle。</li>
+      </ul>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：RISC-V CoVE-IO 规范草案｜证据等级：E3 / Draft-not-ratified
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

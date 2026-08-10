@@ -1,0 +1,111 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>RMM 规范 — 实验 + 评价</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>规范材料，无新实验；只支撑术语、taxonomy、接口语义</li>
+        <li>不展示独立系统实验，不把规范写成一手实现</li>
+        <li>涉及具体平台、协议状态或数值时，转到原始论文或厂商材料</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [80, 420, 1100, 230]
+    columnWidths: [0.25, 0.75]
+    rowHeights: [0.2, 0.2, 0.2, 0.2, 0.2]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+      - - content:
+            text: |
+              <p>设计优势</p>
+        - content:
+            text: |
+              <p>能把 RMM 作为 CCA TCB 核心讲清</p>
+      - - content:
+            text: |
+              <p>主要局限</p>
+        - content:
+            text: |
+              <p>不证明任一 RMM 实现正确，且本地 PDF 不可用时不能写不可见细节</p>
+      - - content:
+            text: |
+              <p>商业落地</p>
+        - content:
+            text: |
+              <p>依赖 RMM 实现验证、firmware 更新、硬件支持和 verifier 检查</p>
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+        - content:
+            text: |
+              <p>当前 SOTA/补充边界; 证据强度 E0</p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Arm RMM Specification, DEN0137; developer.arm.com</p>

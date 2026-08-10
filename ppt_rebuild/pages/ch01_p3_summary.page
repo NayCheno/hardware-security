@@ -1,0 +1,73 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Wang/Huang 2026 — Accelerator TEE SoK</strong></p>
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1060, 55, 160, 30]
+    shapeName: roundRect
+    adjustments: [10000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [1060, 55, 160, 30]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E2 / SoK</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 110, 1100, 480]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心贡献：</strong>分析 51 个 accelerator TEE studies，提出 Host-type、Acc.-type、Mix-type，围绕 access control、memory encryption、attestation 组织设计空间。</p>
+        <p style="margin-top:12px"><strong>关键统计：</strong></p>
+        <ul>
+        <li>41/51 studies 在 2022 年之后提出</li>
+        <li>42/51 依赖 CPU TEE，40/51 支持特定 CPU architecture</li>
+        <li>43/51 只支持一种 accelerator</li>
+        </ul>
+        <p style="margin-top:12px"><strong>关键要点：</strong></p>
+        <ul>
+        <li>三类架构：Host-type 复用 CPU TEE；Acc.-type 把控制逻辑放进 accelerator；Mix-type 组合</li>
+        <li>三类机制：access control、memory protection、attestation</li>
+        <li>在 01 中补齐 Li 2024 对 device path 覆盖不足的问题</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Wang/Huang 2026 p.1 abstract, p.2-p.3 motivation; p.2 Table I; p.4 Figure 1</p>

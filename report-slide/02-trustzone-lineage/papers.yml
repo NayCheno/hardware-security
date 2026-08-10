@@ -65,37 +65,41 @@ primary:
       strengths: 历史基础价值高，能解释 Arm TEE 的双世界起点。
       limitations: 不代表 CCA/RME/RMM 或 confidential VM threat model。
       commercialization: 已长期进入移动和嵌入式 SoC 生态；风险在 TCB 大、接口复杂和迁移到 CCA 时边界不同。
-- key: pinto2019trustzone
+- key: ma2023ret2ns
   role: sota_1
   selection_slot: primary_2
-  paper_type: sok
-  claim_strength: E2
-  selection_reason: Systematic survey of TrustZone-assisted TEEs for mature mobile and embedded TEE lineage.
-  evidence_type: E2 peer-reviewed survey/SoK
-  maturity: peer-reviewed survey/SoK
-  pdf_status: local_pdf_verified
-  source_url: https://doi.org/10.1145/3291047
-  evidence: E2 / Background substrate
-  source_status: local_pdf_verified
-  reference: reference/trusted-execution-environments/demystifying-arm-trustzone-comprehensive-survey/paper.pdf
-  title: Demystifying Arm TrustZone
+  paper_type: system
+  claim_strength: E1
+  selection_reason: Ma 2023 DAC reveals a new class of ret2ns attacks on Cortex-M TrustZone fast-state switch, affecting all Cortex-M processors with TrustZone.
+  evidence_type: E1 peer-reviewed primary work
+  maturity: peer-reviewed primary work
+  pdf_status: source_verified
+  source_url: https://doi.org/10.1109/DAC56929.2023.10247972
+  evidence: E1 / Peer-reviewed SOTA
+  source_status: source_verified
+  reference: reference/trusted-execution-environments/ret2ns-return-to-non-secure-vulnerabilities-arm-cortex-m-trustzone/paper.pdf
+  title: Return-to-Non-Secure Vulnerabilities on ARM Cortex-M TrustZone
   auxiliary: []
   slides:
     summary:
-      claim: 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作
+      claim: 发现 Cortex-M TrustZone 快速状态切换机制中的 ret2ns 攻击，可导致非安全态特权级任意代码执行
       points:
-      - 全面梳理 TrustZone 架构、TEE 软件栈、应用和虚拟化相关工作
+      - Cortex-M TrustZone 快速状态切换的设计弱点
+      - ret2ns 攻击影响所有 Cortex-M TrustZone 处理器
+      - 提出两种低开销防御机制
       visual:
         title: 证据定位
         items:
         - 槽位：primary_2
-        - 类型：sok
-        - 证据：E2 / Background substrate
-        - 来源：local_pdf_verified
+        - 类型：system
+        - 证据：E1 / Peer-reviewed SOTA
+        - 来源：source_verified
     background:
-      claim: TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一
+      claim: Cortex-M TrustZone 的快速状态切换允许安全态直接返回到非安全态用户空间，但保持特权级执行，导致 confused deputy 攻击
       points:
-      - TrustZone 长期被广泛部署，但公开系统化资料不足，学术系统和产业 TEE 栈边界不统一
+      - Cortex-M TrustZone 快速状态切换机制
+      - 安全态到非安全态直接控制流转移
+      - 特权级不降低导致权限提升
       visual:
         title: 问题边界
         items:
@@ -103,30 +107,34 @@ primary:
         - 攻击/管理边界
         - 现有方法缺口
     solution:
-      claim: 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map
+      claim: 提出 ret2ns 攻击四变种，并设计 MPU-assisted address sanitizer 和 address masking 两种防御
       points:
-      - 按系统软件、TEE、虚拟化和应用场景分类，给 TrustZone 生态建立 survey map
+      - 分析四种 ret2ns 攻击变种
+      - MPU-assisted address sanitizer 防御
+      - Address masking 防御方案
       visual:
         title: 关键机制
         items:
-        - TEE OS and trusted applications
-        - Hardware-assisted virtualization use cases
-        - IoT and mobile deployment patterns
+        - Fast-state switch vulnerability
+        - Return-to-non-secure attack variants
+        - MPU-assisted and address-masking defenses
     experiments:
-      claim: 规范/Survey，无新实验；只支撑背景和生态分类
+      claim: DAC 2023 peer-reviewed paper，在 Cortex-M33 硬件上实验验证攻击和防御
       points:
-      - 规范/Survey，无新实验；只支撑背景和生态分类
+      - DAC 2023 peer-reviewed
+      - Cortex-M33 硬件实验验证
+      - 防御开销可忽略
       visual:
         title: 证据强度
         items:
-        - 类型：E2 peer-reviewed survey/SoK
-        - 成熟度：peer-reviewed survey/SoK
-        - PDF：local_pdf_verified
+        - 类型：E1 peer-reviewed primary work
+        - 成熟度：peer-reviewed primary work
+        - PDF：source_verified
     evaluation:
-      claim: 适合写 TrustZone 背景和生态谱系
-      strengths: 适合写 TrustZone 背景和生态谱系。
-      limitations: 对 CCA/RME 不完整，不能直接支撑 Realm 或 confidential VM claim。
-      commercialization: 有助于厂商盘点旧 TEE 生态和迁移成本；风险在 legacy API/TA 兼容性与审计负担。
+      claim: Cortex-M TrustZone 安全的重要新发现，揭示快速状态切换机制的根本设计缺陷
+      strengths: Cortex-M TrustZone 安全的重要新发现，实验验证充分，防御方案实用。
+      limitations: 专注于 Cortex-M 系列，不直接适用于 Cortex-A TrustZone；防御方案需厂商支持 PXN 或 MPU 扩展。
+      commercialization: 对 IoT/嵌入式设备安全有直接影响；落地依赖厂商固件更新和 MPU 配置。
 - key: cerdeira2020trustzone
   role: sota_2
   selection_slot: primary_3

@@ -1,0 +1,97 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch04
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E3 / Draft
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>NanoZone: CCA 细粒度内存保护 — 内容摘要</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: body
+    elementType: text
+    bounds: [60, 92, 1160, 590]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>探索 Arm CCA 上更可扩展、更细粒度的内存保护域，缓解 VM/Realm 粒度过粗的问题。</p>
+        <p>NanoZone 作为草案级 SOTA 工作，研究 CCA granule/lifecycle 能否支撑更小保护域。预印本状态提供了前沿设计方向，但尚不能代表同行评议共识或硬件/OS 生态成熟度。</p>
+        <p>论文定位：当前 SOTA/补充边界；材料类型：系统论文；证据等级：E3 / 草案/未批准规范。</p>
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：NanoZone: CCA 细粒度内存保护｜证据等级：E3 / Draft-not-ratified
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

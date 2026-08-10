@@ -1,0 +1,73 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 500, 35]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>方向总结</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 68, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: summary-table
+  elementType: table
+  bounds: [60, 90, 1160, 570]
+  columnWidths: [0.2500, 0.3000, 0.3000, 0.1500]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "论文"}
+      - content: {text: "核心思想"}
+      - content: {text: "主要局限"}
+      - content: {text: "证据等级"}
+    -
+      - content: {text: "RISC-V CoVE reference architecture"}
+      - content: {text: "CoVE confidential computing 参考架构方向"}
+      - content: {text: "不提供完整 ABI、状态机或 ratified standard"}
+      - content: {text: "E3 / 基础证据"}
+    -
+      - content: {text: "RISC-V AP-TEE / CoVE TVM 规范草案"}
+      - content: {text: "定义 TVM lifecycle 和 SBI ABI"}
+      - content: {text: "v0.7 RC2 仍是 draft，可能变化"}
+      - content: {text: "E3 / 草案"}
+    -
+      - content: {text: "RISC-V TEE 谱系辅助材料"}
+      - content: {text: "pre-CoVE enclave 与 CoVE 谱系分类"}
+      - content: {text: "不能替代原始机制论文或官方规范"}
+      - content: {text: "E2 survey"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

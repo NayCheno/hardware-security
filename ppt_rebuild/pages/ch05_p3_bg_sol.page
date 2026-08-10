@@ -1,0 +1,144 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch05
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E2 / Background
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Accelerator TEE SoK — 背景与方案</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: bg-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: bg-body
+    elementType: text
+    bounds: [60, 128, 1160, 210]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>设备 TEE 机制比 CPU TEE 更分散。</li>
+        <li>不同 accelerator 的队列、固件、驱动和本地 root 差异很大。</li>
+        </ul>
+  - elementId: sep-line
+    elementType: shape
+    bounds: [60, 350, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: sol-title
+    elementType: text
+    bounds: [60, 370, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: sol-body
+    elementType: text
+    bounds: [60, 406, 1160, 280]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>用 taxonomy 区分设备身份、内存路径、队列、runtime、driver TCB 与 attestation，作为 CCA I/O 方向的背景基底。</p>
+        <ul>
+        <li>Accelerator/device TEE design taxonomy</li>
+        <li>Device identity and attestation vocabulary</li>
+        <li>Memory, queue, runtime and driver TCB dimensions</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

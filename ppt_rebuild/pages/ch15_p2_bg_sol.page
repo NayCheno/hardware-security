@@ -1,0 +1,93 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 30, 100, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 30, 100, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>SmartNIC / truste...</p>
+  - elementId: bg-title
+    elementType: text
+    bounds: [60, 70, 400, 36]
+    content:
+      style: "$title"
+      fontSize: 24
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>研究背景</p>
+  - elementId: bg-content
+    elementType: text
+    bounds: [60, 110, 1160, 220]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.5
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>• CPU TEE 在跨节点网络 I/O 中 TCB 大、性能差、异构性高，无法作为统一 network trust substrate</p>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 340, 1160, 1]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$border"
+  - elementId: sol-title
+    elementType: text
+    bounds: [60, 360, 400, 36]
+    content:
+      style: "$title"
+      fontSize: 24
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>解决方案</p>
+  - elementId: sol-content
+    elementType: text
+    bounds: [60, 400, 1160, 260]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.5
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>• 在 NIC hardware 上实现最小安全 primitive、kernel-bypass stack 和可验证协议</p>
+        <p>• 用 Tamarin 验证核心性质</p>
+        <p>• NIC-level silicon root-of-trust</p>
+        <p>• Transferable authentication and non-equivocation</p>
+        <p>• Tamarin-verified protocol core and kernel-bypass stack</p>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

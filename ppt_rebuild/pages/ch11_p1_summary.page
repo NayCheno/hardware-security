@@ -1,0 +1,99 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 10, 120, 18]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 10, 120, 18]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH11
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 1000, 45]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>Memory Encryption: A Survey — 内容摘要</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 78, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: ev-badge-bg
+  elementType: shape
+  bounds: [1080, 30, 140, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $accent
+- elementId: ev-badge-text
+  elementType: text
+  bounds: [1080, 30, 140, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      E2 / Background
+- elementId: body
+  elementType: text
+  bounds: [60, 90, 1160, 560]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>核心论点：</strong>综述 memory encryption 的威胁模型、技术路线和性能/安全权衡。</p>
+      <p>Henson 2014 是 secure memory encryption、integrity 和 freshness 的 background starting point。</p>
+      <p>按硬件增强、OS 辅助、专用设备与 cryptographic memory controller 路线组织 taxonomy，并解释 encryption、authentication、attestation 等概念。</p>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：Memory Encryption: A Survey of Existing Techniques｜证据等级：E2 / Background substrate
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

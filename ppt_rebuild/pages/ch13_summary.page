@@ -1,0 +1,97 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 30, 100, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 30, 100, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Confidential I/O protocol</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 56, 500, 40]
+    content:
+      style: "$title"
+      fontSize: 32
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>方向总结</p>
+  - elementId: title-underline
+    elementType: shape
+    bounds: [60, 100, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: summary-table
+    elementType: table
+    bounds: [60, 120, 1160, 560]
+    columnWidths: [0.25, 0.15, 0.35, 0.25]
+    rowHeights: [0.1, 0.3, 0.3, 0.3]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              论文
+        - content:
+            text: |
+              定位
+        - content:
+            text: |
+              选择理由
+      - - content:
+            text: |
+              - SPDM device identity and measurement
+        - content:
+            text: |
+              开创/基础入口
+        - content:
+            text: |
+              SPDM is the first-party specification foundation for device identity...
+      - - content:
+            text: |
+              - CoVE-IO and TDISP trusted-device lifecycle
+        - content:
+            text: |
+              代表性改进
+        - content:
+            text: |
+              RISC-V CoVE-IO draft maps SPDM and TDISP-style ideas into the RISC-V...
+      - - content:
+            text: |
+              - 'Separate but Together: TLS channel binding with remote...
+        - content:
+            text: |
+              当前 SOTA/补充边界
+        - content:
+            text: |
+              Peer-reviewed endpoint/channel-binding evidence for integrating remote...
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

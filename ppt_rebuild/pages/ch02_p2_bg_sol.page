@@ -1,0 +1,89 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Pinto 2019 — 背景 + 方案</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>TrustZone 长期被广泛部署，但公开系统化资料不足</li>
+        <li>学术系统和产业 TEE 栈边界不统一</li>
+        <li>术语碎片化，缺乏统一的 taxonomy 和分类框架</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: section2-content
+    elementType: text
+    bounds: [80, 420, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>按系统软件、TEE、虚拟化和应用场景分类，建立 survey map</li>
+        <li>TEE OS and trusted applications 的系统分析</li>
+        <li>Hardware-assisted virtualization use cases</li>
+        <li>IoT and mobile deployment patterns</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Pinto 2019, DOI: 10.1145/3291047; local PDF 已核验</p>

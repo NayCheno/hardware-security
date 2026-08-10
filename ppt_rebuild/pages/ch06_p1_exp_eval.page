@@ -1,0 +1,168 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch06
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E1 / Foundational
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>SWATT: 软件 Attestation 早期代表 — 实验与评价</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: exp-body
+    elementType: text
+    bounds: [60, 128, 1160, 180]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>论文在嵌入式节点场景评估。</li>
+        <li>安全性强依赖 timing、硬件和网络假设。</li>
+        <li>只引用已核验的实验方向，不复制未复核的具体数值。</li>
+        </ul>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 320, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 356, 1160, 320]
+    columnWidths: [0.15, 0.85]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>设计优势</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>历史价值高，能解释 attestation 从软件测量走向硬件 RoT 的动因。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>主要局限</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>面对现代强对手和复杂 SoC/TEE 时适用性有限。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>商业落地</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>现代商业方案应转向硬件 RoT、标准化 evidence 和 verifier policy；SWATT 主要作为历史基线。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>开创/基础入口；证据强度 E1</p>
+            align: [left, middle]
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：SWATT: 软件 attestation 早期代表｜证据等级：E1 / Foundational
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

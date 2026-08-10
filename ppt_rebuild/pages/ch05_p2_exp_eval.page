@@ -1,0 +1,168 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch05
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E3 / Draft
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Devlore: Device Interrupt Protection — 实验与评价</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: exp-body
+    elementType: text
+    bounds: [60, 128, 1160, 180]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>本地已核验 arXiv PDF 提供 device-interrupt protection 设计/原型证据。</li>
+        <li>只写机制方向和证据状态，不写未复核数字或成熟部署结论。</li>
+        <li>draft/not-ratified 状态下只引用已核验的机制方向。</li>
+        </ul>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 320, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 356, 1160, 320]
+    columnWidths: [0.15, 0.85]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>设计优势</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>明确指出 interrupt 是 CCA device path 的核心安全面，不应只讨论 DMA。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>主要局限</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>Draft evidence，落地需硬件、firmware、OS、hypervisor 和 interrupt controller 协同。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>商业落地</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>对云端直通设备和加速器租户隔离很关键；风险在 legacy 设备兼容和中断虚拟化复杂性。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>代表性改进；证据强度 E3</p>
+            align: [left, middle]
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：Devlore: device interrupt protection｜证据等级：E3 / Draft-not-ratified
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

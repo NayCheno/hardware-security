@@ -1,0 +1,144 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch05
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E3 / Draft
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>ACAI: CCA Accelerator Execution — 背景与方案</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: bg-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: bg-body
+    elementType: text
+    bounds: [60, 128, 1160, 210]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>Confidential workloads 需要使用 GPU/NPU/FPGA 等加速器。</li>
+        <li>如果设备 DMA、队列和驱动仍由 untrusted host 控制，Realm 内数据会在 offload 路径暴露。</li>
+        </ul>
+  - elementId: sep-line
+    elementType: shape
+    bounds: [60, 350, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: sol-title
+    elementType: text
+    bounds: [60, 370, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: sol-body
+    elementType: text
+    bounds: [60, 406, 1160, 280]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>以 CCA-aware accelerator execution path 连接 Realm、设备内存访问、队列管理和 attestation，缩小 host 可见面。</p>
+        <ul>
+        <li>CCA-aware accelerator execution path</li>
+        <li>Protected DMA 和 command/data movement</li>
+        <li>Driver/runtime TCB boundary for offload</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：ACAI: CCA accelerator execution｜证据等级：E3 / Draft-not-ratified
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

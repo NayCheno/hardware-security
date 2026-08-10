@@ -1,0 +1,168 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch04
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E1 / Foundational
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Shelter: CCA 用户态隔离 — 实验与评价</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: exp-body
+    elementType: text
+    bounds: [60, 128, 1160, 180]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>USENIX Security 论文提供原型与开销评估。</li>
+        <li>本报告不复制未核对的具体性能数字，只引用已核验的机制方向。</li>
+        <li>安全性分析强依赖 timing、硬件和网络假设。</li>
+        </ul>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 320, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 356, 1160, 320]
+    columnWidths: [0.15, 0.85]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>设计优势</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>开辟 CCA 细粒度使用方式，是从 VM Realm 走向应用隔离的方向入口。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>主要局限</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>系统原型不等同于通用 ABI 或量产部署，生态依赖 runtime、OS 与 CCA 硬件支持。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>商业落地</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>对云端敏感函数、插件隔离和移动端安全服务有潜力；风险在开发者可用性和平台普及速度。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>开创/基础入口；证据强度 E1</p>
+            align: [left, middle]
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：Shelter: CCA 用户态隔离｜证据等级：E1 / Foundational
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

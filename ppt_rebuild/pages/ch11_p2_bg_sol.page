@@ -1,0 +1,108 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH11
+- elementId: bg-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>研究背景</strong></p>
+- elementId: bg-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>Encryption alone cannot detect stale or modified memory values returned by an untrusted memory system。</li>
+      <li>Freshness requires integrity trees, counters, or authenticated roots。</li>
+      <li>需要 peer-reviewed 机制来锚定 memory integrity 和 freshness 证据。</li>
+      </ul>
+- elementId: sep-line
+  elementType: shape
+  bounds: [60, 330, 1160, 1]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $border
+- elementId: sol-title
+  elementType: text
+  bounds: [60, 350, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>解决方案</strong></p>
+- elementId: sol-body
+  elementType: text
+  bounds: [60, 390, 1160, 260]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>Address-independent seed encryption (AISE) 提供 counter-mode seed。</li>
+      <li>Bonsai Merkle Tree (BMT) 在 encryption counters 上构建认证树。</li>
+      <li>root MAC 用于 replay/tamper detection，减少 secure-processor integrity-tree 开销。</li>
+      </ul>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：Bonsai Merkle Trees for memory integrity and freshness｜证据等级：E1 / Peer-reviewed mechanism anchor
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

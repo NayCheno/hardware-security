@@ -1,0 +1,100 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 12, 120, 20]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 12, 120, 20]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH08
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p>论文报告 CoreMark/Beebs/RV8 等开销结果。具体数值需核对原文 Table/Figure 后写入。</p>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "RISC-V TEE baseline，适合解释 PMP-based enclave 的优势和限制。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "EuroSys 2020 foundational evidence，不代表后续标准化 confidential VM 或生产 enclave。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "开源可定制性强；风险在 PMP region 限制、生态成熟度和安全 monitor 正确性。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "开创/基础入口；证据强度 E1"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：Keystone: 开源 RISC-V TEE 框架｜证据等级：E1 / Foundational
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

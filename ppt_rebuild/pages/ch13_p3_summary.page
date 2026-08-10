@@ -1,0 +1,96 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 30, 100, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 30, 100, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Confidential I/O ...</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 56, 1000, 40]
+    content:
+      style: "$title"
+      fontSize: 32
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>TLS Channel Binding with Remote Attestation — 内容摘要</p>
+  - elementId: title-underline
+    elementType: shape
+    bounds: [60, 100, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: evidence-badge-bg
+    elementType: shape
+    bounds: [1080, 30, 140, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: evidence-badge-text
+    elementType: text
+    bounds: [1080, 30, 140, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E1 / Peer-reviewed endpoint channel-binding evidence</p>
+  - elementId: body-content
+    elementType: text
+    bounds: [60, 120, 1160, 540]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.5
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>Binds an application secure channel to an attested TEE endpoint</p>
+        <p>Anchors endpoint/channel-binding evidence</p>
+        <p>Peer-reviewed endpoint/channel-binding evidence for integrating remote attestation into TLS.</p>
+  - elementId: source-line
+    elementType: text
+    bounds: [60, 670, 1160, 30]
+    content:
+      style: "$caption"
+      fontSize: 14
+      color: "$secondary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>来源：Separate but Together: TLS channel binding with remote...｜证据等级：E1 / Peer-reviewed endpoint cha...</p>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

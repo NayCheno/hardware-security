@@ -1,0 +1,242 @@
+title: "Hardware Security Survey: Trusted Execution, Confidential Computing, and I/O Protection"
+size: [1280, 720]
+theme:
+  colors:
+    primary: "#2563EB"
+    secondary: "#64748B"
+    accent: "#DC2626"
+    background: "#FFFFFF"
+    text: "#1F2937"
+    surface: "#F8FAFC"
+    border: "#E2E8F0"
+    lightText: "#9CA3AF"
+    white: "#FFFFFF"
+    dark: "#111827"
+  textStyles:
+    title:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.3
+    chapterTitle:
+      fontSize: 44
+      color: "$white"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.2
+    subtitle:
+      fontSize: 24
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.4
+    body:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+    caption:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.4
+    badge:
+      fontSize: 12
+      color: "$white"
+      fontFamily: "Inter, MiSans"
+      backgroundColor: "$accent"
+    coverTitle:
+      fontSize: 48
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.2
+    coverSubtitle:
+      fontSize: 28
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.4
+    evidenceLabel:
+      fontSize: 12
+      color: "$white"
+      fontFamily: "Inter, MiSans"
+      backgroundColor: "$primary"
+  tableStyles:
+    default:
+      fontSize: 16
+      fontFamily: "Inter, MiSans"
+      headerFill: "$primary"
+      headerColor: "$white"
+      headerBold: true
+      bodyFill: ["$white", "$surface"]
+      bodyColor: "$text"
+      border:
+        style: "solid"
+        width: 1
+        color: "$border"
+pages:
+  - pages/cover.page
+  - pages/toc.page
+  - pages/ch01_intro.page
+  - pages/ch01_p1_summary.page
+  - pages/ch01_p1_bg_sol.page
+  - pages/ch01_p1_exp_eval.page
+  - pages/ch01_p2_summary.page
+  - pages/ch01_p2_bg_sol.page
+  - pages/ch01_p2_exp_eval.page
+  - pages/ch01_p3_summary.page
+  - pages/ch01_p3_bg_sol.page
+  - pages/ch01_p3_exp_eval.page
+  - pages/ch01_summary.page
+  - pages/ch02_intro.page
+  - pages/ch02_p1_summary.page
+  - pages/ch02_p1_bg_sol.page
+  - pages/ch02_p1_exp_eval.page
+  - pages/ch02_p2_summary.page
+  - pages/ch02_p2_bg_sol.page
+  - pages/ch02_p2_exp_eval.page
+  - pages/ch02_p3_summary.page
+  - pages/ch02_p3_bg_sol.page
+  - pages/ch02_p3_exp_eval.page
+  - pages/ch02_summary.page
+  - pages/ch03_intro.page
+  - pages/ch03_p1_summary.page
+  - pages/ch03_p1_bg_sol.page
+  - pages/ch03_p1_exp_eval.page
+  - pages/ch03_p2_summary.page
+  - pages/ch03_p2_bg_sol.page
+  - pages/ch03_p2_exp_eval.page
+  - pages/ch03_p3_summary.page
+  - pages/ch03_p3_bg_sol.page
+  - pages/ch03_p3_exp_eval.page
+  - pages/ch03_summary.page
+  - pages/ch04_intro.page
+  - pages/ch04_p1_summary.page
+  - pages/ch04_p1_bg_sol.page
+  - pages/ch04_p1_exp_eval.page
+  - pages/ch04_p2_summary.page
+  - pages/ch04_p2_bg_sol.page
+  - pages/ch04_p2_exp_eval.page
+  - pages/ch04_p3_summary.page
+  - pages/ch04_p3_bg_sol.page
+  - pages/ch04_p3_exp_eval.page
+  - pages/ch04_summary.page
+  - pages/ch05_intro.page
+  - pages/ch05_p1_summary.page
+  - pages/ch05_p1_bg_sol.page
+  - pages/ch05_p1_exp_eval.page
+  - pages/ch05_p2_summary.page
+  - pages/ch05_p2_bg_sol.page
+  - pages/ch05_p2_exp_eval.page
+  - pages/ch05_p3_summary.page
+  - pages/ch05_p3_bg_sol.page
+  - pages/ch05_p3_exp_eval.page
+  - pages/ch05_summary.page
+  - pages/ch06_intro.page
+  - pages/ch06_p1_summary.page
+  - pages/ch06_p1_bg_sol.page
+  - pages/ch06_p1_exp_eval.page
+  - pages/ch06_p2_summary.page
+  - pages/ch06_p2_bg_sol.page
+  - pages/ch06_p2_exp_eval.page
+  - pages/ch06_p3_summary.page
+  - pages/ch06_p3_bg_sol.page
+  - pages/ch06_p3_exp_eval.page
+  - pages/ch06_summary.page
+  - pages/ch07_intro.page
+  - pages/ch07_p1_summary.page
+  - pages/ch07_p1_bg_sol.page
+  - pages/ch07_p1_exp_eval.page
+  - pages/ch07_p2_summary.page
+  - pages/ch07_p2_bg_sol.page
+  - pages/ch07_p2_exp_eval.page
+  - pages/ch07_p3_summary.page
+  - pages/ch07_p3_bg_sol.page
+  - pages/ch07_p3_exp_eval.page
+  - pages/ch07_summary.page
+  - pages/ch08_intro.page
+  - pages/ch08_p1_summary.page
+  - pages/ch08_p1_bg_sol.page
+  - pages/ch08_p1_exp_eval.page
+  - pages/ch08_p2_summary.page
+  - pages/ch08_p2_bg_sol.page
+  - pages/ch08_p2_exp_eval.page
+  - pages/ch08_p3_summary.page
+  - pages/ch08_p3_bg_sol.page
+  - pages/ch08_p3_exp_eval.page
+  - pages/ch08_summary.page
+  - pages/ch09_intro.page
+  - pages/ch09_p1_summary.page
+  - pages/ch09_p1_bg_sol.page
+  - pages/ch09_p1_exp_eval.page
+  - pages/ch09_p2_summary.page
+  - pages/ch09_p2_bg_sol.page
+  - pages/ch09_p2_exp_eval.page
+  - pages/ch09_p3_summary.page
+  - pages/ch09_p3_bg_sol.page
+  - pages/ch09_p3_exp_eval.page
+  - pages/ch09_summary.page
+  - pages/ch10_intro.page
+  - pages/ch10_p1_summary.page
+  - pages/ch10_p1_bg_sol.page
+  - pages/ch10_p1_exp_eval.page
+  - pages/ch10_p2_summary.page
+  - pages/ch10_p2_bg_sol.page
+  - pages/ch10_p2_exp_eval.page
+  - pages/ch10_p3_summary.page
+  - pages/ch10_p3_bg_sol.page
+  - pages/ch10_p3_exp_eval.page
+  - pages/ch10_summary.page
+  - pages/ch11_intro.page
+  - pages/ch11_p1_summary.page
+  - pages/ch11_p1_bg_sol.page
+  - pages/ch11_p1_exp_eval.page
+  - pages/ch11_p2_summary.page
+  - pages/ch11_p2_bg_sol.page
+  - pages/ch11_p2_exp_eval.page
+  - pages/ch11_p3_summary.page
+  - pages/ch11_p3_bg_sol.page
+  - pages/ch11_p3_exp_eval.page
+  - pages/ch11_summary.page
+  - pages/ch12_intro.page
+  - pages/ch12_p1_summary.page
+  - pages/ch12_p1_bg_sol.page
+  - pages/ch12_p1_exp_eval.page
+  - pages/ch12_p2_summary.page
+  - pages/ch12_p2_bg_sol.page
+  - pages/ch12_p2_exp_eval.page
+  - pages/ch12_p3_summary.page
+  - pages/ch12_p3_bg_sol.page
+  - pages/ch12_p3_exp_eval.page
+  - pages/ch12_summary.page
+  - pages/ch13_intro.page
+  - pages/ch13_p1_summary.page
+  - pages/ch13_p1_bg_sol.page
+  - pages/ch13_p1_exp_eval.page
+  - pages/ch13_p2_summary.page
+  - pages/ch13_p2_bg_sol.page
+  - pages/ch13_p2_exp_eval.page
+  - pages/ch13_p3_summary.page
+  - pages/ch13_p3_bg_sol.page
+  - pages/ch13_p3_exp_eval.page
+  - pages/ch13_summary.page
+  - pages/ch14_intro.page
+  - pages/ch14_p1_summary.page
+  - pages/ch14_p1_bg_sol.page
+  - pages/ch14_p1_exp_eval.page
+  - pages/ch14_p2_summary.page
+  - pages/ch14_p2_bg_sol.page
+  - pages/ch14_p2_exp_eval.page
+  - pages/ch14_p3_summary.page
+  - pages/ch14_p3_bg_sol.page
+  - pages/ch14_p3_exp_eval.page
+  - pages/ch14_summary.page
+  - pages/ch15_intro.page
+  - pages/ch15_p1_summary.page
+  - pages/ch15_p1_bg_sol.page
+  - pages/ch15_p1_exp_eval.page
+  - pages/ch15_p2_summary.page
+  - pages/ch15_p2_bg_sol.page
+  - pages/ch15_p2_exp_eval.page
+  - pages/ch15_p3_summary.page
+  - pages/ch15_p3_bg_sol.page
+  - pages/ch15_p3_exp_eval.page
+  - pages/ch15_summary.page
+  - pages/final.page

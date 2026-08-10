@@ -1,0 +1,84 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 500, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>方向03 总结</strong></p>
+  - elementId: summary-table
+    elementType: table
+    bounds: [80, 110, 1100, 530]
+    columnWidths: [0.22, 0.40, 0.38]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>论文</strong></p>
+        - content:
+            text: |
+              <p><strong>核心思想</strong></p>
+        - content:
+            text: |
+              <p><strong>主要局限</strong></p>
+      - - content:
+            text: |
+              <p>Li 2022 CCA</p>
+        - content:
+            text: |
+              <p>Realm/RME/RMM/GPT/lifecycle 核心设计</p>
+        - content:
+            text: |
+              <p>论文原型不等同于后续规范或量产实现</p>
+      - - content:
+            text: |
+              <p>Arm CCA 规范</p>
+        - content:
+            text: |
+              <p>CCA 接口/Realm/memory/attestation 语义</p>
+        - content:
+            text: |
+              <p>不是性能、可用性或具体实现正确性的证据</p>
+      - - content:
+            text: |
+              <p>Arm RMM 规范</p>
+        - content:
+            text: |
+              <p>RMM 接口/RMI/RSI/lifecycle 定义</p>
+        - content:
+            text: |
+              <p>不证明任一 RMM 实现正确</p>
+      - - content:
+            text: |
+              <p><strong>03 Takeaway</strong></p>
+        - content:
+            text: |
+              <p><strong>三篇共同建立演进关系</strong></p>
+        - content:
+            text: |
+              <p><strong>用证据等级控制机制、实验和商业化结论</strong></p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：三篇主讲材料选择、评价字段与 evidence ledger</p>

@@ -1,0 +1,70 @@
+pageType: chapter
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: left-bar
+  elementType: shape
+  bounds: [60, 120, 4, 80]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [80, 110, 1100, 50]
+  content:
+    fontSize: 36
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>方向08：RISC-V TEE lineage</strong></p>
+- elementId: subtitle
+  elementType: text
+  bounds: [80, 160, 1100, 35]
+  content:
+    fontSize: 24
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      Sanctum / Keystone / Penglai / SPEAR-V 技术演进
+- elementId: intro
+  elementType: text
+  bounds: [80, 220, 1100, 70]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      从 PMP-based enclave 到 scalable memory protection，再到 tag/metadata primitive。固定三篇主讲材料，直接呈现 RISC-V enclave lineage 演进。
+- elementId: papers
+  elementType: text
+  bounds: [80, 300, 1100, 300]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.6
+    text: |
+      <ul>
+      <li>Keystone: 开源 RISC-V TEE 框架 — 开创/基础入口（E1 / 基础证据）</li>
+      <li>Penglai: scalable enclave memory protection — 代表性改进（E1 / 同行评审改进证据）</li>
+      <li>SPEAR-V: low-overhead RISC-V enclave primitive — 当前 SOTA/补充边界（E1 / 同行评审改进证据）</li>
+      </ul>
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

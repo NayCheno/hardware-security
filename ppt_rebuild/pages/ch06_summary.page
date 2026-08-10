@@ -1,0 +1,136 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch06
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>方向总结：Attestation、Boot、Lifecycle</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: sum-table
+    elementType: table
+    bounds: [60, 100, 1160, 580]
+    columnWidths: [0.22, 0.33, 0.33, 0.12]
+    rowHeights: [0.12, 0.293, 0.293, 0.294]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>论文名</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>核心思想</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>主要局限</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>证据等级</strong></p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>SWATT</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>Timing-sensitive 软件校验</p>
+            align: [left, middle]
+        - content:
+            text: |
+              <p>现代强对手适用性有限</p>
+            align: [left, middle]
+        - content:
+            text: |
+              <p>E1</p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>RATS</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>远程 attestation 统一架构</p>
+            align: [left, middle]
+        - content:
+            text: |
+              <p>不保证测量链充分</p>
+            align: [left, middle]
+        - content:
+            text: |
+              <p>E0</p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>VRASED</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>验证 RA 硬件/软件 co-design</p>
+            align: [left, middle]
+        - content:
+            text: |
+              <p>面向嵌入式，非云场景</p>
+            align: [left, middle]
+        - content:
+            text: |
+              <p>E1</p>
+            align: [center, middle]
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

@@ -1,0 +1,112 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Boubakri 2025 — 实验结果 + 文章评价</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>Survey 论文，无新实验；证据源为 Figure 1 timeline、Table 1 comparison matrix</li>
+        <li>Table 1 说明 RISC-V 方案在 secure I/O、SDK、TCB、compliance 维度差异很大</li>
+        <li>论文中转述的系统细节和数值只作为阅读地图，必须回引原始论文</li>
+        <li>输出应是 evidence matrix，而不是系统评测页</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [80, 420, 1100, 230]
+    columnWidths: [0.25, 0.75]
+    rowHeights: [0.2, 0.2, 0.2, 0.2, 0.2]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+      - - content:
+            text: |
+              <p>设计优势</p>
+        - content:
+            text: |
+              <p>RISC-V 谱系和比较矩阵清楚，覆盖 2016-2025</p>
+      - - content:
+            text: |
+              <p>主要局限</p>
+        - content:
+            text: |
+              <p>二手证据，且 draft/spec 状态可能变化</p>
+      - - content:
+            text: |
+              <p>商业落地</p>
+        - content:
+            text: |
+              <p>中：适合 roadmap，依赖标准和生态成熟</p>
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+        - content:
+            text: |
+              <p>辅助 SOTA，连接 08/09/10 方向</p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Boubakri 2025 p.20-p.29 Section 4; p.30-p.31 conclusion</p>

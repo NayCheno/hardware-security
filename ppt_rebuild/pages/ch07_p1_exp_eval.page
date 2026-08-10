@@ -1,0 +1,100 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 12, 120, 20]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 12, 120, 20]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH07
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p>规范/Survey，无新实验。RISC-V privileged architecture 只支撑术语、taxonomy、接口语义或证据边界。涉及具体平台、协议状态或数值时，转到原始论文或厂商材料核验。</p>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "所有 RISC-V TEE、CoVE、AP-TEE 讨论的共同底座。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "不是 confidential VM 或 enclave 的完整方案，也不覆盖设备 I/O 隔离。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "商业价值在于开放生态共识；风险在厂商实现差异和扩展组合复杂度。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "开创/基础入口；证据强度 E0"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：RISC-V privileged architecture｜证据等级：E0 / Foundational standard substrate
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

@@ -1,0 +1,68 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Li 2024 — SoK TEE Choices: TRAF 框架</strong></p>
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1060, 55, 160, 30]
+    shapeName: roundRect
+    adjustments: [10000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [1060, 55, 160, 30]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E2 / SoK</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 110, 1100, 480]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心贡献：</strong>提出 TRAF 框架，将 TEE 生命周期和 CPU/memory/I/O runtime 映射到四种 resource-management mode。</p>
+        <p style="margin-top:12px"><strong>关键要点：</strong></p>
+        <ul>
+        <li>先分 remote attestation 与 runtime management，再分析 CPU、memory、I/O 事件</li>
+        <li>四种 mode：unprotected、RTPM-only、RTPM-guarded、instance-assisted</li>
+        <li>建立 pitfall 与 known attack 的映射关系</li>
+        <li>作为 01 的主 taxonomy anchor，不替代平台论文或官方规范</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Li 2024, p.1 abstract, p.2 contributions; p.3 Figure 2; p.5 Figure 3/Figure 4; p.7 Figure 5</p>

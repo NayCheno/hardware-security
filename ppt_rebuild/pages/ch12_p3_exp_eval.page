@@ -1,0 +1,109 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH12
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>与 one-sided static 相比，ODRP 实现 1.72x 到 12x remote memory utilization 提升；与 one-sided dynamic 相比最多 1.82x。</li>
+      <li>ODRP 和 one-sided static 都绕过 runtime MNode CPU；dynamic/two-sided 在多 CNode 时会饱和 MNode CPU。</li>
+      <li>真实应用 overhead 范围约 0.8%-14.6%，swap-intensive Kmeans 的 overhead 约 14.2%。</li>
+      <li>8 CNodes 时 ODRP 达到 one-sided static 约 87.3% 的 swap throughput，同时显著改善 utilization。</li>
+      </ul>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "问题定义清晰，真正把 allocation/deallocation 从 control path 推到 data path，且用 commodity RDMA hardware。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "WR-chain 编程复杂，empty free queue、CNode crash、TT recovery 等 corner cases 仍需 MNode CPU 或额外 recovery 逻辑。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "适合 remote memory、SmartNIC/DPU offload 和低 CPU memory pooling 场景。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "背景系统 / 内存卸载；证据强度 E1"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：ODRP (ASPLOS 2025)｜证据等级：E1 / Peer-reviewed
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

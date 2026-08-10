@@ -1,0 +1,89 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Li 2022 — 背景 + 方案</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>云场景下 host 仍需管理资源，但不应看到 tenant workload 数据</li>
+        <li>传统虚拟化中 hypervisor 可访问所有 VM 内存</li>
+        <li>需要硬件级隔离保证 tenant 数据的 confidentiality 和 integrity</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: section2-content
+    elementType: text
+    bounds: [80, 420, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>把资源管理和数据可见性分离</li>
+        <li>用硬件 granule ownership 保护 Realm 内存</li>
+        <li>RMM lifecycle 管理 Realm 的创建、运行、销毁</li>
+        <li>GPT/GPC 实现物理地址空间的访问控制</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Li 2022, OSDI 2022; local PDF 已核验</p>

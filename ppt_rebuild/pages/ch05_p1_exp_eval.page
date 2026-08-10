@@ -1,0 +1,168 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch05
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E3 / Draft
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>ACAI: CCA Accelerator Execution — 实验与评价</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: exp-body
+    elementType: text
+    bounds: [60, 128, 1160, 180]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>arXiv 系统论文提供原型/设计评估。</li>
+        <li>draft/not-ratified 状态下只引用本地 PDF 中已核验的机制方向与结果。</li>
+        <li>不写成标准或生产事实。</li>
+        </ul>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 320, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 356, 1160, 320]
+    columnWidths: [0.15, 0.85]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>设计优势</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>把 Arm CCA 讨论从 CPU/VM 推到 accelerator workflow，是本方向的入口设计点。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>主要局限</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>预印本不能代表标准化接口或量产设备能力，且驱动/runtime TCB 仍是主要工程风险。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>商业落地</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>可服务 AI/HPC confidential offload；风险在设备厂商支持、驱动隔离和 attestation 生态不统一。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>开创/基础入口；证据强度 E3</p>
+            align: [left, middle]
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：ACAI: CCA accelerator execution｜证据等级：E3 / Draft-not-ratified
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

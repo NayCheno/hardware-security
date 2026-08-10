@@ -1,0 +1,84 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 500, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>方向02 总结</strong></p>
+  - elementId: summary-table
+    elementType: table
+    bounds: [80, 110, 1100, 530]
+    columnWidths: [0.22, 0.40, 0.38]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>论文</strong></p>
+        - content:
+            text: |
+              <p><strong>核心思想</strong></p>
+        - content:
+            text: |
+              <p><strong>主要局限</strong></p>
+      - - content:
+            text: |
+              <p>Arm TrustZone 白皮书</p>
+        - content:
+            text: |
+              <p>Secure/Non-secure world 双世界隔离起点</p>
+        - content:
+            text: |
+              <p>不代表 CCA/RME/RMM 或 confidential VM</p>
+      - - content:
+            text: |
+              <p>Pinto 2019</p>
+        - content:
+            text: |
+              <p>TrustZone 生态 survey map</p>
+        - content:
+            text: |
+              <p>对 CCA/RME 不完整，不能支撑 Realm</p>
+      - - content:
+            text: |
+              <p>Cerdeira 2020</p>
+        - content:
+            text: |
+              <p>漏洞类型和根因 taxonomy</p>
+        - content:
+            text: |
+              <p>不能替代 CCA/RME/RMM 机制分析</p>
+      - - content:
+            text: |
+              <p><strong>02 Takeaway</strong></p>
+        - content:
+            text: |
+              <p><strong>三篇共同给出技术演进</strong></p>
+        - content:
+            text: |
+              <p><strong>用证据等级约束每个结论</strong></p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：三篇主讲材料选择、评价字段与 evidence ledger</p>

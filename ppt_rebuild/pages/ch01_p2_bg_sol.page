@@ -1,0 +1,90 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Boubakri 2025 — 研究背景 + 解决方案</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>RISC-V TEE 的开放性带来可定制安全硬件，也带来术语碎片化</li>
+        <li>轻量 enclave 复用 PMP/ePMP 和 M-mode monitor，受 region 数量和粒度限制</li>
+        <li>更强系统修改 page table walker、cache/memory metadata 或安全 monitor，带来验证成本</li>
+        <li>CoVE/AP-TEE 需要 TVM、TSM、ABI、memory ownership 和 attestation 组合</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: section2-content
+    elementType: text
+    bounds: [80, 420, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>Primitive stack：privilege mode、PMP/ePMP、MMU、H-extension 是底座</li>
+        <li>System lineage：Sanctum/Keystone -> Penglai/CURE/SPEAR-V -> CoVE/AP-TEE</li>
+        <li>Comparison matrix：Table 1 比较 secure I/O、cache side-channel、validation、SDK</li>
+        <li>Open challenges：fragmentation、programming model、standardization、production validation</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Boubakri 2025 p.4 Section 2.2; p.12-p.13 Section 3.7; p.17-p.18 Section 3.14</p>

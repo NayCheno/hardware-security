@@ -1,0 +1,812 @@
+
+--- Page 1 ---
+Hardware Security
+Author
+Hardware Security Survey
+Abstract—This survey reviews hardware security mechanisms
+for trusted execution, confidential computing, memory and I/O
+isolation, attestation, and cross-architecture platform design in
+Arm and RISC-V systems. It emphasizes how modern protection
+boundaries depend on the composition of CPU privilege, physical-
+memory ownership, device mediation, and externally verifiable
+trust evidence.
+Index Terms—hardware security, confidential computing,
+trusted execution environments, Arm CCA, RISC-V , attestation,
+I/O protection
+I. INTRODUCTION
+Hardware security has shifted from isolated processor fea-
+tures toward platform-level protection contracts. Modern sys-
+tems must coordinate execution domains, memory ownership,
+device access, and attestation evidence across the whole ma-
+chine. This survey organizes the current literature around that
+composition problem, using Arm and RISC-V as the main
+architectural lines.
+II. ARMCONFIDENTIALCOMPUTING
+Confidential computing in the Arm ecosystem addresses
+a stronger threat model than classical trusted-execution en-
+vironments. The central problem is not only how to isolate
+a secure software stack from ordinary software, but how to
+protect the confidentiality of a workload even when privileged
+software still manages scheduling, memory allocation, and
+devices [1]–[5]. In Arm platforms, this evolution is visible
+in the transition from TrustZone-based TEEs to the Arm
+Confidential Compute Architecture (CCA), which extends the
+protection boundary into physical-memory ownership, device
+mediation, and attestation. The following sections survey this
+transition, covering TrustZone-based systems, Realm-based
+isolation, hardware enforcement in the memory and I/O path,
+and the attestation mechanisms needed to make protected
+execution usable in practice.
+A. Threat Model and Design Objectives
+1) From Trusted Services to Host-Resilient Confidentiality:
+The distinction between TrustZone-era TEEs and Arm CCA
+is fundamentally a distinction in threat model. In a classical
+TrustZone deployment, the secure-world firmware and runtime
+environment are themselves part of the trusted computing base,
+and the main goal is to isolate security services from the
+normal world [1], [2]. In the confidential-computing setting
+addressed by Arm CCA, the protected workload must remain
+confidential even though a host stack continues to manage
+cores, memory allocation, and devices [3]–[5]. The architec-
+ture therefore aims to separate resource management from data
+visibility more explicitly than conventional TEE models do.
+2) Core Design Dimensions:The cited Arm CCA docu-
+ments and systems papers show that this protection problem
+decomposes into several recurring design dimensions. The
+first is execution-domain structure: the architecture needs a
+protected execution context that is distinct from both ordi-
+nary software and the management software responsible for
+scheduling and provisioning [3]–[5]. The second is memory
+ownership: physical memory must carry hardware-enforced
+ownership metadata rather than depending only on hypervisor-
+maintained bookkeeping [4]–[6]. The third is system inte-
+gration: I/O, accelerators, interrupts, and attestation all have
+to reflect the same protection boundary if confidentiality is
+to survive contact with the whole machine [7]–[11]. These
+dimensions provide a useful organizing lens for the remainder
+of the chapter.
+B. From TrustZone-Based TEEs to Arm CCA
+1) TrustZone as the Classical Arm Isolation Model:Trust-
+Zonepartitions an Arm system into Secure and Non-secure
+worlds, with the Non-secure bit propagated through the SoC
+interconnect and memory system [1], [2]. This model has
+been widely used to build TEEs for mobile, embedded, and
+IoT devices, where a relatively small secure-world software
+stack mediates access to protected resources. Representative
+systems such asTrustShadowshow that TrustZone can
+protect unmodified applications from an untrusted normal-
+world operating system by relocating sensitive execution into
+the secure world [12]. At the same time, survey and SoK
+work shows that TrustZone-assisted TEEs remain exposed to
+recurring weaknesses in interfaces, implementation choices,
+and trusted computing base growth [2], [13].
+For hardware-security surveys, the importance of TrustZone
+is twofold. First, it demonstrates that Arm’s security story has
+long depended on system-wide enforcement rather than on
+CPU privilege levels alone. Second, it shows the limits of
+a two-world model once the secure world accumulates more
+functionality: as more services migrate into the trusted side,
+the TCB grows and the isolation boundary becomes harder to
+reason about.
+2) Arm CCA and the Realm Model:Arm CCAextends this
+design through theRealm Management Extension (RME),
+introducing a model in which confidential workloads execute
+insideRealmsthat are intended to remain opaque to the host
+software stack [3]–[5]. The associatedRealm Management
+Monitor (RMM)manages Realm creation, execution, and
+teardown [10], [14]. Compared with TrustZone, the key change
+is not merely the addition of another execution environment;
+it is the explicit separation between resource management and
+--- Page 2 ---
+data ownership. The host still provisions CPUs, memory, and
+devices, but it is not meant to inspect Realm memory or
+register state as part of normal management.
+This change has already motivated systems work above the
+raw architecture.SHELTERuses Arm CCA to extend isola-
+tion into user space [15].RContainertreats CCA hardware
+primitives as a basis for container isolation [16].virtCCA
+studies how CCA-style protection can be virtualized in con-
+junction with existing Arm trust mechanisms [17]. Taken
+together, these works show that Arm CCA is being treated
+not only as an architectural feature set, but also as a substrate
+for higher-level confidential-computing software stacks.
+C. Hardware Enforcement in the Memory and I/O Path
+1) Granule Ownership and Physical-Memory Checks:The
+stronger isolation model of Arm CCA depends on hardware
+checks in the physical-memory path. TheGranule Protection
+Table (GPT)records the ownership and security state of mem-
+ory granules, while theGranule Protection Check (GPC)
+validates physical accesses against that metadata [4]–[6]. This
+is a significant departure from designs in which isolation
+is represented only by software-maintained page tables or
+a small number of coarse protected regions. In the CCA
+model, physical-memory ownership becomes a hardware-
+checked property that constrains even privileged software.
+This ownership model is also what makes CCA suitable for
+dynamic workloads. Confidential workloads may be created,
+destroyed, resized, or migrated, and their protected memory
+footprint may change over time. Recent work such asSHEL-
+TER,NanoZone, andMore Granular, Less Trustexploits
+this finer-grained ownership model to study user-space and
+intra-process isolation under an untrusted manager [15], [18],
+[19]. The common theme across these systems is that the
+architecture is no longer treating protected memory as a
+single static partition; instead, it supports repeated ownership
+transitions while preserving hardware-enforced separation.
+2) Lifecycle Management and Ownership Transitions:The
+granule model is closely tied to lifecycle management. The
+RMMand the Arm CCA software model treat Realm creation,
+memory delegation, execution, and teardown as explicit state
+transitions rather than as ad hoc software conventions [6], [10].
+This matters because confidential-computing platforms must
+repeatedly move memory between protection states while pre-
+serving consistency between CPU execution, physical-memory
+ownership, and the host’s remaining management authority.
+The design and verification work of Li et al. [3] and later
+verification-oriented work on theRMM[14] both reinforce
+the point that lifecycle state management is part of the security
+argument, not merely an implementation detail.
+3) Securing Devices, Accelerators, and Memory Fabrics:
+CPU-side isolation is insufficient ifDMA-capable devices can
+still reach protected memory directly. Arm therefore extends
+the confidentiality story into the I/O path throughSMMUv3-
+based mediation and realm-aware device assignment [7]–[9].
+This matters because many confidential workloads depend
+on accelerators, storage engines, network adapters, or packet-
+processing units. If device access is not mediated under the
+same protection regime as CPU access, the device path be-
+comes the obvious route around the confidentiality boundary.
+Recent systems research makes this point concrete.ACAI
+studies how accelerator execution can be protected using Arm
+CCA mechanisms [8].Devlorefocuses on device-interrupt
+protection for confidential VMs, highlighting that interrupt
+delivery and device ownership are part of the same protection
+problem [9]. Related work onCXL,PCIe IDE, heterogeneous
+memory descriptions, and remote paging further shows that
+disaggregated memory and high-speed interconnects affect
+not only performance but also where protected data resides
+and which agents can observe it [20]–[25]. For confidential
+workloads, the integrity of the protection boundary therefore
+depends on the fabric and device path as much as on the CPU
+core.
+D. Software Stacks and Deployment Models
+1) User-Space, Containers, and Virtualized Realms:One
+reason Arm CCA has attracted attention is that it can support
+several deployment models above the raw hardware interface.
+SHELTERexplores user-space isolation with Arm CCA hard-
+ware primitives [15].RContainerextends the same substrate
+toward confidential containers [16].virtCCAstudies virtual-
+ized CCA deployments that combine Realm-style protection
+with existing Arm trust infrastructure [17]. These works are
+useful in a survey because they show that CCA is not restricted
+to one software packaging model; rather, it is being used
+as a common basis for protected processes, containers, and
+virtualized workloads.
+2) Fine-Grained Isolation Above the Base Architecture:
+Later systems work also shows that Arm CCA is being pushed
+toward finer-grained protection goals than those envisioned
+by a simple confidential-VM model.NanoZonefocuses on
+scalable and efficient memory protection for Arm CCA [18].
+More Granular, Less Truststudies intra-process isolation under
+an untrusted management environment [19]. Together with
+SHELTER, these works indicate that once granule owner-
+ship and Realm mechanisms exist, researchers naturally try
+to repurpose them for user-space compartmentalization and
+finer-grained software isolation. This is an important trend
+because it suggests that Arm CCA is evolving from a narrowly
+server-oriented confidential-computing mechanism into a more
+general substrate for trusted isolation.
+E. Attestation and Trust Establishment
+1) Attestation for Realms:Isolation alone does not let
+a remote party decide whether to provision secrets to a
+workload. Arm CCA therefore couples protected execution
+with attestation evidence describing the platform state, the
+management monitor, and the initial Realm state [4], [10]. The
+Entity Attestation Token (EAT)standard provides a general
+token format for carrying attestation claims in a machine-
+consumable form [11]. More broadly, studies of attestation
+mechanisms for TEEs emphasize that the practical value of
+--- Page 3 ---
+attestation depends on what is measured, how claims are
+encoded, and how a verifier evaluates them [26]. In this sense,
+attestation converts confidential execution from a local hard-
+ware property into a system property that can be consumed
+by remote tenants, orchestration systems, and key brokers.
+2) Broader Attestation Context in Arm Systems:The same
+lesson appears in earlier TrustZone-oriented literature. Work
+on secure boot, trusted boot, mutual remote attestation, and
+runtime integrity measurement shows that deployable trust
+depends on evidence spanning both launch time and run-
+time [27]–[29]. For edge and IoT platforms,PSA Certified
+provides a broader framework for hardware-rooted assurance
+and attestation-oriented system design [30]. Earlier attestation
+systems such asSW ATT,SMART, andSEDAreinforce
+the same point from a wider systems perspective: evidence
+must be attributable to a concrete execution context and fresh
+enough to support a real trust decision [31]–[33]. Within Arm
+CCA, attestation is therefore not an optional add-on; it is the
+mechanism that makes Realm isolation externally verifiable.
+F . Comparative Perspective
+1) TrustZone versus Arm CCA:The transition fromTrust-
+ZonetoArm CCAis best understood as a change in
+both threat model and enforcement granularity. TrustZone is
+effective when a secure-world software stack is itself part of
+the trusted boundary, but Arm CCA is designed for settings
+in which a powerful host stack must remain outside the
+confidentiality boundary [1]–[5], [10]. As a result, protection
+moves from a mostly binary world partition to an ownership
+model backed by GPT/GPC checks and Realm lifecycle man-
+agement. The comparison is not that one mechanism replaces
+the other in all settings; rather, they target different deployment
+assumptions.
+TABLE I
+ARCHITECTURALCOMPARISON: TRUSTZONE ANDARMCCA
+Property TrustZone Arm CCA
+Primary
+Isolation Model
+Secure / Non-secure
+world split
+Realm-based confidential
+execution with
+Root/Secure/Realm/Non-
+secure separation
+Protection Gran-
+ularity
+Platform-defined secure-
+world partitioning
+Granule ownership tracked
+through GPT/GPC
+Trusted Software
+Context
+Secure-world firmware
+and services
+RMM-mediated Realm
+lifecycle with host outside
+the data boundary
+Memory
+Enforcement
+Style
+World-aware interconnect
+and secure memory re-
+gions
+Hardware-checked owner-
+ship transitions for pro-
+tected granules
+Device Model Typically static secure-
+world device handling
+Realm-aware device and
+I/O mediation
+Attestation Prac-
+tice
+Often platform- or
+vendor-specific
+Structured evidence for
+Realm launch and platform
+state
+2) Arm CCA in Comparative Context:AMD SEV-SNP
+addresses a similar high-level problem by protecting guest
+workloads from a host with substantial management author-
+ity [34], [35]. The useful comparison is therefore not whether
+both systems support confidential workloads, but how they
+represent and enforce the protection boundary. In the Arm
+case, the cited architecture documents and systems papers em-
+phasize explicit security states, Realm lifecycle management,
+and hardware ownership checks over physical memory [3]–[5].
+By contrast, the comparison withRISC-V PMPhighlights
+a different design axis: CCA uses table-backed ownership
+metadata, whereas PMP uses machine-mode configuration
+registers to define protected physical regions [4], [5], [36]. The
+latter remains an important primitive for smaller systems, but
+the former is better aligned with large, dynamic workloads
+that repeatedly change memory ownership and depend on
+coordinated device mediation.
+G. Design Tradeoffs and Open Challenges
+1) Scalability, Complexity, and System Composition:The
+literature surveyed above suggests that Arm CCA’s strengths
+also imply new engineering burdens. Table-backed ownership
+tracking and explicit lifecycle transitions are more expressive
+than coarse partitioning, but they require careful coordination
+among the architecture, the monitor, the host software stack,
+and devices [3]–[5], [10]. The emergence of systems such
+asNanoZone,RContainer, andvirtCCAindicates that re-
+searchers are already exploring how to scale these mechanisms
+to user space, containers, and virtualized deployments without
+losing the clarity of the protection boundary [16]–[18]. This
+suggests that scalability is not only a performance question; it
+is also a question of whether the management model remains
+understandable as deployments become more complex.
+2) Data-in-Use versus Data on the System Fabric:A
+second recurring issue is that confidential execution cannot
+be reduced to CPU-local isolation. In Arm CCA specifically,
+this concern appears through the need to align Realm isolation
+with device mediation, interconnect protection, and attestation
+rather than through one standalone mechanism [4], [5], [7],
+[20], [21]. The architecture therefore addresses confidential
+computing as a composition problem: protected execution,
+memory ownership, I/O mediation, and trust evidence have
+to remain consistent across the entire platform.
+H. Implications for Network Devices
+The mechanisms surveyed in this section are directly
+relevant to modern network hardware. Network appliances
+increasingly combine general-purpose cores,SmartNICs,
+DPUs, storage engines, and accelerators on the same platform,
+and many of these components areDMA-capable. In such
+systems, protecting a confidential workload is not just a matter
+of isolating CPU execution; it also requires consistent me-
+diation of memory ownership, device assignment, interrupts,
+and attestation evidence. Arm CCA is therefore particularly
+relevant to network equipment that performs virtualization,
+confidential packet processing, or multi-tenant offload, because
+the same platform must let the operator manage resources
+without automatically exposing tenant memory or accelerator
+state.
+--- Page 4 ---
+I. Summary
+The Arm literature surveyed here shows a clear progres-
+sion from TrustZone-based TEEs to confidential-computing
+architectures with stronger assumptions about privileged ad-
+versaries. TrustZone established a system-wide isolation model
+based on Secure and Non-secure worlds, but its protection
+boundary is relatively coarse and often tied to a growing
+secure-world TCB. Arm CCA extends the design by intro-
+ducing Realms, GPT/GPC-backed memory ownership, RMM-
+managed lifecycle control, device mediation through the I/O
+path, and structured attestation evidence [1]–[5], [10]. A cross-
+cutting observation is that confidential computing in Arm is
+not defined by any single primitive. Its security properties
+emerge from the composition of memory ownership tracking,
+device mediation, and externally verifiable attestation, all of
+which must hold simultaneously if the workload is to remain
+protected from a powerful host environment.
+III. SECURITYDESIGNMECHANISMS INARM AND
+RISC-V
+Hardware security mechanisms are increasingly being ex-
+posed as architectural primitives rather than as optional soft-
+ware conventions. Across modern Arm and RISC-V systems,
+security-relevant invariants such as indirect-control validation,
+physical-memory ownership, and privileged-access constraints
+are moving into the hardware-software contract itself [36],
+[37]. For a survey of hardware security, this shift matters
+because it changes where defenses live: instead of relying only
+on compiler instrumentation or operating-system policy, the
+architecture now provides direct mechanisms for constraining
+control flow, limiting memory authority, and mediating access
+across privilege and device boundaries. The following sections
+survey these mechanisms by design objective, focusing on
+runtime integrity, privilege and memory isolation, and the
+system-integration issues that determine whether a mechanism
+remains effective once devices, debug paths, and accelerators
+are considered.
+A. Control-Flow and Memory-Safety Mechanisms
+1) Arm Runtime-Integrity Mechanisms:Arm’s recent A-
+profile architecture incorporates several mechanisms that aim
+to make common exploitation primitives harder to realize
+in practice [37].Branch Target Identification (BTI)con-
+strains indirect branches to architecturally valid landing pads,
+reducing the usable gadget space for jump-oriented and re-
+lated control-flow attacks.Pointer Authentication (PAC)pro-
+tects pointers with cryptographic authentication codes, making
+pointer substitution and reuse attacks more difficult.Guarded
+Control Stack (GCS)adds hardware support for protecting
+return-address state. These mechanisms address different parts
+of the control-flow problem, but together they represent a clear
+design direction: indirect control transfer is no longer treated
+as something that software may validate only if it chooses to.
+Arm applies a similar idea to memory-safety failures.Mem-
+ory Tagging Extension (MTE)associates tags with memory
+granules and checks tag consistency on pointer dereference,
+allowing the hardware to detect classes of spatial and temporal
+memory-safety violations with relatively low overhead [37].
+From a survey perspective, the important point is not that any
+one mechanism eliminates memory corruption, but that the
+architecture increasingly offers built-in support for narrowing
+the gap between a latent software bug and a reliable control-
+hijacking exploit.
+2) RISC-V Control-Flow and Protection Primitives:The
+RISC-V architectural material surveyed here shows a related,
+though more modular, direction. The privileged and associated
+architectural specifications include support for control-flow
+integrity through extensions such asZicfilp, which constrains
+indirect-control targets through landing-pad semantics, and
+Zicfiss, which provides hardware support for protecting return-
+address state [36]. Rather than embedding one vertically
+integrated protection model, the RISC-V ecosystem exposes
+a set of composable primitives that can be incorporated into
+different classes of systems.
+This modularity is particularly visible in the treatment of
+memory authority. In the cited RISC-V specifications, the most
+established protection story centers on privilege separation and
+physical-memory access control, especially throughPhysical
+Memory Protection (PMP)and its extensions, rather than on
+a single Arm-MTE-style mainstream memory-tagging mecha-
+nism [36]. The result is a design space in which control-flow
+hardening and memory isolation exist, but are often assembled
+as part of a larger platform composition.
+B. Privilege, Physical Memory, and Domain Isolation
+1) Arm Privilege Hierarchy and System-Wide Isolation:
+Arm’s protection model combines conventional privilege sep-
+aration with system-wide domain isolation. The exception-
+level hierarchy from EL0 to EL3 separates application, kernel,
+hypervisor, and monitor software, whileTrustZoneextends
+this structure with Secure and Non-secure worlds enforced
+across the SoC [1], [2], [37]. Additional mechanisms such as
+PANandPXNconstrain privileged software inside a single
+world by preventing inappropriate access to or execution
+from lower-privilege mappings [37]. These mechanisms are
+important because many real attacks do not begin by crossing
+a world boundary; they begin by exploiting excessive authority
+inside an already privileged context.
+At the system level, Arm’s more recent confidential-
+computing extensions push isolation further into the memory
+system.Arm CCAandRMEuse hardware checks over
+physical-memory ownership to protectRealmseven in the
+presence of a powerful host stack [3]–[5]. In other words, the
+architecture is moving from privilege-only isolation toward
+coordinated CPU, memory, and device mediation. This pro-
+gression is part of a broader trend in secure hardware design:
+once DMA-capable devices and privileged software are part
+of the threat model, core-local access checks are not enough.
+2) RISC-V Privilege Modes and PMP-Based Isolation:
+RISC-V organizes protection around privilege modes and
+a register-programmed physical-memory filter.PMPallows
+--- Page 5 ---
+machine mode to define access permissions for physical-
+memory regions, thereby constraining S-mode and U-mode
+software [36]. Extensions such asePMPandSmepmp
+strengthen this model by refining the handling of execute
+permissions and reducing the amount of implicitly trusted
+machine-mode behavior [36]. The design is comparatively
+simple and well suited to embedded systems, monitors, and
+smaller TEEs where a limited number of protected regions is
+acceptable.
+The main limitation of this style appears when system com-
+plexity increases. Large SoCs, confidential-computing plat-
+forms, and accelerator-rich systems must often coordinate
+CPU isolation withDMAcontrol and device-visible memory
+ownership. Recent work such assIOPMPtherefore studies
+how scalable I/O protection can complement CPU-side isola-
+tion for TEEs [38]. This is an important design point for survey
+work: in RISC-V platforms, the strength of the final security
+story depends heavily on how PMP-like CPU mechanisms are
+composed with peripheral protection.
+C. Trusted Execution, Boot, and Trust Anchors
+1) TEE-Oriented Design Patterns:Trusted-execution sup-
+port remains one of the clearest ways in which hardware se-
+curity mechanisms appear as complete platform designs rather
+than isolated instructions. In the Arm ecosystem,TrustZone
+provides the classical two-world TEE model and has been
+used as the basis for a large body of systems work and
+security analysis [1], [2], [12], [13]. Arm CCA extends this
+line further by introducingRealmsfor confidential workloads
+under stronger host-side adversary assumptions [3]–[5]. More
+broadly, the comparison between TrustZone-style TEEs and
+CCA-style confidential execution shows how trusted-execution
+design has moved from isolating a privileged security service
+toward protecting workloads against stronger software adver-
+saries.
+2) Boot-Time Trust and Measured Launch:Trusted execu-
+tion is closely connected to how a platform establishes trust
+at boot time. Work on secure boot, trusted boot, and remote
+attestation for Arm TrustZone-based devices demonstrates
+that the security of the runtime environment depends on a
+measured launch chain rather than on isolation alone [27]–
+[29]. At a broader systems level,SW ATT,SMART, and
+SEDAshow recurring design requirements for attestation and
+roots of trust: measurements must be attributable, fresh, and
+tied to a concrete execution context [31]–[33]. For hardware
+designers, this means that the relevant trust anchor is not
+simply a privileged mode or a secure memory region; it is the
+combination of launch-time measurement, protected execution,
+and verifiable system state.
+D. I/O, DMA, and Accelerator Mediation
+1) Arm System Mediation Beyond the CPU:Once de-
+vices and accelerators are part of the threat model, hard-
+ware security depends on more than CPU privilege checks.
+Arm’s system architecture therefore includes I/O mediation
+through theSMMU, which is especially important when
+confidential workloads or secure services interact withDMA-
+capable peripherals [7]. The same point is visible in Arm
+CCA-oriented systems work, where accelerator protection
+and device-interrupt delivery are treated as part of the core
+isolation problem rather than as optional external policy [8],
+[9]. This is a crucial design lesson for secure hardware surveys:
+a platform that protects the CPU but leaves devices outside the
+security model has only partial isolation.
+2) RISC-V I/O Protection as a Complementary Layer:
+RISC-V reaches the same requirement through a more modular
+route. The base privileged architecture centers on CPU-side
+protection, while later work such assIOPMPstudies scalable
+I/O protection as a complementary mechanism for TEEs and
+protected domains [36], [38]. This separation reinforces the
+broader pattern seen throughout the chapter: RISC-V often
+exposes a toolkit whose final security properties depend on
+disciplined composition, whereas Arm more often presents
+these pieces as parts of a vertically integrated platform-security
+story.
+E. Attestation and Security Lifecycle Mechanisms
+1) Attestation as a Hardware-Supported Design Mecha-
+nism:Attestation is not only a protocol feature; it is also a
+hardware-design concern because the architecture must expose
+stable roots of trust, measurable state, and protection domains
+whose claims can be verified. TheEATstandard provides a
+general structure for carrying attestation claims, while broader
+work on attestation mechanisms for TEEs emphasizes that the
+usefulness of those claims depends on what the hardware and
+trusted runtime are able to measure and report [11], [26]. In
+this sense, attestation belongs in a survey of hardware security
+design because it links platform mechanisms to external trust
+decisions.
+2) Lifecycle Security Frameworks:The same design logic
+appears in platform frameworks such asPSA Certified,
+which treats hardware-rooted security, attestation, and lifecycle
+management as part of one assurance story rather than as
+isolated controls [30]. This kind of framework is important
+because it extends the discussion beyond the presence of
+security mechanisms to their use across provisioning, update,
+and operational phases. For surveys of secure hardware design,
+lifecycle treatment matters because many platforms fail not
+through the absence of a mechanism, but through inconsistent
+handling of that mechanism across deployment stages.
+F . Debug, Trace, and System Integration
+1) Security-Relevant Auxiliary Components:Architectural
+security mechanisms are not limited to branches, page tables,
+and privilege bits. Arm’s documentation on trace makes clear
+that debug and observability features such asETMprovide
+detailed execution visibility that is valuable for validation
+and diagnostics, but that same visibility must be tightly con-
+trolled in security-sensitive deployments [39]. This illustrates
+a broader systems lesson: every auxiliary subsystem that can
+observe execution or preserve state across contexts can become
+part of the attack surface if it is not incorporated into the
+protection model.
+--- Page 6 ---
+2) Composition as the Central Design Problem:Across
+both Arm and RISC-V , the mechanisms surveyed above
+point to the same conclusion. Secure hardware design is
+not achieved by enabling a single extension in isolation.
+Control-flow hardening, memory-access constraints, privilege
+separation, and device mediation have to compose correctly
+across the whole platform [4], [5], [36]–[38]. This is also
+why architecture manuals and systems papers increasingly
+discuss memory ownership, I/O paths, and monitor logic in
+the same breath: the boundary that matters in practice is the
+one that survives contact with the full machine, not just the
+CPU pipeline.
+G. Cross-Architecture Comparison
+Table II summarizes the main mechanism categories sur-
+veyed in this section. The goal is not to claim that the two
+ecosystems are identical, but to show that they increasingly
+address comparable security objectives through different inte-
+gration styles.
+TABLE II
+CROSS-ARCHITECTURESECURITYMECHANISMMAPPING
+Mechanism
+Category
+Arm RISC-V
+Forward-edge
+control-flow
+protection
+BTI Zicfilp
+Return-address
+protection
+GCS / PAC-assisted
+hardening
+Zicfiss
+Memory bug detec-
+tion
+MTE Protection centered on
+privilege and memory-
+access control in the
+cited materials
+Primary privilege
+structure
+EL0–EL3 plus
+Secure/Non-secure
+system partitioning
+M/S/U privilege modes
+Physical-memory iso-
+lation
+TrustZone system
+partitioning;
+CCA/RME ownership
+checks
+PMP, ePMP, Smepmp
+System-level I/O pro-
+tection
+SMMU-mediated sys-
+tem integration in Arm
+platforms
+Complementary
+mechanisms such
+as sIOPMP
+The comparison suggests a consistent difference in em-
+phasis. The Arm material surveyed here presents a more
+vertically integrated security stack in which runtime integrity,
+world/domain isolation, and system-wide mediation are docu-
+mented as parts of one platform story [4], [5], [37]. The RISC-
+V material, by contrast, emphasizes composable building
+blocks centered on privilege modes and PMP-based physical-
+memory control, with additional system protections layered
+on through complementary mechanisms and proposals [36],
+[38]. This is not a value judgment so much as a design
+distinction: one ecosystem foregrounds integration, while the
+other foregrounds modular composition.
+H. Implications for Secure Hardware Design
+For hardware designers, the practical lesson is that secure
+systems must be evaluated as whole-machine constructions.
+A platform with strong control-flow protections can still fail
+if debug visibility is unmanaged. A platform with strict CPU
+isolation can still fail if a device bypasses memory protections
+throughDMA. A platform with clean privilege layering can
+still fail if the architecture leaves too much ambient authority
+in the most privileged software context. The mechanisms
+surveyed in this section therefore support the same conclusion
+reached elsewhere in this paper: modern hardware security
+depends on coordinated enforcement across the instruction set,
+the memory system, and the device path.
+I. Summary
+The architectures surveyed here show a broad movement
+toward hardware-enforced security invariants. In Arm, this
+is visible in the combination of BTI, PAC, GCS, MTE,
+privilege constraints, TrustZone, and CCA/RME-based sys-
+tem isolation [1], [4], [5], [37]. In RISC-V , the same trend
+appears through control-flow integrity extensions, PMP-family
+physical-memory protection, and complementary proposals for
+scalable I/O mediation [36], [38]. A cross-cutting observation
+is that the core design problem is no longer whether hardware
+offers security features at all, but whether those features
+compose into a coherent platform-level protection model once
+privileged software, accelerators, and device traffic are part of
+the system.
+REFERENCES
+[1] ARM Limited, “Arm security technology: Building a secure system
+using trustzone technology,” ARM Ltd., Tech. Rep., 2009. [Online].
+Available: https://developer.arm.com/documentation/PRD29-GENC-0
+09492/c?lang=en
+[2] S. Pinto and N. Santos, “Demystifying arm trustzone: A comprehensive
+survey,”ACM Comput. Surv., vol. 51, no. 6, Jan. 2019. [Online].
+Available: https://doi.org/10.1145/3291047
+[3] X. Li, X. Li, C. Dall, R. Gu, J. Nieh, Y . Sait, and G. Stockwell, “Design
+and verification of the arm confidential compute architecture,” in16th
+USENIX Symposium on Operating Systems Design and Implementation
+(OSDI 22). Carlsbad, CA: USENIX Association, Jul. 2022, pp.
+465–484. [Online]. Available: https://www.usenix.org/conference/osdi
+22/presentation/li
+[4] ARM Limited, “Arm confidential compute architecture specification,”
+ARM Ltd., Tech. Rep., 2025. [Online]. Available: https://developer.ar
+m.com/documentation/den0125/latest
+[5] ——, “Realm management extension architecture specification,” ARM
+Ltd., Tech. Rep., 2025. [Online]. Available: https://developer.arm.com/
+documentation/den0126/latest
+[6] Linux Kernel Community, “Arm confidential compute architecture doc-
+umentation,” https://docs.kernel.org/arch/arm64/arm-cca.html, 2023.
+[7] ARM Limited, “Arm system memory management unit architecture
+specification (smmuv3),” ARM Ltd., Tech. Rep., 2022. [Online].
+Available: https://developer.arm.com/documentation/ihi0070/latest
+[8] S. Sridhara, A. Bertschi, B. Schlüter, M. Kuhne, F. Aliberti,
+and S. Shinde, “Acai: Protecting accelerator execution with arm
+confidential computing architecture,” 2023. [Online]. Available: https:
+//arxiv.org/abs/2305.15986
+[9] A. Bertschi, S. Sridhara, M. Kuhne, B. Schlüter, F. Groschupp,
+C. Thorens, N. Dutly, S. Capkun, and S. Shinde, “Devlore: Device
+interrupt protection for confidential vms,” 2026. [Online]. Available:
+https://arxiv.org/abs/2408.05835
+[10] ARM Limited, “Realm management monitor specification,” ARM Ltd.,
+Tech. Rep., 2025. [Online]. Available: https://developer.arm.com/docu
+mentation/den0137/latest/
+[11] L. Lundblade, G. Mandyam, J. O’Donoghue, and C. Wallace, “The
+Entity Attestation Token (EAT),” RFC 9711, Apr. 2025. [Online].
+Available: https://www.rfc-editor.org/info/rfc9711
+--- Page 7 ---
+[12] L. Guan, P. Liu, X. Xing, X. Ge, S. Zhang, M. Yu, and T. Jaeger,
+“Trustshadow: Secure execution of unmodified applications with arm
+trustzone,” inProceedings of the 15th Annual International Conference
+on Mobile Systems, Applications, and Services, 2017, pp. 488–501.
+[Online]. Available: https://doi.org/10.1145/3081333.3081349
+[13] D. Cerdeira, N. Santos, P. Fonseca, and S. Pinto, “Sok: Understanding
+the prevailing security vulnerabilities in trustzone-assisted tee systems,”
+in2020 IEEE Symposium on Security and Privacy (SP), 2020, pp. 1416–
+1432.
+[14] T. Wu, S. Xiong, E. Manino, G. Stockwell, and L. C. Cordeiro,
+“Verifying components of arm(r) confidential computing architecture
+with esbmc,” 2024. [Online]. Available: https://arxiv.org/abs/2406.04375
+[15] Y . Zhang, Y . Hu, Z. Ning, F. Zhang, X. Luo, H. Huang, S. Yan, and
+Z. He, “SHELTER: Extending arm CCA with isolation in user space,”
+in32nd USENIX Security Symposium (USENIX Security 23). USENIX
+Association, 2023, pp. 6257–6274. [Online]. Available: https://www.us
+enix.org/conference/usenixsecurity23/presentation/zhang-yiming
+[16] Q. Zhou, W. Cao, X. Jia, P. Liu, S. Zhang, J. Chen, S. Xu, and Z. Song,
+“Rcontainer: A secure container architecture through extending arm
+cca hardware primitives,” in32nd Annual Network and Distributed
+System Security Symposium (NDSS 2025). The Internet Society, 2025.
+[Online]. Available: https://www.ndss-symposium.org/ndss-paper/rcont
+ainer-a-secure-container-architecture-through-extending-arm-cca-har
+dware-primitives/
+[17] X. Xu, W. Wang, Y . Wu, C. Wang, H. Zhu, H. Ma, Z. Min,
+Z. Pang, R. Hou, and Y . Jin, “virtcca: Virtualized arm confidential
+compute architecture with trustzone,” 2026. [Online]. Available:
+https://arxiv.org/abs/2306.11011
+[18] S. Liu, Y . Gao, M. Zhang, and J. Wang, “Nanozone: Scalable, efficient,
+and secure memory protection for arm cca,” 2025. [Online]. Available:
+https://arxiv.org/abs/2506.07034
+[19] S. Liu, Z. Jiang, J. Wang, W. Zhou, K. Sun, Z. Chen, and Y . Xie, “More
+granular, less trust: Enforcing intra-process isolation with arm cca in an
+untrusted management environment,”IEEE Transactions on Information
+Forensics and Security, vol. 20, pp. 12 507–12 522, 2025.
+[20] Compute Express Link Consortium, “Compute express link
+specification,” CXL Consortium, Tech. Rep., 2023. [Online]. Available:
+https://computeexpresslink.org/wp-content/uploads/2024/02/CXL-3.1-S
+pecification.pdf
+[21] PCI-SIG, “Pci express integrity and data encryption (ide),” PCI
+Special Interest Group, Tech. Rep., 2025. [Online]. Available:
+https://pcisig.com/specification-overview/pci-express-base
+[22] UEFI Forum, “Advanced configuration and power interface (acpi)
+specification,” UEFI Forum, Tech. Rep., 2021. [Online]. Available:
+https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/
+[23] D. Gouk, S. Lee, M. Kwon, and M. Jung, “Direct access,
+high-performance memory disaggregation with directcxl,” in2022
+USENIX Annual Technical Conference (USENIX ATC 22). USENIX
+Association, 2022, pp. 287–294. [Online]. Available: https://www.usen
+ix.org/conference/atc22/presentation/gouk
+[24] Y . Zhong, D. S. Berger, C. Waldspurger, R. Wee, I. Agarwal, R. Agarwal,
+F. Hady, K. Kumar, M. D. Hill, M. Chowdhury, and A. Cidon,
+“Managing memory tiers with CXL in virtualized environments,” in18th
+USENIX Symposium on Operating Systems Design and Implementation
+(OSDI 24). USENIX Association, 2024, pp. 37–56. [Online]. Available:
+https://www.usenix.org/conference/osdi24/presentation/zhong-yuhong
+[25] Z. Wang, X. Wei, J. Gu, H. Xie, R. Chen, and H. Chen, “ODRP:
+on-demand remote paging with programmable RDMA,” inProceedings
+of the 22nd USENIX Symposium on Networked Systems Design and
+Implementation. USENIX Association, 2025. [Online]. Available:
+https://www.usenix.org/conference/nsdi25/presentation/wang-zixuan
+[26] J. Ménétrey, C. Göttel, M. Pasin, P. Felber, and V . Schiavoni, “An
+exploratory study of attestation mechanisms for trusted execution
+environments,” 2022. [Online]. Available: https://arxiv.org/abs/2204.0
+6790
+[27] Z. Ling, H. Yan, X. Shao, J. Luo, Y . Xu, B. Pearson, and X. Fu, “Secure
+boot, trusted boot and remote attestation for arm trustzone-based iot
+nodes,”Journal of Systems Architecture, vol. 119, p. 102240, 2021.
+[Online]. Available: https://www.sciencedirect.com/science/article/pii/
+S1383762121001661
+[28] Y . Chen, Y . Ding, J. Zhang, and L. Song, “Mra-ima: Enhanced mutual
+remote attestation based on arm trustzone,” in2024 9th International
+Conference on Computer and Communication Systems (ICCCS), 2024,
+pp. 1278–1284.
+[29] J. Mao and X. Chang, “Pdrima: A policy-driven runtime integrity
+measurement and attestation approach for arm trustzone-based tee,”
+2025. [Online]. Available: https://arxiv.org/abs/2512.06500
+[30] ARM Limited, “Psa certified security framework,” ARM Ltd., Tech.
+Rep., 2023. [Online]. Available: https://developer.arm.com/documentat
+ion/den0128/latest
+[31] A. Seshadri, A. Perrig, L. van Doorn, and P. Khosla, “SW ATT: software-
+based attestation for embedded devices,” inIEEE Symposium on Security
+and Privacy, 2004. Proceedings. 2004, 2004, pp. 272–282.
+[32] K. M. E. Defrawy, G. Tsudik, A. Francillon, and D. Perito, “Smart:
+Secure and minimal architecture for (establishing dynamic) root of
+trust,” inNetwork and Distributed System Security Symposium, 2012.
+[Online]. Available: https://api.semanticscholar.org/CorpusID:909934
+[33] N. Asokan, F. Brasser, A. Ibrahim, A.-R. Sadeghi, M. Schunter,
+G. Tsudik, and C. Wachsmann, “Seda: Scalable embedded device
+attestation,” inProceedings of the 22nd ACM SIGSAC Conference on
+Computer and Communications Security, 2015, pp. 964–975. [Online].
+Available: https://doi.org/10.1145/2810103.2813670
+[34] Advanced Micro Devices, “Secure encrypted virtualization (sev),”
+AMD, Tech. Rep., 2017. [Online]. Available: https://www.amd.com/en
+/developer/sev.html
+[35] AMD, “Secure encrypted virtualization secure nested paging (sev-
+snp),” AMD Ltd., Tech. Rep., 2020. [Online]. Available: https:
+//docs.amd.com/v/u/en-US/SEV-SNP-strengthening-vm-isolation-wit
+h-integrity-protection-and-more
+[36] RISC-V Foundation,The RISC-V Instruction Set Manual: Privileged
+Architecture, 2025. [Online]. Available: https://docs.riscv.org/reference
+/isa/_attachments/riscv-privileged.pdf
+[37] ARM Limited,ARM Architecture Reference Manual, for A-profile
+architecture, ARM Ltd., 2025. [Online]. Available: https://developer.ar
+m.com/documentation/ddi0487/latest/
+[38] E. Feng, D. Feng, D. Du, Y . Xia, W. Zheng, S. Zhao, and
+H. Chen, “siopmp: Scalable and efficient i/o protection for tees,”
+inProceedings of the 29th ACM International Conference on
+Architectural Support for Programming Languages and Operating
+Systems, Volume 2, 2024, pp. 1061–1076. [Online]. Available:
+https://doi.org/10.1145/3620665.3640378
+[39] ARM Limited, “Understanding trace,” ARM Ltd., Tech. Rep., 2020.

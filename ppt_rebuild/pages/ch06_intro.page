@@ -1,0 +1,76 @@
+pageType: chapter
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: left-bar
+    elementType: shape
+    bounds: [60, 120, 4, 80]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: ch-title
+    elementType: text
+    bounds: [80, 110, 1100, 48]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Attestation、Boot、Lifecycle</strong></p>
+  - elementId: ch-subtitle
+    elementType: text
+    bounds: [80, 160, 1100, 36]
+    content:
+      fontSize: 24
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>区分 secure boot、launch attestation、runtime evidence 与 verifier policy</p>
+  - elementId: ch-intro
+    elementType: text
+    bounds: [80, 220, 1100, 90]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p>核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。</p>
+        <p>区分 secure boot、launch attestation、runtime/control-flow evidence、evidence profile 与 verifier policy。</p>
+  - elementId: ch-papers
+    elementType: text
+    bounds: [80, 320, 1100, 360]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <p><strong>本方向三篇主讲材料：</strong></p>
+        <ul>
+        <li><strong>SWATT: 软件 Attestation 早期代表</strong> — 开创/基础入口，E1 / 基础证据</li>
+        <li><strong>RATS 架构</strong> — 代表性改进，E0 / Spec-standard SOTA</li>
+        <li><strong>VRASED Verified RA Co-design</strong> — 当前 SOTA/补充边界，E1 / 同行评审改进证据</li>
+        </ul>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

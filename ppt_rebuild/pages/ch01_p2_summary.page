@@ -1,0 +1,69 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Boubakri 2025 — RISC-V TEE Survey</strong></p>
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1060, 55, 160, 30]
+    shapeName: roundRect
+    adjustments: [10000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [1060, 55, 160, 30]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E2 / Survey</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 110, 1100, 480]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心贡献：</strong>按 RISC-V primitives、representative systems、comparison matrix 和 open challenges 组织 2016-2025 谱系。</p>
+        <p style="margin-top:12px"><strong>关键要点：</strong></p>
+        <ul>
+        <li>Figure 1 给出 timeline：Sanctum(2016) -> Keystone(2020) -> Penglai/CURE(2021) -> CoVE/AP-TEE(2023)</li>
+        <li>Table 1 横向比较 isolation、memory、secure I/O、TCB、SDK、compliance</li>
+        <li>Primitive stack：privilege mode、PMP/ePMP、MMU、H-extension 决定隔离基础</li>
+        <li>System lineage：open enclave -> memory protection -> confidential VM</li>
+        <li>在 01 中作为 RISC-V branch 的辅助 SOTA，具体机制回原始材料</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Boubakri 2025 p.1 abstract, p.4 Section 2.3; p.4 Figure 1; p.19 Table 1</p>

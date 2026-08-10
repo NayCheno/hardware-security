@@ -1,0 +1,107 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 30, 100, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 30, 100, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Accelerator / DPU...</p>
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 70, 400, 36]
+    content:
+      style: "$title"
+      fontSize: 24
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>实验结果</p>
+  - elementId: exp-content
+    elementType: text
+    bounds: [60, 110, 1160, 180]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.5
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>• 论文报告 GPU benchmark 开销 0.58%-5.31%，FPGA benchmark 开销 9.61%-16.30%，TCB 增量约 1301 LoC + 140 LoC</p>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 310, 400, 36]
+    content:
+      style: "$title"
+      fontSize: 24
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>文章评价</p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 350, 1160, 320]
+    columnWidths: [0.2, 0.8]
+    rowHeights: [0.2, 0.2, 0.2, 0.2, 0.2]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              维度
+        - content:
+            text: |
+              判断
+      - - content:
+            text: |
+              - 设计优势
+        - content:
+            text: |
+              当前 Arm CCA GPU/FPGA confidential accelerator 的 peer-reviewed SOTA。
+      - - content:
+            text: |
+              - 主要局限
+        - content:
+            text: |
+              Device identity、SPDM/TDISP、production CCA hardware、复杂多租户 accelerator...
+      - - content:
+            text: |
+              - 商业落地
+        - content:
+            text: |
+              可迁移到 DPU/SmartNIC packet-processing rules、queue descriptors 和 TLS keys；风险在。
+      - - content:
+            text: |
+              - 讲稿定位
+        - content:
+            text: |
+              当前 SOTA/补充边界; 证据强度 E1
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

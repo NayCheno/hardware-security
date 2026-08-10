@@ -1,0 +1,68 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Li 2022 — Arm Confidential Computing Architecture</strong></p>
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1060, 55, 160, 30]
+    shapeName: roundRect
+    adjustments: [10000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [1060, 55, 160, 30]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E1 / 基础证据</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 110, 1100, 480]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心贡献：</strong>OSDI 2022 系统论文，提出并验证 Arm CCA 核心设计，包括 Realm、RME、RMM、GPT/GPC 与 lifecycle。</p>
+        <p style="margin-top:12px"><strong>关键要点：</strong></p>
+        <ul>
+        <li>Realm world 和 host/tenant 的硬件级分离</li>
+        <li>Granule ownership 和 GPT/GPC 的内存保护机制</li>
+        <li>RMM-mediated lifecycle 和 attestation path</li>
+        <li>把资源管理和数据可见性分离</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Li 2022, OSDI 2022; local PDF 已核验</p>

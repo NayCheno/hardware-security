@@ -1,0 +1,63 @@
+pageType: chapter
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 120, 4, 80]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 120, 1100, 50]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>方向01：硬件辅助 TEE Taxonomy</strong></p>
+  - elementId: subtitle
+    elementType: text
+    bounds: [80, 175, 1100, 35]
+    content:
+      fontSize: 24
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>建立 protected object、resource manager、evidence chain 和 device boundary 的总分类图</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 230, 1100, 420]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心问题：</strong>远程用户不信任平台管理者，但平台仍需调度 CPU、分配内存、处理 I/O，并给 verifier 提供可信证据。</p>
+        <p style="margin-top:16px"><strong>三篇论文分工：</strong></p>
+        <ul>
+        <li><strong>Li 2024 (SoK, E2)</strong>：server-side TEE runtime taxonomy，提出 TRAF 框架，四种 mode 平衡安全与管理性</li>
+        <li><strong>Boubakri 2025 (Survey, E2)</strong>：RISC-V TEE 谱系，PMP 到 CoVE/AP-TEE，Table 1 横向比较</li>
+        <li><strong>Wang/Huang 2026 (SoK, E2)</strong>：accelerator TEE 分类，GPU/NPU/DPU，51 篇 corpus 分析</li>
+        </ul>
+        <p style="margin-top:16px"><strong>证据等级：</strong>三篇均为 SoK/Survey，只作为 design-space anchor；具体机制、协议状态和性能数字需回原始论文或官方规范。</p>

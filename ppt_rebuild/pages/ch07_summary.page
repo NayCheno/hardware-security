@@ -1,0 +1,73 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 500, 35]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>方向总结</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 68, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: summary-table
+  elementType: table
+  bounds: [60, 90, 1160, 570]
+  columnWidths: [0.2500, 0.3000, 0.3000, 0.1500]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "论文"}
+      - content: {text: "核心思想"}
+      - content: {text: "主要局限"}
+      - content: {text: "证据等级"}
+    -
+      - content: {text: "RISC-V privileged architecture"}
+      - content: {text: "定义 privilege modes、PMP、virtualization 基础"}
+      - content: {text: "不是 confidential VM 或 enclave 完整方案"}
+      - content: {text: "E0 / 基础证据"}
+    -
+      - content: {text: "RISC-V IOMMU"}
+      - content: {text: "定义 I/O translation/protection 架构"}
+      - content: {text: "不覆盖设备身份、attestation 或 interrupt"}
+      - content: {text: "E0 / Spec-standard"}
+    -
+      - content: {text: "RISC-V Advanced Interrupt Architecture"}
+      - content: {text: "定义 interrupt、MSI、virtual interrupt 基础"}
+      - content: {text: "不定义完整 confidential I/O protocol"}
+      - content: {text: "E0 / Spec-standard"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

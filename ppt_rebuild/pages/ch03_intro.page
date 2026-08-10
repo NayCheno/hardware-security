@@ -1,0 +1,63 @@
+pageType: chapter
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 120, 4, 80]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 120, 1100, 50]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>方向03：Arm CCA / RME / RMM 基础架构</strong></p>
+  - elementId: subtitle
+    elementType: text
+    bounds: [80, 175, 1100, 35]
+    content:
+      fontSize: 24
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>围绕 Realm、RME、RMM、granule ownership 与 lifecycle 建立 Arm CCA 主线</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 230, 1100, 420]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心问题：</strong>云场景下 host 仍需管理资源，但不应看到 tenant workload 数据。</p>
+        <p style="margin-top:16px"><strong>三篇论文分工：</strong></p>
+        <ul>
+        <li><strong>Li 2022 CCA (E1)</strong>：开创/基础入口，OSDI 系统论文，提出 Realm、RME、RMM、GPT/GPC 与 lifecycle</li>
+        <li><strong>Arm CCA 架构规范 (E0)</strong>：代表性改进，官方规范，定义 Realm model 和 standard evidence</li>
+        <li><strong>Arm RMM 规范 (E0)</strong>：当前 SOTA/补充边界，官方规范，定义 Realm management 和 lifecycle</li>
+        </ul>
+        <p style="margin-top:16px"><strong>证据等级：</strong>E1 为系统论文基础证据；E0 为官方规范标准材料；具体实现正确性需回验证和厂商证据。</p>

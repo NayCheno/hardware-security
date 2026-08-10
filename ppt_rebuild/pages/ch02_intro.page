@@ -1,0 +1,63 @@
+pageType: chapter
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 120, 4, 80]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 120, 1100, 50]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>方向02：Arm TrustZone TEE 与漏洞谱系</strong></p>
+  - elementId: subtitle
+    elementType: text
+    bounds: [80, 175, 1100, 35]
+    content:
+      fontSize: 24
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>把 TrustZone 作为 CCA 前史和边界对比，建立技术演进路径</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 230, 1100, 420]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心问题：</strong>把 TrustZone 作为 CCA 前史和边界对比，不把 TrustZone threat model 误写成 CCA。</p>
+        <p style="margin-top:16px"><strong>三篇论文分工：</strong></p>
+        <ul>
+        <li><strong>Arm TrustZone 白皮书 (E4)</strong>：开创/基础入口，Secure/Non-secure world 双世界起点</li>
+        <li><strong>Pinto 2019 (Survey, E2)</strong>：代表性改进，TrustZone 架构、TEE 软件栈、应用和虚拟化 survey</li>
+        <li><strong>Cerdeira 2020 (SoK, E2)</strong>：当前 SOTA/补充边界，TrustZone-assisted TEE 漏洞类型和根因</li>
+        </ul>
+        <p style="margin-top:16px"><strong>证据等级：</strong>白皮书为 E4 产业证据；Survey/SoK 为 E2 背景材料；具体平台结论需回一手材料。</p>

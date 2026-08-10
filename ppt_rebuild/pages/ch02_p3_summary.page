@@ -1,0 +1,68 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Cerdeira 2020 — TrustZone 漏洞 SoK</strong></p>
+  - elementId: badge-bg
+    elementType: shape
+    bounds: [1060, 55, 160, 30]
+    shapeName: roundRect
+    adjustments: [10000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: badge-text
+    elementType: text
+    bounds: [1060, 55, 160, 30]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>E2 / Peer-reviewed SoK</p>
+  - elementId: content
+    elementType: text
+    bounds: [80, 110, 1100, 480]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <p><strong>核心贡献：</strong>S&P 2020 SoK，归纳 TrustZone-assisted TEE 的主流漏洞类型和根因，建立漏洞 taxonomy。</p>
+        <p style="margin-top:12px"><strong>关键要点：</strong></p>
+        <ul>
+        <li>Trusted application 和 TEE OS 的 attack surface 分析</li>
+        <li>Secure monitor / driver interface 的 risk 识别</li>
+        <li>Vulnerability taxonomy 和 root-cause grouping</li>
+        <li>解释为什么后续 CCA 需要更强边界</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Cerdeira 2020, DOI: 10.1109/SP40000.2020.00061; local PDF 已核验</p>

@@ -1,0 +1,168 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 10, 80, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 10, 80, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        Ch05
+  - elementId: ev-badge-bg
+    elementType: shape
+    bounds: [1060, 10, 160, 20]
+    shapeName: roundRect
+    adjustments: [8000]
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: ev-badge-text
+    elementType: text
+    bounds: [1060, 10, 160, 20]
+    content:
+      fontSize: 12
+      color: "#FFFFFF"
+      fontFamily: "Inter, MiSans"
+      align: [center, middle]
+      wrap: false
+      text: |
+        E2 / Background
+  - elementId: title
+    elementType: text
+    bounds: [60, 36, 990, 42]
+    content:
+      fontSize: 32
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Accelerator TEE SoK — 实验与评价</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 80, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: exp-title
+    elementType: text
+    bounds: [60, 92, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: exp-body
+    elementType: text
+    bounds: [60, 128, 1160, 180]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      align: [left, top]
+      text: |
+        <ul>
+        <li>规范/Survey，无新实验。Accelerator TEE SoK 只支撑术语、taxonomy、接口语义或证据边界。</li>
+        <li>不展示独立系统实验，也不把二手归纳写成一手结果。</li>
+        <li>涉及具体平台、协议状态或数值时，转到原始论文或官方规范核验。</li>
+        </ul>
+  - elementId: eval-title
+    elementType: text
+    bounds: [60, 320, 200, 36]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [60, 356, 1160, 320]
+    columnWidths: [0.15, 0.85]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+            align: [center, middle]
+      - - content:
+            text: |
+              <p>设计优势</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>能把 accelerator TEE 设计空间系统化，避免只围绕 CPU Realm 叙事。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>主要局限</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>不是 Arm CCA 专用机制证据，也不是某个设备的生产部署证明。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>商业落地</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>有助于产品需求拆解和 vendor 对标；风险在 taxonomy 与具体硬件能力之间仍需二次验证。</p>
+            align: [left, middle]
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+            align: [center, middle]
+        - content:
+            text: |
+              <p>当前 SOTA/补充边界；证据强度 E2</p>
+            align: [left, middle]
+  - elementId: source
+    elementType: text
+    bounds: [60, 690, 1160, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      wrap: false
+      text: |
+        来源：Accelerator TEE SoK for CCA I/O｜证据等级：E2 / Background substrate
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

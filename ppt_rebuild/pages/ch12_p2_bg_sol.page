@@ -1,0 +1,110 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH12
+- elementId: bg-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>研究背景</strong></p>
+- elementId: bg-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>云平台希望用 CXL.memory 降低成本和 embodied carbon，但 CXL 访问延迟高于本地 DRAM。</li>
+      <li>软件 tiering 需要追踪 hotness：PTE 扫描、PTE poisoning 或 instruction sampling 在 VM 场景里有开销、兼容性和隐私问题。</li>
+      <li>page 级 placement 假设页内访问有空间局部性，但 VM 的 free-page randomization、warm VM 和 huge page 会破坏这个假设。</li>
+      <li>设计目标包括 unmodified VM、低 host overhead、不增加 cross-VM interference、接近 local DRAM 性能。</li>
+      </ul>
+- elementId: sep-line
+  elementType: shape
+  bounds: [60, 330, 1160, 1]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $border
+- elementId: sol-title
+  elementType: text
+  bounds: [60, 350, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>解决方案</strong></p>
+- elementId: sol-body
+  elementType: text
+  bounds: [60, 390, 1160, 260]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>hardware-tiered NUMA node 将 local DRAM 与 CXL.memory 组合成软件可见的 aggregate capacity，并在 cache-line 粒度交换。</li>
+      <li>mixed mode 额外暴露 dedicated local memory NUMA node，为 cache-unfriendly 或 latency-sensitive VM 预留稳定本地页。</li>
+      <li>Memstrata 读取 performance events，用 random forest slowdown estimator 识别 outlier VM，并迁移 dedicated local pages。</li>
+      <li>分工清楚：硬件处理行级 hotness，软件处理多租户公平和 outlier 缓解。</li>
+      </ul>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：CXL-Tiers (ASPLOS 2024)｜证据等级：E1 / Peer-reviewed
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

@@ -1,0 +1,70 @@
+pageType: chapter
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: left-bar
+  elementType: shape
+  bounds: [60, 120, 4, 80]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [80, 110, 1100, 50]
+  content:
+    fontSize: 36
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>方向07：RISC-V 基础安全 primitives</strong></p>
+- elementId: subtitle
+  elementType: text
+  bounds: [80, 160, 1100, 35]
+  content:
+    fontSize: 24
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      从标准规范到安全 substrate 的技术演进
+- elementId: intro
+  elementType: text
+  bounds: [80, 220, 1100, 70]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      把 PMP/ePMP/Smepmp、IOMMU、IOPMP、AIA、CFI 等 substrate 与 TEE 本体区分开。先用三篇主讲材料建立演进关系，再用证据等级控制每个结论。
+- elementId: papers
+  elementType: text
+  bounds: [80, 300, 1100, 300]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.6
+    text: |
+      <ul>
+      <li>RISC-V privileged architecture — 开创/基础入口（E0 / 基础证据 standard substrate）</li>
+      <li>RISC-V IOMMU — 代表性改进（E0 / Spec-standard SOTA）</li>
+      <li>RISC-V Advanced Interrupt Architecture — 当前 SOTA/补充边界（E0 / Spec-standard SOTA）</li>
+      </ul>
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

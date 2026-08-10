@@ -1,0 +1,75 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 500, 45]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>方向总结</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 78, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: summary-table
+  elementType: table
+  bounds: [60, 90, 1160, 570]
+  columnWidths: [0.2500, 0.2500, 0.3000, 0.2000]
+  rowHeights: [0.2500, 0.2500, 0.2500, 0.2500]
+  style: $default
+  rows:
+    -
+      - content: {text: "论文"}
+      - content: {text: "核心思想"}
+      - content: {text: "主要局限"}
+      - content: {text: "证据等级"}
+    -
+      - content: {text: "sIOPMP"}
+      - content: {text: "面向 TEE 的 scalable I/O protection，聚焦设备 access control 和 metadata/checking 可扩展性"}
+      - content: {text: "主要解决 access control，不覆盖完整 device identity、TDISP、link security 或 trusted interrupt"}
+      - content: {text: "E1 / Peer-reviewed"}
+    -
+      - content: {text: "RISC-V CoVE-IO 规范草案"}
+      - content: {text: "定义 RISC-V confidential I/O 架构，把 TVM 设备使用扩展到 device identity、DMA/MMIO、interrupt 和 link security"}
+      - content: {text: "v0.3.0 draft 仍可能变化，不证明任一硬件或 OS 实现成熟"}
+      - content: {text: "E3 / Draft"}
+    -
+      - content: {text: "RISC-V IOMMU 支撑 CoVE-IO"}
+      - content: {text: "IOMMU 支撑设备 DMA translation/protection，是 CoVE-IO 设备侧地址访问控制的标准底座"}
+      - content: {text: "IOMMU 不是单独的 confidential I/O 方案，也不覆盖 device identity、SPDM/TDISP 或 link security"}
+      - content: {text: "E0 / Spec"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

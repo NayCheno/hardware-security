@@ -1,0 +1,99 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 10, 120, 18]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 10, 120, 18]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH12
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 1000, 45]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>DirectCXL — 内容摘要</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 78, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: ev-badge-bg
+  elementType: shape
+  bounds: [1080, 30, 140, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $accent
+- elementId: ev-badge-text
+  elementType: text
+  bounds: [1080, 30, 140, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      E1 / Peer-reviewed
+- elementId: body
+  elementType: text
+  bounds: [60, 90, 1160, 560]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>核心贡献：</strong>把远端内存变成 host 可直接 load/store 的 CXL.mem 地址空间。</p>
+      <p>论文提出 directly accessible memory disaggregation：host 通过 CXL.mem 直连 remote memory resources，无需先搬入 host DRAM。</p>
+      <p>补充 Linux 5.13 runtime、cxl-namespace、segment table 和 mmap 接口。在本 survey 中它是 fabric data-path 基础论文。</p>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：DirectCXL (ASPLOS 2022)｜证据等级：E1 / Peer-reviewed
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

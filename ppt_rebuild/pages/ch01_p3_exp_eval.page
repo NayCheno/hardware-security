@@ -1,0 +1,112 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Wang/Huang 2026 — 实验结果 + 文章评价</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>SoK 论文，无新 end-to-end 系统实验；价值在 corpus、taxonomy tables 和 checklist</li>
+        <li>Table I corpus(51)、Table III security、Table IV/V access-control、Table VI-IX memory/attestation</li>
+        <li>Table X-XIII 评价 TCB size、software stack、multi-type support、plug-and-play</li>
+        <li>Figure 4 给出 memory-encryption granularity mismatch 示例分析</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [80, 420, 1100, 230]
+    columnWidths: [0.25, 0.75]
+    rowHeights: [0.2, 0.2, 0.2, 0.2, 0.2]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+      - - content:
+            text: |
+              <p>设计优势</p>
+        - content:
+            text: |
+              <p>把设备侧 access/memory/attestation/TCB 放入统一 taxonomy</p>
+      - - content:
+            text: |
+              <p>主要局限</p>
+        - content:
+            text: |
+              <p>二手 SoK 证据，不能替代原始系统或规范</p>
+      - - content:
+            text: |
+              <p>商业落地</p>
+        - content:
+            text: |
+              <p>高：confidential accelerator 与 GPU cloud 需求明确</p>
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+        - content:
+            text: |
+              <p>辅助 SOTA，连接 05/10/13/14/15 方向</p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Wang/Huang 2026 p.12-p.14 Table X-XIII; p.15 discussion and conclusion</p>

@@ -1,0 +1,75 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 500, 45]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>方向总结</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 78, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: summary-table
+  elementType: table
+  bounds: [60, 90, 1160, 570]
+  columnWidths: [0.2500, 0.3000, 0.3000, 0.1500]
+  rowHeights: [0.2500, 0.2500, 0.2500, 0.2500]
+  style: $default
+  rows:
+    -
+      - content: {text: "论文"}
+      - content: {text: "核心思想"}
+      - content: {text: "主要局限"}
+      - content: {text: "证据等级"}
+    -
+      - content: {text: "Memory Encryption Survey"}
+      - content: {text: "综述 memory encryption 威胁模型、技术路线和性能/安全权衡"}
+      - content: {text: "2014 时间截面早于 SEV-SNP、TDX、Arm CCA、RISC-V CoVE 和 CXL/PCIe IDE"}
+      - content: {text: "E2 / Background"}
+    -
+      - content: {text: "Bonsai Merkle Trees"}
+      - content: {text: "Counter/tree metadata 检测 tamper 和 replay，锚定 memory freshness"}
+      - content: {text: "Secure-processor lineage 不是 modern confidential-VM product"}
+      - content: {text: "E1 / Peer-reviewed"}
+    -
+      - content: {text: "AMD SEV-SNP"}
+      - content: {text: "Secure nested paging + RMP，减少 host-controlled metadata 风险"}
+      - content: {text: "Vendor whitepaper 不是 peer-reviewed proof，不证明所有部署抵抗侧信道"}
+      - content: {text: "E4 / Industry"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

@@ -1,0 +1,90 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Wang/Huang 2026 — 研究背景 + 解决方案</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>CPU TEE 只保护 CPU-side execution/memory；workload offload 后数据跨 device memory</li>
+        <li>攻击面贯穿 task preparation/termination 和 task computing 两阶段</li>
+        <li>攻击目标：input/output、model parameters、task code、page table、metadata</li>
+        <li>攻击来源：host OS/hypervisor、malicious task、device/firmware adversary</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: section2-content
+    elementType: text
+    bounds: [80, 420, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>三类架构：Host-type 复用 CPU TEE；Acc.-type 把控制逻辑放进 accelerator；Mix-type 组合</li>
+        <li>Access control：CPU TEE、TSM/RMM/firmware、I/O bus filter 共同决定 DMA/MMIO</li>
+        <li>Memory protection：host memory、device memory、I/O link 和 security metadata</li>
+        <li>Attestation：需要 accelerator HRoT、endorser、reference values 和 verifier policy</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Wang/Huang 2026 p.4-p.6 Figure 2 and Section IV; p.1-p.4 Figure 1</p>

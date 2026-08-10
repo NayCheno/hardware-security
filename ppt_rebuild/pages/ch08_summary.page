@@ -1,0 +1,73 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [60, 30, 500, 35]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>方向总结</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 68, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: summary-table
+  elementType: table
+  bounds: [60, 90, 1160, 570]
+  columnWidths: [0.2500, 0.3000, 0.3000, 0.1500]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "论文"}
+      - content: {text: "核心思想"}
+      - content: {text: "主要局限"}
+      - content: {text: "证据等级"}
+    -
+      - content: {text: "Keystone: 开源 RISC-V TEE 框架"}
+      - content: {text: "PMP + security monitor + runtime 构建 enclave"}
+      - content: {text: "不代表后续标准化 confidential VM"}
+      - content: {text: "E1 / 基础证据"}
+    -
+      - content: {text: "Penglai: scalable enclave memory protection"}
+      - content: {text: "可扩展内存保护应对大规模 enclave"}
+      - content: {text: "需要硬件修改和生态配套"}
+      - content: {text: "E1 / 同行评审"}
+    -
+      - content: {text: "SPEAR-V: low-overhead RISC-V enclave primitive"}
+      - content: {text: "tag/metadata primitive 支持双向 sandbox"}
+      - content: {text: "不等同于 RISC-V 标准或量产硬件"}
+      - content: {text: "E1 / 同行评审"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：三篇主讲材料选择、评价字段与 evidence ledger｜证据等级：方向综述
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

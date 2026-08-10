@@ -1,0 +1,84 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 500, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>方向01 总结</strong></p>
+  - elementId: summary-table
+    elementType: table
+    bounds: [80, 110, 1100, 530]
+    columnWidths: [0.22, 0.40, 0.38]
+    rowHeights: [0.12, 0.22, 0.22, 0.22, 0.22]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>论文</strong></p>
+        - content:
+            text: |
+              <p><strong>核心思想</strong></p>
+        - content:
+            text: |
+              <p><strong>主要局限</strong></p>
+      - - content:
+            text: |
+              <p>Li 2024</p>
+        - content:
+            text: |
+              <p>TRAF：runtime event -> management mode -> pitfall</p>
+        - content:
+            text: |
+              <p>偏 CPU/server-side TEE，不能证明平台机制</p>
+      - - content:
+            text: |
+              <p>Boubakri 2025</p>
+        - content:
+            text: |
+              <p>RISC-V primitives -> systems -> open challenges</p>
+        - content:
+            text: |
+              <p>二手 survey，状态需跟官方 spec</p>
+      - - content:
+            text: |
+              <p>Wang/Huang 2026</p>
+        - content:
+            text: |
+              <p>accelerator TEE：access/memory/attestation/TCB</p>
+        - content:
+            text: |
+              <p>不能替代 device/system 原始证据</p>
+      - - content:
+            text: |
+              <p><strong>01 Takeaway</strong></p>
+        - content:
+            text: |
+              <p><strong>分类先行，证据分级约束结论</strong></p>
+        - content:
+            text: |
+              <p><strong>后续章节必须补一手材料</strong></p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Li 2024 Figure 3-Figure 5; Boubakri 2025 Figure 1/Table 1; Wang/Huang 2026 Table I/Figure 1/Table III</p>

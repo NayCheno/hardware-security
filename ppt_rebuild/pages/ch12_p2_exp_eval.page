@@ -1,0 +1,109 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 14, 120, 22]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 14, 120, 22]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH12
+- elementId: exp-title
+  elementType: text
+  bounds: [60, 40, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>实验结果</strong></p>
+- elementId: exp-body
+  elementType: text
+  bounds: [60, 80, 1160, 230]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <ul>
+      <li>单 VM 115 workloads 中，mixed mode 下 82% workload slowdown <=5%，95% workload slowdown <=10%，但 outlier 可达 34%。</li>
+      <li>multi-VM 场景中，Memstrata 可以识别 outlier 并迁移 dedicated local pages，把 worst-case slowdown 从 35% 降到小于 6%。</li>
+      <li>Memstrata 的最大 CPU overhead 是 single core 的 4%，内存开销约 110 MB。</li>
+      <li>这些数据证明 CXL tiering 能接近 local DRAM，但也显示 resource-management policy 会决定尾部体验。</li>
+      </ul>
+- elementId: eval-title
+  elementType: text
+  bounds: [60, 330, 300, 35]
+  content:
+    fontSize: 24
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>文章评价</strong></p>
+- elementId: eval-table
+  elementType: table
+  bounds: [60, 370, 1160, 280]
+  columnWidths: [0.2000, 0.8000]
+  rowHeights: [0.2000, 0.2000, 0.2000, 0.2000, 0.2000]
+  style: $default
+  rows:
+    -
+      - content: {text: "维度"}
+      - content: {text: "判断"}
+    -
+      - content: {text: "设计优势"}
+      - content: {text: "真实 CXL hardware prototype、115 workloads、multi-VM outlier 实验和 Azure production motivation，让商业可信度强。"}
+    -
+      - content: {text: "主要局限"}
+      - content: {text: "Intel Flat Memory Mode 依赖特定处理器/MC 能力，且论文不解决 CXL IDE keying、attestation、device assignment 或 confidential VM ownership。"}
+    -
+      - content: {text: "商业落地"}
+      - content: {text: "CXL capacity tier 能直接服务云成本、内存扩容和碳排优化，Memstrata 可作为 hypervisor 管理层策略。"}
+    -
+      - content: {text: "讲稿定位"}
+      - content: {text: "背景系统 / 性能隔离；证据强度 E1"}
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    wrap: True
+    text: |
+      来源：CXL-Tiers (ASPLOS 2024)｜证据等级：E1 / Peer-reviewed
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

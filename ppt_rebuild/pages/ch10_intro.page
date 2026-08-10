@@ -1,0 +1,74 @@
+pageType: chapter
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: left-bar
+  elementType: shape
+  bounds: [60, 120, 4, 80]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [80, 110, 1100, 50]
+  content:
+    fontSize: 36
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      <p><strong>方向10：RISC-V CoVE-IO / TEE-I/O</strong></p>
+- elementId: subtitle
+  elementType: text
+  bounds: [80, 160, 1100, 35]
+  content:
+    fontSize: 24
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      设备身份、DMA/MMIO、中断与链路安全
+- elementId: intro
+  elementType: text
+  bounds: [80, 220, 1100, 70]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    wrap: True
+    text: |
+      把设备身份、DMA/MMIO、interrupt、link security 与 I/O translation 放到同一边界。先用三篇主讲材料建立演进关系，再用证据等级控制每个结论。
+- elementId: papers
+  elementType: text
+  bounds: [80, 300, 1100, 300]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.6
+    wrap: True
+    text: |
+      <ul>
+      <li>sIOPMP: scalable I/O protection for TEE — 开创/基础入口（E1 / Peer-reviewed）</li>
+      <li>RISC-V CoVE-IO 规范草案 — 代表性改进（E3 / Draft）</li>
+      <li>RISC-V IOMMU 支撑 CoVE-IO — 当前 SOTA/补充边界（E0 / Spec）</li>
+      </ul>
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

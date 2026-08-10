@@ -1,0 +1,96 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 12, 120, 20]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 12, 120, 20]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH09
+- elementId: title
+  elementType: text
+  bounds: [60, 38, 1000, 40]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>RISC-V TEE 谱系辅助材料 — 内容摘要</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 80, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: ev-badge-bg
+  elementType: shape
+  bounds: [1080, 38, 140, 20]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $accent
+- elementId: ev-badge-text
+  elementType: text
+  bounds: [1080, 38, 140, 20]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      E2 survey
+- elementId: body
+  elementType: text
+  bounds: [60, 95, 1160, 555]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>核心贡献：</strong>把 pre-CoVE enclave 与 CoVE 放入 RISC-V TEE 谱系，辅助区分 enclave architecture、trusted monitor/runtime 和 confidential VM</p>
+      <p>Recent RISC-V TEE survey cross-checks the CoVE and AP-TEE lineage against older enclave work。</p>
+      <p><strong>论文定位：</strong>E2 survey / Background</p>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：RISC-V TEE 谱系辅助材料｜证据等级：E2 survey / Background substrate
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

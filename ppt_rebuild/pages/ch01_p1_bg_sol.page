@@ -1,0 +1,91 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Li 2024 — 研究背景 + 解决方案</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>研究背景</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>TEE 根本矛盾：host 被视为不可信，却必须管理调度、页表、I/O 和实例生命周期</li>
+        <li>Secure Remote Execution 目标：secure measurement、confidentiality、integrity</li>
+        <li>攻击者模型：控制 privileged software，管理 non-TEE world 的 memory、I/O、scheduling</li>
+        <li>remote attestation 只能证明初始状态；运行中安全取决于 runtime event 管理权限制</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>解决方案</strong></p>
+  - elementId: section2-content
+    elementType: text
+    bounds: [80, 420, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>TRAF 把"TEE 安不安全"转成"runtime event 由谁管理、谁校验、谁承担 TCB 成本"</li>
+        <li>CPU scheduling 多为 unprotected mode（调度效率优先）</li>
+        <li>context switch 多为 RTPM-only mode（寄存器状态由 TCB 保存/恢复）</li>
+        <li>memory allocation 常在 guarded 与 assisted mode 之间取舍（corner case 高发）</li>
+        <li>I/O data transmission 仍依赖 unprotected path（引出 trusted I/O 章节）</li>
+        </ul>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Li 2024 p.2 Section 2.1-2.2; p.5 Figure 4; p.6-p.8 Section 4.3-4.5</p>

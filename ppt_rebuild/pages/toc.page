@@ -1,0 +1,71 @@
+pageType: table_of_contents
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: accent-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 30, 400, 50]
+    content:
+      style: "$title"
+      fontSize: 32
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>Contents</p>
+  - elementId: title-underline
+    elementType: shape
+    bounds: [60, 82, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: toc-col1
+    elementType: text
+    bounds: [60, 110, 560, 560]
+    content:
+      style: "$body"
+      fontSize: 16
+      lineHeight: 1.6
+      align: [left, top]
+      wrap: true
+      text: |
+        <p><strong><span style="color:$primary;">01</span></strong>  TEE Taxonomy & Classification</p>
+        <p><strong><span style="color:$primary;">02</span></strong>  Arm TrustZone Lineage</p>
+        <p><strong><span style="color:$primary;">03</span></strong>  Arm CCA / RME / RMM</p>
+        <p><strong><span style="color:$primary;">04</span></strong>  CCA Fine-Grained Isolation</p>
+        <p><strong><span style="color:$primary;">05</span></strong>  CCA I/O & Accelerator</p>
+        <p><strong><span style="color:$primary;">06</span></strong>  Attestation & Boot</p>
+        <p><strong><span style="color:$primary;">07</span></strong>  RISC-V Security Primitives</p>
+        <p><strong><span style="color:$primary;">08</span></strong>  RISC-V TEE Lineage</p>
+  - elementId: toc-col2
+    elementType: text
+    bounds: [660, 110, 560, 560]
+    content:
+      style: "$body"
+      fontSize: 16
+      lineHeight: 1.6
+      align: [left, top]
+      wrap: true
+      text: |
+        <p><strong><span style="color:$primary;">09</span></strong>  RISC-V CoVE / AP-TEE</p>
+        <p><strong><span style="color:$primary;">10</span></strong>  RISC-V CoVE-IO</p>
+        <p><strong><span style="color:$primary;">11</span></strong>  Memory Encryption & Integrity</p>
+        <p><strong><span style="color:$primary;">12</span></strong>  Memory / I/O Fabrics</p>
+        <p><strong><span style="color:$primary;">13</span></strong>  Confidential I/O Protocol</p>
+        <p><strong><span style="color:$primary;">14</span></strong>  Accelerator / DPU / SmartNIC</p>
+        <p><strong><span style="color:$primary;">15</span></strong>  SmartNIC / Trusted NIC</p>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

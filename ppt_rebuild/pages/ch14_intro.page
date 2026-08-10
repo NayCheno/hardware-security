@@ -1,0 +1,74 @@
+pageType: chapter
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 120, 4, 80]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: ch-title
+    elementType: text
+    bounds: [80, 110, 1100, 50]
+    content:
+      style: "$title"
+      fontSize: 36
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>Direction 14: Accelerator / DPU / SmartNIC Confidential Offload</p>
+  - elementId: ch-subtitle
+    elementType: text
+    bounds: [80, 160, 1100, 40]
+    content:
+      style: "$subtitle"
+      fontSize: 24
+      color: "$secondary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>HETEE, CloudScale, and CAGE for GPU/FPGA TEE</p>
+  - elementId: intro-text
+    elementType: text
+    bounds: [80, 220, 1120, 70]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.5
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>Accelerator / DPU / SmartNIC confidential offload 的核心是先界定保护对象、管理边界和证据强度，再用三篇主讲材料串起技术演进。</p>
+  - elementId: paper-list
+    elementType: text
+    bounds: [80, 300, 1120, 380]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$text"
+      lineHeight: 1.6
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>• - 'HETEE: rack-scale heterogeneous TEE — 开创/基础入口 (E1 / 基础证据 peer-reviewed)</p>
+        <p>• - CloudScale confidential computing with heterogeneous devices — 代表性改进 (E1 / 同行评审改进证据)</p>
+        <p>• - CAGE confidential accelerator workflowow for Arm CCA — 当前 SOTA/补充边界 (E1 / 同行评审改进证据)</p>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

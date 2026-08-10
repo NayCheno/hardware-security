@@ -1,0 +1,97 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: top-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-bg
+    elementType: shape
+    bounds: [60, 30, 100, 24]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: dir-badge-text
+    elementType: text
+    bounds: [60, 30, 100, 24]
+    content:
+      fontSize: 12
+      color: "$white"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p>Accelerator / DPU / Sm...</p>
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 56, 500, 40]
+    content:
+      style: "$title"
+      fontSize: 32
+      color: "$primary"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>方向总结</p>
+  - elementId: title-underline
+    elementType: shape
+    bounds: [60, 100, 120, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: summary-table
+    elementType: table
+    bounds: [60, 120, 1160, 560]
+    columnWidths: [0.25, 0.15, 0.35, 0.25]
+    rowHeights: [0.1, 0.3, 0.3, 0.3]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              论文
+        - content:
+            text: |
+              定位
+        - content:
+            text: |
+              选择理由
+      - - content:
+            text: |
+              - 'HETEE: rack-scale heterogeneous TEE
+        - content:
+            text: |
+              开创/基础入口
+        - content:
+            text: |
+              HETEE is a foundational peer-reviewed work for heterogeneous...
+      - - content:
+            text: |
+              - CloudScale confidential computing with heterogeneous devices
+        - content:
+            text: |
+              代表性改进
+        - content:
+            text: |
+              Cloud-scale acceleration work is a peer-reviewed 2024 SOTA item for...
+      - - content:
+            text: |
+              - CAGE confidential accelerator workflowow for Arm CCA
+        - content:
+            text: |
+              当前 SOTA/补充边界
+        - content:
+            text: |
+              CAGE is a recent peer-reviewed SOTA item for GPU accelerator enclaves.
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

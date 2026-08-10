@@ -1,0 +1,96 @@
+pageType: content
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-bg
+  elementType: shape
+  bounds: [60, 12, 120, 20]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: badge-text
+  elementType: text
+  bounds: [60, 12, 120, 20]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      CH07
+- elementId: title
+  elementType: text
+  bounds: [60, 38, 1000, 40]
+  content:
+    fontSize: 32
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>RISC-V Advanced Interrupt Architecture — 内容摘要</strong></p>
+- elementId: title-line
+  elementType: shape
+  bounds: [60, 80, 120, 3]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: ev-badge-bg
+  elementType: shape
+  bounds: [1080, 38, 140, 20]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $accent
+- elementId: ev-badge-text
+  elementType: text
+  bounds: [1080, 38, 140, 20]
+  content:
+    fontSize: 12
+    color: #FFFFFF
+    fontFamily: Inter, MiSans
+    lineHeight: 1.0
+    align: [center, middle]
+    wrap: False
+    text: |
+      E0 / Spec-standard
+- elementId: body
+  elementType: text
+  bounds: [60, 95, 1160, 555]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>核心贡献：</strong>定义 interrupt、MSI、virtual interrupt 等基础，为 trusted interrupt delivery 和 confidential I/O 提供标准语义</p>
+      <p>RISC-V AIA specification is the current interrupt virtualization and ownership substrate。</p>
+      <p><strong>论文定位：</strong>E0 / Spec-standard SOTA</p>
+- elementId: source
+  elementType: text
+  bounds: [60, 690, 1160, 20]
+  content:
+    fontSize: 14
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.2
+    text: |
+      来源：RISC-V Advanced Interrupt Architecture｜证据等级：E0 / Spec-standard SOTA
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

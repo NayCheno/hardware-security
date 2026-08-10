@@ -1,0 +1,70 @@
+pageType: chapter
+background:
+  type: solid
+  color: "#FFFFFF"
+elements:
+- elementId: top-bar
+  elementType: shape
+  bounds: [0, 0, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: left-bar
+  elementType: shape
+  bounds: [60, 120, 4, 80]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary
+- elementId: title
+  elementType: text
+  bounds: [80, 110, 1100, 50]
+  content:
+    fontSize: 36
+    color: $primary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      <p><strong>方向09：RISC-V CoVE / AP-TEE confidential VM</strong></p>
+- elementId: subtitle
+  elementType: text
+  bounds: [80, 160, 1100, 35]
+  content:
+    fontSize: 24
+    color: $secondary
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      从 enclave 到 confidential VM 的架构演进
+- elementId: intro
+  elementType: text
+  bounds: [80, 220, 1100, 70]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.5
+    text: |
+      把 pre-CoVE enclave 与 AP-TEE/CoVE TVM lifecycle 区分开。survey 只作为 background substrate，不替代 CoVE/AP-TEE 机制证据。
+- elementId: papers
+  elementType: text
+  bounds: [80, 300, 1100, 300]
+  content:
+    fontSize: 18
+    color: $text
+    fontFamily: Inter, MiSans
+    lineHeight: 1.6
+    text: |
+      <ul>
+      <li>RISC-V CoVE reference architecture — 开创/基础入口（E3 / 基础证据 public preprint）</li>
+      <li>RISC-V AP-TEE / CoVE TVM 规范草案 — 代表性改进（E3 / 草案/未批准规范）</li>
+      <li>RISC-V TEE 谱系辅助材料 — 当前 SOTA/补充边界（E2 survey / Background substrate）</li>
+      </ul>
+- elementId: bottom-bar
+  elementType: shape
+  bounds: [0, 714, 1280, 6]
+  shapeName: rect
+  fill:
+    type: solid
+    color: $primary

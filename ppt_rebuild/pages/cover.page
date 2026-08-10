@@ -1,0 +1,57 @@
+pageType: cover
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: accent-bar
+    elementType: shape
+    bounds: [0, 0, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title-text
+    elementType: text
+    bounds: [100, 220, 1080, 130]
+    content:
+      style: "$coverTitle"
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>Hardware Security Survey</p>
+        <p><span style="font-size:36px; color:$secondary;">Trusted Execution, Confidential Computing, and I/O Protection</span></p>
+  - elementId: subtitle-text
+    elementType: text
+    bounds: [100, 370, 900, 50]
+    content:
+      style: "$coverSubtitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p>A Comprehensive Review of Arm CCA, RISC-V CoVE, and Cross-Architecture Platform Security</p>
+  - elementId: divider-line
+    elementType: shape
+    bounds: [100, 440, 200, 3]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: meta-text
+    elementType: text
+    bounds: [100, 460, 600, 80]
+    content:
+      style: "$body"
+      fontSize: 18
+      color: "$secondary"
+      align: [left, top]
+      wrap: true
+      text: |
+        <p>15 Technical Directions | 45 Primary Papers</p>
+        <p>Evidence-Based Survey with E0-E4 Grading</p>
+  - elementId: bottom-bar
+    elementType: shape
+    bounds: [0, 714, 1280, 6]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"

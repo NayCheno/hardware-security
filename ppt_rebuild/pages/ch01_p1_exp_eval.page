@@ -1,0 +1,112 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: left-accent
+    elementType: shape
+    bounds: [60, 60, 4, 40]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: title
+    elementType: text
+    bounds: [80, 55, 900, 40]
+    content:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>Li 2024 — 实验结果 + 文章评价</strong></p>
+  - elementId: section1-title
+    elementType: text
+    bounds: [80, 110, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>实验结果</strong></p>
+  - elementId: section1-content
+    elementType: text
+    bounds: [80, 150, 1100, 200]
+    content:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Inter, MiSans"
+      lineHeight: 1.5
+      text: |
+        <ul>
+        <li>SoK 论文，无新实验；证据对象为 Figure 1-5、Table 1、Appendix Table 2</li>
+        <li>Figure 5 把多种 TEE 的 CPU、memory、I/O event 映射到四种 mode，说明跨平台可比性</li>
+        <li>Table 1 把 vulnerable design flaws 与 known attacks 对齐，用于解释 pitfall</li>
+        <li>具体机制、协议状态和数值必须回到原始平台论文或官方规范</li>
+        </ul>
+  - elementId: divider
+    elementType: shape
+    bounds: [60, 360, 1160, 0]
+    shapeName: straightConnector1
+    border:
+      style: solid
+      width: 1
+      color: "$border"
+  - elementId: section2-title
+    elementType: text
+    bounds: [80, 380, 400, 35]
+    content:
+      fontSize: 24
+      color: "$primary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p><strong>文章评价</strong></p>
+  - elementId: eval-table
+    elementType: table
+    bounds: [80, 420, 1100, 230]
+    columnWidths: [0.25, 0.75]
+    rowHeights: [0.2, 0.2, 0.2, 0.2, 0.2]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>维度</strong></p>
+        - content:
+            text: |
+              <p><strong>判断</strong></p>
+      - - content:
+            text: |
+              <p>设计优势</p>
+        - content:
+            text: |
+              <p>TRAF 抽象清楚，统一解释 CPU/memory/I/O runtime event</p>
+      - - content:
+            text: |
+              <p>主要局限</p>
+        - content:
+            text: |
+              <p>不是平台机制证明，device path 覆盖不足</p>
+      - - content:
+            text: |
+              <p>商业落地</p>
+        - content:
+            text: |
+              <p>高：适合架构审查和 verifier policy checklist</p>
+      - - content:
+            text: |
+              <p>讲稿定位</p>
+        - content:
+            text: |
+              <p>主 taxonomy anchor，不作性能或生产状态证据</p>
+  - elementId: source
+    elementType: text
+    bounds: [80, 660, 1100, 25]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Inter, MiSans"
+      wrap: false
+      text: |
+        <p>来源：Li 2024 p.7 Figure 5; p.9 Table 1; p.12 Section 6</p>
